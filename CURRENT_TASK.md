@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S3-T01.
+Only this task may be implemented. Do not start it until a human explicitly requests S3-T02.
 
 ---
 
@@ -8,55 +8,57 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S2-T07 |
-| Task | Catalog Review |
+| Task ID | S3-T01 |
+| Task | Homepage Storefront Implementation |
 | Status | **COMPLETED** |
-| Scope | Quality gate on the 12-product static catalog. No data or UI changes. Image-path tests added. Sprint 2 complete. |
+| Scope | Option 1 homepage: hero, categories, catalog products, promo, intro, trust bar. Data via `getHomePage`. No featured merchandising, cart, search, or JSON-LD. |
 
 ---
 
 ## Task ID
 
-S3-T01
+S3-T02
 
 ## Task
 
-SEO-Friendly URL Strategy
+Dynamic Metadata
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S3-T01 automatically.
+Do **not** implement S3-T02 automatically.
+
+The original S3-T01 “SEO-Friendly URL Strategy” was deferred so the homepage could ship first. It remains **NOT_STARTED** (see `docs/sprints/SPRINT-03.md`). Do not start it in this file until a human requests it.
 
 ## Objective
 
-See `docs/sprints/SPRINT-03.md` → S3-T01.
+See `docs/sprints/SPRINT-03.md` → S3-T02.
 
 ## Scope
 
-See `docs/sprints/SPRINT-03.md` → S3-T01.
+See `docs/sprints/SPRINT-03.md` → S3-T02.
 
 ## Dependencies
 
-Sprint 2 completed.
+S3-T01 (homepage) completed.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-03.md` → S3-T01.
+See `docs/sprints/SPRINT-03.md` → S3-T02.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-03.md` → S3-T01.
+See `docs/sprints/SPRINT-03.md` → S3-T02.
 
 ## Tests
 
-See `docs/sprints/SPRINT-03.md` → S3-T01.
+See `docs/sprints/SPRINT-03.md` → S3-T02.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-03.md` → S3-T01.
+See `docs/sprints/SPRINT-03.md` → S3-T02.
 
-## Next task after S3-T01 (do not start)
+## Next task after S3-T02 (do not start)
 
-S3-T02 — see `docs/sprints/SPRINT-03.md`. Do not start it automatically.
+S3-T03 — see `docs/sprints/SPRINT-03.md`. Do not start it automatically.

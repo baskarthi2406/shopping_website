@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S2-T07:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05).
+**Task:** S1-T02 (layer contract). **As implemented through S3-T01:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -286,7 +286,7 @@ Belong here (not in React):
 - Get category / list categories — **S1-T05**
 - List featured products — **S1-T05** (returns empty until merchandising exists)
 - Search / filter products (rules TBD)
-- Build home page data (hero refs, category stand-ins, featured)
+- Build home page data — **S3-T01** `getHomePage` + `toHomePageViewModel` (hero/promo asset refs, category stand-ins, `list()` products; not `listFeatured()`)
 - Cart: add, update qty, remove, read  
 
 **S2-T01 / S2-T02:** `getCategoryPage(categories, products, slug)` returns `{ category, products }` or `null` (unknown slug). S2-T02 did not add a second listing use case.
@@ -403,7 +403,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S2-T07)
+## 17. Folder structure (as implemented through S3-T01)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -428,13 +428,15 @@ These choices follow this contract. They are **not** an ADR.
 frontend/
   app/                           # routing (S1-T03); README boundary (S1-T04)
     layout.tsx
-    page.tsx
+    page.tsx                     # S3-T01 Option 1 homepage
     not-found.tsx                # S2-T01
     c/[slug]/page.tsx            # S2-T01 category listing
     p/[slug]/page.tsx            # S2-T03 product detail
     globals.css
   public/
     mini-mystiq-logo.png
+    baby-sleeveless-sets-new-collection-banner.jpg
+    baby-dress-bloomer-sets-new-collection-banner.jpg
     pink-white-pleated-baby-dress.jpg
     sage-striped-baby-top-and-shorts.jpg
     cream-grey-rose-tiered-baby-dress.jpg
@@ -454,6 +456,9 @@ frontend/
     storefront/product-detail.tsx # S2-T03; view-model props only
     storefront/breadcrumbs.tsx   # S2-T04; presentation items only
     storefront/catalog-navigation.tsx # S2-T04; presentation items only
+    storefront/announcement-bar.tsx   # S3-T01
+    storefront/home-*.tsx             # S3-T01 homepage sections
+    storefront/trust-bar.tsx          # S3-T01
   config/
     catalog.ts                   # composition root (S1-T05)
   domain/
@@ -462,7 +467,7 @@ frontend/
   application/
     catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
-    seo/                         # category + product metadata; JSON-LD — Sprint 3
+    seo/                         # home + category + product metadata; JSON-LD — later Sprint 3
   infrastructure/
     catalog/                     # Static*Repository — S1-T05
     cart/                        # browser storage adapter — Sprint 4
@@ -509,4 +514,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. S2-T01–S2-T06 are complete. Next: **S2-T07** — do not start automatically.
+There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01 homepage is complete. Next: **S3-T02** — do not start automatically.

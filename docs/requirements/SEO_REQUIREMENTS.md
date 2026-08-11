@@ -74,6 +74,18 @@ Product pages at `/p/{slug}`:
 
 Filter/sort **deferred**. No `?sort=` / facet URLs. Category canonicals remain `/c/{slug}`. See `CATALOG_FILTER_SORT.md`.
 
+## Implemented (S3-T01)
+
+Homepage `/`:
+
+- `generateMetadata` via `buildHomeMetadata`
+- Title `Mini Mystiq | Baby Clothes & Toys`
+- Factual description (clothing catalog; no invented offers)
+- Canonical `/`
+- OpenGraph title, description, hero image
+- One H1 (Option 1 hero headline); crawlable `/c/{slug}` and `/p/{slug}` links
+- No JSON-LD
+
 ## Reviewed (S2-T07)
 
 12-product static catalog: unique titles, canonical `/p/{slug}` and `/c/{slug}`, OpenGraph, crawlable HTML, factual alts. Uncategorized products remain reachable at `/p/{slug}` only. JSON-LD still Sprint 3.

@@ -13,6 +13,11 @@ export {
   type ProductCardViewModel,
 } from "./category-page-view-model";
 export { getCategoryBySlug } from "./get-category-by-slug";
+export { getHomePage, type HomePageData } from "./get-home-page";
+export {
+  toHomePageViewModel,
+  type HomePageViewModel,
+} from "./home-page-view-model";
 export {
   getCategoryPage,
   type CategoryPageData,

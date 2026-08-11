@@ -31,27 +31,29 @@ Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
 
 ## Current Sprint
 
-**Sprint 2 — Product Catalog**  
-Status: **COMPLETED** (S2-T01 … S2-T07)
+**Sprint 3 — Homepage + SEO**  
+Status: **IN_PROGRESS** (S3-T01 completed)
 
 ---
 
 ## Current Task
 
-**S3-T01 — SEO-Friendly URL Strategy**  
+**S3-T02 — Dynamic Metadata**  
 Status: **NOT_STARTED**
 
-Do not start S3-T01 automatically.
+Do not start S3-T02 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-03.md`.
 
 There is **no S1-T09**. There is **no S2-T08**.
 
+Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
+
 ---
 
 ## Overall Status
 
-**SPRINT_2_COMPLETED**
+**SPRINT_3_IN_PROGRESS**
 
 ---
 
@@ -69,6 +71,7 @@ There is **no S1-T09**. There is **no S2-T08**.
 - Product detail `/p/[slug]` (S2-T03)
 - Catalog nav + shared breadcrumbs (S2-T04)
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
+- Option 1 homepage (S3-T01)
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
 ### Backend (Phase 2 — not started)
@@ -88,21 +91,23 @@ There is **no S1-T09**. There is **no S2-T08**.
 - S2-T05 — Listing Filter/Sort (Placeholder) — **deferred**
 - S2-T06 — Expand Static Catalog Fixtures
 - S2-T07 — Catalog Review (**Sprint 2 COMPLETED**)
+- S3-T01 — Homepage Storefront Implementation
 
 ## In progress
 
-- None. Do not start S3-T01 automatically.
+- None. Do not start S3-T02 automatically.
 
 ## Pending
 
-- S3-T01 — SEO-Friendly URL Strategy (next)
+- S3-T02 — Dynamic Metadata (next)
+- Deferred original S3-T01 — SEO-Friendly URL Strategy (not started)
 - Remainder of Sprint 3–11
 
 ## Blockers
 
-- None for starting S3-T01 when explicitly requested.
-- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan and several dress categories, dedicated category/hero lifestyle art, toys (no approved toy assets), pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules.
+- None for starting S3-T02 when explicitly requested.
+- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan and several dress categories, dedicated category/hero lifestyle art, toys (no approved toy assets), pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules. Announcement/trust-bar copy is from Option 1; operations still TBD.
 
 ## Next task (do not start automatically)
 
-**S3-T01 — SEO-Friendly URL Strategy**
+**S3-T02 — Dynamic Metadata**

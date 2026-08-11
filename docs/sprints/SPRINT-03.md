@@ -4,21 +4,23 @@
 |-------|--------|
 | Sprint ID | S3 |
 | Phase | Phase 1 — SEO-First Storefront |
-| Objective | First-class SEO for the storefront |
-| Status | NOT_STARTED |
+| Objective | Customer homepage, then first-class SEO for the storefront |
+| Status | IN_PROGRESS |
 | Dependencies | Sprint 2 completed |
+
+Sprint 3 was **reordered**: S3-T01 is the Option 1 homepage (the storefront was still a shell). The original S3-T01 “SEO-Friendly URL Strategy” is **deferred**, not cancelled — see below. Remaining S3-T02 … S3-T11 stay SEO tasks.
 
 Follow `docs/requirements/SEO_REQUIREMENTS.md` and `docs/requirements/MOBILE_REQUIREMENTS.md`. Domain and legal names remain **TBD**. Storefront SEO work must not regress mobile-first layout or Core Web Vitals considerations.
 
 ---
 
-## S3-T01 — SEO-Friendly URL Strategy
+## S3-T01 — Homepage Storefront Implementation
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Document and implement catalog URL patterns (redirects if Sprint 2 URLs change).
+Replace the foundation homepage shell with the approved Option 1 customer storefront.
 
 ### Dependencies
 
@@ -26,30 +28,61 @@ Sprint 2.
 
 ### Requirements
 
-Human-readable slugs; no session IDs in URLs. Exact pattern TBD in this task; record the decision (ADR if it changes architecture).
+Mobile-first. Data-driven categories and products via application/catalog. Approved hero and promo assets. No cart, search, filter/sort, JSON-LD, backend, or invented featured merchandising.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Docs + route path updates + fixture slugs if needed.
+- `getHomePage` + `toHomePageViewModel` (uses `list()`, not `listFeatured()`)
+- Homepage sections: hero, category circles, catalog product grid, secondary promo, intro, trust bar
+- Header: announcement bar (Option 1 copy), logo, `details`/`summary` mobile category menu, desktop wrapping nav
+- Footer: brand + data-driven category links
+- `buildHomeMetadata` for `/`
+- Hero/promo JPEGs served from `frontend/public/` (originals kept in repository-root `public/`)
 
-### Expected files/modules
+### Homepage sections
 
-- `docs/requirements/SEO_REQUIREMENTS.md` (patterns filled in)
-- Next.js catalog routes
-- Optional ADR
+| Section | Source |
+|---------|--------|
+| Announcement bar | Option 1 copy (policies still operationally TBD) |
+| Hero | Option 1 headline/CTA + `baby-sleeveless-sets-new-collection-banner.jpg` |
+| Shop by category | `listCategories()` + documented product-photo stand-ins |
+| Clothing in the catalog | `listProducts()` — not featured |
+| Secondary promo | `baby-dress-bloomer-sets-new-collection-banner.jpg` |
+| Intro | Factual storefront copy (no toy inventory claim) |
+| Trust bar | Option 1 copy |
+| Footer | Brand + nav from `listCategories()` |
+
+Shop Now / promo link to the first category that has products (data-driven). No Client Component; mobile nav is `details`/`summary`.
 
 ### Acceptance criteria
 
-- URL scheme documented and implemented
-- Old paths either still work or redirect (if they existed)
+- Homepage is a real storefront, not an empty shell
+- UI does not import fixtures
+- Existing `/c/` and `/p/` routes still work
 
 ### Testing requirements
 
-Route tests or build-time path checks for fixture slugs.
+Unit tests for `getHomePage`, homepage view model, and home metadata. Lint, typecheck, build.
 
 ### Definition of Done
 
-URL strategy live and documented.
+Homepage live. S3-T02 recorded **NOT_STARTED**. Original SEO URL strategy remains deferred (not started).
+
+---
+
+## Deferred — SEO-Friendly URL Strategy (original S3-T01)
+
+**Status:** NOT_STARTED
+
+Reordered behind the homepage. Still required in Sprint 3. Do not skip.
+
+### Objective
+
+Document and implement catalog URL patterns (redirects if Sprint 2 URLs change).
+
+### Requirements
+
+Human-readable slugs; no session IDs in URLs. Exact pattern TBD in this task; record the decision (ADR if it changes architecture). Current Phase 1 paths remain `/`, `/c/{slug}`, `/p/{slug}`.
 
 ---
 

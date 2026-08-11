@@ -22,7 +22,9 @@ When Next.js is initialized (S1-T03), serve the **SEO-named** files from the Nex
 - `kids-button-down-shirts-rose-and-burgundy.jpg`
 - `kids-linen-shirts-brown-and-sage.jpg`
 
-Do not copy hero/promo banners until a homepage task uses them. Do not delete originals.
+**S3-T01:** hero and secondary promo copied into `frontend/public/` (SEO filenames; originals kept).
+
+Do not delete originals.
 
 ---
 

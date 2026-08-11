@@ -1,6 +1,7 @@
 import {
   getCategoryBySlug,
   getCategoryPage,
+  getHomePage,
   getProductById,
   getProductBySlug,
   getProductPage,
@@ -38,6 +39,7 @@ export const catalog = {
     getCategoryBySlug(categoryRepository, slug),
   getCategoryPage: (slug: string) =>
     getCategoryPage(categoryRepository, productRepository, slug),
+  getHomePage: () => getHomePage(categoryRepository, productRepository),
   listCategories: () => listCategories(categoryRepository),
   listUoms: () => uomRepository.list(),
   getUomByCode: (code: string) => uomRepository.getByCode(code),

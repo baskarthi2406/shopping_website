@@ -74,7 +74,7 @@ Sprint 1 is complete. There is no S1-T09.
 | S2-T06 | Expand Static Catalog Fixtures | **COMPLETED** |
 | S2-T07 | Catalog Review | **COMPLETED** |
 
-S2-T01 delivered `/c/[slug]`. S2-T02 is complete with no duplicate route. S2-T03 delivered `/p/[slug]`. S2-T04 delivered catalog nav and shared breadcrumbs. S2-T05 deferred filter/sort. S2-T06 expanded the static catalog to 12 approved products. S2-T07 reviewed the catalog (pass; no data changes). There is no S2-T08. Do not start S3-T01 automatically.
+S2-T01 delivered `/c/[slug]`. S2-T02 is complete with no duplicate route. S2-T03 delivered `/p/[slug]`. S2-T04 delivered catalog nav and shared breadcrumbs. S2-T05 deferred filter/sort. S2-T06 expanded the static catalog to 12 approved products. S2-T07 reviewed the catalog (pass; no data changes). There is no S2-T08.
 
 ---
 
@@ -84,15 +84,22 @@ S2-T01 delivered `/c/[slug]`. S2-T02 is complete with no duplicate route. S2-T03
 
 See the live Sprint 2 section above. Status: **COMPLETED**.
 
-### Sprint 3 — SEO
+### Sprint 3 — Homepage + SEO
 
 | Field | Value |
 |-------|--------|
 | Phase | Phase 1 |
-| Objective | First-class SEO: URLs, metadata, sitemap, robots, structured data, OG, images, internal linking |
-| Status | **NOT_STARTED** |
+| Objective | Option 1 homepage, then first-class SEO: URLs, metadata, sitemap, robots, structured data, OG, images, internal linking |
+| Status | **IN_PROGRESS** |
 | Dependencies | Sprint 2 completed |
 | Task IDs | S3-T01 … S3-T11 |
+
+| Task ID | Name | Status |
+|---------|------|--------|
+| S3-T01 | Homepage Storefront Implementation | **COMPLETED** |
+| S3-T02 | Dynamic Metadata | **NOT_STARTED** |
+
+Original “SEO-Friendly URL Strategy” was reordered out of S3-T01 and remains **NOT_STARTED** (deferred in `docs/sprints/SPRINT-03.md`). Do not start S3-T02 automatically.
 
 ### Sprint 4 — Cart & Storefront Completion
 
