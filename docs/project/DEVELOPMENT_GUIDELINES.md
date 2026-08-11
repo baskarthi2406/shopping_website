@@ -70,6 +70,7 @@ Phase 1 catalog access: `config/catalog.ts` → application use cases → reposi
 - Semantic HTML, keyboard-accessible and touch-friendly storefront controls.
 - No secrets in Git.
 - No extra dependencies without a task need.
+- Unit tests: Vitest (`npm test`). Colocate `*.test.ts`. Application tests use repository fakes, not static fixtures. Domain tests stay framework-free. Component/E2E tests are later tasks.
 
 ## Definition of Done
 

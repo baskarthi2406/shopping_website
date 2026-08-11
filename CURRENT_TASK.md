@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S1-T06.
+Only this task may be implemented. Do not start it until a human explicitly requests S1-T07.
 
 ---
 
@@ -8,55 +8,55 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S1-T05 |
-| Task | Repository Interfaces and Static Data Source |
+| Task ID | S1-T06 |
+| Task | Configure Linting and Unit Tests |
 | Status | **COMPLETED** |
-| Scope | Catalog domain types, repository interfaces, static repositories, small fixture set. No storefront UI. No FastAPI. No test runner (S1-T06). |
+| Scope | Vitest unit runner, colocated `*.test.ts`, existing ESLint kept. Catalog domain/application/static-repo tests. No UI. No Prettier. No E2E. |
 
 ---
 
 ## Task ID
 
-S1-T06
+S1-T07
 
 ## Task
 
-Configure Linting and Unit Tests
+Base Layout, Tokens, Semantic HTML Shell
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S1-T06 automatically.
+Do **not** implement S1-T07 automatically.
 
 ## Objective
 
-Add linting/formatting and a unit test runner for `frontend/`.
+Create a minimal accessible layout shell (header/footer landmarks) and Tailwind tokens. No catalog pages.
 
 ## Scope
 
-See `docs/sprints/SPRINT-01.md` → S1-T06. Select Next.js-compatible tools. Do not add unrelated libraries. Prove S1-T05 catalog tests under the chosen runner.
+See `docs/sprints/SPRINT-01.md` → S1-T07. Root layout, basic navigation placeholders, CSS tokens. Home page remains a shell, not a merchandising page.
 
 ## Dependencies
 
-S1-T03 (can proceed after S1-T05). S1-T05 catalog modules exist and should be covered.
+S1-T04.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-01.md` → S1-T06. Document choices in `docs/project/TECH_STACK.md`.
+See `docs/sprints/SPRINT-01.md` → S1-T07. Semantic HTML, mobile-first, Design Option 1 tokens TBD (neutral placeholders until derived).
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-01.md` → S1-T06.
+See `docs/sprints/SPRINT-01.md` → S1-T07.
 
 ## Tests
 
-This task *is* test infrastructure; S1-T05 static repository list/get-by-slug tests must run green.
+Lint + unit tests + build. Optional simple render test of the layout.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-01.md` → S1-T06.
+See `docs/sprints/SPRINT-01.md` → S1-T07.
 
-## Next task after S1-T06 (do not start)
+## Next task after S1-T07 (do not start)
 
-S1-T07 — Base Layout, Tokens, Semantic HTML Shell
+S1-T08 — Foundation Review and Documentation Sync

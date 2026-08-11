@@ -9,6 +9,7 @@ Phase 1 SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys)
 - TypeScript (`strict: true`)
 - Tailwind CSS v4
 - ESLint (`eslint-config-next`)
+- Vitest 4 (unit tests)
 
 Server Components are the default. No state-management library. No API client. No backend dependencies.
 
@@ -28,6 +29,8 @@ Other commands:
 ```bash
 npm run typecheck
 npm run lint
+npm test
+npm run test:watch
 npm run build
 npm start
 ```
@@ -84,9 +87,22 @@ When they are needed:
 
 ## Testing
 
-Testing framework selection remains **TBD** (S1-T06). Do not add a test runner in this package until that task.
+**Runner:** Vitest 4 (Node). Config: `vitest.config.mts`.
 
-Sanity checks: `npm run typecheck`, `npm run lint`, `npm run build`.
+**Convention:** colocate `*.test.ts` with the source module.
+
+| Belongs in unit tests | Does not belong |
+|----------------------|-----------------|
+| Domain behavior (`isCatalogSlug`) | Type-only models with no behavior |
+| Application use cases with in-memory repository fakes | Importing `infrastructure/catalog/data` from application tests |
+| `Static*Repository` list/get/slug/featured/UOM | Component render tests, Playwright/Cypress, mock servers |
+
+```bash
+npm test
+npm run test:watch
+```
+
+Component and E2E testing remain later tasks. No coverage thresholds.
 
 ## SEO
 
