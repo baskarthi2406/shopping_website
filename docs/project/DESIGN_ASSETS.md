@@ -5,6 +5,8 @@
 
 When Next.js is initialized (S1-T03), serve the **SEO-named** files from the Next.js `public` directory.
 
+**S1-T03:** the approved logo is copied to `frontend/public/mini-mystiq-logo.png`. Repository-root `public/` remains the source of truth. Do not copy the rest of the catalog/hero assets until the tasks that use them.
+
 ---
 
 ## Brand (decided)

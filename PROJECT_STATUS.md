@@ -38,7 +38,7 @@ Status: **IN_PROGRESS**
 
 ## Current Task
 
-**S1-T03 — Initialize Next.js + TypeScript + Tailwind**  
+**S1-T04 — Establish Frontend Project Structure**  
 Status: **NOT_STARTED**
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
@@ -55,9 +55,11 @@ Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
 
 ### Frontend (Phase 1)
 
-- Next.js App Router (ADR 0002) — **not initialized**
-- React, TypeScript, Tailwind CSS
+- Next.js 16.3.0 App Router (ADR 0002) — initialized in `frontend/`
+- React 19.2.8, TypeScript 5.9.3 (`strict: true`), Tailwind CSS 4.3.3
+- ESLint 9.39.5 (`eslint-config-next` 16.3.0)
 - Layer boundaries: `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02)
+- App routes live at `frontend/app/` (no `src/` directory)
 
 ### Backend (Phase 2 — not started)
 
@@ -70,21 +72,22 @@ Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
 - S0-T01 — Initialize Project-Control Documentation
 - S1-T01 — Document Target Architecture
 - S1-T02 — Document Frontend Layer Boundaries
+- S1-T03 — Initialize Next.js + TypeScript + Tailwind
 
 ## In progress
 
-- None. Do not start S1-T03 automatically.
+- None. Do not start S1-T04 automatically.
 
 ## Pending
 
-- S1-T03 — Initialize Next.js + TypeScript + Tailwind (next)
+- S1-T04 — Establish Frontend Project Structure (next)
 - Remainder of Sprint 1–11
 
 ## Blockers
 
-- None for starting S1-T03 when explicitly requested.
+- None for starting S1-T04 when explicitly requested.
 - Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art.
 
 ## Next task (do not start automatically)
 
-**S1-T03 — Initialize Next.js + TypeScript + Tailwind**
+**S1-T04 — Establish Frontend Project Structure**

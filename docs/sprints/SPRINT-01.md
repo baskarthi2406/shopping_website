@@ -107,7 +107,7 @@ Layer doc accepted in-repo; next task recorded only.
 
 ## S1-T03 — Initialize Next.js + TypeScript + Tailwind
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 

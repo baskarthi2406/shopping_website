@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (documentation only). **Do not initialize Next.js until S1-T03.**
+**Task:** S1-T02 (layer contract). Next.js initialized in S1-T03 at `frontend/app/` (no `src/`). Layer folders are S1-T04.
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -45,7 +45,7 @@ Presentation may depend on **view models** (plain objects) produced by applicati
 
 ### 2.1 App / routing layer
 
-**Owns:** `src/app` route tree, URL segments, layouts, `loading.tsx`, `error.tsx`, `not-found.tsx`, `generateMetadata` **calls**, sitemap/robots **routes**.
+**Owns:** `app/` route tree (as implemented: `frontend/app`, not `src/app`), URL segments, layouts, `loading.tsx`, `error.tsx`, `not-found.tsx`, `generateMetadata` **calls**, sitemap/robots **routes**.
 
 **Does not own:** Business rules, fixture data, CSS design tokens as a system, cart math.
 
@@ -392,41 +392,43 @@ Do not add a test framework in S1-T02.
 
 ---
 
-## 17. Target folder structure (do not create yet)
+## 17. Target folder structure
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
+**As implemented (S1-T03):** official Next.js 16 scaffold uses `frontend/app/` (no `src/` directory). Keep domain/application/infrastructure **outside** `app/` when they are added in S1-T04. Do not move routes under `src/app` unless an ADR says so.
+
+S1-T03 created `app/`, `public/mini-mystiq-logo.png`, and the Next.js config files only. Empty `domain/`, `application/`, `infrastructure/`, `components/`, `config/`, `lib/`, and `types/` folders are **S1-T04**.
+
 ```
 frontend/
-  src/
-    app/                         # routing layer
-      layout.tsx
-      page.tsx
-      c/[slug]/page.tsx
-      p/[slug]/page.tsx
-      cart/
-      checkout/
-      sitemap.ts
-      robots.ts
-    domain/
-      catalog/
-      cart/
-    application/
-      catalog/
-      cart/
-      seo/
-    infrastructure/
-      catalog/                   # static now; api later
-      cart/
-      config/
-    components/
-      ui/
-      storefront/
-    lib/                         # shared utils only
-    styles/
+  app/                           # routing layer (S1-T03)
+    layout.tsx
+    page.tsx
+    c/[slug]/page.tsx            # later sprints
+    p/[slug]/page.tsx
+    cart/
+    checkout/
+    sitemap.ts
+    robots.ts
+  public/
+    mini-mystiq-logo.png         # S1-T03; other assets later
+  domain/                        # S1-T04
+    catalog/
+    cart/
+  application/                   # S1-T04
+    catalog/
+    cart/
+    seo/
+  infrastructure/                # S1-T04
+    catalog/                     # static now; api later
+    cart/
+    config/
+  components/                    # S1-T04
+    ui/
+    storefront/
+  lib/                           # shared utils only
 ```
-
-If the Next.js scaffold uses `frontend/app` instead of `frontend/src/app`, keep domain/application/infrastructure **outside** the route folder (S1-T04).
 
 Do not add `types/` as a dump; prefer domain + view-model types beside their layer.
 
