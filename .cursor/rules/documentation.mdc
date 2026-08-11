@@ -1,0 +1,27 @@
+---
+description: Project-control docs, TBD policy, ADRs, and status updates
+globs: "**/{PROJECT_*.md,CURRENT_TASK.md,SPRINT_STATUS.md,README.md,docs/**/*.md}"
+alwaysApply: false
+---
+
+# Documentation
+
+The Git repository is the source of truth. Status files must match reality.
+
+When finishing a task, update all of:
+
+1. `CURRENT_TASK.md`
+2. `PROJECT_STATUS.md`
+3. `SPRINT_STATUS.md`
+4. The sprint file under `docs/sprints/`
+5. `README.md` current-status section if stale
+
+Never mark a future task `COMPLETED`. Never leave the finished task as `IN_PROGRESS`.
+
+Record the next task ID but do not implement it.
+
+Undecided business, vendor, or legal facts: write **TBD**. Do not invent brand, domain, pricing, or providers.
+
+Significant architecture changes: add an ADR in `docs/decisions/` (status, date, context, decision, consequences) before implementing.
+
+Cursor rules must not contradict `PROJECT_DEVELOPMENT_RULES.md`. If they do, the rules file wins; report the conflict.

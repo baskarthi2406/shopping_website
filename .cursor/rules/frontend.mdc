@@ -1,0 +1,23 @@
+---
+description: Next.js, React, TypeScript, Tailwind, and SEO storefront rules
+globs: frontend/**/*.{ts,tsx,js,jsx,css,md}
+alwaysApply: false
+---
+
+# Frontend
+
+Phase 1 storefront lives in `frontend/`. Stack: Next.js, React, TypeScript, Tailwind.
+
+- Keep `page.tsx` / layouts thin. Call application use cases, not fixture files or fetch/SQL.
+- Prefer Server Components for crawlable catalog pages.
+- Client Components only for interactive islands (cart, forms).
+- Domain types must not import React or Next.js.
+- Do not use `any` without a one-line justification. Prefer `unknown`.
+- Do not call FastAPI until a Phase 2 task requires the HTTP repository.
+- Semantic HTML: `header`, `main`, `footer`, headings in order, real links.
+
+SEO is first-class: crawlable category/product HTML, metadata from data, canonicals, sitemap, robots, JSON-LD, OpenGraph, Next.js `Image`, internal links. Do not ship client-only catalog shells.
+
+Cart in Phase 1 is client-side. Checkout must not charge cards in Phase 1.
+
+Do not add dependencies unless the current task requires them. Do not create `package.json` during documentation-only tasks.
