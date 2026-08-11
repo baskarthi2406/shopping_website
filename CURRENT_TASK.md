@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S1-T04.
+Only this task may be implemented. Do not start it until a human explicitly requests S1-T05.
 
 ---
 
@@ -8,55 +8,55 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S1-T03 |
-| Task | Initialize Next.js + TypeScript + Tailwind |
+| Task ID | S1-T04 |
+| Task | Establish Frontend Project Structure |
 | Status | **COMPLETED** |
-| Scope | Next.js App Router scaffold in `frontend/`. Minimal brand shell. No catalog, no domain modules, no backend. |
+| Scope | Layer folders and boundary READMEs under `frontend/`. No catalog, cart, or storefront UI. No FastAPI. |
 
 ---
 
 ## Task ID
 
-S1-T04
+S1-T05
 
 ## Task
 
-Establish Frontend Project Structure
+Repository Interfaces and Static Data Source
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S1-T04 automatically.
+Do **not** implement S1-T05 automatically.
 
 ## Objective
 
-Create the frontend folder structure that matches the approved architecture (`docs/architecture/FRONTEND_ARCHITECTURE.md`).
+Define product/category repository interfaces and a static/mock implementation with minimal sample data.
 
 ## Scope
 
-See `docs/sprints/SPRINT-01.md` → S1-T04. Folders and placeholder modules that compile. No product UI. No FastAPI.
+See `docs/sprints/SPRINT-01.md` → S1-T05. Interfaces in application/domain, not in UI. Placeholder catalog only. No HTTP backend.
 
 ## Dependencies
 
-S1-T03.
+S1-T04.
 
 ## Requirements
 
-Match S1-T01/S1-T02 docs. Page files stay thin. App Router is at `frontend/app/` (no `src/`). Keep domain/application/infrastructure **outside** the route folder.
+See `docs/sprints/SPRINT-01.md` → S1-T05. UI must not import fixture files. Same use-case signatures must survive a later API repository.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-01.md` → S1-T04.
+See `docs/sprints/SPRINT-01.md` → S1-T05.
 
 ## Tests
 
-Build succeeds. Full test runner is S1-T06.
+Unit tests for the static repository (list/get by slug or id). Full test runner is S1-T06 if not yet present.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-01.md` → S1-T04.
+See `docs/sprints/SPRINT-01.md` → S1-T05.
 
-## Next task after S1-T04 (do not start)
+## Next task after S1-T05 (do not start)
 
-S1-T05 — Repository Interfaces and Static Data Source
+S1-T06 — Configure Linting and Unit Tests

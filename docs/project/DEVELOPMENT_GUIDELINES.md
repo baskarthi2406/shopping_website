@@ -26,7 +26,7 @@ Never start the next task automatically.
 
 ## Layering
 
-See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02).
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; S1-T04 folders).
 
 ```
 App / Pages → Presentation → Application → Domain → Repository interface
@@ -39,6 +39,20 @@ Phase 1 infrastructure = static/mock data.
 Phase 2 infrastructure = HTTP client → FastAPI + PostgreSQL behind the same frontend repository interface.
 
 Pages are Server Components by default. Client Components are small interactive islands only.
+
+### Frontend folders (S1-T04)
+
+| Path | Boundary |
+|------|----------|
+| `frontend/app/` | Routes and layouts only |
+| `frontend/components/` | Presentation (`ui/`, `storefront/`) |
+| `frontend/domain/` | Catalog and cart concepts (no React/Next) |
+| `frontend/application/` | Use cases **and** repository interfaces |
+| `frontend/infrastructure/` | Static (Phase 1) or HTTP (Phase 2) adapters |
+| `frontend/config/` | Composition / env binding; no secrets |
+| `frontend/lib/` | Shared technical utilities only |
+
+Do not add a top-level `repositories/` or `types/` dump. Canonical `Product` / `Category` / `Cart` types belong in `domain/`.
 
 ## Documentation
 

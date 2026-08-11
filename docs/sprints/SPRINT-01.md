@@ -152,7 +152,7 @@ Scaffold committed; README run steps work; status updated; next task not started
 
 ## S1-T04 — Establish Frontend Project Structure
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 

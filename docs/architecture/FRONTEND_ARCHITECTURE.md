@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). Next.js initialized in S1-T03 at `frontend/app/` (no `src/`). Layer folders are S1-T04.
+**Task:** S1-T02 (layer contract). Next.js initialized in S1-T03 at `frontend/app/` (no `src/`). Layer folders established in S1-T04 (boundary READMEs; no catalog implementation).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -109,7 +109,7 @@ Services must be unit-testable with fake repositories.
 
 **Does not own:** Implementations, UI.
 
-Lived next to application (TypeScript interfaces). Implementations live in infrastructure.
+Lived next to application (TypeScript interfaces under `application/catalog/` and `application/cart/`). Implementations live in `infrastructure/`. There is no top-level `frontend/repositories/` tree.
 
 ---
 
@@ -392,45 +392,49 @@ Do not add a test framework in S1-T02.
 
 ---
 
-## 17. Target folder structure
+## 17. Folder structure (as implemented, S1-T04)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
-**As implemented (S1-T03):** official Next.js 16 scaffold uses `frontend/app/` (no `src/` directory). Keep domain/application/infrastructure **outside** `app/` when they are added in S1-T04. Do not move routes under `src/app` unless an ADR says so.
+**S1-T03:** Next.js 16 App Router at `frontend/app/` (no `src/`). Logo at `frontend/public/mini-mystiq-logo.png`.
 
-S1-T03 created `app/`, `public/mini-mystiq-logo.png`, and the Next.js config files only. Empty `domain/`, `application/`, `infrastructure/`, `components/`, `config/`, `lib/`, and `types/` folders are **S1-T04**.
+**S1-T04:** Layer directories exist with boundary READMEs only. No domain types, use cases, static repositories, or storefront UI yet (those are S1-T05 / S1-T07 / Sprint 2+).
+
+**Not created (intentional):**
+
+- Top-level `repositories/` — interfaces live under `application/` (this file §2.6).
+- Top-level `types/` — domain types belong in `domain/`; view models beside application/presentation.
+- `domain/product` and `domain/category` as sibling trees — catalog concepts are grouped under `domain/catalog/`.
+- Nested `infrastructure/config/` — composition/env binding is top-level `config/` (§2.8).
+
+These choices follow this contract. They are **not** an ADR.
 
 ```
 frontend/
-  app/                           # routing layer (S1-T03)
+  app/                           # routing (S1-T03); README boundary (S1-T04)
     layout.tsx
     page.tsx
-    c/[slug]/page.tsx            # later sprints
-    p/[slug]/page.tsx
-    cart/
-    checkout/
-    sitemap.ts
-    robots.ts
+    globals.css
   public/
-    mini-mystiq-logo.png         # S1-T03; other assets later
-  domain/                        # S1-T04
-    catalog/
+    mini-mystiq-logo.png
+  components/
+    ui/                          # primitives — later UI tasks
+    storefront/                  # composites — later UI tasks
+  domain/
+    catalog/                     # Product, Category, Uom — types in S1-T05
+    cart/                        # Cart, CartItem — Sprint 4
+  application/
+    catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
-  application/                   # S1-T04
-    catalog/
-    cart/
-    seo/
-  infrastructure/                # S1-T04
-    catalog/                     # static now; api later
-    cart/
-    config/
-  components/                    # S1-T04
-    ui/
-    storefront/
-  lib/                           # shared utils only
+    seo/                         # metadata/JSON-LD helpers — Sprint 3
+  infrastructure/
+    catalog/                     # Static*Repository — S1-T05
+    cart/                        # browser storage adapter — Sprint 4
+  config/                        # bind implementations; no secrets
+  lib/                           # shared technical utils only
 ```
 
-Do not add `types/` as a dump; prefer domain + view-model types beside their layer.
+Future routes (`c/[slug]`, `p/[slug]`, `cart`, `checkout`, `sitemap.ts`, `robots.ts`) stay under `app/` when those sprints arrive.
 
 ---
 

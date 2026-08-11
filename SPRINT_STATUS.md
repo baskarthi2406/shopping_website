@@ -44,13 +44,13 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 | S1-T01 | Document Target Architecture | **COMPLETED** |
 | S1-T02 | Document Frontend Layer Boundaries | **COMPLETED** |
 | S1-T03 | Initialize Next.js + TypeScript + Tailwind | **COMPLETED** |
-| S1-T04 | Establish Frontend Project Structure | NOT_STARTED |
+| S1-T04 | Establish Frontend Project Structure | **COMPLETED** |
 | S1-T05 | Repository Interfaces and Static Data Source | NOT_STARTED |
 | S1-T06 | Configure Linting and Unit Tests | NOT_STARTED |
 | S1-T07 | Base Layout, Tokens, Semantic HTML Shell | NOT_STARTED |
 | S1-T08 | Foundation Review and Documentation Sync | NOT_STARTED |
 
-S1-T03 is completed. Next.js lives in `frontend/` (App Router at `frontend/app/`). Do not start S1-T04 automatically. Layer folders are S1-T04 only.
+S1-T04 is completed. Layer folders exist under `frontend/` (boundary READMEs; no catalog code). Do not start S1-T05 automatically. Repository interfaces and static data are S1-T05 only.
 
 ---
 
