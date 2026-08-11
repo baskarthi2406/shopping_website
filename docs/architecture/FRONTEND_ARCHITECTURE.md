@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). Next.js initialized in S1-T03 at `frontend/app/` (no `src/`). Layer folders are S1-T04.
+**Task:** S1-T02 (layer contract). Next.js initialized in S1-T03 at `frontend/app/` (no `src/`). Layer folders in S1-T04. Static catalog in S1-T05.
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -109,7 +109,7 @@ Services must be unit-testable with fake repositories.
 
 **Does not own:** Implementations, UI.
 
-Lived next to application (TypeScript interfaces). Implementations live in infrastructure.
+Lived next to application (TypeScript interfaces under `application/catalog/` and `application/cart/`). Implementations live in `infrastructure/`. There is no top-level `frontend/repositories/` tree.
 
 ---
 
@@ -249,50 +249,52 @@ Navy/tan dresses: product image exists; **category TBD** — do not infer Kids/T
 
 ---
 
-## 8. Repository interfaces (not implemented)
+## 8. Repository interfaces (as implemented, S1-T05)
 
-Phase 1: Application → interface → `Static*Repository` → static data.  
-Phase 2: same interface → `Api*Repository` → FastAPI.
+Phase 1: Application → interface → `Static*Repository` → static records under `infrastructure/catalog/data/`.  
+Phase 2: same interface → `Api*Repository` → FastAPI (not created). Composition: `config/catalog.ts`.
 
-Suggested methods (refine in S1-T05):
+Methods:
 
 **ProductRepository**
 
+- `getById(id): Promise<Product | null>`
 - `getBySlug(slug): Promise<Product | null>`
-- `list(query?: ListProductsQuery): Promise<Product[]>`
-- `listByCategorySlug(slug): Promise<Product[]>`
-- `listFeatured(): Promise<Product[]>`
-- `search(query: string): Promise<Product[]>` — behavior TBD if search is later
+- `list(): Promise<readonly Product[]>`
+- `listByCategorySlug(slug): Promise<readonly Product[]>`
+- `listFeatured(): Promise<readonly Product[]>` — returns `[]` until merchandising is decided
+- `search` — **not** on the interface (behavior TBD)
 
 **CategoryRepository**
 
+- `getById(id): Promise<Category | null>`
 - `getBySlug(slug): Promise<Category | null>`
-- `list(): Promise<Category[]>`
+- `list(): Promise<readonly Category[]>`
 
 **UomRepository**
 
-- `list(): Promise<Uom[]>`
+- `list(): Promise<readonly Uom[]>` — empty in Phase 1 fixtures
 - `getByCode(code): Promise<Uom | null>`
 
 Cart: `CartRepository` (client) — `get`, `save` — Sprint 4. Storage library **TBD**; do not add one in this task.
 
 ---
 
-## 9. Application services (not implemented)
+## 9. Application services (S1-T05 catalog queries)
 
 Belong here (not in React):
 
-- Get product by slug  
-- List products / by category  
-- Get category / list categories  
-- Search / filter products (rules TBD)  
-- Get featured products  
-- Build home page data (hero refs, category stand-ins, featured)  
+- Get product by slug / id — **S1-T05**
+- List products / by category — **S1-T05**
+- Get category / list categories — **S1-T05**
+- List featured products — **S1-T05** (returns empty until merchandising exists)
+- Search / filter products (rules TBD)
+- Build home page data (hero refs, category stand-ins, featured)
 - Cart: add, update qty, remove, read  
 
-Catalog use cases for **Sprint 2** (high level): list categories, list products in a category, get product by slug, 404 on unknown slug.
+Catalog use cases for **Sprint 2** (high level): list categories, list products in a category, get product by slug, 404 on unknown slug. Pages call `config/catalog.ts`, not fixtures.
 
-Test with in-memory fake repositories. No JSX.
+Test with in-memory fake repositories (runner: S1-T06). No JSX.
 
 ---
 
@@ -392,45 +394,51 @@ Do not add a test framework in S1-T02.
 
 ---
 
-## 17. Target folder structure
+## 17. Folder structure (as implemented, S1-T04)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
-**As implemented (S1-T03):** official Next.js 16 scaffold uses `frontend/app/` (no `src/` directory). Keep domain/application/infrastructure **outside** `app/` when they are added in S1-T04. Do not move routes under `src/app` unless an ADR says so.
+**S1-T03:** Next.js 16 App Router at `frontend/app/` (no `src/`). Logo at `frontend/public/mini-mystiq-logo.png`.
 
-S1-T03 created `app/`, `public/mini-mystiq-logo.png`, and the Next.js config files only. Empty `domain/`, `application/`, `infrastructure/`, `components/`, `config/`, `lib/`, and `types/` folders are **S1-T04**.
+**S1-T04:** Layer directories exist with boundary READMEs only.
+
+**S1-T05:** Catalog domain types, repository interfaces, static repositories, and a small fixture set. No storefront UI. Pages still must not import `infrastructure/catalog/data`.
+
+**Not created (intentional):**
+
+- Top-level `repositories/` — interfaces live under `application/` (this file §2.6).
+- Top-level `types/` — domain types belong in `domain/`; view models beside application/presentation.
+- `domain/product` and `domain/category` as sibling trees — catalog concepts are grouped under `domain/catalog/`.
+- Nested `infrastructure/config/` — composition/env binding is top-level `config/` (§2.8).
+
+These choices follow this contract. They are **not** an ADR.
 
 ```
 frontend/
-  app/                           # routing layer (S1-T03)
+  app/                           # routing (S1-T03); README boundary (S1-T04)
     layout.tsx
     page.tsx
-    c/[slug]/page.tsx            # later sprints
-    p/[slug]/page.tsx
-    cart/
-    checkout/
-    sitemap.ts
-    robots.ts
+    globals.css
   public/
-    mini-mystiq-logo.png         # S1-T03; other assets later
-  domain/                        # S1-T04
-    catalog/
+    mini-mystiq-logo.png
+  components/
+    ui/                          # primitives — later UI tasks
+    storefront/                  # composites — later UI tasks
+  domain/
+    catalog/                     # Product, Category, Uom — types in S1-T05
+    cart/                        # Cart, CartItem — Sprint 4
+  application/
+    catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
-  application/                   # S1-T04
-    catalog/
-    cart/
-    seo/
-  infrastructure/                # S1-T04
-    catalog/                     # static now; api later
-    cart/
-    config/
-  components/                    # S1-T04
-    ui/
-    storefront/
-  lib/                           # shared utils only
+    seo/                         # metadata/JSON-LD helpers — Sprint 3
+  infrastructure/
+    catalog/                     # Static*Repository — S1-T05
+    cart/                        # browser storage adapter — Sprint 4
+  config/                        # bind implementations; no secrets
+  lib/                           # shared technical utils only
 ```
 
-Do not add `types/` as a dump; prefer domain + view-model types beside their layer.
+Future routes (`c/[slug]`, `p/[slug]`, `cart`, `checkout`, `sitemap.ts`, `robots.ts`) stay under `app/` when those sprints arrive.
 
 ---
 

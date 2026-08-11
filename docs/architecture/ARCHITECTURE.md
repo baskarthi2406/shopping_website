@@ -90,7 +90,7 @@ ICartRepository   (Phase 1: client storage; Phase 2: HTTP)
 
 | Phase | Frontend implementation |
 |-------|-------------------------|
-| 1 | `StaticProductRepository` / `StaticCategoryRepository` reading in-repo fixtures |
+| 1 | `StaticProductRepository` / `StaticCategoryRepository` / `StaticUomRepository` (S1-T05); bound in `frontend/config/catalog.ts` |
 | 2 | `HttpProductRepository` calling FastAPI; same method signatures |
 
 Composition (env or config) selects the implementation. **Do not** branch inside page files.
@@ -211,26 +211,29 @@ Documentation-only tasks: review, no runtime tests. Tooling TBD in S1-T06.
 
 ---
 
-## 15. Target folder structure (not created yet)
+## 15. Target folder structure
 
-Created in S1-T04 / Sprint 5. S1-T01 **records** this target:
+Frontend layer folders were created in **S1-T04** (boundary READMEs; no catalog code). Backend remains Sprint 5+.
+
+As implemented, Next.js routes are `frontend/app/` (no `src/`). Domain, application, infrastructure, components, config, and lib sit beside `app/`. Details: `FRONTEND_ARCHITECTURE.md` §17.
 
 ```
 shopping/
   frontend/                 # Next.js app (S1-T03+)
-    src/
-      app/                  # routes, layouts, metadata (thin)
-      domain/
-        catalog/
-        cart/
-      application/
-        catalog/
-        cart/
-      infrastructure/
-        catalog/            # static/ now; http/ in Phase 2
-        cart/
-      components/           # presentational, mobile-first
-      styles/
+    app/                    # routes, layouts, metadata (thin)
+    domain/
+      catalog/
+      cart/
+    application/
+      catalog/
+      cart/
+      seo/
+    infrastructure/
+      catalog/              # static/ now; http/ in Phase 2
+      cart/
+    components/             # presentational, mobile-first
+    config/
+    lib/
   backend/                  # FastAPI modular monolith (Sprint 5+)
     app/
       api/                  # routers by module
@@ -243,8 +246,6 @@ shopping/
   public/                   # current approved assets (SEO names)
   docs/
 ```
-
-If the Next.js scaffold requires `frontend/app` at the package root, keep `domain` / `application` / `infrastructure` **outside** route files. Adjust paths in S1-T04 without changing layering.
 
 ---
 

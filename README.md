@@ -145,9 +145,9 @@ Then implement **only** the current task.
 | Phase | Phase 1 — SEO-First Storefront |
 | Overall status | SPRINT_1_IN_PROGRESS |
 | Current sprint | Sprint 1 — Foundation & Architecture (**IN_PROGRESS**) |
-| Last completed | S1-T03 — Initialize Next.js + TypeScript + Tailwind |
-| Current task | S1-T04 — Establish Frontend Project Structure (**NOT_STARTED**) |
+| Last completed | S1-T05 — Repository Interfaces and Static Data Source |
+| Current task | S1-T06 — Configure Linting and Unit Tests (**NOT_STARTED**) |
 
-Do **not** start S1-T04 automatically.
+Do **not** start S1-T06 automatically.
 
-Phase 2 backend implementation has **not** started. Frontend Next.js is initialized in `frontend/` (App Router at `frontend/app/`).
+Phase 2 backend implementation has **not** started. Frontend Next.js is initialized in `frontend/` (App Router at `frontend/app/`). Layer folders exist (S1-T04). Static catalog is behind `config/catalog.ts` (S1-T05).

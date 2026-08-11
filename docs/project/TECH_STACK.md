@@ -14,7 +14,7 @@
 | Visual assets | `public/` (logo + product/promo photos) | Approved; inventory in `DESIGN_ASSETS.md` |
 | Image pipeline | Next.js Image | In use for the approved logo (`frontend/public/mini-mystiq-logo.png`) |
 | Routing | App Router at `frontend/app/` (no `src/`) | Decided (ADR 0002); S1-T03 |
-| Data | Static/mock repositories | Decided for Phase 1; not implemented until S1-T05 |
+| Data | Static/mock repositories | Implemented S1-T05 (`config/catalog.ts` → ports → static repos) |
 | Testing tools | TBD | Decide in S1-T06 |
 | Linting | ESLint 9.39.5 + `eslint-config-next` 16.3.0 | Scaffolded in S1-T03; remaining lint/format policy is S1-T06 |
 | Formatting | TBD | Decide in S1-T06 |

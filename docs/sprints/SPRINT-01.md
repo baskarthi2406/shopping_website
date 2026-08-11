@@ -152,7 +152,7 @@ Scaffold committed; README run steps work; status updated; next task not started
 
 ## S1-T04 — Establish Frontend Project Structure
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -193,7 +193,7 @@ Structure exists and is documented as implemented.
 
 ## S1-T05 — Repository Interfaces and Static Data Source
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -230,9 +230,11 @@ Types, interfaces, static repository, a few fixture products/categories.
 
 Unit tests for the static repository (list/get by slug or id).
 
+The test runner is **TBD until S1-T06**. This task did not install a framework. Repositories and use cases take interfaces so S1-T06 can add list/get-by-slug tests without changing production code.
+
 ### Definition of Done
 
-Interfaces + mock impl + tests; status updated.
+Interfaces + mock impl; unit tests scheduled for S1-T06; status updated.
 
 ---
 
