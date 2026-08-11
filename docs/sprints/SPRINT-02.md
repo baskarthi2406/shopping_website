@@ -241,11 +241,17 @@ UI breadcrumbs and catalog nav shipped; JSON-LD left to Sprint 3. S2-T05 recorde
 
 ## S2-T05 — Listing Filter/Sort (Placeholder)
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED (deferred)
 
 ### Objective
 
 Add only filter/sort behavior that is decided. If business rules are TBD, implement a minimal sort (e.g. name) **or** document that filters are deferred — do not invent faceted search.
+
+### Outcome
+
+**Deferred.** Price, size, color, brand, inventory, and merchandising order are TBD. No sort, facets, query parameters, or placeholder Filter/Sort UI were added. Listings keep repository order.
+
+Note: `docs/requirements/CATALOG_FILTER_SORT.md`. Task is **COMPLETED** as documentation (not BLOCKED): S2-T06 does not depend on filters.
 
 ### Dependencies
 
@@ -255,13 +261,13 @@ S2-T02.
 
 Do not silently invent taxonomy facets. Prefer TBD + one documented simple sort if needed for UI completeness.
 
-### Implementation scope
+### Implementation scope (as closed)
 
-Either: documented simple sort on listings, or a short requirements note that S2-T05 is deferred with status BLOCKED/TBD recorded in status files.
+Documentation only. No listing query parameters. No Client Component. Category/product pages unchanged.
 
 ### Expected files/modules
 
-- Listing query parameters **or** `docs/requirements/` note + sprint status BLOCKED
+- `docs/requirements/CATALOG_FILTER_SORT.md`
 
 ### Acceptance criteria
 
@@ -270,11 +276,11 @@ Either: documented simple sort on listings, or a short requirements note that S2
 
 ### Testing requirements
 
-If implemented, unit tests for sort. If deferred, documentation-only review.
+Deferred: documentation-only review. No new unit tests (no new logic).
 
 ### Definition of Done
 
-Either minimal sort exists or deferral is explicit in status/docs.
+Deferral is explicit in status/docs. S2-T06 recorded **NOT_STARTED**.
 
 ---
 

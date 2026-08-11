@@ -23,6 +23,7 @@ The public site must eventually allow visitors to:
 - Product attributes beyond name, description, images, price display, and category: **TBD**.
 - Variants (size/color): **TBD**.
 - Stock display on the storefront: **TBD**.
+- Listing filter/sort: **TBD**. S2-T05 deferred this; see `CATALOG_FILTER_SORT.md`. Do not invent facets.
 
 ## Cart (Phase 1)
 

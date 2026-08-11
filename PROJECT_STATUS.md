@@ -32,16 +32,16 @@ Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
 ## Current Sprint
 
 **Sprint 2 — Product Catalog**  
-Status: **IN_PROGRESS** (S2-T01 … S2-T04 completed)
+Status: **IN_PROGRESS** (S2-T01 … S2-T05 completed)
 
 ---
 
 ## Current Task
 
-**S2-T05 — Listing Filter/Sort (Placeholder)**  
+**S2-T06 — Expand Static Catalog Fixtures**  
 Status: **NOT_STARTED**
 
-Do not start S2-T05 automatically. Do not invent faceted search if rules are TBD.
+Do not start S2-T06 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-02.md`.
 
@@ -68,6 +68,7 @@ There is **no S1-T09**.
 - Category listing `/c/[slug]` (S2-T01; S2-T02 closed as already satisfied)
 - Product detail `/p/[slug]` (S2-T03)
 - Catalog nav + shared breadcrumbs (S2-T04)
+- Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
 ### Backend (Phase 2 — not started)
@@ -84,21 +85,22 @@ There is **no S1-T09**.
 - S2-T02 — Category Product Listing Page (satisfied by S2-T01; no duplicate route)
 - S2-T03 — Product Detail Page
 - S2-T04 — Catalog Navigation and Breadcrumbs (UI)
+- S2-T05 — Listing Filter/Sort (Placeholder) — **deferred**; no filter/sort shipped
 
 ## In progress
 
-- None. Do not start S2-T05 automatically.
+- None. Do not start S2-T06 automatically.
 
 ## Pending
 
-- S2-T05 — Listing Filter/Sort (Placeholder) (next)
+- S2-T06 — Expand Static Catalog Fixtures (next)
 - Remainder of Sprint 2–11
 
 ## Blockers
 
-- None for starting S2-T05 when explicitly requested.
-- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art, pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets.
+- None for starting S2-T06 when explicitly requested.
+- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art, pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules.
 
 ## Next task (do not start automatically)
 
-**S2-T05 — Listing Filter/Sort (Placeholder)**
+**S2-T06 — Expand Static Catalog Fixtures**
