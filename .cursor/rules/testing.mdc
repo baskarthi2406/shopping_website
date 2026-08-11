@@ -16,3 +16,5 @@ Prefer tests at domain and application boundaries over brittle UI snapshots.
 - Do not skip tests to bypass architecture (e.g. testing a page that reads fixtures directly).
 
 After implementation: run the checks listed in the task (lint/test/build as they exist). If tooling is not initialized yet (before S1-T03/S1-T06), do not install it unless that is the current task.
+
+Phase 1 unit tests: Vitest (`frontend/`, `npm test`). Colocate `*.test.ts`. Application tests fake repository interfaces; do not import static fixture files. Component/E2E runners are not configured.

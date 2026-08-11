@@ -15,9 +15,9 @@
 | Image pipeline | Next.js Image | In use for the approved logo (`frontend/public/mini-mystiq-logo.png`) |
 | Routing | App Router at `frontend/app/` (no `src/`) | Decided (ADR 0002); S1-T03 |
 | Data | Static/mock repositories | Implemented S1-T05 (`config/catalog.ts` → ports → static repos) |
-| Testing tools | TBD | Decide in S1-T06 |
-| Linting | ESLint 9.39.5 + `eslint-config-next` 16.3.0 | Scaffolded in S1-T03; remaining lint/format policy is S1-T06 |
-| Formatting | TBD | Decide in S1-T06 |
+| Testing tools | Vitest 4.1.10 (Node environment) | Decided S1-T06; colocate `*.test.ts` |
+| Linting | ESLint 9.39.5 + `eslint-config-next` 16.3.0 | Reviewed S1-T06; keep Next Core Web Vitals + TypeScript |
+| Formatting | No Prettier | Decided S1-T06 — avoid a second style tool; ESLint + editor defaults |
 
 ## Phase 2 — Backend
 

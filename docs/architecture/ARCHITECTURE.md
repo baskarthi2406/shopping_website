@@ -191,12 +191,12 @@ Breakpoints / nav pattern / CWV numbers: **TBD** (Tailwind defaults when UI star
 
 | Layer | What to test | When |
 |-------|----------------|------|
-| Domain / application | Pure unit tests | S1-T05+ |
-| Static repositories | List/get/slug | S1-T05 |
-| UI | Optional component tests | S1-T06+ |
+| Domain / application | Pure unit tests | Vitest (S1-T06); fakes for use cases |
+| Static repositories | List/get/slug | Vitest (S1-T06) |
+| UI | Optional component tests | Later; not configured |
 | FastAPI | API + repository tests | Sprint 5+ |
 
-Documentation-only tasks: review, no runtime tests. Tooling TBD in S1-T06.
+Documentation-only tasks: review, no runtime tests. Frontend unit runner is Vitest.
 
 ---
 

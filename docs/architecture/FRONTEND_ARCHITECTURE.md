@@ -381,16 +381,20 @@ WCAG numeric target still **TBD** (proposed 2.2 AA — not approved).
 
 ## 16. Testing boundaries
 
+**Runner (S1-T06):** Vitest 4, Node environment, no jsdom. Commands: `npm test` (CI), `npm run test:watch`.
+
+**Convention:** colocate `*.test.ts` next to the module under test. Do not put unit tests under `app/` or `components/` until a UI testing task.
+
 | Layer | Test | Tool |
 |-------|------|------|
-| Domain | Invariants, cart math, slugs | Unit — runner **TBD** S1-T06 |
-| Application | Use cases with fakes | Unit |
-| Repository | Static list/get/slug | Unit |
-| Components | Render + interaction of client islands | **TBD** |
+| Domain | Behavior that exists (e.g. `isCatalogSlug`). Do not invent validators for type-only models. | Vitest |
+| Application | Use cases with in-memory fakes of repository **interfaces**. Must not import `infrastructure/catalog/data`. | Vitest |
+| Repository | Static list/get/slug/featured/UOM via `Static*Repository` classes | Vitest |
+| Components | Render + interaction of client islands | **TBD** (not Vitest/jsdom in S1-T06) |
 | Pages | Optional integration | **TBD** |
-| E2E | Browse category → PDP → cart (later) | **TBD** |
+| E2E | Browse category → PDP → cart (later) | **TBD** (not Playwright/Cypress in S1-T06) |
 
-Do not add a test framework in S1-T02.
+No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
