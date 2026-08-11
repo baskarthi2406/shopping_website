@@ -39,7 +39,7 @@ npm start
 
 Sprint 1 foundation is complete (S1-T08). Option 1 tokens and a semantic shell (`header` / `main` / `footer`) exist. The home page remains a brand shell (no catalog, hero, or nav).
 
-**S2-T01:** crawlable category listing at `/c/[slug]` (Server Component). Data comes from `catalog.getCategoryPage` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
+**S2-T01 / S2-T02:** crawlable category listing at `/c/[slug]` (Server Component). Built in S2-T01; S2-T02 added no duplicate route or ProductCard. Data comes from `catalog.getCategoryPage` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
 
 Valid development slugs: `/c/baby-essentials` (three products), `/c/infants`, `/c/kids`, `/c/teens`, `/c/women` (empty states). Unknown slugs use `notFound()`. Product cards link to `/p/{slug}` (PDP not built). No cart, search, or filters.
 

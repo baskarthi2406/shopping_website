@@ -56,7 +56,7 @@ Do not add a top-level `repositories/` or `types/` dump. Canonical `Product` / `
 
 Phase 1 catalog access: `config/catalog.ts` → application use cases → repository interfaces → `Static*Repository` → `infrastructure/catalog/data/`. Never import fixtures from React or `app/`.
 
-Category listing (S2-T01): `app/c/[slug]/page.tsx` calls `catalog.getCategoryPage`. Presentation (`ProductCard`) receives view-model props only. Metadata helpers live in `application/seo/`.
+Category listing (S2-T01; S2-T02 closed as already satisfied): `app/c/[slug]/page.tsx` calls `catalog.getCategoryPage`. Presentation (`ProductCard`) receives view-model props only. Metadata helpers live in `application/seo/`. Do not add a second category listing route or ProductCard.
 
 ## Documentation
 
