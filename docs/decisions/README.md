@@ -24,6 +24,11 @@ Suggested sections:
 
 ## Current ADRs
 
-None yet.
+| ID | Title | Status |
+|----|--------|--------|
+| [0001](0001-storefront-design-option-1.md) | Storefront Design Option 1 | Accepted |
+| [0002](0002-nextjs-app-router-server-components.md) | App Router + Server Components | Accepted |
+| [0003](0003-modular-monolith-backend.md) | Modular monolith backend | Accepted |
+| [0004](0004-repository-swap-static-to-http.md) | Static → HTTP repository swap | Accepted |
 
-Baseline architecture in `docs/architecture/` is a **proposed** starting point. S1-T01 may promote or amend it; if S1-T01 changes a decided stack item (Next.js, FastAPI, PostgreSQL), write an ADR.
+Baseline architecture in `docs/architecture/` is refined during S1-T01. Stack (Next.js, FastAPI, PostgreSQL) is already decided and does not need an ADR unless it changes.

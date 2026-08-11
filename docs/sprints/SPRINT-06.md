@@ -147,7 +147,7 @@ S5-T01. ADR for admin location.
 
 ### Requirements
 
-Write ADR if admin lives in `frontend/` vs elsewhere. Not indexable (robots/noindex).
+Write ADR if admin lives in `frontend/` vs elsewhere. Not indexable (robots/noindex). Admin may prioritize desktop but must remain responsive.
 
 ### Implementation scope
 
@@ -164,6 +164,7 @@ Admin layout + dashboard placeholder. ADR.
 - Shell renders
 - noindex/robots disallow documented
 - No full RBAC required yet (Sprint 8) but risk documented
+- Layout remains usable on a narrower viewport (responsive; desktop-priority is allowed)
 
 ### Testing requirements
 

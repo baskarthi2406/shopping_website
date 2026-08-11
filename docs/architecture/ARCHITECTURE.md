@@ -1,81 +1,274 @@
 # Target Architecture
 
-Status: **proposed baseline** for Phase 1. S1-T01 will refine this document. Significant changes require an ADR.
+**Status:** Accepted for S1-T01 (documentation). Implementation starts in later Sprint 1 tasks.  
+Significant changes require an ADR.
+
+**Product:** Mini Mystiq — Baby Clothes & Toys  
+**Tagline:** Delivering Style & Tech  
+**Homepage UI:** Design Option 1 (`docs/project/DESIGN_OPTION_1.md`, ADR 0001)
 
 ---
 
-## Goals
+## 1. Goals
 
-- SEO-first public storefront
-- SOLID and clean separation of concerns
-- Testable domain and application layers
-- Replace Phase 1 static repositories with Phase 2 API repositories without rewriting the UI
+- SEO-first, crawlable storefront
+- Mobile-first (Mobile → Tablet → Desktop)
+- SOLID, testable domain and application layers
+- Phase 1 static repositories replaced in Phase 2 by API repositories **without a storefront rewrite**
+- Backend: **modular monolith** (ADR 0003) — not microservices
+- Approved assets only (`docs/project/DESIGN_ASSETS.md`); logo `mini-mystiq-logo.png`
 
 ---
 
-## Evolution
+## 2. System overview
 
-### Phase 1
+```
+Phase 1                          Phase 2
+───────                          ───────
+Next.js UI                       Next.js UI  (same)
+  → Application services           → Application services  (same)
+    → Repository interface           → Repository interface  (same)
+      → Static repository              → HTTP repository
+                                           → FastAPI modular monolith
+                                             → Application / Domain
+                                               → SQL repository
+                                                 → PostgreSQL
+```
+
+One Git repository (`shopping/`). Apps: `frontend/` (Phase 1+), `backend/` (Phase 2).
+
+---
+
+## 3. Layers and dependency direction
+
+```
+Interface (Next.js pages / FastAPI routers)
+        ↓
+Application (use cases, repository interfaces)
+        ↓
+Domain (entities, value objects, rules)
+        ↑
+Infrastructure (static data, HTTP client, PostgreSQL)
+```
+
+| Layer | May depend on | Must not depend on |
+|-------|----------------|--------------------|
+| Domain | Nothing (language types only) | Next.js, React, Tailwind, FastAPI, SQL, fetch |
+| Application | Domain | UI, ORM, route files |
+| Infrastructure | Domain + application interfaces | UI components |
+| Interface | Application | SQL, fixture JSON, other apps’ internals |
+
+**Rule:** UI and HTTP adapters call application services. They never import static JSON or SQL models.
+
+---
+
+## 4. Domain boundaries
+
+Logical domains (modules). Not services.
+
+| Domain | Phase 1 storefront | Phase 2 backend |
+|--------|--------------------|-----------------|
+| Catalog (Product, Category, UOM) | Yes (static) | Yes |
+| Cart | Client-side (Sprint 4) | Persisted (Sprint 7) |
+| Inventory | Display **TBD** | Sprint 7 |
+| Ordering | Checkout shell only | Sprint 7–9 |
+| Identity / Customer | Header chrome only | Sprint 8 |
+| Admin / Audit | No | Sprint 6–8 |
+| Marketing / CMS | No | Later; TBD |
+
+Keep module folders aligned with these names so a domain can be extracted later **without** starting as microservices.
+
+---
+
+## 5. Repository swap
+
+```
+IProductRepository
+ICategoryRepository
+ICartRepository   (Phase 1: client storage; Phase 2: HTTP)
+```
+
+| Phase | Frontend implementation |
+|-------|-------------------------|
+| 1 | `StaticProductRepository` / `StaticCategoryRepository` reading in-repo fixtures |
+| 2 | `HttpProductRepository` calling FastAPI; same method signatures |
+
+Composition (env or config) selects the implementation. **Do not** branch inside page files.
+
+ADR 0004.
+
+---
+
+## 6. Phase 1 data flow
+
+```
+Next.js (Server Components for catalog)
+  → Catalog application services
+    → IProductRepository / ICategoryRepository
+      → Static repository
+        → Static product/category data + SEO image paths from DESIGN_ASSETS.md
+```
+
+No FastAPI, no PostgreSQL, no admin implementation.
+
+---
+
+## 7. Phase 2 data flow
 
 ```
 Next.js
-  ↓
-Domain / Application abstractions
-  ↓
-Repository interface
-  ↓
-Static / mock data
+  → same application services
+    → same repository interfaces
+      → HTTP repository (API client)
+        → FastAPI (modular monolith)
+          → application / domain
+            → repository interface
+              → PostgreSQL
 ```
 
-### Phase 2
-
-```
-Next.js
-  ↓
-API client (frontend infrastructure implementing the same repository interface)
-  ↓
-FastAPI
-  ↓
-Application / Domain
-  ↓
-Repository
-  ↓
-PostgreSQL
-```
-
-The frontend application layer must depend on **interfaces**, not on mock files or HTTP clients.
+Next.js **never** opens a DB connection.
 
 ---
 
-## Layers
+## 8. Frontend (summary)
 
-| Layer | Responsibility |
-|-------|----------------|
-| Interface | Next.js pages/layouts (Phase 1); FastAPI routers (Phase 2) |
-| Application | Use cases (list products, get product, cart operations) |
-| Domain | Entities, value objects, catalog/cart rules that do not depend on frameworks |
-| Infrastructure | Mock JSON, API clients, ORM, mail, payment adapters |
+- Next.js App Router, React, TypeScript, Tailwind (ADR 0002)
+- Server Components for catalog/SEO pages; Client Components for cart, search box, wishlist chrome, mobile nav
+- Mobile-first; Design Option 1
+- Details: `FRONTEND_ARCHITECTURE.md`
 
-## Boundaries
+---
 
-- Domain must not import Next.js, React, FastAPI, SQL, or Tailwind.
-- UI must not query PostgreSQL or read ad-hoc JSON except through a repository.
-- Admin is Phase 2 and must not be built in the Phase 1 storefront except as documented later.
+## 9. Backend (summary)
 
-## Repository abstraction
+- Python + FastAPI + PostgreSQL
+- **Modular monolith**, one deployable, one database
+- Thin routers; domain in modules
+- Details: `BACKEND_ARCHITECTURE.md`, ADR 0003
 
-Each aggregate (Product, Category, and later Cart/Order/Customer) is accessed through a repository interface defined in the application or domain layer.
+---
 
-Phase 1: `StaticProductRepository`  
-Phase 2: `HttpProductRepository` (frontend) + `SqlProductRepository` (backend)
+## 10. Admin
 
-## TBD
+Phase 2. Same backend application services. UI host **TBD** (ADR in Sprint 6). Desktop-priority, still responsive. Not indexed. Modules: `docs/requirements/ADMIN_REQUIREMENTS.md`.
 
-- Exact folder names inside `frontend/` (decide in S1-T01 / S1-T04)
-- Backend package layout (decide in Sprint 5)
-- Auth, caching, and CMS (not Phase 1)
+---
 
-See also:
+## 11. SEO architecture
 
-- `FRONTEND_ARCHITECTURE.md`
-- `BACKEND_ARCHITECTURE.md`
+First-class. Default URL shapes (implement Sprint 2–3; change only via ADR):
+
+| Page | Path | Indexed |
+|------|------|---------|
+| Home | `/` | Yes |
+| Category | `/c/{categorySlug}` | Yes |
+| Product | `/p/{productSlug}` | Yes |
+| Cart | `/cart` | No |
+| Checkout | `/checkout` | No |
+| Admin | TBD Phase 2 | No |
+
+Also: `generateMetadata`, canonicals, sitemap, `robots.txt`, Product / BreadcrumbList / Organization JSON-LD, OpenGraph, Next.js `Image`, semantic HTML, internal links. Catalog HTML from the server.
+
+Canonical **domain** TBD. Organization legal name TBD (brand Mini Mystiq).
+
+Details: `docs/requirements/SEO_REQUIREMENTS.md`.
+
+---
+
+## 12. Mobile-first architecture
+
+Mandatory for the storefront. Priority: **Mobile → Tablet → Desktop**.
+
+Every storefront UI task: mobile layout, touch, responsive type/images, no horizontal scroll, mobile nav/listing/PDP/cart, performance, Core Web Vitals.
+
+Desktop extends mobile. Admin may be desktop-first but responsive.
+
+Breakpoints / nav pattern / CWV numbers: **TBD** (Tailwind defaults when UI starts, then document).
+
+---
+
+## 13. Testing architecture
+
+| Layer | What to test | When |
+|-------|----------------|------|
+| Domain / application | Pure unit tests | S1-T05+ |
+| Static repositories | List/get/slug | S1-T05 |
+| UI | Optional component tests | S1-T06+ |
+| FastAPI | API + repository tests | Sprint 5+ |
+
+Documentation-only tasks: review, no runtime tests. Tooling TBD in S1-T06.
+
+---
+
+## 14. Security boundaries
+
+- No secrets in Git
+- Phase 1: no customer auth; Account/Wishlist icons are chrome (behavior TBD)
+- Phase 2: auth at API; RBAC on admin; frontend does not talk to Postgres
+- Do not index cart, checkout, or admin
+- Validate input at FastAPI boundaries
+- PII rules TBD Sprint 8
+
+---
+
+## 15. Target folder structure (not created yet)
+
+Created in S1-T04 / Sprint 5. S1-T01 **records** this target:
+
+```
+shopping/
+  frontend/                 # Next.js app (S1-T03+)
+    src/
+      app/                  # routes, layouts, metadata (thin)
+      domain/
+        catalog/
+        cart/
+      application/
+        catalog/
+        cart/
+      infrastructure/
+        catalog/            # static/ now; http/ in Phase 2
+        cart/
+      components/           # presentational, mobile-first
+      styles/
+  backend/                  # FastAPI modular monolith (Sprint 5+)
+    app/
+      api/                  # routers by module
+      modules/
+        catalog/
+        inventory/
+        ordering/
+        identity/
+      shared/
+  public/                   # current approved assets (SEO names)
+  docs/
+```
+
+If the Next.js scaffold requires `frontend/app` at the package root, keep `domain` / `application` / `infrastructure` **outside** route files. Adjust paths in S1-T04 without changing layering.
+
+---
+
+## 16. ADRs
+
+| ID | Decision |
+|----|----------|
+| 0001 | Design Option 1 homepage |
+| 0002 | App Router + Server Components for catalog |
+| 0003 | Modular monolith backend (not microservices) |
+| 0004 | Repository interfaces; static → HTTP without UI rewrite |
+
+---
+
+## 17. TBD (do not invent)
+
+- Domain, trailing slash, locales
+- Exact Tailwind breakpoint px and CWV budgets
+- ORM, migration tool, API error envelope (Sprint 5)
+- Admin UI host (Sprint 6)
+- Auth provider (Sprint 8)
+- Payment/email/shipping vendors (Sprint 9)
+- Legal entity (wireframe “Enn2Gee”)
+- Category data taxonomy vs Option 1 nav labels
+- Standalone Option 1 lifestyle hero photo
+
+See also: `FRONTEND_ARCHITECTURE.md`, `BACKEND_ARCHITECTURE.md`.

@@ -196,6 +196,8 @@ Next.js UI → Application → Repository interface → API client
 - Do not fetch from a FastAPI backend until Phase 2 tasks require it.
 - Keep page files thin: compose domain/application modules; do not embed catalog rules in `page.tsx`.
 - Semantic HTML is required.
+- Storefront UI is mobile-first (Mobile → Tablet → Desktop). See Section 14.
+- Visual identity is Mini Mystiq. Logo: `public/mini-mystiq-logo.png`. See `docs/project/DESIGN_ASSETS.md`.
 - Do not initialize Next.js unless the current task explicitly requires it.
 
 ---
@@ -226,19 +228,76 @@ The storefront must eventually support:
 - Organization structured data
 - OpenGraph
 - Image optimization
+- SEO-friendly image filenames (see below)
 - Semantic HTML
 - Internal linking
 - Crawlable product and category pages
 
 Do not ship client-only catalog pages that search engines cannot crawl.
 
-Business SEO copy, brand name, and domain are **TBD** unless documented in requirements.
+Brand name is **Mini Mystiq** (documented). Domain and legal entity remain **TBD** unless documented in requirements.
+
+### SEO image filenames
+
+Storefront `src` must use SEO-friendly names documented in `docs/project/DESIGN_ASSETS.md`.
+
+- lowercase; hyphen-separated words; no spaces or special characters
+- describe the actual image; do not guess; mark **TBD** if unclear
+- no generic names (`IMG_1234`, `product1`, WhatsApp timestamps)
+- logo is stable: `mini-mystiq-logo.png` — do not rename it again
+- keep original files; do not delete them
+- `alt` describes the image in words; do not use the filename as alt
+- mapping table: Original Filename | SEO Filename | Type | Usage | Status
 
 ---
 
-## 14. FastAPI Rules (Phase 2)
+## 14. Mobile-First Rules
+
+Mobile-first is **mandatory** for the customer storefront.
+
+Responsive priority:
+
+```
+Mobile → Tablet → Desktop
+```
+
+Mobile customers are the primary audience. Desktop is an extension of the mobile-first design, not the other way around.
+
+Every storefront task must consider:
+
+- Mobile layout
+- Touch-friendly interactions
+- Responsive typography
+- Responsive images
+- No horizontal scrolling
+- Mobile navigation
+- Mobile product browsing
+- Mobile product detail
+- Mobile cart
+- Mobile performance
+- Core Web Vitals
+
+Rules:
+
+- Design and implement the smallest viewport first; enhance for tablet and desktop.
+- Do not ship desktop-only storefront layouts that are merely squeezed onto phones.
+- Interactive controls on the storefront must be usable with touch (not hover-only).
+- Catalog and cart pages must not require horizontal scrolling at mobile widths.
+- Navigation, product listing, product detail, and cart must have explicit mobile treatments.
+- Prefer CSS (Tailwind) responsive utilities over separate mobile sites or user-agent forks.
+- Exact breakpoint pixel values are **TBD** (Tailwind defaults may be used when a UI task starts, and must then be documented).
+- Numeric Core Web Vitals budgets are **TBD**; storefront work must still avoid known CWV regressions (oversized images, blocked rendering, layout shift from unsized media).
+
+Admin UI (Phase 2) may prioritize desktop usability but **must remain responsive**.
+
+Details: `docs/requirements/MOBILE_REQUIREMENTS.md`.
+
+---
+
+## 15. FastAPI Rules (Phase 2)
 
 - Backend lives in `backend/`.
+- Phase 2 shape is a **modular monolith** (ADR 0003), not microservices.
 - Do **not** implement FastAPI during Phase 1.
 - FastAPI handles HTTP only: validation, authn/authz hooks, status codes.
 - Business rules belong in application/domain modules, not in route functions.
@@ -247,7 +306,7 @@ Business SEO copy, brand name, and domain are **TBD** unless documented in requi
 
 ---
 
-## 15. PostgreSQL Rules (Phase 2)
+## 16. PostgreSQL Rules (Phase 2)
 
 - PostgreSQL is the Phase 2 system of record.
 - Schema changes go through migrations (tool TBD in Sprint 5).
@@ -256,7 +315,7 @@ Business SEO copy, brand name, and domain are **TBD** unless documented in requi
 
 ---
 
-## 16. Testing Rules
+## 17. Testing Rules
 
 - Every task that changes behavior must include tests named in the task spec.
 - Documentation-only tasks do not require runtime tests; they require a file/consistency review.
@@ -267,7 +326,7 @@ Business SEO copy, brand name, and domain are **TBD** unless documented in requi
 
 ---
 
-## 17. Git Workflow
+## 18. Git Workflow
 
 - Repository root is `shopping/`. Do not create a nested `baby-store/` directory.
 - Create a branch for the current task before implementation.
@@ -299,7 +358,7 @@ Examples:
 
 ---
 
-## 18. Documentation Rules
+## 19. Documentation Rules
 
 - Keep `docs/` in sync with implemented reality.
 - Do not silently invent business requirements. Use **TBD**.
@@ -309,7 +368,7 @@ Examples:
 
 ---
 
-## 19. ADR Rules
+## 20. ADR Rules
 
 - ADRs live in `docs/decisions/`.
 - Write an ADR before changing: framework choice, layering, data ownership, auth model, or Phase 1↔Phase 2 integration.
@@ -318,7 +377,7 @@ Examples:
 
 ---
 
-## 20. Dependency Rules
+## 21. Dependency Rules
 
 - Do not add a dependency unless the current task requires it.
 - Prefer the existing stack: Next.js, React, TypeScript, Tailwind (Phase 1); Python, FastAPI, PostgreSQL (Phase 2).
@@ -327,7 +386,7 @@ Examples:
 
 ---
 
-## 21. Security Rules
+## 22. Security Rules
 
 - Never commit secrets.
 - Do not log personal data unnecessarily. Customer PII handling is TBD until Sprint 8.
@@ -337,26 +396,28 @@ Examples:
 
 ---
 
-## 22. Performance Rules
+## 23. Performance Rules
 
 - Catalog pages must remain server-renderable.
 - Optimize images through the Next.js image pipeline once the storefront exists.
+- Use approved files in repository `public/` (`docs/project/DESIGN_ASSETS.md`). Do not generate, download, or replace the Mini Mystiq logo or product photos.
 - Do not fetch unnecessary client-side data for SEO-critical pages.
-- Performance budgets and hosting limits are **TBD**.
+- Storefront performance is mobile-first: consider Core Web Vitals on every storefront UI task.
+- Numeric CWV, Lighthouse, and hosting budgets are **TBD**.
 
 ---
 
-## 23. Accessibility Rules
+## 24. Accessibility Rules
 
 - Use semantic HTML and correct heading order.
-- Interactive controls must be keyboard accessible.
+- Interactive controls must be keyboard accessible and, on the storefront, touch-friendly.
 - Images require meaningful `alt` text (or empty alt when decorative).
 - Color must not be the only means of conveying information.
 - Detailed WCAG target is **TBD** (proposed: WCAG 2.2 AA — not approved until an ADR or requirement says so).
 
 ---
 
-## 24. Definition of Done
+## 25. Definition of Done
 
 A task is done only when **all** of the following are true:
 
@@ -364,7 +425,7 @@ A task is done only when **all** of the following are true:
 2. Acceptance criteria are met.
 3. Required tests exist and pass (or documentation review is complete for docs-only tasks).
 4. Architecture and layering rules are respected.
-5. SEO/a11y/security rules that apply to the changed files are respected.
+5. SEO, accessibility, mobile-first, and security rules that apply to the changed files are respected.
 6. Documentation is updated.
 7. `PROJECT_STATUS.md`, `SPRINT_STATUS.md`, `CURRENT_TASK.md`, and the sprint file are updated.
 8. No Phase 2+ implementation leaked into a Phase 1 task.
@@ -372,7 +433,7 @@ A task is done only when **all** of the following are true:
 
 ---
 
-## 25. Stop Rule (No Automatic Next Task)
+## 26. Stop Rule (No Automatic Next Task)
 
 Completing a task does **not** authorize starting the next one.
 
@@ -384,7 +445,7 @@ After a task is completed:
 
 ---
 
-## 26. Phase Guardrails
+## 27. Phase Guardrails
 
 | Phase | Allowed | Not allowed |
 |-------|---------|-------------|
@@ -396,7 +457,7 @@ After a task is completed:
 
 ---
 
-## 27. Undecided Requirements
+## 28. Undecided Requirements
 
 If a business, brand, legal, or vendor decision is not in `docs/`, mark it **TBD**.
 

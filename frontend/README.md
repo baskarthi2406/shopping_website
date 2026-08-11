@@ -1,6 +1,6 @@
 # Frontend
 
-Phase 1 SEO-first storefront for the Baby Clothes & Toys project.
+Phase 1 SEO-first, mobile-first storefront for the Baby Clothes & Toys project.
 
 ## Planned stack
 
@@ -32,5 +32,7 @@ In Phase 2 the repository implementation switches to an API client. The UI must 
 - Keep page files thin.
 - Prefer Server Components for crawlable catalog pages.
 - SEO is a first-class requirement.
+- UX is mobile-first: Mobile → Tablet → Desktop. See `docs/requirements/MOBILE_REQUIREMENTS.md`.
+- Brand assets: repository `public/` (see `docs/project/DESIGN_ASSETS.md`). Logo: `mini-mystiq-logo.png`. Use SEO filenames in the UI.
 
 Details: `docs/architecture/FRONTEND_ARCHITECTURE.md`.

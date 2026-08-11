@@ -2,7 +2,9 @@
 
 Repository: **shopping**
 
-SEO-first e-commerce storefront for baby clothes and toys, with a later FastAPI + PostgreSQL backend and admin.
+**Mini Mystiq** — SEO-first, **mobile-first** e-commerce storefront for baby clothes and toys, with a later FastAPI + PostgreSQL backend and admin.
+
+Tagline: **Delivering Style & Tech**
 
 ---
 
@@ -46,7 +48,13 @@ SOLID and clean architecture:
 
 The storefront must not need a major rewrite when mock data is replaced by the API.
 
-See `docs/architecture/ARCHITECTURE.md`.
+Customer storefront UX is **mobile-first** (Mobile → Tablet → Desktop). Desktop is an extension of mobile, not the starting point. Admin (Phase 2) may prioritize desktop but must remain responsive.
+
+Approved logo and photos: `public/` — inventory in `docs/project/DESIGN_ASSETS.md`. Do not replace the Mini Mystiq logo.
+
+Homepage UI follows **Design Option 1** (finalized): `docs/project/DESIGN_OPTION_1.md`.
+
+See `docs/architecture/ARCHITECTURE.md` and `docs/requirements/MOBILE_REQUIREMENTS.md`.
 
 ---
 
@@ -135,11 +143,11 @@ Then implement **only** the current task.
 | Field | Value |
 |-------|--------|
 | Phase | Phase 1 — SEO-First Storefront |
-| Overall status | READY_FOR_SPRINT_1 |
-| Current sprint | Sprint 1 — Foundation & Architecture (**NOT_STARTED**) |
-| Last completed | S0-T01 — Initialize Project-Control Documentation |
-| Current task | S1-T01 — Document Target Architecture (**NOT_STARTED**) |
+| Overall status | SPRINT_1_IN_PROGRESS |
+| Current sprint | Sprint 1 — Foundation & Architecture (**IN_PROGRESS**) |
+| Last completed | S1-T01 — Document Target Architecture |
+| Current task | S1-T02 — Document Frontend Layer Boundaries (**NOT_STARTED**) |
 
-Do **not** start S1-T01 automatically.
+Do **not** start S1-T02 automatically. Do not initialize Next.js until S1-T03.
 
 Phase 2 backend implementation has **not** started. Frontend Next.js is **not** initialized.

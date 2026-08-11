@@ -22,6 +22,8 @@ Record the next task ID but do not implement it.
 
 Undecided business, vendor, or legal facts: write **TBD**. Do not invent brand, domain, pricing, or providers.
 
+Storefront requirements include SEO-first and mobile-first (`docs/requirements/SEO_REQUIREMENTS.md`, `docs/requirements/MOBILE_REQUIREMENTS.md`). Do not drop these when editing sprint specs.
+
 Significant architecture changes: add an ADR in `docs/decisions/` (status, date, context, decision, consequences) before implementing.
 
 Cursor rules must not contradict `PROJECT_DEVELOPMENT_RULES.md`. If they do, the rules file wins; report the conflict.

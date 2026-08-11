@@ -58,7 +58,7 @@ Security review recorded.
 
 ### Objective
 
-Catalog page performance: images, server rendering, obvious N+1/API waterfalls.
+Catalog page performance: images, server rendering, obvious N+1/API waterfalls, mobile Core Web Vitals.
 
 ### Dependencies
 
@@ -66,7 +66,7 @@ Storefront + API.
 
 ### Requirements
 
-Budgets **TBD**. Do not add a new CDN vendor silently.
+Budgets **TBD**. Measure with mobile-first / CWV in mind (LCP, INP, CLS). Do not add a new CDN vendor silently.
 
 ### Implementation scope
 
@@ -81,6 +81,7 @@ Measure (method TBD) + fix hotspots.
 
 - Notes include before/after or remaining TBD
 - Catalog still crawlable
+- Mobile performance and Core Web Vitals are addressed or listed as residual TBD with budgets still unset
 
 ### Testing requirements
 

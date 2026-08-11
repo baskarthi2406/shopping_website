@@ -34,14 +34,14 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 | Field | Value |
 |-------|--------|
 | Phase | Phase 1 — SEO-First Storefront |
-| Objective | Document architecture and scaffold the Next.js storefront with clean layering and mock repositories |
-| Status | **NOT_STARTED** |
+| Objective | Document architecture and scaffold the Next.js storefront with clean layering, mock repositories, and mobile-first UX |
+| Status | **IN_PROGRESS** |
 | Dependencies | S0-T01 completed |
 | Task IDs | S1-T01 … S1-T08 |
 
 | Task ID | Name | Status |
 |---------|------|--------|
-| S1-T01 | Document Target Architecture | **NOT_STARTED** |
+| S1-T01 | Document Target Architecture | **COMPLETED** |
 | S1-T02 | Document Frontend Layer Boundaries | NOT_STARTED |
 | S1-T03 | Initialize Next.js + TypeScript + Tailwind | NOT_STARTED |
 | S1-T04 | Establish Frontend Project Structure | NOT_STARTED |
@@ -50,7 +50,7 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 | S1-T07 | Base Layout, Tokens, Semantic HTML Shell | NOT_STARTED |
 | S1-T08 | Foundation Review and Documentation Sync | NOT_STARTED |
 
-Do not start S1-T01 automatically.
+S1-T01 is completed. Do not start S1-T02 automatically. Do not initialize Next.js until S1-T03.
 
 ---
 
@@ -161,4 +161,6 @@ Do not start S1-T01 automatically.
 ## Notes
 
 - Admin UI modules are planned in `docs/requirements/ADMIN_REQUIREMENTS.md`. Implementation starts in Phase 2.
+- Storefront is mobile-first (`docs/requirements/MOBILE_REQUIREMENTS.md`). Admin may prioritize desktop but must stay responsive.
+- Homepage visual design: Option 1 finalized (`docs/project/DESIGN_OPTION_1.md`).
 - Vendor, brand, and policy decisions are **TBD**.

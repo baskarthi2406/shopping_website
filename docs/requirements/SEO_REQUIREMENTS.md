@@ -2,7 +2,7 @@
 
 SEO is a **first-class** requirement. Catalog pages must be crawlable.
 
-Brand, domain, and marketing copy are **TBD**.
+Brand: **Mini Mystiq**. Domain and legal entity remain **TBD**.
 
 ---
 
@@ -10,7 +10,7 @@ Brand, domain, and marketing copy are **TBD**.
 
 | Capability | Notes |
 |------------|--------|
-| SEO-friendly URLs | Pattern TBD in S3-T01 (e.g. `/c/{slug}`, `/p/{slug}` — proposal only) |
+| SEO-friendly URLs | Architecture default (S1-T01): `/`, `/c/{categorySlug}`, `/p/{productSlug}`. Implement Sprint 2–3; change via ADR |
 | Dynamic metadata | Title, description per page type |
 | Canonical URLs | One canonical per indexable page |
 | Sitemap | XML sitemap of indexable URLs |
@@ -19,10 +19,14 @@ Brand, domain, and marketing copy are **TBD**.
 | Breadcrumb structured data | JSON-LD BreadcrumbList |
 | Organization structured data | JSON-LD Organization (legal name TBD) |
 | OpenGraph | Title, description, image |
-| Image optimization | Next.js image pipeline; alt text |
+| Image optimization | Next.js image pipeline; SEO filenames + meaningful alt (not the filename); approved `public/` assets (`DESIGN_ASSETS.md`) |
 | Semantic HTML | Landmarks, headings, lists |
 | Internal linking | Categories ↔ products, breadcrumbs |
 | Crawlable product/category pages | Server-rendered HTML; not client-only shells |
+
+## Mobile and Core Web Vitals
+
+SEO and mobile-first overlap: crawlable HTML must also be usable on a phone. Storefront tasks must consider Core Web Vitals (numeric budgets **TBD**). See `MOBILE_REQUIREMENTS.md`.
 
 ## Implementation rules
 

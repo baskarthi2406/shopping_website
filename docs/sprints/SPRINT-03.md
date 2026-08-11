@@ -8,7 +8,7 @@
 | Status | NOT_STARTED |
 | Dependencies | Sprint 2 completed |
 
-Follow `docs/requirements/SEO_REQUIREMENTS.md`. Domain and legal names remain **TBD**.
+Follow `docs/requirements/SEO_REQUIREMENTS.md` and `docs/requirements/MOBILE_REQUIREMENTS.md`. Domain and legal names remain **TBD**. Storefront SEO work must not regress mobile-first layout or Core Web Vitals considerations.
 
 ---
 
@@ -382,7 +382,7 @@ S2-T03.
 
 ### Requirements
 
-No raw unoptimized decorative catalog `<img>` for product photos unless documented exception. Alt from product data.
+No raw unoptimized decorative catalog `<img>` for product photos unless documented exception. Alt from product data. Images must be responsive (no overflow / horizontal scroll). Consider LCP on PDP.
 
 ### Implementation scope
 
@@ -391,12 +391,13 @@ Image component usage on listing and PDP.
 ### Expected files/modules
 
 - Product image component
-- Fixture image paths or placeholders in `public/`
+- Fixture image paths from SEO filenames in `docs/project/DESIGN_ASSETS.md`
 
 ### Acceptance criteria
 
 - Product images use the Next.js Image component (or documented equivalent)
 - Alt text from data
+- Images are responsive on mobile; no horizontal scroll from media
 
 ### Testing requirements
 

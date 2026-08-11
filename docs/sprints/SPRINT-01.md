@@ -4,21 +4,21 @@
 |-------|--------|
 | Sprint ID | S1 |
 | Phase | Phase 1 — SEO-First Storefront |
-| Objective | Document target architecture and establish the Next.js storefront foundation with clean layers and mock repositories |
-| Status | NOT_STARTED |
+| Objective | Document target architecture and establish the Next.js storefront foundation with clean layers, mock repositories, and mobile-first UX |
+| Status | IN_PROGRESS |
 | Dependencies | S0-T01 completed |
 
-Do not implement these tasks until they are the current task. Do not start S1-T01 automatically after S0-T01.
+Do not implement later Sprint 1 tasks until they are the current task. S1-T01 is documentation only — no Next.js init.
 
 ---
 
 ## S1-T01 — Document Target Architecture
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Produce the agreed Phase 1/Phase 2 architecture document: layers, repository abstraction, SEO-first rendering, and evolution path from mock data to API.
+Produce the agreed Phase 1/Phase 2 architecture document: layers, repository abstraction, SEO-first rendering, mobile-first storefront UX, and evolution path from mock data to API.
 
 ### Dependencies
 
@@ -27,6 +27,8 @@ S0-T01 completed.
 ### Requirements
 
 - Align with `docs/architecture/` and `PROJECT_DEVELOPMENT_RULES.md`
+- Include mobile-first storefront (Mobile → Tablet → Desktop) per `docs/requirements/MOBILE_REQUIREMENTS.md`
+- Include approved Mini Mystiq assets per `docs/project/DESIGN_ASSETS.md` (logo, `public/` photos, wireframe). Do not replace the logo.
 - Do not invent business requirements; mark TBD
 - Significant deviations from the decided stack need an ADR
 
@@ -39,6 +41,7 @@ Documentation only. Update architecture docs and, if needed, one ADR. No Next.js
 - `docs/architecture/ARCHITECTURE.md`
 - `docs/architecture/FRONTEND_ARCHITECTURE.md`
 - `docs/architecture/BACKEND_ARCHITECTURE.md`
+- `docs/project/DESIGN_ASSETS.md`
 - `docs/decisions/*` only if a decision changes
 - Status files
 
@@ -46,6 +49,8 @@ Documentation only. Update architecture docs and, if needed, one ADR. No Next.js
 
 - Target architecture is explicit enough to scaffold `frontend/` in later S1 tasks
 - Phase 1 vs Phase 2 data flow is documented
+- Mobile-first storefront vs desktop-priority responsive admin is documented
+- Mini Mystiq logo and `public/` assets are inventoried and referenced
 - Folder structure proposal is recorded
 - No application code
 
@@ -286,7 +291,7 @@ S1-T04.
 
 ### Requirements
 
-Semantic HTML, keyboard-focusable header links (even if targets are placeholders). Visual brand is **TBD**.
+Semantic HTML, keyboard-focusable header links (even if targets are placeholders). Visual brand is **TBD**. Mobile-first layout and mobile navigation shell per `docs/requirements/MOBILE_REQUIREMENTS.md`.
 
 ### Implementation scope
 
@@ -302,6 +307,8 @@ Root layout, basic navigation placeholders, CSS tokens. Home page remains a shel
 - Valid landmark structure
 - No cart/catalog feature work beyond placeholder nav labels
 - Crawlable document shell (real `<header>`, `<main>`, `<footer>`)
+- Mobile-first: usable at a narrow viewport; no horizontal scroll; desktop is an enhancement
+- Touch-friendly nav controls (pattern TBD)
 
 ### Testing requirements
 
