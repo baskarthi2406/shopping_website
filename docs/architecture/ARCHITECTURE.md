@@ -1,6 +1,6 @@
 # Target Architecture
 
-**Status:** Accepted for S1-T01 (documentation). Implementation starts in later Sprint 1 tasks.  
+**Status:** Accepted for S1-T01. Sprint 1 foundation is implemented as of S1-T08.  
 Significant changes require an ADR.
 
 **Product:** Mini Mystiq — Baby Clothes & Toys  
@@ -213,7 +213,7 @@ Documentation-only tasks: review, no runtime tests. Frontend unit runner is Vite
 
 ## 15. Target folder structure
 
-Frontend layer folders were created in **S1-T04** (boundary READMEs; no catalog code). Backend remains Sprint 5+.
+Frontend layer folders were created in **S1-T04**. Static catalog **S1-T05**, Vitest **S1-T06**, tokens/shell **S1-T07**. Backend remains Sprint 5+.
 
 As implemented, Next.js routes are `frontend/app/` (no `src/`). Domain, application, infrastructure, components, config, and lib sit beside `app/`. Details: `FRONTEND_ARCHITECTURE.md` §17.
 

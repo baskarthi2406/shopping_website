@@ -5,10 +5,10 @@
 | Sprint ID | S1 |
 | Phase | Phase 1 — SEO-First Storefront |
 | Objective | Document target architecture and establish the Next.js storefront foundation with clean layers, mock repositories, and mobile-first UX |
-| Status | IN_PROGRESS |
+| Status | COMPLETED |
 | Dependencies | S0-T01 completed |
 
-Do not implement later Sprint 1 tasks until they are the current task. S1-T01 is documentation only — no Next.js init.
+Sprint 1 is complete as of S1-T08. Do not start Sprint 2 until a human requests **S2-T01**. There is no S1-T09.
 
 ---
 
@@ -230,7 +230,7 @@ Types, interfaces, static repository, a few fixture products/categories.
 
 Unit tests for the static repository (list/get by slug or id).
 
-The test runner is **TBD until S1-T06**. This task did not install a framework. Repositories and use cases take interfaces so S1-T06 can add list/get-by-slug tests without changing production code.
+The test runner was TBD during S1-T05. **S1-T06 added Vitest**; list/get-by-slug tests live beside the static repositories.
 
 ### Definition of Done
 
@@ -252,7 +252,7 @@ S1-T03 (can proceed after S1-T05 if tests already need a runner; do not skip if 
 
 ### Requirements
 
-Tool choices currently **TBD** — select common Next.js-compatible tools in this task and document them in `docs/project/TECH_STACK.md`. Do not add unrelated libraries.
+**As completed:** Vitest 4.1.10 (Node), existing ESLint/`eslint-config-next`, no Prettier. Documented in `docs/project/TECH_STACK.md`.
 
 ### Implementation scope
 
@@ -293,7 +293,7 @@ S1-T04.
 
 ### Requirements
 
-Semantic HTML, keyboard-focusable header links (even if targets are placeholders). Visual brand is **TBD**. Mobile-first layout and mobile navigation shell per `docs/requirements/MOBILE_REQUIREMENTS.md`.
+**As completed:** Semantic `header` / `main` / `footer` plus skip link and logo home link. No placeholder `<nav>` (no fake destinations). Option 1 CSS tokens are **implementation defaults** in `app/globals.css`, not a locked brand guide. Mobile nav pattern remains TBD (Sprint 2+).
 
 ### Implementation scope
 
@@ -324,7 +324,7 @@ Shell merged; no Sprint 2 catalog scope included.
 
 ## S1-T08 — Foundation Review and Documentation Sync
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 

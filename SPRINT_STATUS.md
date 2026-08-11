@@ -35,7 +35,7 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 |-------|--------|
 | Phase | Phase 1 — SEO-First Storefront |
 | Objective | Document architecture and scaffold the Next.js storefront with clean layering, mock repositories, and mobile-first UX |
-| Status | **IN_PROGRESS** |
+| Status | **COMPLETED** |
 | Dependencies | S0-T01 completed |
 | Task IDs | S1-T01 … S1-T08 |
 
@@ -48,9 +48,9 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 | S1-T05 | Repository Interfaces and Static Data Source | **COMPLETED** |
 | S1-T06 | Configure Linting and Unit Tests | **COMPLETED** |
 | S1-T07 | Base Layout, Tokens, Semantic HTML Shell | **COMPLETED** |
-| S1-T08 | Foundation Review and Documentation Sync | NOT_STARTED |
+| S1-T08 | Foundation Review and Documentation Sync | **COMPLETED** |
 
-S1-T07 is completed. Option 1 tokens and a semantic shell exist. Do not start S1-T08 automatically. Foundation review is S1-T08 only.
+Sprint 1 is complete. There is no S1-T09. Do not start S2-T01 automatically.
 
 ---
 

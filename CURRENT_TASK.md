@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S1-T08.
+Only this task may be implemented. Do not start it until a human explicitly requests S2-T01.
 
 ---
 
@@ -8,55 +8,55 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S1-T07 |
-| Task | Base Layout, Tokens, Semantic HTML Shell |
+| Task ID | S1-T08 |
+| Task | Foundation Review and Documentation Sync |
 | Status | **COMPLETED** |
-| Scope | Option 1 CSS tokens, Container, semantic shell (skip link, header logo, main, footer). No catalog UI, nav, hero, or Client Components. |
+| Scope | Reviewed Sprint 1 against implementation. Docs synced. No storefront features. No architecture change. No S1-T09 (does not exist). |
 
 ---
 
 ## Task ID
 
-S1-T08
+S2-T01
 
 ## Task
 
-Foundation Review and Documentation Sync
+Category Listing Page
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S1-T08 automatically.
+Do **not** implement S2-T01 automatically.
 
 ## Objective
 
-Review Sprint 1 against architecture docs; sync README and architecture “as implemented”; confirm Phase 2 code was not introduced.
+Render a crawlable list of categories from the category repository.
 
 ## Scope
 
-See `docs/sprints/SPRINT-01.md` → S1-T08. Docs and small structural fixes only. No new features.
+See `docs/sprints/SPRINT-02.md` → S2-T01. Thin page, application query `listCategories`, presentational list. Mobile-first. No FastAPI.
 
 ## Dependencies
 
-S1-T03 through S1-T07.
+S1-T05, S1-T07. Sprint 1 completed (S1-T08).
 
 ## Requirements
 
-See `docs/sprints/SPRINT-01.md` → S1-T08.
+See `docs/sprints/SPRINT-02.md` → S2-T01.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-01.md` → S1-T08.
+See `docs/sprints/SPRINT-02.md` → S2-T01.
 
 ## Tests
 
-Lint, unit tests, build.
+Unit test the query; page uses the query (not fixtures directly).
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-01.md` → S1-T08.
+See `docs/sprints/SPRINT-02.md` → S2-T01.
 
-## Next task after S1-T08 (do not start)
+## Next task after S2-T01 (do not start)
 
-S2-T01 — first Sprint 2 task (do not start until Sprint 1 is completed via S1-T08).
+S2-T02 — Category Product Listing Page
