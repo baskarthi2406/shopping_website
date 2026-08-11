@@ -27,6 +27,7 @@ Do not rewrite the storefront when replacing mock repositories with API reposito
 
 ## Phase guardrails
 
+- Storefront is mobile-first (Mobile → Tablet → Desktop). Admin may be desktop-priority but must stay responsive.
 - Phase 1: no FastAPI, PostgreSQL, admin implementation, or payments.
 - Do not initialize Next.js or install packages unless the current task says so.
 - Significant architecture changes require an ADR in `docs/decisions/`.

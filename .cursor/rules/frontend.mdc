@@ -15,6 +15,11 @@ Phase 1 storefront lives in `frontend/`. Stack: Next.js, React, TypeScript, Tail
 - Do not use `any` without a one-line justification. Prefer `unknown`.
 - Do not call FastAPI until a Phase 2 task requires the HTTP repository.
 - Semantic HTML: `header`, `main`, `footer`, headings in order, real links.
+- Storefront is mobile-first: Mobile → Tablet → Desktop. Desktop extends mobile; do not design desktop-first and squeeze.
+- Touch-friendly controls (no hover-only actions). No horizontal scrolling. Responsive type and images.
+- Every storefront UI task must consider mobile nav, listing, PDP, cart, performance, and Core Web Vitals.
+- Use approved assets in repository `public/` (`docs/project/DESIGN_ASSETS.md`). Logo is `mini-mystiq-logo.png`. Use SEO filenames for `src`; keep originals; do not generate replacements. Same photos on mobile/tablet/desktop — contain/crop, do not stretch. Alt text describes the image, not the filename.
+- Homepage UI follows finalized Design Option 1 (`docs/project/DESIGN_OPTION_1.md`). Do not implement Options 2–4. Do not slice `mini-mystiq-app-design-suggestions.png` for production images.
 
 SEO is first-class: crawlable category/product HTML, metadata from data, canonicals, sitemap, robots, JSON-LD, OpenGraph, Next.js `Image`, internal links. Do not ship client-only catalog shells.
 

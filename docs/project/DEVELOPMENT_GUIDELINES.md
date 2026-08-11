@@ -40,10 +40,12 @@ Phase 2 infrastructure = FastAPI + PostgreSQL behind the same frontend repositor
 ## Quality
 
 - SEO-first storefront pages must remain crawlable.
-- Semantic HTML and keyboard-accessible controls.
+- Storefront is mobile-first: Mobile → Tablet → Desktop. Desktop extends mobile; it does not lead.
+- Mini Mystiq logo and photos: `public/` only. See `docs/project/DESIGN_ASSETS.md`. Do not generate replacements.
+- Semantic HTML, keyboard-accessible and touch-friendly storefront controls.
 - No secrets in Git.
 - No extra dependencies without a task need.
 
 ## Definition of Done
 
-See `PROJECT_DEVELOPMENT_RULES.md` section 24.
+See `PROJECT_DEVELOPMENT_RULES.md` section 25.

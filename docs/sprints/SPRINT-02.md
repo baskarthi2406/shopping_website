@@ -10,6 +10,8 @@
 
 Business taxonomy, copy, and pricing rules are **TBD**. Use placeholder catalog data.
 
+Storefront catalog UI is **mobile-first** (Mobile → Tablet → Desktop). See `docs/requirements/MOBILE_REQUIREMENTS.md`.
+
 ---
 
 ## S2-T01 — Category Listing Page
@@ -26,7 +28,7 @@ S1-T05, S1-T07.
 
 ### Requirements
 
-Server-rendered HTML; thin page file; semantic lists/headings.
+Server-rendered HTML; thin page file; semantic lists/headings; mobile-first browsing layout.
 
 ### Implementation scope
 
@@ -42,6 +44,7 @@ Category index route + application query. No filters beyond what mock data suppo
 
 - Categories from the repository appear in HTML
 - Internal links to category pages (S2-T02 may land URLs)
+- Mobile-first listing: readable and tappable on a narrow viewport; no horizontal scroll
 - No FastAPI
 
 ### Testing requirements
@@ -68,7 +71,7 @@ S2-T01.
 
 ### Requirements
 
-Crawlable listing; 404 for unknown slug. URL pattern follows current architecture (final SEO URLs may be adjusted in S3-T01).
+Crawlable listing; 404 for unknown slug. URL pattern follows current architecture (final SEO URLs may be adjusted in S3-T01). Mobile-first product browsing.
 
 ### Implementation scope
 
@@ -84,6 +87,7 @@ Dynamic category route, listing UI, not-found handling.
 - Products for the category render in HTML
 - Empty category is handled without crashing
 - Unknown slug is a not-found response
+- Mobile-first listing: no horizontal scroll; touch-friendly product links/cards
 
 ### Testing requirements
 
@@ -109,7 +113,7 @@ S2-T02.
 
 ### Requirements
 
-Semantic product content (name, description, image placeholders). Variant/stock rules **TBD** — omit or show placeholder fields only if present on the type.
+Semantic product content (name, description, image placeholders). Variant/stock rules **TBD** — omit or show placeholder fields only if present on the type. Mobile-first product detail.
 
 ### Implementation scope
 
@@ -125,6 +129,7 @@ Product detail route + `getProduct` use case. No cart button required until Spri
 
 - Product fields from repository render in HTML
 - Unknown product is not-found
+- Mobile-first PDP: readable typography and images on a narrow viewport; no horizontal scroll
 - No payment or backend
 
 ### Testing requirements
@@ -151,7 +156,7 @@ S2-T03.
 
 ### Requirements
 
-Semantic breadcrumb navigation; internal links between home, category, product.
+Semantic breadcrumb navigation; internal links between home, category, product. Mobile-friendly wrapping; no horizontal scroll.
 
 ### Implementation scope
 
@@ -166,6 +171,7 @@ Breadcrumb component wired on catalog routes.
 
 - Users can navigate category → product → parent category via links
 - Breadcrumbs are in HTML (not canvas/images)
+- Breadcrumbs wrap on mobile; no horizontal scroll
 
 ### Testing requirements
 
@@ -285,6 +291,7 @@ Fixes and documentation.
 - UI does not import static JSON directly
 - Unknown routes 404
 - README/architecture match behavior
+- Catalog pages are mobile-first (listing + PDP) with no horizontal scroll at mobile widths
 
 ### Testing requirements
 

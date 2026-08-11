@@ -30,6 +30,7 @@ Module list is a **roadmap**, not a Sprint 1 backlog. Workflows, fields, and per
 - Admin must not be publicly indexable.
 - Admin requires authentication and RBAC (Sprint 8). Until then, any early admin shell in Sprint 6 must not be treated as production-safe (**TBD** temporary protection).
 - Prefer reusing backend application services rather than duplicating domain rules in the admin UI.
+- Admin may **prioritize desktop** usability but **must remain responsive**. Unlike the customer storefront, admin is not required to be mobile-first.
 
 ## TBD
 

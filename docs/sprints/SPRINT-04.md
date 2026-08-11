@@ -8,6 +8,8 @@
 | Status | NOT_STARTED |
 | Dependencies | Sprint 3 completed |
 
+Cart and remaining storefront UI are **mobile-first**. See `docs/requirements/MOBILE_REQUIREMENTS.md`.
+
 ---
 
 ## S4-T01 — Cart Domain Model
@@ -104,7 +106,7 @@ S4-T02, S2-T03.
 
 ### Requirements
 
-Keyboard accessible buttons. Do not block crawlable product HTML behind the cart island.
+Keyboard accessible and touch-friendly buttons. Do not block crawlable product HTML behind the cart island. Mobile-first PDP cart controls.
 
 ### Implementation scope
 
@@ -119,6 +121,7 @@ Cart buttons + application service used by client island.
 
 - User can add a mock product and change quantity
 - Product content remains in server HTML
+- Controls are usable on a narrow viewport (touch, not hover-only)
 
 ### Testing requirements
 
@@ -144,7 +147,7 @@ S4-T03.
 
 ### Requirements
 
-Semantic table/list. No payment. SEO: do not add cart to sitemap.
+Semantic table/list. No payment. SEO: do not add cart to sitemap. Mobile-first cart page (no horizontal scroll).
 
 ### Implementation scope
 
@@ -160,6 +163,7 @@ Cart route + UI.
 - Empty cart state
 - Lines reflect repository
 - No checkout charge
+- Cart is usable on a phone: quantities and remove are touch-friendly; no horizontal scroll
 
 ### Testing requirements
 
@@ -185,7 +189,7 @@ S4-T04.
 
 ### Requirements
 
-Do not collect real payment data. Do not pretend orders persist on a server.
+Do not collect real payment data. Do not pretend orders persist on a server. Mobile-first shell.
 
 ### Implementation scope
 
@@ -200,6 +204,7 @@ Checkout route shell + copy that Phase 3 will implement payment.
 
 - Page exists and is clearly non-charging
 - No FastAPI order API
+- Usable on a narrow viewport; no horizontal scroll
 
 ### Testing requirements
 
@@ -225,7 +230,7 @@ S2 catalog routes, S1-T07.
 
 ### Requirements
 
-Do not invent campaigns. Placeholder hero/copy allowed if labeled as placeholder.
+Do not invent campaigns. Placeholder hero/copy allowed if labeled as placeholder. Mobile-first home and a11y pass including touch.
 
 ### Implementation scope
 
@@ -241,6 +246,7 @@ Home content + a11y fixes (focus, alt, headings).
 - Home links into catalog
 - Heading order valid on home/category/product/cart
 - Keyboard access to nav and cart controls
+- Mobile-first: no horizontal scroll; touch-friendly nav and cart controls
 
 ### Testing requirements
 
@@ -258,7 +264,7 @@ A11y pass documented; home is a shell not a marketing CMS.
 
 ### Objective
 
-Confirm Phase 1 DoD: SEO storefront, mock repos, cart client-side, no backend. Sync docs.
+Confirm Phase 1 DoD: SEO storefront, mobile-first UX, mock repos, cart client-side, no backend. Sync docs.
 
 ### Dependencies
 
@@ -281,6 +287,7 @@ Review, doc sync, small fixes.
 - No FastAPI/PostgreSQL implementation
 - Repository interfaces still the persistence boundary
 - Sprint 3 SEO features still present
+- Storefront is mobile-first (nav, listing, PDP, cart); no horizontal scroll at mobile widths
 
 ### Testing requirements
 

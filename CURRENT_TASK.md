@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S1-T01.
+Only this task may be implemented. Do not start it until a human explicitly requests S1-T02.
 
 ---
 
@@ -8,65 +8,55 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S0-T01 |
-| Task | Initialize Project-Control Documentation |
+| Task ID | S1-T01 |
+| Task | Document Target Architecture |
 | Status | **COMPLETED** |
-| Scope | Documentation only. No application code was created. |
+| Scope | Documentation and asset mapping only. No Next.js, no UI, no API, no database. |
 
 ---
 
 ## Task ID
 
-S1-T01
+S1-T02
 
 ## Task
 
-Document Target Architecture
+Document Frontend Layer Boundaries
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S1-T01 automatically. Wait for an explicit instruction to begin.
+Do **not** implement S1-T02 automatically.
 
 ## Objective
 
-Produce the agreed Phase 1/Phase 2 architecture document: layers, repository abstraction, SEO-first rendering, and the evolution path from mock data to API.
+Specify domain, application, infrastructure, and UI module boundaries for `frontend/`, including repository interface rules.
 
 ## Scope
 
-Documentation only (see `docs/sprints/SPRINT-01.md`). No Next.js initialization.
+Documentation only. See `docs/sprints/SPRINT-01.md` → S1-T02. No Next.js initialization.
 
 ## Dependencies
 
-S0-T01 completed.
+S1-T01 completed.
 
 ## Requirements
 
-- Align with `docs/architecture/` and `PROJECT_DEVELOPMENT_RULES.md`
-- Do not invent business requirements; mark TBD
-- Significant deviations from the decided stack need an ADR
-
-## Files / modules affected (when started)
-
-- `docs/architecture/ARCHITECTURE.md`
-- `docs/architecture/FRONTEND_ARCHITECTURE.md`
-- `docs/architecture/BACKEND_ARCHITECTURE.md`
-- `docs/decisions/*` only if a decision changes
-- Status files
+See `docs/sprints/SPRINT-01.md` → S1-T02. Align with `docs/architecture/FRONTEND_ARCHITECTURE.md` and ADR 0002–0004.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-01.md` → S1-T01.
+See `docs/sprints/SPRINT-01.md` → S1-T02.
 
 ## Tests
 
-Documentation review when the task is started.
+Documentation review when started.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-01.md` → S1-T01.
+See `docs/sprints/SPRINT-01.md` → S1-T02.
 
-## Next task after S1-T01 (do not start)
+## Next task after S1-T02 (do not start)
 
-S1-T02 — Document Frontend Layer Boundaries
+S1-T03 — Initialize Next.js + TypeScript + Tailwind

@@ -1,42 +1,106 @@
 # Backend Architecture
 
-Phase 2. **Not started.** Do not implement during Phase 1.
+Phase 2. **Not started.** Do not implement in Phase 1.
 
-## Stack
+---
 
-Python + FastAPI + PostgreSQL.
+## Stack (decided)
 
-## Intended flow
+| Item | Choice |
+|------|--------|
+| Language | Python |
+| HTTP | FastAPI |
+| Database | PostgreSQL |
+| Shape | **Modular monolith** (ADR 0003) |
+
+ORM, migrations, and API error envelope: **TBD** in Sprint 5 (then ADR if needed).
+
+---
+
+## Modular monolith (not microservices)
+
+One FastAPI process. One PostgreSQL database. Multiple **modules** with clear domain boundaries:
 
 ```
-FastAPI routers (validation, status codes, auth dependencies)
-  → Application services / use cases
-  → Domain
-  → Repository interfaces
-  → PostgreSQL implementation
+backend/
+  app/
+    api/                      # HTTP only: /api/v1/...
+      catalog/
+      inventory/
+      ordering/
+      identity/
+    modules/
+      catalog/
+        domain/
+        application/
+        infrastructure/       # SQL repositories
+      inventory/
+      ordering/
+      identity/
+      audit/
+    shared/                   # config, errors, auth dependencies
 ```
 
-## Rules
+Modules may call each other only through **application** APIs, not by importing another module’s SQL models.
 
-- Routers stay thin.
-- Domain does not import FastAPI or SQLAlchemy/SQL drivers (ORM choice TBD).
-- Schema changes use migrations (tool TBD in S5-T02).
-- Frontend never accesses PostgreSQL directly.
+This allows a later split into services **without** designing microservices now.
+
+---
+
+## Request flow
+
+```
+FastAPI router (validate, status codes, auth dependency)
+  → Application use case
+    → Domain
+    → Repository interface
+      → PostgreSQL implementation
+```
+
+Routers do not contain business rules and do not import ORM models.
+
+---
+
+## PostgreSQL boundary
+
+- System of record for catalog, UOM, inventory, carts, orders, customers, users, audit (as those sprints land)
+- Schema via migrations (tool TBD S5-T02)
+- **Only** backend infrastructure talks to Postgres
+- Next.js never uses a DB driver
+- Undecided columns stay TBD — do not invent catalog fields
+
+---
 
 ## API boundary
 
-- Versioning strategy TBD in Sprint 5 (proposal: `/api/v1/...` — not approved until S5-T04).
-- Error envelope TBD in Sprint 5.
-- CORS, auth, and rate limits TBD.
+Proposal for Sprint 5 (not implemented): `/api/v1/`. Confirm in S5-T04 + ADR.
+
+Frontend `Http*Repository` is the only consumer of this API from the storefront.
+
+CORS, rate limits, auth: TBD Sprint 5/8.
+
+---
 
 ## Admin
 
-Admin modules consume the same application services where practical. Admin UI technology is **TBD** (options: Next.js admin app vs separate UI — decide via ADR in Phase 2).
+- Same application/domain modules as the public API where practical
+- Admin UI host TBD (ADR in S6-T04): Next.js app vs separate
+- Desktop-priority, responsive, `noindex`, auth + RBAC (Sprint 8)
+- Planned modules: `docs/requirements/ADMIN_REQUIREMENTS.md`
 
-Planned modules: `docs/requirements/ADMIN_REQUIREMENTS.md`.
+---
 
-## Persistence
+## Testing
 
-PostgreSQL is the system of record for products, categories, UOM, inventory, carts, orders, customers, users, and audit logs once those sprints land.
+- Use-case tests with fake repositories
+- API tests for routes and error shape
+- Repository tests against a documented DB strategy (Sprint 5)
 
-Exact schema is **TBD**.
+---
+
+## Security
+
+- Secrets in env, never Git
+- Authn/authz at the API edge
+- Audit log for admin mutations (Sprint 8)
+- No password/PII in logs
