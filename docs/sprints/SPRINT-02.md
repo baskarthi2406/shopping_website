@@ -5,7 +5,7 @@
 | Sprint ID | S2 |
 | Phase | Phase 1 — SEO-First Storefront |
 | Objective | Crawlable category and product listing/detail experience on mock data |
-| Status | NOT_STARTED |
+| Status | IN_PROGRESS |
 | Dependencies | Sprint 1 completed |
 
 Business taxonomy, copy, and pricing rules are **TBD**. Use placeholder catalog data.
@@ -16,11 +16,13 @@ Storefront catalog UI is **mobile-first** (Mobile → Tablet → Desktop). See `
 
 ## S2-T01 — Category Listing Page
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Render a crawlable list of categories from the category repository.
+Crawlable category product listing at `/c/[slug]`, resolved through the catalog application layer.
+
+The original sprint outline described a category **index** (`listCategories`). The explicit S2-T01 request implemented the **category-by-slug product listing** instead. A separate category index page was not built.
 
 ### Dependencies
 
@@ -28,38 +30,58 @@ S1-T05, S1-T07.
 
 ### Requirements
 
-Server-rendered HTML; thin page file; semantic lists/headings; mobile-first browsing layout.
+Server Component page; `generateMetadata` from category data; unknown slug → `notFound()`; empty valid category → empty state; mobile-first product grid. No cart, search, filters, header/nav/footer redesign, JSON-LD, or product detail page.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Category index route + application query. No filters beyond what mock data supports.
+- Route: `frontend/app/c/[slug]/page.tsx`
+- Application: `getCategoryPage` (category + products, `null` if unknown)
+- View model: `toCategoryPageViewModel` / `toProductCardViewModel`
+- Metadata helper: `application/seo/category-metadata.ts`
+- Presentation: `ProductCard` (view-model props only)
+- Minimal `app/not-found.tsx` for unknown routes
+- Copied the three `baby-essentials` product JPEGs into `frontend/public/` (SEO filenames; originals kept in repository-root `public/`)
 
-### Expected files/modules
+### Current static catalog used
 
-- Category page route
-- Application query `listCategories`
-- Presentational category list component
+Categories: `baby-essentials`, `infants`, `kids`, `teens`, `women`.
+
+Products on `/c/baby-essentials`: pink-white pleated baby dress, sage striped top and shorts, cream/grey/rose tiered baby dress.
+
+`infants`, `kids`, `teens`, `women` exist and render empty. Uncategorized products (navy/tan, olive, beige) are not shown. No invented prices, stock, sizes, or extra categories.
 
 ### Acceptance criteria
 
-- Categories from the repository appear in HTML
-- Internal links to category pages (S2-T02 may land URLs)
-- Mobile-first listing: readable and tappable on a narrow viewport; no horizontal scroll
+- Valid slug renders H1 + products (or empty state) from `catalog.getCategoryPage`
+- Unknown slug is HTTP 404 (`notFound()`), not a fake empty category
+- Product links use `/p/{slug}` (PDP not implemented)
+- Unique title/description/canonical `/c/{slug}` + OpenGraph title/description
+- Option 1 tokens; no raw hex; no `"use client"`
 - No FastAPI
 
 ### Testing requirements
 
-Unit test the query; page uses the query (not fixtures directly).
+Unit tests for `getCategoryPage`, view-model mapping, and metadata. Page does not import fixtures.
 
 ### Definition of Done
 
-Page works on mock data; status updated.
+Page works on mock data; status updated. S2-T02 remains **NOT_STARTED**.
+
+### Notes
+
+- JSON-LD (Product / BreadcrumbList) is Sprint 3. Not invented here.
+- Canonical **domain** remains TBD; canonical is the path `/c/{slug}`.
+- Category descriptions are currently `null`; metadata uses a factual fallback (`{name} at Mini Mystiq. Baby Clothes & Toys.`).
+- Visible breadcrumb is Home (link) + current category (not a link). Full catalog nav remains S2-T04.
+- S2-T02’s original `/c/[slug]` product-listing scope was delivered here. Do not rebuild the same route when S2-T02 starts; re-scope that task (possible remaining work: category index).
 
 ---
 
 ## S2-T02 — Category Product Listing Page
 
 **Status:** NOT_STARTED
+
+Do **not** start automatically. `/c/[slug]` product listing, `notFound()`, and empty states were implemented in **S2-T01**. Do not re-implement that route. Remaining work for this task is TBD when a human requests S2-T02 (the original S2-T01 category index is one candidate).
 
 ### Objective
 

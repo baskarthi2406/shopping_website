@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S2-T01.
+Only this task may be implemented. Do not start it until a human explicitly requests S2-T02.
 
 ---
 
@@ -8,55 +8,57 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S1-T08 |
-| Task | Foundation Review and Documentation Sync |
+| Task ID | S2-T01 |
+| Task | Category Listing Page |
 | Status | **COMPLETED** |
-| Scope | Reviewed Sprint 1 against implementation. Docs synced. No storefront features. No architecture change. No S1-T09 (does not exist). |
+| Scope | `/c/[slug]` Server Component listing via `catalog.getCategoryPage`. ProductCard, generateMetadata, canonical `/c/{slug}`, `notFound()` for unknown slugs. No PDP, cart, search, header/nav, JSON-LD, or FastAPI. |
 
 ---
 
 ## Task ID
 
-S2-T01
+S2-T02
 
 ## Task
 
-Category Listing Page
+Category Product Listing Page
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S2-T01 automatically.
+Do **not** implement S2-T02 automatically.
+
+`/c/[slug]` product listing was already delivered in S2-T01. Do not rebuild that route. Re-scope when this task is requested (possible remaining work: category index).
 
 ## Objective
 
-Render a crawlable list of categories from the category repository.
+See `docs/sprints/SPRINT-02.md` → S2-T02. Original outline: products for a category slug. That route exists as of S2-T01.
 
 ## Scope
 
-See `docs/sprints/SPRINT-02.md` → S2-T01. Thin page, application query `listCategories`, presentational list. Mobile-first. No FastAPI.
+See `docs/sprints/SPRINT-02.md` → S2-T02.
 
 ## Dependencies
 
-S1-T05, S1-T07. Sprint 1 completed (S1-T08).
+S2-T01 completed.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-02.md` → S2-T01.
+See `docs/sprints/SPRINT-02.md` → S2-T02.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-02.md` → S2-T01.
+See `docs/sprints/SPRINT-02.md` → S2-T02.
 
 ## Tests
 
-Unit test the query; page uses the query (not fixtures directly).
+See `docs/sprints/SPRINT-02.md` → S2-T02.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-02.md` → S2-T01.
+See `docs/sprints/SPRINT-02.md` → S2-T02.
 
-## Next task after S2-T01 (do not start)
+## Next task after S2-T02 (do not start)
 
-S2-T02 — Category Product Listing Page
+S2-T03 — Product Detail Page

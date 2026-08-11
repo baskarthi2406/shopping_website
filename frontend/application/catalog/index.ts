@@ -1,7 +1,17 @@
 export type { CategoryRepository } from "./category-repository";
 export type { ProductRepository } from "./product-repository";
 export type { UomRepository } from "./uom-repository";
+export {
+  toCategoryPageViewModel,
+  toProductCardViewModel,
+  type CategoryPageViewModel,
+  type ProductCardViewModel,
+} from "./category-page-view-model";
 export { getCategoryBySlug } from "./get-category-by-slug";
+export {
+  getCategoryPage,
+  type CategoryPageData,
+} from "./get-category-page";
 export { getProductById } from "./get-product-by-id";
 export { getProductBySlug } from "./get-product-by-slug";
 export { listCategories } from "./list-categories";

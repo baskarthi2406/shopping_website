@@ -37,11 +37,13 @@ npm start
 
 ## Current state
 
-Sprint 1 foundation is complete (S1-T08). Option 1 tokens and a semantic shell (`header` / `main` / `footer`) exist. The home page remains a brand shell (no catalog, hero, or nav). It does **not** import catalog data. `config/catalog.ts` is the composition root for later pages.
+Sprint 1 foundation is complete (S1-T08). Option 1 tokens and a semantic shell (`header` / `main` / `footer`) exist. The home page remains a brand shell (no catalog, hero, or nav).
 
-Catalog access: `config/catalog.ts` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
+**S2-T01:** crawlable category listing at `/c/[slug]` (Server Component). Data comes from `catalog.getCategoryPage` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
 
-**Not implemented yet:** product listing, product details, cart, search, categories, hero, full Option 1 header/nav/footer, admin, SEO suite (`sitemap`, `robots`, JSON-LD, OpenGraph, canonicals).
+Valid development slugs: `/c/baby-essentials` (three products), `/c/infants`, `/c/kids`, `/c/teens`, `/c/women` (empty states). Unknown slugs use `notFound()`. Product cards link to `/p/{slug}` (PDP not built). No cart, search, or filters.
+
+**Not implemented yet:** product detail page, category index, homepage catalog, cart, search, full Option 1 header/nav/footer, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
 
 ## Architecture
 
@@ -81,9 +83,7 @@ Centralized in `app/globals.css` as `--mm-*` variables, mapped to Tailwind `@the
 
 ## Public assets
 
-Approved logo is served from `frontend/public/mini-mystiq-logo.png`.
-
-The repository-root `public/` directory remains the design-asset source of truth (`docs/project/DESIGN_ASSETS.md`). Do not replace or redesign the logo.
+Approved logo is served from `frontend/public/mini-mystiq-logo.png`. S2-T01 also copied the three `baby-essentials` product JPEGs into `frontend/public/` (SEO filenames). Repository-root `public/` remains the design-asset source of truth (`docs/project/DESIGN_ASSETS.md`). Do not replace or redesign the logo.
 
 ## Configuration / environment variables
 
@@ -117,7 +117,7 @@ Component and E2E testing remain later tasks. No coverage thresholds.
 
 ## SEO
 
-Do not implement the SEO suite here. The App Router layout already exports `metadata` so later tasks can add `generateMetadata`, `sitemap.ts`, `robots.ts`, JSON-LD, canonicals, and OpenGraph without restructuring the app.
+Category pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}`, OpenGraph title/description). Site origin, sitemap, robots.txt, and JSON-LD remain later tasks. Canonical domain is TBD.
 
 ## Mobile-first
 

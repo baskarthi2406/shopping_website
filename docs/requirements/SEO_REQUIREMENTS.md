@@ -35,6 +35,20 @@ SEO and mobile-first overlap: crawlable HTML must also be usable on a phone. Sto
 - Metadata must be derived from catalog data via application queries, not duplicated ad hoc in random components.
 - Indexing of cart/checkout/admin: cart and checkout should not be marketed as indexable; admin is Phase 2 and must not be indexed.
 
+## Implemented (S2-T01)
+
+Category pages at `/c/{slug}`:
+
+- `generateMetadata` from category data via `buildCategoryMetadata` (`application/seo/category-metadata.ts`)
+- Unique title `{Category name} | Mini Mystiq`
+- Description from category copy when present; otherwise a factual fallback (`{name} at Mini Mystiq. Baby Clothes & Toys.`) — no invented marketing claims
+- Canonical path `/c/{slug}` (no query parameters). Absolute origin remains TBD (`NEXT_PUBLIC_SITE_URL`)
+- OpenGraph title, description, and path `url`
+- One H1 (category name); crawlable `/p/{slug}` product links; image `alt` from catalog data
+- Unknown category: HTTP 404 + `noindex` (Next.js `notFound()`). Do not index fake categories
+
+**Not in S2-T01 (Sprint 3):** sitemap, robots.txt, JSON-LD (Product / BreadcrumbList / Organization), OpenGraph images (site URL TBD).
+
 ## TBD
 
 - Canonical domain

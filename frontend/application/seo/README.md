@@ -4,4 +4,4 @@ SEO helpers for `generateMetadata`, canonical URLs, OpenGraph, and JSON-LD (Prod
 
 Pages call helpers; they do not copy-paste metadata objects. `sitemap.ts` / `robots.ts` stay under `app/` and call this layer.
 
-Do not implement the SEO suite in S1-T04 (Sprint 3).
+**S2-T01:** `category-metadata.ts` builds title, description, and canonical path `/c/{slug}` from category domain data. JSON-LD, sitemap, and robots remain Sprint 3. Canonical domain is TBD.

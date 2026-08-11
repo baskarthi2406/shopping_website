@@ -26,7 +26,7 @@ Never start the next task automatically.
 
 ## Layering
 
-See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S1-T08).
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S2-T01).
 
 ```
 App / Pages → Presentation → Application → Domain → Repository interface
@@ -55,6 +55,8 @@ Pages are Server Components by default. Client Components are small interactive 
 Do not add a top-level `repositories/` or `types/` dump. Canonical `Product` / `Category` / `Cart` types belong in `domain/`.
 
 Phase 1 catalog access: `config/catalog.ts` → application use cases → repository interfaces → `Static*Repository` → `infrastructure/catalog/data/`. Never import fixtures from React or `app/`.
+
+Category listing (S2-T01): `app/c/[slug]/page.tsx` calls `catalog.getCategoryPage`. Presentation (`ProductCard`) receives view-model props only. Metadata helpers live in `application/seo/`.
 
 ## Documentation
 
