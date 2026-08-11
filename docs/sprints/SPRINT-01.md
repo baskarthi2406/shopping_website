@@ -66,7 +66,7 @@ Docs updated; status files point to S1-T02; S1-T02 not started.
 
 ## S1-T02 — Document Frontend Layer Boundaries
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -107,7 +107,7 @@ Layer doc accepted in-repo; next task recorded only.
 
 ## S1-T03 — Initialize Next.js + TypeScript + Tailwind
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 

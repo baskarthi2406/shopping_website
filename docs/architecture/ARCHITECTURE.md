@@ -135,7 +135,7 @@ Next.js **never** opens a DB connection.
 - Next.js App Router, React, TypeScript, Tailwind (ADR 0002)
 - Server Components for catalog/SEO pages; Client Components for cart, search box, wishlist chrome, mobile nav
 - Mobile-first; Design Option 1
-- Details: `FRONTEND_ARCHITECTURE.md`
+- **Layer contract (S1-T02):** `FRONTEND_ARCHITECTURE.md` — pages → presentation → application → domain → repository interfaces; infrastructure implements repositories. No React → JSON/API.
 
 ---
 

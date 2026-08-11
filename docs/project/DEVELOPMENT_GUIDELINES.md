@@ -26,10 +26,19 @@ Never start the next task automatically.
 
 ## Layering
 
-UI and HTTP adapters call application services. Application services call repository interfaces. Infrastructure implements repositories.
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02).
+
+```
+App / Pages → Presentation → Application → Domain → Repository interface
+Infrastructure implements repositories. Configuration binds them.
+```
+
+**Forbidden:** React → static JSON; React → FastAPI/SQL; Domain → Next.js/React.
 
 Phase 1 infrastructure = static/mock data.  
-Phase 2 infrastructure = FastAPI + PostgreSQL behind the same frontend repository interface.
+Phase 2 infrastructure = HTTP client → FastAPI + PostgreSQL behind the same frontend repository interface.
+
+Pages are Server Components by default. Client Components are small interactive islands only.
 
 ## Documentation
 

@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S1-T02.
+Only this task may be implemented. Do not start it until a human explicitly requests S1-T04.
 
 ---
 
@@ -8,55 +8,55 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S1-T01 |
-| Task | Document Target Architecture |
+| Task ID | S1-T03 |
+| Task | Initialize Next.js + TypeScript + Tailwind |
 | Status | **COMPLETED** |
-| Scope | Documentation and asset mapping only. No Next.js, no UI, no API, no database. |
+| Scope | Next.js App Router scaffold in `frontend/`. Minimal brand shell. No catalog, no domain modules, no backend. |
 
 ---
 
 ## Task ID
 
-S1-T02
+S1-T04
 
 ## Task
 
-Document Frontend Layer Boundaries
+Establish Frontend Project Structure
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S1-T02 automatically.
+Do **not** implement S1-T04 automatically.
 
 ## Objective
 
-Specify domain, application, infrastructure, and UI module boundaries for `frontend/`, including repository interface rules.
+Create the frontend folder structure that matches the approved architecture (`docs/architecture/FRONTEND_ARCHITECTURE.md`).
 
 ## Scope
 
-Documentation only. See `docs/sprints/SPRINT-01.md` → S1-T02. No Next.js initialization.
+See `docs/sprints/SPRINT-01.md` → S1-T04. Folders and placeholder modules that compile. No product UI. No FastAPI.
 
 ## Dependencies
 
-S1-T01 completed.
+S1-T03.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-01.md` → S1-T02. Align with `docs/architecture/FRONTEND_ARCHITECTURE.md` and ADR 0002–0004.
+Match S1-T01/S1-T02 docs. Page files stay thin. App Router is at `frontend/app/` (no `src/`). Keep domain/application/infrastructure **outside** the route folder.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-01.md` → S1-T02.
+See `docs/sprints/SPRINT-01.md` → S1-T04.
 
 ## Tests
 
-Documentation review when started.
+Build succeeds. Full test runner is S1-T06.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-01.md` → S1-T02.
+See `docs/sprints/SPRINT-01.md` → S1-T04.
 
-## Next task after S1-T02 (do not start)
+## Next task after S1-T04 (do not start)
 
-S1-T03 — Initialize Next.js + TypeScript + Tailwind
+S1-T05 — Repository Interfaces and Static Data Source

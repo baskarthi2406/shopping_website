@@ -8,6 +8,7 @@ alwaysApply: false
 
 Phase 1 storefront lives in `frontend/`. Stack: Next.js, React, TypeScript, Tailwind.
 
+- Follow `docs/architecture/FRONTEND_ARCHITECTURE.md` layer boundaries.
 - Keep `page.tsx` / layouts thin. Call application use cases, not fixture files or fetch/SQL.
 - Prefer Server Components for crawlable catalog pages.
 - Client Components only for interactive islands (cart, forms).
