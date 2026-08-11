@@ -1,0 +1,35 @@
+---
+description: SOLID, clean architecture, phase guardrails, and one-task workflow
+alwaysApply: true
+---
+
+# Architecture and workflow
+
+Git documentation and source code are the source of truth. Never use previous chat history.
+
+Before any task, read `PROJECT_DEVELOPMENT_RULES.md`, `PROJECT_STATUS.md`, `SPRINT_STATUS.md`, `CURRENT_TASK.md`, then relevant docs and this rules folder.
+
+Work only on the task in `CURRENT_TASK.md`. Never start the next task automatically.
+
+Workflow: Plan → Implement → Test → Review → Document → Update status → Commit → Stop.
+
+## Layers
+
+- Domain: no Next.js, React, FastAPI, SQL, or Tailwind.
+- Application: use cases; depends on domain and repository interfaces only.
+- Infrastructure: static/mock repos (Phase 1) or API/SQL (Phase 2).
+- UI/HTTP: thin pages and routers.
+
+Phase 1: `Next.js → Application → Repository interface → static/mock data`.
+Phase 2: same frontend interfaces; `HttpRepository → FastAPI → Domain → PostgreSQL`.
+
+Do not rewrite the storefront when replacing mock repositories with API repositories.
+
+## Phase guardrails
+
+- Phase 1: no FastAPI, PostgreSQL, admin implementation, or payments.
+- Do not initialize Next.js or install packages unless the current task says so.
+- Significant architecture changes require an ADR in `docs/decisions/`.
+- Undecided business facts are TBD. Do not invent them.
+
+After every completed task, update `CURRENT_TASK.md`, `PROJECT_STATUS.md`, `SPRINT_STATUS.md`, and the sprint file.

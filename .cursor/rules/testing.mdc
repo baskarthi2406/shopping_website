@@ -1,0 +1,18 @@
+---
+description: Testing expectations per task and layer
+alwaysApply: true
+---
+
+# Testing
+
+Every behavior-changing task must include the tests named in its sprint spec. Documentation-only tasks need a file and consistency review, not runtime tests.
+
+Prefer tests at domain and application boundaries over brittle UI snapshots.
+
+- Phase 1: unit-test domain, use cases, and mock/static repositories. UI may depend on use cases, not JSON fixtures.
+- Phase 2: API tests and repository tests per Sprint 5 tooling.
+- Do not hit real payment/email providers in CI; use fakes.
+- Do not merge a task whose stated tests fail.
+- Do not skip tests to bypass architecture (e.g. testing a page that reads fixtures directly).
+
+After implementation: run the checks listed in the task (lint/test/build as they exist). If tooling is not initialized yet (before S1-T03/S1-T06), do not install it unless that is the current task.

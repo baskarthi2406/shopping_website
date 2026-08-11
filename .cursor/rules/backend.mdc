@@ -1,0 +1,20 @@
+---
+description: FastAPI, PostgreSQL, and Phase 2 backend rules
+globs: backend/**/*.{py,toml,ini,md,sql}
+alwaysApply: false
+---
+
+# Backend
+
+Backend implementation starts in Phase 2 (Sprint 5+). If `CURRENT_TASK.md` is a Phase 1 or S0 task, do not add FastAPI, Python packages, or SQL.
+
+When a Phase 2 task is active:
+
+- FastAPI routers are HTTP only: validation, status codes, auth dependencies.
+- Business rules live in application/domain modules, not route functions.
+- Repositories abstract PostgreSQL. Routers must not import ORM models directly.
+- Schema changes go through migrations. Never commit secrets; use `.env.example` without values that are real credentials.
+- Frontend must not access PostgreSQL; it uses the API via a repository adapter.
+- Admin APIs require auth/RBAC once Sprint 8 exists; until then document the risk.
+
+Match `docs/architecture/BACKEND_ARCHITECTURE.md`. New API error/versioning shapes need the Sprint 5 ADR. Mark undecided schema fields TBD.
