@@ -47,7 +47,20 @@ Category pages at `/c/{slug}`:
 - One H1 (category name); crawlable `/p/{slug}` product links; image `alt` from catalog data
 - Unknown category: HTTP 404 + `noindex` (Next.js `notFound()`). Do not index fake categories
 
-**Not in S2-T01 (Sprint 3):** sitemap, robots.txt, JSON-LD (Product / BreadcrumbList / Organization), OpenGraph images (site URL TBD).
+**Not in S2-T01 (Sprint 3):** sitemap, robots.txt, JSON-LD (Product / BreadcrumbList / Organization).
+
+## Implemented (S2-T03)
+
+Product pages at `/p/{slug}`:
+
+- `generateMetadata` from product data via `buildProductMetadata` (`application/seo/product-metadata.ts`)
+- Unique title `{Product name} | Mini Mystiq`
+- Description from the product description; factual fallback only if that field is blank
+- Canonical path `/p/{slug}` (no query parameters). Absolute origin remains TBD
+- OpenGraph title, description, path `url`, and first product image when present
+- One H1 (product name); crawlable `/c/{slug}` category links when merchandising is known
+- Unknown product: HTTP 404 + `noindex`. Do not index fake products
+- JSON-LD Product schema is **not** implemented here (Sprint 3). Do not invent offers, SKU, or availability.
 
 ## TBD
 

@@ -3,6 +3,7 @@ import {
   getCategoryPage,
   getProductById,
   getProductBySlug,
+  getProductPage,
   listCategories,
   listFeaturedProducts,
   listProducts,
@@ -27,6 +28,8 @@ const uomRepository: UomRepository = new StaticUomRepository();
 export const catalog = {
   getProductById: (id: string) => getProductById(productRepository, id),
   getProductBySlug: (slug: string) => getProductBySlug(productRepository, slug),
+  getProductPage: (slug: string) =>
+    getProductPage(productRepository, categoryRepository, slug),
   listProducts: () => listProducts(productRepository),
   listProductsByCategory: (categorySlug: string) =>
     listProductsByCategory(productRepository, categorySlug),

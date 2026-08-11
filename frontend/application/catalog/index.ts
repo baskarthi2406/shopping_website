@@ -14,6 +14,14 @@ export {
 } from "./get-category-page";
 export { getProductById } from "./get-product-by-id";
 export { getProductBySlug } from "./get-product-by-slug";
+export {
+  getProductPage,
+  type ProductPageData,
+} from "./get-product-page";
+export {
+  toProductPageViewModel,
+  type ProductPageViewModel,
+} from "./product-page-view-model";
 export { listCategories } from "./list-categories";
 export { listFeaturedProducts } from "./list-featured-products";
 export { listProducts } from "./list-products";

@@ -137,7 +137,7 @@ Category listing complete on mock data. Overlap documented. S2-T03 recorded **NO
 
 ## S2-T03 — Product Detail Page
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -149,17 +149,17 @@ S2-T02.
 
 ### Requirements
 
-Semantic product content (name, description, image placeholders). Variant/stock rules **TBD** — omit or show placeholder fields only if present on the type. Mobile-first product detail.
+Semantic product content (name, description, images). Variant/stock/price **TBD** — omitted, not invented. Mobile-first product detail. No cart. JSON-LD deferred to Sprint 3.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Product detail route + `getProduct` use case. No cart button required until Sprint 4 (a disabled placeholder is optional, not required).
-
-### Expected files/modules
-
-- Product detail route
-- Product detail presentational component
-- `getProduct` use case
+- Route: `frontend/app/p/[slug]/page.tsx` (Server Component)
+- Application: `getProductPage` → existing `getProductBySlug` + `CategoryRepository.getById` for known category links
+- View model: `toProductPageViewModel`
+- Metadata: `application/seo/product-metadata.ts`
+- Presentation: `components/storefront/product-detail.tsx`
+- Reuses `app/not-found.tsx` for unknown slugs
+- Copied remaining catalog product JPEGs into `frontend/public/` (SEO filenames; originals kept)
 
 ### Acceptance criteria
 
@@ -170,11 +170,19 @@ Product detail route + `getProduct` use case. No cart button required until Spri
 
 ### Testing requirements
 
-Use-case tests for found/not-found.
+Use-case tests for found/not-found; view-model and metadata tests. Page does not import fixtures.
 
 ### Definition of Done
 
-PDP works on mock data.
+PDP works on mock data. S2-T04 recorded **NOT_STARTED**.
+
+### Notes
+
+- JSON-LD Product schema is Sprint 3. Not invented here (no price/availability/offers).
+- Canonical **domain** remains TBD; canonical is the path `/p/{slug}`.
+- Uncategorized products (navy/tan, olive, beige) render without a fake category crumb or link.
+- Default variants, `uomCode`, and `inventoryStatus: unknown` are not displayed.
+- No `"use client"`. Primary image uses `priority` for LCP.
 
 ---
 

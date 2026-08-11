@@ -41,9 +41,11 @@ Sprint 1 foundation is complete (S1-T08). Option 1 tokens and a semantic shell (
 
 **S2-T01 / S2-T02:** crawlable category listing at `/c/[slug]` (Server Component). Built in S2-T01; S2-T02 added no duplicate route or ProductCard. Data comes from `catalog.getCategoryPage` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
 
-Valid development slugs: `/c/baby-essentials` (three products), `/c/infants`, `/c/kids`, `/c/teens`, `/c/women` (empty states). Unknown slugs use `notFound()`. Product cards link to `/p/{slug}` (PDP not built). No cart, search, or filters.
+Valid development slugs: `/c/baby-essentials` (three products), `/c/infants`, `/c/kids`, `/c/teens`, `/c/women` (empty states). Unknown slugs use `notFound()`. Product cards link to `/p/{slug}`.
 
-**Not implemented yet:** product detail page, category index, homepage catalog, cart, search, full Option 1 header/nav/footer, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
+**S2-T03:** crawlable product detail at `/p/[slug]` via `catalog.getProductPage`. Example: `/p/pink-white-pleated-baby-dress`. Unknown slugs use `notFound()`. No price, stock, variants, or cart. JSON-LD is Sprint 3.
+
+**Not implemented yet:** category index, homepage catalog, cart, search, full Option 1 header/nav/footer, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
 
 ## Architecture
 
@@ -83,7 +85,7 @@ Centralized in `app/globals.css` as `--mm-*` variables, mapped to Tailwind `@the
 
 ## Public assets
 
-Approved logo is served from `frontend/public/mini-mystiq-logo.png`. S2-T01 also copied the three `baby-essentials` product JPEGs into `frontend/public/` (SEO filenames). Repository-root `public/` remains the design-asset source of truth (`docs/project/DESIGN_ASSETS.md`). Do not replace or redesign the logo.
+Approved logo is served from `frontend/public/mini-mystiq-logo.png`. Catalog product JPEGs used by `/c/` and `/p/` are copied into `frontend/public/` (SEO filenames). Repository-root `public/` remains the design-asset source of truth (`docs/project/DESIGN_ASSETS.md`). Do not replace or redesign the logo.
 
 ## Configuration / environment variables
 
@@ -117,7 +119,7 @@ Component and E2E testing remain later tasks. No coverage thresholds.
 
 ## SEO
 
-Category pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}`, OpenGraph title/description). Site origin, sitemap, robots.txt, and JSON-LD remain later tasks. Canonical domain is TBD.
+Category and product pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}` or `/p/{slug}`, OpenGraph). Product pages include the first product image in OpenGraph when present. Site origin, sitemap, robots.txt, and JSON-LD remain later tasks. Canonical domain is TBD.
 
 ## Mobile-first
 

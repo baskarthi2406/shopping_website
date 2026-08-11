@@ -10,4 +10,6 @@ Pages stay thin Server Components by default. Do not put product, cart, or prici
 
 **S2-T01:** `c/[slug]/page.tsx` (category listing) and `not-found.tsx`. The page calls `catalog.getCategoryPage` and `generateMetadata`; it must not import fixtures.
 
-Future routes (`/p/[slug]`), cart, and SEO files (`sitemap.ts`, `robots.ts`) belong to later sprints.
+**S2-T03:** `p/[slug]/page.tsx` (product detail) calls `catalog.getProductPage`. Unknown slugs reuse `not-found.tsx`.
+
+Future routes: cart and SEO files (`sitemap.ts`, `robots.ts`) belong to later sprints.

@@ -7,13 +7,15 @@ When Next.js is initialized (S1-T03), serve the **SEO-named** files from the Nex
 
 **S1-T03:** the approved logo is copied to `frontend/public/mini-mystiq-logo.png`. Repository-root `public/` remains the source of truth.
 
-**S2-T01:** the three `baby-essentials` product photos were copied (not renamed) into `frontend/public/` so Next.js Image can serve them:
+**S2-T01:** the three `baby-essentials` product photos were copied (not renamed) into `frontend/public/`.
 
-- `pink-white-pleated-baby-dress.jpg`
-- `sage-striped-baby-top-and-shorts.jpg`
-- `cream-grey-rose-tiered-baby-dress.jpg`
+**S2-T03:** the remaining catalog product photos referenced by static product records were copied into `frontend/public/`:
 
-Do not copy remaining catalog/hero assets until the tasks that use them. Do not delete originals.
+- `navy-star-and-tan-bow-dresses.jpg`
+- `olive-green-patterned-dress.jpg`
+- `beige-motif-pleated-dress.jpg`
+
+Do not copy remaining hero/shirt/promo assets until the tasks that use them. Do not delete originals.
 
 ---
 

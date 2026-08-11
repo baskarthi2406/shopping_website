@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S2-T03.
+Only this task may be implemented. Do not start it until a human explicitly requests S2-T04.
 
 ---
 
@@ -8,55 +8,57 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S2-T02 |
-| Task | Category Product Listing Page |
+| Task ID | S2-T03 |
+| Task | Product Detail Page |
 | Status | **COMPLETED** |
-| Scope | No new storefront code. S2-T01 already delivered `/c/[slug]`, `getCategoryPage`, `ProductCard`, empty/404 handling. Overlap documented. Category index not invented. PDP not started. |
+| Scope | `/p/[slug]` Server Component via `catalog.getProductPage`. ProductDetail, generateMetadata, canonical `/p/{slug}`, OpenGraph image, `notFound()` for unknown slugs. No cart, price, stock, variants, JSON-LD, or FastAPI. |
 
 ---
 
 ## Task ID
 
-S2-T03
+S2-T04
 
 ## Task
 
-Product Detail Page
+Catalog Navigation and Breadcrumbs (UI)
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S2-T03 automatically.
+Do **not** implement S2-T04 automatically.
+
+Category and product pages already have simple semantic breadcrumbs. Do not rebuild those routes. This task owns catalog nav and any shared breadcrumb component if still needed.
 
 ## Objective
 
-Crawlable product detail by slug/id as documented. See `docs/sprints/SPRINT-02.md` → S2-T03.
+See `docs/sprints/SPRINT-02.md` → S2-T04.
 
 ## Scope
 
-See `docs/sprints/SPRINT-02.md` → S2-T03. Product cards already link to `/p/{slug}`; that route does not exist yet.
+See `docs/sprints/SPRINT-02.md` → S2-T04.
 
 ## Dependencies
 
-S2-T02 completed (listing already existed from S2-T01).
+S2-T03 completed.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-02.md` → S2-T03.
+See `docs/sprints/SPRINT-02.md` → S2-T04.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-02.md` → S2-T03.
+See `docs/sprints/SPRINT-02.md` → S2-T04.
 
 ## Tests
 
-See `docs/sprints/SPRINT-02.md` → S2-T03.
+See `docs/sprints/SPRINT-02.md` → S2-T04.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-02.md` → S2-T03.
+See `docs/sprints/SPRINT-02.md` → S2-T04.
 
-## Next task after S2-T03 (do not start)
+## Next task after S2-T04 (do not start)
 
-S2-T04 — Catalog Navigation and Breadcrumbs (UI)
+S2-T05 — Listing Filter/Sort (Placeholder)
