@@ -62,6 +62,14 @@ Product pages at `/p/{slug}`:
 - Unknown product: HTTP 404 + `noindex`. Do not index fake products
 - JSON-LD Product schema is **not** implemented here (Sprint 3). Do not invent offers, SKU, or availability.
 
+## Implemented (S2-T04)
+
+- Header catalog nav: crawlable `/c/{slug}` links from `listCategories` (Baby Essentials, Infants, Kids, Teens, Women)
+- Shared breadcrumb UI on category and product pages (`<nav aria-label="Breadcrumb">`)
+- No BreadcrumbList JSON-LD (Sprint 3)
+- No `nofollow` on catalog nav or breadcrumbs
+- No Client-Component-only navigation
+
 ## TBD
 
 - Canonical domain

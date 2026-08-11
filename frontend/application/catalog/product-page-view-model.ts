@@ -1,4 +1,5 @@
 import type { Category, Product } from "@/domain/catalog";
+import type { BreadcrumbItemViewModel } from "./breadcrumb-view-model";
 
 export type ProductImageViewModel = {
   readonly src: string;
@@ -10,11 +11,6 @@ export type ProductCategoryLinkViewModel = {
   readonly href: string;
 };
 
-export type ProductBreadcrumbItemViewModel = {
-  readonly label: string;
-  readonly href: string | null;
-};
-
 export type ProductPageViewModel = {
   readonly slug: string;
   readonly name: string;
@@ -22,7 +18,7 @@ export type ProductPageViewModel = {
   readonly canonicalPath: string;
   readonly images: readonly ProductImageViewModel[];
   readonly categories: readonly ProductCategoryLinkViewModel[];
-  readonly breadcrumb: readonly ProductBreadcrumbItemViewModel[];
+  readonly breadcrumb: readonly BreadcrumbItemViewModel[];
 };
 
 export function toProductPageViewModel(
@@ -34,7 +30,7 @@ export function toProductPageViewModel(
     href: `/c/${category.slug}`,
   }));
 
-  const breadcrumb: ProductBreadcrumbItemViewModel[] = [
+  const breadcrumb: BreadcrumbItemViewModel[] = [
     { label: "Home", href: "/" },
     ...categoryLinks.map((category) => ({
       label: category.name,

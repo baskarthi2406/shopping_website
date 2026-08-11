@@ -1,13 +1,18 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { CatalogNavigation } from "@/components/storefront/catalog-navigation";
 import { Container } from "@/components/ui/container";
 
 type StorefrontShellProps = {
   children: ReactNode;
+  navigation?: readonly { label: string; href: string }[];
 };
 
-export function StorefrontShell({ children }: StorefrontShellProps) {
+export function StorefrontShell({
+  children,
+  navigation = [],
+}: StorefrontShellProps) {
   return (
     <>
       <a href="#main-content" className="skip-link">
@@ -15,10 +20,10 @@ export function StorefrontShell({ children }: StorefrontShellProps) {
       </a>
       <div className="flex min-h-dvh flex-col bg-background text-foreground">
         <header className="border-b border-border bg-surface">
-          <Container className="flex items-center py-3">
+          <Container className="flex flex-col gap-1 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
             <Link
               href="/"
-              className="inline-flex min-h-[var(--mm-tap-min)] items-center rounded-md"
+              className="inline-flex min-h-[var(--mm-tap-min)] shrink-0 items-center rounded-md"
             >
               <Image
                 src="/mini-mystiq-logo.png"
@@ -30,6 +35,7 @@ export function StorefrontShell({ children }: StorefrontShellProps) {
                 style={{ width: "auto", height: "auto" }}
               />
             </Link>
+            <CatalogNavigation items={navigation} />
           </Container>
         </header>
         <main id="main-content" className="flex-1">

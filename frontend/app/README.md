@@ -12,4 +12,6 @@ Pages stay thin Server Components by default. Do not put product, cart, or prici
 
 **S2-T03:** `p/[slug]/page.tsx` (product detail) calls `catalog.getProductPage`. Unknown slugs reuse `not-found.tsx`.
 
+**S2-T04:** `layout.tsx` loads catalog nav via `catalog.listCategories`. It remains a Server Component.
+
 Future routes: cart and SEO files (`sitemap.ts`, `robots.ts`) belong to later sprints.

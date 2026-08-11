@@ -1,6 +1,11 @@
 export type { CategoryRepository } from "./category-repository";
 export type { ProductRepository } from "./product-repository";
 export type { UomRepository } from "./uom-repository";
+export type { BreadcrumbItemViewModel } from "./breadcrumb-view-model";
+export {
+  toCatalogNavItems,
+  type CatalogNavItemViewModel,
+} from "./catalog-nav-view-model";
 export {
   toCategoryPageViewModel,
   toProductCardViewModel,

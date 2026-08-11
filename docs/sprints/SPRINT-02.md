@@ -188,7 +188,7 @@ PDP works on mock data. S2-T04 recorded **NOT_STARTED**.
 
 ## S2-T04 — Catalog Navigation and Breadcrumbs (UI)
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -202,28 +202,40 @@ S2-T03.
 
 Semantic breadcrumb navigation; internal links between home, category, product. Mobile-friendly wrapping; no horizontal scroll.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Breadcrumb component wired on catalog routes.
+- Shared `Breadcrumbs` presentation component (items as props)
+- Category and product pages reuse it (S2-T01/S2-T03 inline markup removed)
+- Header catalog nav from `catalog.listCategories()` → `toCatalogNavItems` (layout maps; shell receives props)
+- Wrapping link list — no hamburger, no `"use client"`, no cart/search/account
+- Categories used: Baby Essentials, Infants, Kids, Teens, Women. No New Arrivals/Offers (not in the catalog)
 
 ### Expected files/modules
 
-- Breadcrumb UI component
-- Integration on category and product pages
+- `frontend/components/storefront/breadcrumbs.tsx`
+- `frontend/components/storefront/catalog-navigation.tsx`
+- Integration on category and product pages; nav on the storefront shell
 
 ### Acceptance criteria
 
 - Users can navigate category → product → parent category via links
 - Breadcrumbs are in HTML (not canvas/images)
 - Breadcrumbs wrap on mobile; no horizontal scroll
+- Catalog category links are crawlable from every page using the shell
 
 ### Testing requirements
 
-Component or unit test for crumb trail construction from domain data.
+Unit tests for crumb trail construction (`toCategoryPageViewModel`, `toProductPageViewModel`) and `toCatalogNavItems`. No JSX snapshot tests.
 
 ### Definition of Done
 
-UI breadcrumbs shipped; JSON-LD left to Sprint 3.
+UI breadcrumbs and catalog nav shipped; JSON-LD left to Sprint 3. S2-T05 recorded **NOT_STARTED**.
+
+### Notes
+
+- BreadcrumbList JSON-LD is Sprint 3.
+- Uncategorized products still breadcrumb Home → product only.
+- Option 1 search/wishlist/account/cart chrome is out of scope.
 
 ---
 

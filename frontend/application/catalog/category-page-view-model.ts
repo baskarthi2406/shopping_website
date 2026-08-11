@@ -1,4 +1,5 @@
 import type { Category, Product } from "@/domain/catalog";
+import type { BreadcrumbItemViewModel } from "./breadcrumb-view-model";
 
 export type ProductCardViewModel = {
   readonly href: string;
@@ -14,6 +15,7 @@ export type CategoryPageViewModel = {
   readonly canonicalPath: string;
   readonly productCount: number;
   readonly products: readonly ProductCardViewModel[];
+  readonly breadcrumb: readonly BreadcrumbItemViewModel[];
 };
 
 export function toProductCardViewModel(
@@ -40,5 +42,9 @@ export function toCategoryPageViewModel(
     canonicalPath: `/c/${category.slug}`,
     productCount: products.length,
     products: products.map(toProductCardViewModel),
+    breadcrumb: [
+      { label: "Home", href: "/" },
+      { label: category.name, href: null },
+    ],
   };
 }

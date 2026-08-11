@@ -60,6 +60,8 @@ Category listing (S2-T01; S2-T02 closed as already satisfied): `app/c/[slug]/pag
 
 Product detail (S2-T03): `app/p/[slug]/page.tsx` calls `catalog.getProductPage`. Presentation (`ProductDetail`) receives view-model props only. Do not display price, stock, or variants while those fields are TBD.
 
+Catalog nav (S2-T04): `app/layout.tsx` calls `catalog.listCategories` and `toCatalogNavItems`. `StorefrontShell` receives nav props. `Breadcrumbs` and `CatalogNavigation` are presentation-only. No `"use client"`. Breadcrumb JSON-LD remains Sprint 3.
+
 Metadata helpers live in `application/seo/`.
 
 ## Documentation

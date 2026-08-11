@@ -69,5 +69,9 @@ describe("toCategoryPageViewModel", () => {
     });
     expect(view.products).toHaveLength(1);
     expect(view.products[0]?.href).toBe("/p/sage-striped-baby-top-and-shorts");
+    expect(view.breadcrumb).toEqual([
+      { label: "Home", href: "/" },
+      { label: "Baby Essentials", href: null },
+    ]);
   });
 });
