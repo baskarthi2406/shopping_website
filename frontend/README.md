@@ -47,7 +47,9 @@ Valid development slugs: `/c/baby-essentials` (three products), `/c/infants`, `/
 
 **S2-T04:** header catalog nav (categories from `listCategories`) and a shared `Breadcrumbs` component on `/c/` and `/p/`. Wrapping links, no hamburger Client Component, no cart/search. Breadcrumb JSON-LD is Sprint 3.
 
-**Not implemented yet:** category index, homepage catalog, cart, search, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
+**S2-T05:** listing filter/sort deferred. Category pages do not expose Filter/Sort UI or query parameters. See `docs/requirements/CATALOG_FILTER_SORT.md`.
+
+**Not implemented yet:** category index, homepage catalog, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
 
 ## Architecture
 

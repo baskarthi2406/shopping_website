@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S2-T05.
+Only this task may be implemented. Do not start it until a human explicitly requests S2-T06.
 
 ---
 
@@ -8,57 +8,55 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S2-T04 |
-| Task | Catalog Navigation and Breadcrumbs (UI) |
-| Status | **COMPLETED** |
-| Scope | Shared `Breadcrumbs` on category/product pages. Header catalog nav from `listCategories` (wrapping links, no Client Component). JSON-LD deferred. No cart/search/filters. |
+| Task ID | S2-T05 |
+| Task | Listing Filter/Sort (Placeholder) |
+| Status | **COMPLETED** (deferred) |
+| Scope | Documentation only. No filter/sort UI, query parameters, or name-sort. Note: `docs/requirements/CATALOG_FILTER_SORT.md`. |
 
 ---
 
 ## Task ID
 
-S2-T05
+S2-T06
 
 ## Task
 
-Listing Filter/Sort (Placeholder)
+Expand Static Catalog Fixtures
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S2-T05 automatically.
-
-If business filter/sort rules are TBD, prefer documenting deferral over inventing facets.
+Do **not** implement S2-T06 automatically.
 
 ## Objective
 
-See `docs/sprints/SPRINT-02.md` → S2-T05.
+See `docs/sprints/SPRINT-02.md` → S2-T06.
 
 ## Scope
 
-See `docs/sprints/SPRINT-02.md` → S2-T05.
+See `docs/sprints/SPRINT-02.md` → S2-T06.
 
 ## Dependencies
 
-S2-T02 / S2-T04 completed.
+S1-T05; typically after S2-T03. S2-T05 completed (filters deferred).
 
 ## Requirements
 
-See `docs/sprints/SPRINT-02.md` → S2-T05.
+See `docs/sprints/SPRINT-02.md` → S2-T06.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-02.md` → S2-T05.
+See `docs/sprints/SPRINT-02.md` → S2-T06.
 
 ## Tests
 
-See `docs/sprints/SPRINT-02.md` → S2-T05.
+See `docs/sprints/SPRINT-02.md` → S2-T06.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-02.md` → S2-T05.
+See `docs/sprints/SPRINT-02.md` → S2-T06.
 
-## Next task after S2-T05 (do not start)
+## Next task after S2-T06 (do not start)
 
-S2-T06 — Expand Static Catalog Fixtures
+S2-T07 — Catalog Review

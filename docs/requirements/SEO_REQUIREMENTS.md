@@ -70,10 +70,15 @@ Product pages at `/p/{slug}`:
 - No `nofollow` on catalog nav or breadcrumbs
 - No Client-Component-only navigation
 
+## Implemented (S2-T05)
+
+Filter/sort **deferred**. No `?sort=` / facet URLs. Category canonicals remain `/c/{slug}`. See `CATALOG_FILTER_SORT.md`.
+
 ## TBD
 
 - Canonical domain
 - Trailing-slash policy
 - Pagination SEO
+- Filtered-listing SEO (when filters exist)
 - hreflang / locales
 - Search appearance extras (FAQ, reviews)

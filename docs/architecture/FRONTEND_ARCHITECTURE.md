@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S2-T04:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05; Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04).
+**Task:** S1-T02 (layer contract). **As implemented through S2-T05:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05; Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -403,7 +403,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S2-T04)
+## 17. Folder structure (as implemented through S2-T05)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -493,7 +493,7 @@ No page rewrite. ADR 0004.
 ## 20. TBD
 
 - Exact domain fields, variants, inventory display  
-- Search/filter rules  
+- Search/filter rules (S2-T05 deferred; `CATALOG_FILTER_SORT.md`)  
 - Cart storage API (`localStorage` vs memory)  
 - Breakpoint px as a **business** lock (S1-T07 uses Tailwind sm/md/lg as implementation defaults)  
 - CWV budgets, WCAG numeric target  
@@ -503,4 +503,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. S2-T01–S2-T04 are complete (`/c/[slug]`, `/p/[slug]`, catalog nav + shared breadcrumbs). Next: **S2-T05** — do not start automatically. Do not invent filters if business rules are TBD.
+There is **no S1-T09**. S2-T01–S2-T05 are complete. S2-T05 deferred listing filter/sort (`docs/requirements/CATALOG_FILTER_SORT.md`). Next: **S2-T06** — do not start automatically.
