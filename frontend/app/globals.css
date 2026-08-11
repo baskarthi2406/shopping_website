@@ -1,1 +1,194 @@
 @import "tailwindcss";
+
+/*
+  Mini Mystiq design tokens — S1-T07 foundation.
+
+  Colors: implementation defaults derived from Design Option 1 (top-left mockup).
+  Primary green sampled from the announcement bar (~#016C37).
+  Pastel peach sampled from a category surface (~#FCF1D8).
+  These are NOT a finalized brand-guide decision; refine if Option 1 art is re-measured.
+
+  Breakpoints: Tailwind defaults used as implementation defaults (business TBD):
+  sm 640px (tablet start), md 768px, lg 1024px (desktop start).
+*/
+
+:root {
+  --mm-color-primary: #016c37;
+  --mm-color-primary-hover: #01552c;
+  --mm-color-primary-foreground: #ffffff;
+  --mm-color-background: #ffffff;
+  --mm-color-surface: #ffffff;
+  --mm-color-surface-muted: #f4f7f6;
+  --mm-color-surface-accent: #e8f4ee;
+  --mm-color-surface-warm: #fcf1d8;
+  --mm-color-foreground: #171717;
+  --mm-color-foreground-secondary: #525252;
+  --mm-color-foreground-muted: #737373;
+  --mm-color-border: #e5e7eb;
+  --mm-color-focus: #016c37;
+  --mm-color-success: #016c37;
+  --mm-color-warning: #b45309;
+  --mm-color-error: #b42318;
+
+  --mm-font-sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
+    Arial, sans-serif;
+
+  --mm-font-display: 1.75rem;
+  --mm-font-h1: 1.5rem;
+  --mm-font-h2: 1.25rem;
+  --mm-font-h3: 1.125rem;
+  --mm-font-body: 1rem;
+  --mm-font-small: 0.875rem;
+  --mm-font-caption: 0.75rem;
+
+  --mm-space-page: 1rem;
+  --mm-container-max: 72rem;
+  --mm-tap-min: 2.75rem;
+}
+
+@media (min-width: 640px) {
+  :root {
+    --mm-font-display: 2.25rem;
+    --mm-font-h1: 1.875rem;
+    --mm-font-h2: 1.5rem;
+    --mm-font-h3: 1.25rem;
+    --mm-space-page: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --mm-font-display: 2.5rem;
+    --mm-font-h1: 2.25rem;
+    --mm-space-page: 2rem;
+  }
+}
+
+@theme inline {
+  --color-primary: var(--mm-color-primary);
+  --color-primary-hover: var(--mm-color-primary-hover);
+  --color-primary-foreground: var(--mm-color-primary-foreground);
+  --color-background: var(--mm-color-background);
+  --color-surface: var(--mm-color-surface);
+  --color-surface-muted: var(--mm-color-surface-muted);
+  --color-surface-accent: var(--mm-color-surface-accent);
+  --color-surface-warm: var(--mm-color-surface-warm);
+  --color-foreground: var(--mm-color-foreground);
+  --color-foreground-secondary: var(--mm-color-foreground-secondary);
+  --color-foreground-muted: var(--mm-color-foreground-muted);
+  --color-border: var(--mm-color-border);
+  --color-focus: var(--mm-color-focus);
+  --color-success: var(--mm-color-success);
+  --color-warning: var(--mm-color-warning);
+  --color-error: var(--mm-color-error);
+
+  --font-sans: var(--mm-font-sans);
+
+  --text-display: var(--mm-font-display);
+  --text-display--line-height: 1.2;
+  --text-h1: var(--mm-font-h1);
+  --text-h1--line-height: 1.25;
+  --text-h2: var(--mm-font-h2);
+  --text-h2--line-height: 1.3;
+  --text-h3: var(--mm-font-h3);
+  --text-h3--line-height: 1.35;
+  --text-body: var(--mm-font-body);
+  --text-body--line-height: 1.5;
+  --text-small: var(--mm-font-small);
+  --text-small--line-height: 1.45;
+  --text-caption: var(--mm-font-caption);
+  --text-caption--line-height: 1.4;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-full: 9999px;
+
+  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
+  --shadow-md: 0 4px 16px rgb(15 23 42 / 0.06);
+}
+
+@layer base {
+  html {
+    font-family: var(--mm-font-sans);
+    color: var(--mm-color-foreground);
+    background-color: var(--mm-color-background);
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    min-height: 100dvh;
+    overflow-x: hidden;
+    font-size: var(--mm-font-body);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  h1 {
+    font-size: var(--mm-font-h1);
+    line-height: 1.25;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+
+  h2 {
+    font-size: var(--mm-font-h2);
+    line-height: 1.3;
+    font-weight: 600;
+  }
+
+  h3 {
+    font-size: var(--mm-font-h3);
+    line-height: 1.35;
+    font-weight: 600;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--mm-color-focus);
+    outline-offset: 2px;
+  }
+
+  :focus:not(:focus-visible) {
+    outline: none;
+  }
+}
+
+@layer utilities {
+  .skip-link {
+    position: absolute;
+    left: var(--mm-space-page);
+    top: var(--mm-space-page);
+    z-index: 100;
+    display: inline-flex;
+    min-height: var(--mm-tap-min);
+    align-items: center;
+    border-radius: var(--radius-md);
+    background-color: var(--mm-color-primary);
+    padding-inline: 1rem;
+    color: var(--mm-color-primary-foreground);
+    transform: translateY(-8rem);
+  }
+
+  .skip-link:focus {
+    transform: translateY(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+
+  .skip-link {
+    transition: none;
+  }
+}

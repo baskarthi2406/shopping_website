@@ -38,7 +38,7 @@ Status: **IN_PROGRESS**
 
 ## Current Task
 
-**S1-T07 — Base Layout, Tokens, Semantic HTML Shell**  
+**S1-T08 — Foundation Review and Documentation Sync**  
 Status: **NOT_STARTED**
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
@@ -59,6 +59,7 @@ Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
 - React 19.2.8, TypeScript 5.9.3 (`strict: true`), Tailwind CSS 4.3.3
 - ESLint 9.39.5 (`eslint-config-next` 16.3.0)
 - Vitest 4.1.10 — `npm test` / `npm run test:watch`; colocate `*.test.ts`
+- Option 1 design tokens + semantic shell (S1-T07)
 - Layer folders (S1-T04) + static catalog (S1-T05): `config/catalog.ts` → ports → `Static*Repository`
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
@@ -77,21 +78,22 @@ Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
 - S1-T04 — Establish Frontend Project Structure
 - S1-T05 — Repository Interfaces and Static Data Source
 - S1-T06 — Configure Linting and Unit Tests
+- S1-T07 — Base Layout, Tokens, Semantic HTML Shell
 
 ## In progress
 
-- None. Do not start S1-T07 automatically.
+- None. Do not start S1-T08 automatically.
 
 ## Pending
 
-- S1-T07 — Base Layout, Tokens, Semantic HTML Shell (next)
-- Remainder of Sprint 1–11
+- S1-T08 — Foundation Review and Documentation Sync (next)
+- Remainder of Sprint 2–11
 
 ## Blockers
 
-- None for starting S1-T07 when explicitly requested.
+- None for starting S1-T08 when explicitly requested.
 - Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art, pricing, UOM, variants, inventory display.
 
 ## Next task (do not start automatically)
 
-**S1-T07 — Base Layout, Tokens, Semantic HTML Shell**
+**S1-T08 — Foundation Review and Documentation Sync**

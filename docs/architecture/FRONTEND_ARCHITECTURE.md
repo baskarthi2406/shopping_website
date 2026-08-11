@@ -219,7 +219,11 @@ Organize reusable UI (created in later tasks, not now):
 
 Primitives have **no** catalog fetching. `ProductCard` receives a product view model.
 
-Do not invent another visual language. Exact hex in first UI task from Option 1.
+Do not invent another visual language.
+
+**S1-T07 tokens:** CSS variables in `frontend/app/globals.css` (`--mm-*`), mapped into Tailwind v4 `@theme inline`. Primary `#016C37` sampled from Option 1. Hex values are **implementation defaults**, not a locked brand guide (`DESIGN_OPTION_1.md`).
+
+Primitives: `components/ui/container.tsx`. Shell: `components/storefront/storefront-shell.tsx` (skip link, header logo, main, footer — not the final Option 1 chrome).
 
 ---
 
@@ -356,7 +360,7 @@ Every storefront UI task: mobile layout, touch (no hover-only), responsive type/
 
 Admin (Phase 2): desktop-priority, still responsive.
 
-Breakpoints / nav pattern / CWV numbers: **TBD**. Hero LCP: `baby-sleeveless-sets-new-collection-banner.jpg`. Secondary: `baby-dress-bloomer-sets-new-collection-banner.jpg`.
+Breakpoints: business **TBD**. S1-T07 uses Tailwind defaults as implementation defaults (`sm` 640 / `md` 768 / `lg` 1024). Nav pattern / CWV numbers: **TBD**. Hero LCP: `baby-sleeveless-sets-new-collection-banner.jpg`. Secondary: `baby-dress-bloomer-sets-new-collection-banner.jpg`.
 
 ---
 

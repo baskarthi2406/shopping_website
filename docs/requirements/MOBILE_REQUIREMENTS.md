@@ -53,7 +53,7 @@ Admin UI **may prioritize desktop** usability (data tables, bulk edit) but **mus
 
 ## TBD
 
-- Breakpoint pixel values (Tailwind defaults may be adopted in the first UI task and then documented)
+- Breakpoint pixel values — S1-T07 uses Tailwind defaults as **implementation defaults** (`sm` 640 / `md` 768 / `lg` 1024). Not a business lock.
 - Minimum tap-target size
 - Numeric Core Web Vitals / Lighthouse budgets
 - Mobile nav pattern (hamburger, bottom bar, etc.)
