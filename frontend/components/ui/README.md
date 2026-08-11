@@ -1,5 +1,7 @@
 # `components/ui`
 
-Design-system primitives (Button, Input, Card, Badge, Modal, Container, Typography).
+Design-system primitives. No catalog fetching.
 
-No catalog fetching. No domain imports required. Created in later UI tasks (S1-T07+), not S1-T04.
+**S1-T07:** `Container` — mobile-first page gutter (`--mm-space-page`) and max width (`--mm-container-max`).
+
+Button, Card, Badge, etc. remain later UI tasks.

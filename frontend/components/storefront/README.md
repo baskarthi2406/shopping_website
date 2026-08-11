@@ -1,7 +1,7 @@
 # `components/storefront`
 
-Storefront composites: ProductCard, Price, ImageGallery, CategoryCircle, Hero, Header, Footer, navigation.
+Storefront composites. Receive view-model props. Do not import repositories or fixtures.
 
-Receive view-model props from pages/application. Do not import repositories or fixtures.
+**S1-T07:** `StorefrontShell` — skip link, `<header>` (logo home link only), `<main>`, `<footer>`. Not the final Option 1 header/nav/footer.
 
-Not implemented in S1-T04.
+Hero, ProductCard, navigation, cart chrome: later tasks.

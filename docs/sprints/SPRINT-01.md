@@ -281,7 +281,7 @@ Tooling documented and green.
 
 ## S1-T07 — Base Layout, Tokens, Semantic HTML Shell
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 

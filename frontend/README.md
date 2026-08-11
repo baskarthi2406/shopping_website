@@ -37,11 +37,11 @@ npm start
 
 ## Current state
 
-S1-T03 foundation page, S1-T04 layer folders, and S1-T05 static catalog (domain + ports + fixtures). The root page still shows the brand name, tagline, and approved logo — it does **not** import catalog data.
+S1-T07 adds Option 1 design tokens and a semantic shell (`header` / `main` / `footer`). The home page remains a brand shell (no catalog, hero, or nav). It does **not** import catalog data.
 
 Catalog access: `config/catalog.ts` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
 
-**Not implemented yet:** product listing, product details, cart, search, categories, hero, Design Option 1 storefront, admin, SEO suite (`sitemap`, `robots`, JSON-LD, OpenGraph, canonicals).
+**Not implemented yet:** product listing, product details, cart, search, categories, hero, full Option 1 header/nav/footer, admin, SEO suite (`sitemap`, `robots`, JSON-LD, OpenGraph, canonicals).
 
 ## Architecture
 
@@ -67,6 +67,17 @@ Infrastructure implements repositories. Configuration binds them.
 There is no top-level `repositories/` or `types/` folder. Canonical domain models belong in `domain/`.
 
 Details: `docs/architecture/FRONTEND_ARCHITECTURE.md` §17. Each layer folder has a README.
+
+## Design tokens (S1-T07)
+
+Centralized in `app/globals.css` as `--mm-*` variables, mapped to Tailwind `@theme inline`.
+
+- Primary green `#016C37` sampled from Option 1 (implementation default, not a brand-guide lock).
+- System UI sans-serif. No extra font package.
+- Breakpoints: Tailwind `sm` 640 / `md` 768 / `lg` 1024 (implementation defaults; business TBD).
+- Use semantic classes (`bg-primary`, `text-foreground`), not raw hex in components.
+- `Container` applies `--mm-space-page` (16 → 24 → 32px) and `--mm-container-max`.
+- Accessibility: `lang="en"`, skip link, `:focus-visible`, `prefers-reduced-motion`, 44px tap-min implementation default.
 
 ## Public assets
 

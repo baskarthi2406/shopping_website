@@ -9,4 +9,4 @@ Reusable UI for Design Option 1. Components receive **view models / props**. The
 
 **Must not contain:** filtering, pricing, cart math, repository calls, `localStorage`.
 
-Do not implement Header, Footer, Hero, ProductCard, or navigation in S1-T04.
+**S1-T07:** `ui/container` and `storefront/storefront-shell` only. Do not add Hero, ProductCard, or navigation here.

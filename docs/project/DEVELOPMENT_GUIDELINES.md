@@ -71,6 +71,7 @@ Phase 1 catalog access: `config/catalog.ts` → application use cases → reposi
 - No secrets in Git.
 - No extra dependencies without a task need.
 - Unit tests: Vitest (`npm test`). Colocate `*.test.ts`. Application tests use repository fakes, not static fixtures. Domain tests stay framework-free. Component/E2E tests are later tasks.
+- Visual tokens: Option 1 via `frontend/app/globals.css`. Use semantic utilities (`bg-primary`, `text-foreground`), not raw hex. Breakpoints and hex are implementation defaults until a brand guide says otherwise.
 
 ## Definition of Done
 

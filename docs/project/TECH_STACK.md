@@ -8,7 +8,8 @@
 | UI | React 19.2.8 | Decided |
 | Language | TypeScript 5.9.3 (`strict: true`) | Decided |
 | Styling | Tailwind CSS 4.3.3 | Decided |
-| Storefront UX | Mobile-first (Mobile → Tablet → Desktop) | Decided; breakpoint px TBD |
+| Storefront UX | Mobile-first (Mobile → Tablet → Desktop) | Decided; S1-T07 uses Tailwind sm/md/lg as implementation defaults |
+| Design tokens | Option 1 CSS variables in `frontend/app/globals.css` | S1-T07; hex are implementation defaults |
 | Brand | Mini Mystiq | Decided |
 | Homepage UI | Design Option 1 (top-left of `mini-mystiq-app-design-suggestions.png`) | **Finalized** — `DESIGN_OPTION_1.md` |
 | Visual assets | `public/` (logo + product/promo photos) | Approved; inventory in `DESIGN_ASSETS.md` |

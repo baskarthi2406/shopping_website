@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { StorefrontShell } from "@/components/storefront/storefront-shell";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -9,8 +10,8 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en">
-      <body className="min-h-dvh bg-white text-neutral-900 antialiased">
-        {children}
+      <body>
+        <StorefrontShell>{children}</StorefrontShell>
       </body>
     </html>
   );

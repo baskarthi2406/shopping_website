@@ -15,7 +15,7 @@ Do not implement UI in this documentation task. Do not extract/crop new image fi
 | Area | Option 1 |
 |------|----------|
 | Page | Desktop homepage mockup (implement **mobile-first**; stack sections on small screens) |
-| Palette | Forest green, white, light gray. Exact hex **TBD** (derive in the first UI task from this mockup; do not invent a second palette) |
+| Palette | Forest green, white, light gray. Exact hex **TBD** as a brand-guide; S1-T07 recorded **implementation defaults** sampled from this mockup (below). |
 | Type | Clean sans-serif |
 | Logo | Existing `mini-mystiq-logo.png` + tagline Delivering Style & Tech — do not redraw |
 | Announcement bar | Forest green bar, white text |
@@ -97,6 +97,27 @@ Option 1 **shows** Wishlist and Account. Customer accounts are Phase 2 (Sprint 8
 Offers / New Arrivals links are design IA. Coupon engine is not Phase 1. Destination pages **TBD**.
 
 Cart icon is in scope for Sprint 4.
+
+---
+
+## S1-T07 implementation defaults (not a brand-guide lock)
+
+S1-T07 derived CSS tokens from Option 1. Treat as implementation defaults until a brand guide or re-measurement replaces them.
+
+| Token | Value | Source |
+|-------|--------|--------|
+| Primary / announcement / CTA | `#016C37` | Sampled from Option 1 announcement bar |
+| Primary hover | `#01552C` | Darker shade of the sampled primary |
+| Page background / surface | `#FFFFFF` | Option 1 white |
+| Surface muted | `#F4F7F6` | Sampled near Option 1 header |
+| Surface warm (pastel) | `#FCF1D8` | Sampled Option 1 category surface |
+| Surface accent (pastel mint) | `#E8F4EE` | Soft wash of primary; supporting only |
+| Foreground | `#171717` | Option 1 near-black text |
+| Breakpoints | `sm` 640px, `md` 768px, `lg` 1024px | Tailwind defaults (business TBD) |
+| Type | System UI sans-serif | No extra font package |
+| Tap target min | 44px (`2.75rem`) | A11y implementation default (MOBILE_REQUIREMENTS TBD) |
+
+Tokens live in `frontend/app/globals.css`. Do not scatter raw hex in components.
 
 ---
 

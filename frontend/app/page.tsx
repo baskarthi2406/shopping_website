@@ -1,21 +1,14 @@
-import Image from "next/image";
+import { Container } from "@/components/ui/container";
 
 export default function Home() {
   return (
-    <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col items-center justify-center gap-4 px-4 py-8 text-center">
-      <Image
-        src="/mini-mystiq-logo.png"
-        alt="Mini Mystiq"
-        width={280}
-        height={127}
-        priority
-        className="max-w-[280px]"
-        style={{ width: "auto", height: "auto" }}
-      />
-      <h1 className="text-2xl font-semibold tracking-tight sm:text-3xl">
+    <Container className="flex flex-col items-center py-8 text-center sm:py-12">
+      <h1 className="text-h1 font-semibold tracking-tight text-foreground">
         Mini Mystiq
       </h1>
-      <p className="text-base text-neutral-600 sm:text-lg">Baby Clothes & Toys</p>
-    </main>
+      <p className="mt-2 text-body text-foreground-secondary">
+        Baby Clothes & Toys
+      </p>
+    </Container>
   );
 }
