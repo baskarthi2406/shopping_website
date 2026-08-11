@@ -24,7 +24,7 @@ The public site must eventually allow visitors to:
 - Variants (size/color): **TBD**.
 - Stock display on the storefront: **TBD**.
 - Listing filter/sort: **TBD**. S2-T05 deferred this; see `CATALOG_FILTER_SORT.md`. Do not invent facets.
-- Phase 1 static catalog (S2-T06): approved product photos only. Toys pending assets. Several dresses remain uncategorized (age/taxonomy TBD).
+- Phase 1 static catalog (S2-T06, reviewed S2-T07): 12 approved product photos. Toys pending assets. Five dresses remain uncategorized (age/taxonomy TBD). Infants/teens/women may stay empty.
 
 ## Cart (Phase 1)
 

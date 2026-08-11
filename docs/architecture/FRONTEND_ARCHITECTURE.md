@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S2-T06:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05).
+**Task:** S1-T02 (layer contract). **As implemented through S2-T07:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -403,7 +403,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S2-T06)
+## 17. Folder structure (as implemented through S2-T07)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 

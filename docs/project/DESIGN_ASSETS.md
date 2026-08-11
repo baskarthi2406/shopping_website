@@ -11,6 +11,8 @@ When Next.js is initialized (S1-T03), serve the **SEO-named** files from the Nex
 
 **S2-T03:** navy/tan, olive, and beige product photos copied into `frontend/public/`.
 
+**S2-T07:** catalog review compared this inventory to fixtures and `frontend/public/`. No asset rename, copy, or classification correction.
+
 **S2-T06:** remaining approved **product** photos copied into `frontend/public/`:
 
 - `grey-pinafore-baby-set.jpg`

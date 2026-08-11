@@ -5,7 +5,7 @@
 | Sprint ID | S2 |
 | Phase | Phase 1 — SEO-First Storefront |
 | Objective | Crawlable category and product listing/detail experience on mock data |
-| Status | IN_PROGRESS |
+| Status | COMPLETED |
 | Dependencies | Sprint 1 completed |
 
 Business taxonomy, copy, and pricing rules are **TBD**. Use placeholder catalog data.
@@ -339,7 +339,7 @@ Fixtures support Sprint 2 pages. S2-T07 recorded **NOT_STARTED**.
 
 ## S2-T07 — Catalog Review
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -353,13 +353,30 @@ S2-T01 … S2-T06 (S2-T05 may be deferred if recorded).
 
 No Phase 2 code. Pages remain server-rendered.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Fixes and documentation.
+Quality gate only. No catalog data, taxonomy, UI, filter/sort, search, cart, JSON-LD, or backend changes. Added focused repository tests that image `src` files exist under `frontend/public/` and that product names/descriptions do not use unsupported commercial claims.
 
-### Expected files/modules
+### Review result
 
-- Docs + catalog pages as needed for fixes
+**Pass.** 12 approved products. No invented products, prices, SKUs, inventory, variants, UOM, brand, reviews, or categories.
+
+| Category | Count | Products |
+|----------|-------|----------|
+| baby-essentials | 4 | pink-white-pleated-baby-dress, sage-striped-baby-top-and-shorts, cream-grey-rose-tiered-baby-dress, grey-pinafore-baby-set |
+| kids | 3 | kids-striped-shirts-burgundy-and-sage, kids-button-down-shirts-rose-and-burgundy, kids-linen-shirts-brown-and-sage |
+| infants, teens, women | 0 | empty states kept |
+| Uncategorized | 5 | navy-star-tan-bow-dress, olive-green-patterned-dress, beige-motif-pleated-dress, dusty-blue-floral-dress, cream-tiered-shirt-dress |
+
+IDs and slugs unique and SEO-friendly. Existing slugs preserved. `kids-linen-shirts-brown-and-sage` storefront name remains “Brown and sage textured kids shirts” (does not claim linen). Uncategorized dresses stay uncategorized (age TBD). Toys still pending approved assets.
+
+Assets: all product `src` values are approved SEO filenames in `frontend/public/`; root `public/` originals kept. Logo, heroes, Pigeon, hiring, and character-print are not products.
+
+SEO: unique titles, canonical `/c/{slug}` and `/p/{slug}`, OpenGraph, one H1, crawlable links, no JSON-LD. Unknown `/c/` and `/p/` slugs are HTTP 404 + `noindex`. Empty categories remain indexable.
+
+Architecture: UI → application → repository interface → static data. No `"use client"` on catalog pages. Filter/sort still deferred.
+
+Mobile/a11y: 2-column cards → 3 → 4; wrapping category nav; `min-h` tap targets; skip link; `focus-visible`; breadcrumbs wrap. Landscape grey-pinafore photo uses global `object-contain` (letterbox) rather than a product-specific `cover` crop — documented in DESIGN_ASSETS, not changed here.
 
 ### Acceptance criteria
 
@@ -370,8 +387,8 @@ Fixes and documentation.
 
 ### Testing requirements
 
-Lint, unit tests, build.
+Lint, unit tests, build. Unique id/slug, category id, and public image-path checks.
 
 ### Definition of Done
 
-Sprint 2 completed in status files; S3-T01 recorded, not started.
+Sprint 2 completed in status files; S3-T01 recorded, not started. There is no S2-T08.

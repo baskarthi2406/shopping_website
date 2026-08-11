@@ -51,6 +51,8 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S2-T06:** static catalog expanded to 12 approved product photos. No invented products, prices, or categories. Toys pending approved assets.
 
+**S2-T07:** catalog review passed. No fixture or UI corrections. Image-path tests confirm `frontend/public/` files. Uncategorized dresses and empty infants/teens/women remain intentional.
+
 **Not implemented yet:** category index, homepage catalog, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
 
 ## Architecture

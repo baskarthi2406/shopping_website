@@ -74,6 +74,10 @@ Product pages at `/p/{slug}`:
 
 Filter/sort **deferred**. No `?sort=` / facet URLs. Category canonicals remain `/c/{slug}`. See `CATALOG_FILTER_SORT.md`.
 
+## Reviewed (S2-T07)
+
+12-product static catalog: unique titles, canonical `/p/{slug}` and `/c/{slug}`, OpenGraph, crawlable HTML, factual alts. Uncategorized products remain reachable at `/p/{slug}` only. JSON-LD still Sprint 3.
+
 ## TBD
 
 - Canonical domain
