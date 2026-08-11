@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S1-T02.
+Only this task may be implemented. Do not start it until a human explicitly requests S1-T03.
 
 ---
 
@@ -8,55 +8,55 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S1-T01 |
-| Task | Document Target Architecture |
+| Task ID | S1-T02 |
+| Task | Document Frontend Layer Boundaries |
 | Status | **COMPLETED** |
-| Scope | Documentation and asset mapping only. No Next.js, no UI, no API, no database. |
+| Scope | Documentation only. No Next.js, no UI, no packages. |
 
 ---
 
 ## Task ID
 
-S1-T02
+S1-T03
 
 ## Task
 
-Document Frontend Layer Boundaries
+Initialize Next.js + TypeScript + Tailwind
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S1-T02 automatically.
+Do **not** implement S1-T03 automatically.
 
 ## Objective
 
-Specify domain, application, infrastructure, and UI module boundaries for `frontend/`, including repository interface rules.
+Initialize the Next.js application inside `frontend/` with TypeScript and Tailwind CSS.
 
 ## Scope
 
-Documentation only. See `docs/sprints/SPRINT-01.md` → S1-T02. No Next.js initialization.
+See `docs/sprints/SPRINT-01.md` → S1-T03. App lives in `frontend/`. No catalog features. No FastAPI.
 
 ## Dependencies
 
-S1-T01 completed.
+S1-T01, S1-T02.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-01.md` → S1-T02. Align with `docs/architecture/FRONTEND_ARCHITECTURE.md` and ADR 0002–0004.
+See `docs/sprints/SPRINT-01.md` → S1-T03. Follow ADR 0002 (App Router).
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-01.md` → S1-T02.
+See `docs/sprints/SPRINT-01.md` → S1-T03.
 
 ## Tests
 
-Documentation review when started.
+Documented run command; full test runner is S1-T06.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-01.md` → S1-T02.
+See `docs/sprints/SPRINT-01.md` → S1-T03.
 
-## Next task after S1-T02 (do not start)
+## Next task after S1-T03 (do not start)
 
-S1-T03 — Initialize Next.js + TypeScript + Tailwind
+S1-T04 — Establish Frontend Project Structure

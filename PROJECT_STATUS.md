@@ -17,8 +17,7 @@ This file is the live index of project state. A new AI session must read it afte
 ## Project
 
 **Name:** Mini Mystiq — Baby Clothes & Toys E-Commerce  
-**Repository:** `shopping`  
-**Purpose:** SEO-first, mobile-first storefront, later FastAPI + PostgreSQL modular monolith and admin.
+**Repository:** `shopping`
 
 ---
 
@@ -39,16 +38,10 @@ Status: **IN_PROGRESS**
 
 ## Current Task
 
-**S1-T02 — Document Frontend Layer Boundaries**  
+**S1-T03 — Initialize Next.js + TypeScript + Tailwind**  
 Status: **NOT_STARTED**
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
-
----
-
-## Bootstrap Task
-
-**S0-T01** — COMPLETED
 
 ---
 
@@ -64,16 +57,11 @@ Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
 
 - Next.js App Router (ADR 0002) — **not initialized**
 - React, TypeScript, Tailwind CSS
+- Layer boundaries: `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02)
 
 ### Backend (Phase 2 — not started)
 
-- Python, FastAPI **modular monolith** (ADR 0003), PostgreSQL
-
-### Architecture
-
-- SOLID, clean layers, repository swap static → HTTP (ADR 0004)
-- Design Option 1 finalized (ADR 0001)
-- Mobile-first storefront; admin desktop-priority but responsive
+- Python, FastAPI modular monolith (ADR 0003), PostgreSQL
 
 ---
 
@@ -81,22 +69,22 @@ Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
 
 - S0-T01 — Initialize Project-Control Documentation
 - S1-T01 — Document Target Architecture
+- S1-T02 — Document Frontend Layer Boundaries
 
 ## In progress
 
-- None. Do not start S1-T02 automatically.
+- None. Do not start S1-T03 automatically.
 
 ## Pending
 
-- S1-T02 — Document Frontend Layer Boundaries (next)
+- S1-T03 — Initialize Next.js + TypeScript + Tailwind (next)
 - Remainder of Sprint 1–11
 
 ## Blockers
 
-- None for S1-T02 (documentation).
-- Next.js still not initialized (S1-T03).
+- None for starting S1-T03 when explicitly requested.
 - Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art.
 
 ## Next task (do not start automatically)
 
-**S1-T02 — Document Frontend Layer Boundaries**
+**S1-T03 — Initialize Next.js + TypeScript + Tailwind**
