@@ -1,5 +1,7 @@
 # `domain/catalog`
 
-Product, Category, ProductVariant, Uom, inventory status values, slug shape rules.
+Framework-free catalog types (S1-T05): `Product`, `Category`, `ProductVariant`, `Uom`, `CatalogImage`, `InventoryStatus`, `isCatalogSlug`.
 
-Do not invent merchandising fields here. S1-T05 introduces minimal types. Navy/tan dresses: product image exists; **category TBD**.
+**Must not import:** React, Next.js, Tailwind, `fetch`, browser storage, FastAPI, SQL.
+
+Navy/tan dresses: product exists; **category TBD** (`categoryIds` empty). Pricing, SKU, tax, brand, size/color values, and UOM codes are omitted or null — do not invent them.

@@ -1,7 +1,9 @@
 # `application/catalog`
 
-Catalog use cases and repository interfaces (`ProductRepository`, `CategoryRepository`, `UomRepository`).
+Catalog use cases and repository interfaces (S1-T05).
 
-Pages call this layer. UI must not import fixtures. Implementations are bound in `config/` and live in `infrastructure/catalog/`.
+**Ports:** `ProductRepository`, `CategoryRepository`, `UomRepository`.
 
-S1-T05 implements the first ports and queries. Sprint 2 implements storefront use of them.
+**Use cases:** get/list products and categories. No search, pricing, or inventory engines.
+
+Depends on domain + these interfaces only. Bind implementations in `config/catalog.ts`.

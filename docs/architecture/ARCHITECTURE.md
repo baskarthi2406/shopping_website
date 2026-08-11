@@ -90,7 +90,7 @@ ICartRepository   (Phase 1: client storage; Phase 2: HTTP)
 
 | Phase | Frontend implementation |
 |-------|-------------------------|
-| 1 | `StaticProductRepository` / `StaticCategoryRepository` reading in-repo fixtures |
+| 1 | `StaticProductRepository` / `StaticCategoryRepository` / `StaticUomRepository` (S1-T05); bound in `frontend/config/catalog.ts` |
 | 2 | `HttpProductRepository` calling FastAPI; same method signatures |
 
 Composition (env or config) selects the implementation. **Do not** branch inside page files.

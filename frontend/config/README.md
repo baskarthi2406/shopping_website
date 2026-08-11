@@ -2,13 +2,10 @@
 
 Binds which repository implementation to use (static vs HTTP). Holds non-secret public settings such as site URL for canonicals (**TBD**).
 
-**Must not contain:** secrets, business rules, catalog data.
+**Must not contain:** secrets, business rules, catalog fixture rows.
 
-Rules:
+`catalog.ts` is the Phase 1 composition root (`Static*Repository`). Pages call `catalog.*` use-case wrappers. They must not import `infrastructure/catalog/data`.
 
-- Secrets go in `.env.local` (gitignored). Never commit them.
-- Document variable names in `.env.example` only when a task introduces them.
-- Prefer server-only env vars unless the browser needs the value (`NEXT_PUBLIC_*`).
-- Pages must not `if (phase === 1) import json`. Composition happens here (S1-T05+).
+Phase 2 swaps implementations in this file only (ADR 0004).
 
-No environment variables are required yet.
+Secrets go in `.env.local` (gitignored). No environment variables are required yet.

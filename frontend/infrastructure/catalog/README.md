@@ -1,7 +1,7 @@
 # `infrastructure/catalog`
 
-Phase 1: static product/category/uom repositories and fixture mapping (S1-T05).
+Phase 1 static catalog (S1-T05): `StaticProductRepository`, `StaticCategoryRepository`, `StaticUomRepository`.
 
-Phase 2: API repositories behind the **same** interfaces. No storefront rewrite (ADR 0004).
+Raw records live in `data/`. Mappers produce domain models. UI and `app/` must not import this folder or `data/`.
 
-Fixtures must not be imported from React components.
+Phase 2: replace these classes in `config/catalog.ts` with API repositories (ADR 0004). Do not add FastAPI here.

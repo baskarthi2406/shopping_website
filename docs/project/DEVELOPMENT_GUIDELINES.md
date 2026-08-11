@@ -54,6 +54,8 @@ Pages are Server Components by default. Client Components are small interactive 
 
 Do not add a top-level `repositories/` or `types/` dump. Canonical `Product` / `Category` / `Cart` types belong in `domain/`.
 
+Phase 1 catalog access: `config/catalog.ts` → application use cases → repository interfaces → `Static*Repository` → `infrastructure/catalog/data/`. Never import fixtures from React or `app/`.
+
 ## Documentation
 
 - Mark undecided business facts as **TBD**.

@@ -34,7 +34,9 @@ npm start
 
 ## Current state
 
-S1-T03 foundation page plus S1-T04 layer folders (boundary READMEs). The root page still shows the brand name, tagline, and approved logo.
+S1-T03 foundation page, S1-T04 layer folders, and S1-T05 static catalog (domain + ports + fixtures). The root page still shows the brand name, tagline, and approved logo — it does **not** import catalog data.
+
+Catalog access: `config/catalog.ts` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
 
 **Not implemented yet:** product listing, product details, cart, search, categories, hero, Design Option 1 storefront, admin, SEO suite (`sitemap`, `robots`, JSON-LD, OpenGraph, canonicals).
 
