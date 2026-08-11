@@ -31,17 +31,17 @@ Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
 
 ## Current Sprint
 
-**Sprint 1 — Foundation & Architecture**  
-Status: **COMPLETED** (S1-T08)
-
-Next sprint: **Sprint 2 — Product Catalog** — **NOT_STARTED**
+**Sprint 2 — Product Catalog**  
+Status: **IN_PROGRESS** (S2-T01 completed)
 
 ---
 
 ## Current Task
 
-**S2-T01 — Category Listing Page**  
+**S2-T02 — Category Product Listing Page**  
 Status: **NOT_STARTED**
+
+`/c/[slug]` was implemented in S2-T01. Do not rebuild it. Do not start S2-T02 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-02.md`.
 
@@ -51,7 +51,7 @@ There is **no S1-T09**.
 
 ## Overall Status
 
-**SPRINT_1_COMPLETED**
+**SPRINT_2_IN_PROGRESS**
 
 ---
 
@@ -65,6 +65,7 @@ There is **no S1-T09**.
 - Vitest 4.1.10 — `npm test` / `npm run test:watch`; colocate `*.test.ts`
 - Option 1 design tokens + semantic shell (S1-T07)
 - Static catalog (S1-T05): `config/catalog.ts` → ports → `Static*Repository`
+- Category listing `/c/[slug]` (S2-T01)
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
 ### Backend (Phase 2 — not started)
@@ -77,21 +78,22 @@ There is **no S1-T09**.
 
 - S0-T01 — Initialize Project-Control Documentation
 - S1-T01 … S1-T08 — Sprint 1 Foundation & Architecture (**COMPLETED**)
+- S2-T01 — Category Listing Page
 
 ## In progress
 
-- None. Do not start S2-T01 automatically.
+- None. Do not start S2-T02 automatically.
 
 ## Pending
 
-- S2-T01 — Category Listing Page (next)
+- S2-T02 — Category Product Listing Page (next; re-scope — `/c/[slug]` already exists)
 - Remainder of Sprint 2–11
 
 ## Blockers
 
-- None for starting S2-T01 when explicitly requested.
+- None for starting S2-T02 when explicitly requested (re-scope first).
 - Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art, pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets.
 
 ## Next task (do not start automatically)
 
-**S2-T01 — Category Listing Page**
+**S2-T02 — Category Product Listing Page**

@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S1-T08:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05; Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07.
+**Task:** S1-T02 (layer contract). **As implemented through S2-T01:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05; Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`.
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -289,7 +289,7 @@ Belong here (not in React):
 - Build home page data (hero refs, category stand-ins, featured)
 - Cart: add, update qty, remove, read  
 
-Catalog use cases for **Sprint 2** (high level): list categories, list products in a category, get product by slug, 404 on unknown slug. Pages call `config/catalog.ts`, not fixtures.
+**S2-T01:** `getCategoryPage(categories, products, slug)` returns `{ category, products }` or `null` (unknown slug). Pages call `config/catalog.ts`, not fixtures. View models map domain → `ProductCard` props (no price/inventory).
 
 Test with in-memory fake repositories (runner: S1-T06). No JSX.
 
@@ -397,7 +397,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented, Sprint 1)
+## 17. Folder structure (as implemented through S2-T01)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -423,12 +423,18 @@ frontend/
   app/                           # routing (S1-T03); README boundary (S1-T04)
     layout.tsx
     page.tsx
+    not-found.tsx                # S2-T01
+    c/[slug]/page.tsx            # S2-T01 category listing
     globals.css
   public/
     mini-mystiq-logo.png
+    pink-white-pleated-baby-dress.jpg
+    sage-striped-baby-top-and-shorts.jpg
+    cream-grey-rose-tiered-baby-dress.jpg
   components/
     ui/container.tsx             # S1-T07
     storefront/storefront-shell.tsx
+    storefront/product-card.tsx  # S2-T01; view-model props only
   config/
     catalog.ts                   # composition root (S1-T05)
   domain/
@@ -437,14 +443,16 @@ frontend/
   application/
     catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
-    seo/                         # metadata/JSON-LD helpers — Sprint 3
+    seo/                         # category metadata (S2-T01); JSON-LD — Sprint 3
   infrastructure/
     catalog/                     # Static*Repository — S1-T05
     cart/                        # browser storage adapter — Sprint 4
   lib/                           # shared technical utils only (empty aside from README)
 ```
 
-Future routes (`c/[slug]`, `p/[slug]`, `cart`, `checkout`, `sitemap.ts`, `robots.ts`) stay under `app/` when those sprints arrive.
+**S2-T01:** `/c/[slug]` is a Server Component. The page calls `catalog.getCategoryPage(slug)` (composition root). It must not import fixtures or `Static*Repository`. Unknown slug → `notFound()`. JSON-LD is still Sprint 3.
+
+Future routes (`p/[slug]`, `cart`, `checkout`, `sitemap.ts`, `robots.ts`) stay under `app/` when those sprints arrive.
 
 ---
 
@@ -480,4 +488,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. After Sprint 1 the next task is **S2-T01** (category listing).
+There is **no S1-T09**. S2-T01 (category listing `/c/[slug]`) is complete. Next: **S2-T02** — do not start automatically. `/c/[slug]` already exists; do not rebuild it.

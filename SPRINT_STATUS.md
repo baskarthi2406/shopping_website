@@ -50,7 +50,31 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 | S1-T07 | Base Layout, Tokens, Semantic HTML Shell | **COMPLETED** |
 | S1-T08 | Foundation Review and Documentation Sync | **COMPLETED** |
 
-Sprint 1 is complete. There is no S1-T09. Do not start S2-T01 automatically.
+Sprint 1 is complete. There is no S1-T09.
+
+---
+
+## Sprint 2 — Product Catalog
+
+| Field | Value |
+|-------|--------|
+| Phase | Phase 1 — SEO-First Storefront |
+| Objective | Crawlable category and product listing/detail experience on mock data |
+| Status | **IN_PROGRESS** |
+| Dependencies | Sprint 1 completed |
+| Task IDs | S2-T01 … S2-T07 |
+
+| Task ID | Name | Status |
+|---------|------|--------|
+| S2-T01 | Category Listing Page | **COMPLETED** |
+| S2-T02 | Category Product Listing Page | **NOT_STARTED** |
+| S2-T03 | Product Detail Page | **NOT_STARTED** |
+| S2-T04 | Catalog Navigation and Breadcrumbs (UI) | **NOT_STARTED** |
+| S2-T05 | Listing Filter/Sort (Placeholder) | **NOT_STARTED** |
+| S2-T06 | Expand Static Catalog Fixtures | **NOT_STARTED** |
+| S2-T07 | Catalog Review | **NOT_STARTED** |
+
+S2-T01 delivered `/c/[slug]`. Do not start S2-T02 automatically. Do not rebuild `/c/[slug]`.
 
 ---
 
@@ -58,13 +82,7 @@ Sprint 1 is complete. There is no S1-T09. Do not start S2-T01 automatically.
 
 ### Sprint 2 — Product Catalog
 
-| Field | Value |
-|-------|--------|
-| Phase | Phase 1 |
-| Objective | Crawlable category and product listing/detail experience on mock data |
-| Status | **NOT_STARTED** |
-| Dependencies | Sprint 1 completed |
-| Task IDs | S2-T01 … S2-T07 |
+See the live Sprint 2 section above. Status: **IN_PROGRESS**.
 
 ### Sprint 3 — SEO
 

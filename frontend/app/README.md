@@ -8,4 +8,6 @@ Next.js App Router only: routes, layouts, loading/error/not-found boundaries, me
 
 Pages stay thin Server Components by default. Do not put product, cart, or pricing rules here.
 
-Future catalog routes (`/c/[slug]`, `/p/[slug]`), cart, and SEO files belong to later sprints — do not add them in S1-T04.
+**S2-T01:** `c/[slug]/page.tsx` (category listing) and `not-found.tsx`. The page calls `catalog.getCategoryPage` and `generateMetadata`; it must not import fixtures.
+
+Future routes (`/p/[slug]`), cart, and SEO files (`sitemap.ts`, `robots.ts`) belong to later sprints.
