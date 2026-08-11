@@ -2,7 +2,7 @@
 
 Phase 1 SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys).
 
-## Stack (S1-T03)
+## Stack
 
 - Next.js 16 (App Router)
 - React 19
@@ -37,7 +37,7 @@ npm start
 
 ## Current state
 
-S1-T07 adds Option 1 design tokens and a semantic shell (`header` / `main` / `footer`). The home page remains a brand shell (no catalog, hero, or nav). It does **not** import catalog data.
+Sprint 1 foundation is complete (S1-T08). Option 1 tokens and a semantic shell (`header` / `main` / `footer`) exist. The home page remains a brand shell (no catalog, hero, or nav). It does **not** import catalog data. `config/catalog.ts` is the composition root for later pages.
 
 Catalog access: `config/catalog.ts` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
 
@@ -87,7 +87,7 @@ The repository-root `public/` directory remains the design-asset source of truth
 
 ## Configuration / environment variables
 
-No environment variables are required for S1-T03.
+No environment variables are required yet.
 
 When they are needed:
 

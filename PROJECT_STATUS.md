@@ -32,22 +32,26 @@ Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
 ## Current Sprint
 
 **Sprint 1 — Foundation & Architecture**  
-Status: **IN_PROGRESS**
+Status: **COMPLETED** (S1-T08)
+
+Next sprint: **Sprint 2 — Product Catalog** — **NOT_STARTED**
 
 ---
 
 ## Current Task
 
-**S1-T08 — Foundation Review and Documentation Sync**  
+**S2-T01 — Category Listing Page**  
 Status: **NOT_STARTED**
 
-Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
+Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-02.md`.
+
+There is **no S1-T09**.
 
 ---
 
 ## Overall Status
 
-**SPRINT_1_IN_PROGRESS**
+**SPRINT_1_COMPLETED**
 
 ---
 
@@ -55,12 +59,12 @@ Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
 
 ### Frontend (Phase 1)
 
-- Next.js 16.3.0 App Router (ADR 0002) — initialized in `frontend/`
+- Next.js 16.3.0 App Router (ADR 0002) — `frontend/app/` (no `src/`)
 - React 19.2.8, TypeScript 5.9.3 (`strict: true`), Tailwind CSS 4.3.3
 - ESLint 9.39.5 (`eslint-config-next` 16.3.0)
 - Vitest 4.1.10 — `npm test` / `npm run test:watch`; colocate `*.test.ts`
 - Option 1 design tokens + semantic shell (S1-T07)
-- Layer folders (S1-T04) + static catalog (S1-T05): `config/catalog.ts` → ports → `Static*Repository`
+- Static catalog (S1-T05): `config/catalog.ts` → ports → `Static*Repository`
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
 ### Backend (Phase 2 — not started)
@@ -72,28 +76,22 @@ Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-01.md`.
 ## Completed work
 
 - S0-T01 — Initialize Project-Control Documentation
-- S1-T01 — Document Target Architecture
-- S1-T02 — Document Frontend Layer Boundaries
-- S1-T03 — Initialize Next.js + TypeScript + Tailwind
-- S1-T04 — Establish Frontend Project Structure
-- S1-T05 — Repository Interfaces and Static Data Source
-- S1-T06 — Configure Linting and Unit Tests
-- S1-T07 — Base Layout, Tokens, Semantic HTML Shell
+- S1-T01 … S1-T08 — Sprint 1 Foundation & Architecture (**COMPLETED**)
 
 ## In progress
 
-- None. Do not start S1-T08 automatically.
+- None. Do not start S2-T01 automatically.
 
 ## Pending
 
-- S1-T08 — Foundation Review and Documentation Sync (next)
+- S2-T01 — Category Listing Page (next)
 - Remainder of Sprint 2–11
 
 ## Blockers
 
-- None for starting S1-T08 when explicitly requested.
-- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art, pricing, UOM, variants, inventory display.
+- None for starting S2-T01 when explicitly requested.
+- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art, pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets.
 
 ## Next task (do not start automatically)
 
-**S1-T08 — Foundation Review and Documentation Sync**
+**S2-T01 — Category Listing Page**

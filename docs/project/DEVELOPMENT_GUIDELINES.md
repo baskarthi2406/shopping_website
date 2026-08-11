@@ -26,7 +26,7 @@ Never start the next task automatically.
 
 ## Layering
 
-See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; S1-T04 folders).
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S1-T08).
 
 ```
 App / Pages → Presentation → Application → Domain → Repository interface

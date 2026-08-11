@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). Next.js initialized in S1-T03 at `frontend/app/` (no `src/`). Layer folders in S1-T04. Static catalog in S1-T05.
+**Task:** S1-T02 (layer contract). **As implemented through S1-T08:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05; Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07.
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -143,23 +143,16 @@ No new utility library in this task.
 
 ---
 
-## 3. App Router responsibilities (not implemented)
+## 3. App Router responsibilities
 
-| Artifact | Responsibility |
-|----------|----------------|
-| `app/` | Route tree only |
-| `layout.tsx` | Shell: announcement, header, footer, fonts; semantic `header`/`main`/`footer` |
-| `page.tsx` | Thin page: call services, render presentation |
-| Route segments | `c/[slug]`, `p/[slug]`, `cart`, `checkout` |
-| Dynamic routes | Resolve slug via application; `notFound()` if missing |
-| `loading.tsx` | Route-level pending UI |
-| `error.tsx` | Unexpected render/request errors (client boundary) |
-| `not-found.tsx` | Unknown routes and unknown slugs |
-| `generateMetadata` | Calls SEO helpers + catalog services |
-| `sitemap.ts` | Indexable URLs from catalog services |
-| `robots.ts` | Allow catalog; disallow cart/checkout/admin; sitemap link |
-
-Do not implement these files in S1-T02.
+| Artifact | Status after Sprint 1 |
+|----------|------------------------|
+| `app/` | Route tree only. Tokens live in `globals.css` (Tailwind v4 CSS-first; no separate `styles/` folder). |
+| `layout.tsx` | Semantic shell via `StorefrontShell` (skip link, header logo, main, footer). Not the final Option 1 chrome. Server Component. Exports `metadata`. |
+| `page.tsx` | Brand shell only. Does not call catalog services yet (Sprint 2). |
+| Route segments `c/[slug]`, `p/[slug]`, `cart`, `checkout` | Later sprints |
+| `loading.tsx` / `error.tsx` / `not-found.tsx` | Later |
+| `generateMetadata` (dynamic), `sitemap.ts`, `robots.ts` | Sprint 3; structure does not block them |
 
 ---
 
@@ -356,6 +349,8 @@ Do not swallow errors in presentation.
 
 Priority: **Mobile → Tablet → Desktop**. Desktop extends mobile.
 
+**S1-T07 layout:** `--mm-space-page` (16 / 24 / 32px), `--mm-container-max` 72rem, logo `max-w` on the header image. `overflow-x-hidden` on `body` is a backstop; the shell itself has no min-width wider than the viewport. Catalog grids are Sprint 2 (must not rely on clipping alone).
+
 Every storefront UI task: mobile layout, touch (no hover-only), responsive type/images, no horizontal scroll, mobile nav/listing/PDP/cart, performance, Core Web Vitals.
 
 Admin (Phase 2): desktop-priority, still responsive.
@@ -402,7 +397,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented, S1-T04)
+## 17. Folder structure (as implemented, Sprint 1)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -410,7 +405,9 @@ Compatible with S1-T01. Names `application` / `infrastructure` are the approved 
 
 **S1-T04:** Layer directories exist with boundary READMEs only.
 
-**S1-T05:** Catalog domain types, repository interfaces, static repositories, and a small fixture set. No storefront UI. Pages still must not import `infrastructure/catalog/data`.
+**S1-T05:** Catalog domain types, repository interfaces, static repositories, and a small fixture set. Pages must not import `infrastructure/catalog/data`.
+
+**S1-T06:** Vitest (`*.test.ts` colocated). **S1-T07:** `Container`, `StorefrontShell`, Option 1 `--mm-*` tokens.
 
 **Not created (intentional):**
 
@@ -430,8 +427,10 @@ frontend/
   public/
     mini-mystiq-logo.png
   components/
-    ui/                          # primitives — later UI tasks
-    storefront/                  # composites — later UI tasks
+    ui/container.tsx             # S1-T07
+    storefront/storefront-shell.tsx
+  config/
+    catalog.ts                   # composition root (S1-T05)
   domain/
     catalog/                     # Product, Category, Uom — types in S1-T05
     cart/                        # Cart, CartItem — Sprint 4
@@ -442,8 +441,7 @@ frontend/
   infrastructure/
     catalog/                     # Static*Repository — S1-T05
     cart/                        # browser storage adapter — Sprint 4
-  config/                        # bind implementations; no secrets
-  lib/                           # shared technical utils only
+  lib/                           # shared technical utils only (empty aside from README)
 ```
 
 Future routes (`c/[slug]`, `p/[slug]`, `cart`, `checkout`, `sitemap.ts`, `robots.ts`) stay under `app/` when those sprints arrive.
@@ -474,10 +472,12 @@ No page rewrite. ADR 0004.
 - Exact domain fields, variants, inventory display  
 - Search/filter rules  
 - Cart storage API (`localStorage` vs memory)  
-- Test/lint tools (S1-T06)  
-- Breakpoint px, CWV budgets, WCAG target  
+- Breakpoint px as a **business** lock (S1-T07 uses Tailwind sm/md/lg as implementation defaults)  
+- CWV budgets, WCAG numeric target  
 - Site URL, legal name  
 - Admin host  
 - Whether `search()` exists in Phase 1  
 
-No ADR for this task: it specifies S1-T01 decisions; it does not change them.
+No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
+
+There is **no S1-T09**. After Sprint 1 the next task is **S2-T01** (category listing).
