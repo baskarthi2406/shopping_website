@@ -8,4 +8,6 @@ Storefront composites. Receive view-model props. Do not import repositories or f
 
 **S2-T03:** `ProductDetail` — presentation only (name, description, images, breadcrumb, category links). No cart, price, or variant selectors.
 
-Hero, navigation, cart chrome: later tasks.
+**S2-T04:** `Breadcrumbs` and `CatalogNavigation` — presentation props only. Shell header shows category links; pages pass breadcrumb items from view models.
+
+Hero, search/wishlist/account/cart chrome: later tasks.

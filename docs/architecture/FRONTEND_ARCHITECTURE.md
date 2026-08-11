@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S2-T03:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05; Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]` (S2-T01/S2-T02); product detail at `/p/[slug]` (S2-T03).
+**Task:** S1-T02 (layer contract). **As implemented through S2-T04:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05; Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -216,7 +216,7 @@ Do not invent another visual language.
 
 **S1-T07 tokens:** CSS variables in `frontend/app/globals.css` (`--mm-*`), mapped into Tailwind v4 `@theme inline`. Primary `#016C37` sampled from Option 1. Hex values are **implementation defaults**, not a locked brand guide (`DESIGN_OPTION_1.md`).
 
-Primitives: `components/ui/container.tsx`. Shell: `components/storefront/storefront-shell.tsx` (skip link, header logo, main, footer — not the final Option 1 chrome).
+Primitives: `components/ui/container.tsx`. Shell: `components/storefront/storefront-shell.tsx` (skip link, header logo + catalog nav props, main, footer). Search/wishlist/account/cart chrome is still not implemented.
 
 ---
 
@@ -292,6 +292,8 @@ Belong here (not in React):
 **S2-T01 / S2-T02:** `getCategoryPage(categories, products, slug)` returns `{ category, products }` or `null` (unknown slug). S2-T02 did not add a second listing use case.
 
 **S2-T03:** `getProductPage(products, categories, slug)` returns `{ product, categories }` or `null`. Reuses `getProductBySlug`; does not add a second product lookup. Unresolved category ids are omitted.
+
+**S2-T04:** `toCatalogNavItems(categories)` maps `listCategories()` to `{ label, href: /c/{slug} }`. Layout loads nav; `StorefrontShell` / `CatalogNavigation` / `Breadcrumbs` receive props only.
 
 Pages call `config/catalog.ts`, not fixtures. View models map domain → presentation props (no price/inventory).
 
@@ -401,7 +403,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S2-T03)
+## 17. Folder structure (as implemented through S2-T04)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -444,6 +446,8 @@ frontend/
     storefront/storefront-shell.tsx
     storefront/product-card.tsx  # S2-T01; view-model props only
     storefront/product-detail.tsx # S2-T03; view-model props only
+    storefront/breadcrumbs.tsx   # S2-T04; presentation items only
+    storefront/catalog-navigation.tsx # S2-T04; presentation items only
   config/
     catalog.ts                   # composition root (S1-T05)
   domain/
@@ -499,4 +503,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. S2-T01–S2-T03 are complete (`/c/[slug]`, `/p/[slug]`). Next: **S2-T04** — do not start automatically. Do not rebuild the PDP or category listing for navigation work.
+There is **no S1-T09**. S2-T01–S2-T04 are complete (`/c/[slug]`, `/p/[slug]`, catalog nav + shared breadcrumbs). Next: **S2-T05** — do not start automatically. Do not invent filters if business rules are TBD.

@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
 
 export type ProductDetailProps = {
   product: {
@@ -17,38 +18,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
   return (
     <>
-      <nav aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-x-2 text-small text-foreground-secondary">
-          {product.breadcrumb.map((item, index) => {
-            const isLast = index === product.breadcrumb.length - 1;
-
-            return (
-              <li key={`${item.label}-${index}`} className="flex items-center gap-x-2">
-                {index > 0 ? (
-                  <span aria-hidden="true" className="text-foreground-muted">
-                    /
-                  </span>
-                ) : null}
-                {item.href && !isLast ? (
-                  <Link
-                    href={item.href}
-                    className="inline-flex min-h-[var(--mm-tap-min)] items-center text-primary hover:text-primary-hover"
-                  >
-                    {item.label}
-                  </Link>
-                ) : (
-                  <span
-                    className="inline-flex min-h-[var(--mm-tap-min)] items-center text-foreground"
-                    aria-current={isLast ? "page" : undefined}
-                  >
-                    {item.label}
-                  </span>
-                )}
-              </li>
-            );
-          })}
-        </ol>
-      </nav>
+      <Breadcrumbs items={product.breadcrumb} />
 
       <article className="mt-4 grid gap-6 lg:grid-cols-2 lg:items-start lg:gap-10">
         <div>

@@ -1,9 +1,9 @@
 import { cache } from "react";
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { toCategoryPageViewModel } from "@/application/catalog";
 import { buildCategoryMetadata } from "@/application/seo/category-metadata";
+import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
 import { ProductCard } from "@/components/storefront/product-card";
 import { Container } from "@/components/ui/container";
 import { catalog } from "@/config/catalog";
@@ -58,27 +58,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
 
   return (
     <Container className="py-6 sm:py-8 lg:py-10">
-      <nav aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-x-2 text-small text-foreground-secondary">
-          <li>
-            <Link
-              href="/"
-              className="inline-flex min-h-[var(--mm-tap-min)] items-center text-primary hover:text-primary-hover"
-            >
-              Home
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-foreground-muted">
-            /
-          </li>
-          <li
-            className="inline-flex min-h-[var(--mm-tap-min)] items-center text-foreground"
-            aria-current="page"
-          >
-            {view.name}
-          </li>
-        </ol>
-      </nav>
+      <Breadcrumbs items={view.breadcrumb} />
 
       <header className="mt-4">
         <h1 className="text-h1 font-semibold tracking-tight text-foreground">

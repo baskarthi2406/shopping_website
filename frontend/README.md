@@ -45,7 +45,9 @@ Valid development slugs: `/c/baby-essentials` (three products), `/c/infants`, `/
 
 **S2-T03:** crawlable product detail at `/p/[slug]` via `catalog.getProductPage`. Example: `/p/pink-white-pleated-baby-dress`. Unknown slugs use `notFound()`. No price, stock, variants, or cart. JSON-LD is Sprint 3.
 
-**Not implemented yet:** category index, homepage catalog, cart, search, full Option 1 header/nav/footer, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
+**S2-T04:** header catalog nav (categories from `listCategories`) and a shared `Breadcrumbs` component on `/c/` and `/p/`. Wrapping links, no hamburger Client Component, no cart/search. Breadcrumb JSON-LD is Sprint 3.
+
+**Not implemented yet:** category index, homepage catalog, cart, search, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
 
 ## Architecture
 
