@@ -32,16 +32,16 @@ Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
 ## Current Sprint
 
 **Sprint 2 — Product Catalog**  
-Status: **IN_PROGRESS** (S2-T01 … S2-T05 completed)
+Status: **IN_PROGRESS** (S2-T01 … S2-T06 completed)
 
 ---
 
 ## Current Task
 
-**S2-T06 — Expand Static Catalog Fixtures**  
+**S2-T07 — Catalog Review**  
 Status: **NOT_STARTED**
 
-Do not start S2-T06 automatically.
+Do not start S2-T07 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-02.md`.
 
@@ -64,7 +64,7 @@ There is **no S1-T09**.
 - ESLint 9.39.5 (`eslint-config-next` 16.3.0)
 - Vitest 4.1.10 — `npm test` / `npm run test:watch`; colocate `*.test.ts`
 - Option 1 design tokens + semantic shell (S1-T07)
-- Static catalog (S1-T05): `config/catalog.ts` → ports → `Static*Repository`
+- Static catalog: 12 approved products (S1-T05, expanded S2-T06)
 - Category listing `/c/[slug]` (S2-T01; S2-T02 closed as already satisfied)
 - Product detail `/p/[slug]` (S2-T03)
 - Catalog nav + shared breadcrumbs (S2-T04)
@@ -85,22 +85,23 @@ There is **no S1-T09**.
 - S2-T02 — Category Product Listing Page (satisfied by S2-T01; no duplicate route)
 - S2-T03 — Product Detail Page
 - S2-T04 — Catalog Navigation and Breadcrumbs (UI)
-- S2-T05 — Listing Filter/Sort (Placeholder) — **deferred**; no filter/sort shipped
+- S2-T05 — Listing Filter/Sort (Placeholder) — **deferred**
+- S2-T06 — Expand Static Catalog Fixtures
 
 ## In progress
 
-- None. Do not start S2-T06 automatically.
+- None. Do not start S2-T07 automatically.
 
 ## Pending
 
-- S2-T06 — Expand Static Catalog Fixtures (next)
-- Remainder of Sprint 2–11
+- S2-T07 — Catalog Review (next)
+- Remainder of Sprint 3–11
 
 ## Blockers
 
-- None for starting S2-T06 when explicitly requested.
-- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan category, dedicated category/hero lifestyle art, pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules.
+- None for starting S2-T07 when explicitly requested.
+- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan and several dress categories, dedicated category/hero lifestyle art, toys (no approved toy assets), pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules.
 
 ## Next task (do not start automatically)
 
-**S2-T06 — Expand Static Catalog Fixtures**
+**S2-T07 — Catalog Review**

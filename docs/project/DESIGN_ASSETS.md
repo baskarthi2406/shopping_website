@@ -9,13 +9,18 @@ When Next.js is initialized (S1-T03), serve the **SEO-named** files from the Nex
 
 **S2-T01:** the three `baby-essentials` product photos were copied (not renamed) into `frontend/public/`.
 
-**S2-T03:** the remaining catalog product photos referenced by static product records were copied into `frontend/public/`:
+**S2-T03:** navy/tan, olive, and beige product photos copied into `frontend/public/`.
 
-- `navy-star-and-tan-bow-dresses.jpg`
-- `olive-green-patterned-dress.jpg`
-- `beige-motif-pleated-dress.jpg`
+**S2-T06:** remaining approved **product** photos copied into `frontend/public/`:
 
-Do not copy remaining hero/shirt/promo assets until the tasks that use them. Do not delete originals.
+- `grey-pinafore-baby-set.jpg`
+- `dusty-blue-floral-dress.jpg`
+- `cream-tiered-shirt-dress.jpg`
+- `kids-striped-shirts-burgundy-and-sage.jpg`
+- `kids-button-down-shirts-rose-and-burgundy.jpg`
+- `kids-linen-shirts-brown-and-sage.jpg`
+
+Do not copy hero/promo banners until a homepage task uses them. Do not delete originals.
 
 ---
 
@@ -56,9 +61,9 @@ Do not recreate or replace it. Do not rename it again.
 | `WhatsApp Image 2026-07-25 at 6.00.54 PM (2).jpeg` | `cream-tiered-shirt-dress.jpg` | Product | Product card / PDP; 3:4 | Approved — **use SEO name** |
 | `WhatsApp Image 2026-07-25 at 6.00.55 PM.jpeg` | `grey-pinafore-baby-set.jpg` | Product | Product card / PDP; **4:3 landscape** — crop for cards | Approved — **use SEO name** |
 | `WhatsApp Image 2026-07-25 at 6.00.55 PM (1).jpeg` | `cream-grey-rose-tiered-baby-dress.jpg` | Product | Product card / PDP; 3:4 | Approved — **use SEO name** |
-| `WhatsApp Image 2026-06-26 at 4.51.31 PM.jpeg` (inside zip) | `kids-striped-shirts-burgundy-and-sage.jpg` | Product | Product card / PDP; 4:3 | Approved extract — **use SEO name**. Not in UI until a later task |
-| `WhatsApp Image 2026-06-26 at 4.53.57 PM.jpeg` (inside zip) | `kids-button-down-shirts-rose-and-burgundy.jpg` | Product | Product card / PDP | Approved extract — **use SEO name**. Not in UI until a later task |
-| `WhatsApp Image 2026-06-26 at 4.55.02 PM.jpeg` (inside zip) | `kids-linen-shirts-brown-and-sage.jpg` | Product | Product card / PDP | Approved extract — **use SEO name**. Not in UI until a later task |
+| `WhatsApp Image 2026-06-26 at 4.51.31 PM.jpeg` (inside zip) | `kids-striped-shirts-burgundy-and-sage.jpg` | Product | Product card / PDP; 4:3 | Approved extract — **use SEO name**. In catalog (S2-T06), category `kids` |
+| `WhatsApp Image 2026-06-26 at 4.53.57 PM.jpeg` (inside zip) | `kids-button-down-shirts-rose-and-burgundy.jpg` | Product | Product card / PDP | Approved extract — **use SEO name**. In catalog (S2-T06), category `kids` |
+| `WhatsApp Image 2026-06-26 at 4.55.02 PM.jpeg` (inside zip) | `kids-linen-shirts-brown-and-sage.jpg` | Product | Product card / PDP | Approved extract — **use SEO name**. In catalog (S2-T06), category `kids`. Customer-facing name uses documented alt (does not claim linen) |
 | `WhatsApp Image 2026-06-26 at 4.55.41 PM.jpeg` (inside zip) | — | Product **TBD** | Character-print outfits | **Do not extract/use.** Do not name as Disney/licensed. Zip entry only |
 | `WhatsApp Image 2026-06-04 at 2.42.23 PM.jpeg` | — | Pigeon bottle promo | **Not in storefront** until confirmed as catalog product | TBD — original retained, not renamed |
 | `WhatsApp Image 2026-07-30 at 11.58.49 AM.jpeg` | — | Hiring flyer | **Outside storefront.** Possible later Careers page | TBD — original retained |
@@ -140,7 +145,7 @@ Do not slice Option 1 composite circles. Replace this table when dedicated categ
 
 ## Zip archive
 
-Original zip **kept**. Three shirt photos copied to SEO names (above). Character-print entry **not** extracted and **not** used. Hangtags may read BINTANG (manufacturer TBD). Storefront brand remains Mini Mystiq. Do not put these shirts in the UI until a catalog/UI task says so.
+Original zip **kept**. Three shirt photos copied to SEO names (above) and added to the static catalog in S2-T06 (`kids`). Character-print entry **not** extracted and **not** used. Hangtags may read BINTANG (manufacturer TBD). Storefront brand remains Mini Mystiq.
 
 ---
 
@@ -173,7 +178,7 @@ Original zip **kept**. Three shirt photos copied to SEO names (above). Character
 | Primary hero | `baby-sleeveless-sets-new-collection-banner.jpg` |
 | Secondary promo | `baby-dress-bloomer-sets-new-collection-banner.jpg` |
 | Category circles | Temporary product-photo table above |
-| Product cards / PDP | SEO product `.jpg` files (including three extracted shirts when a UI task includes them) |
+| Product cards / PDP | SEO product `.jpg` files (including three extracted kids shirts, S2-T06) |
 
 ---
 
@@ -181,13 +186,13 @@ Original zip **kept**. Three shirt photos copied to SEO names (above). Character
 
 1. **Pigeon bottle** — not in the storefront until confirmed as a catalog product.
 2. **Hiring flyer** — outside the storefront; may later support a Careers page.
-3. **Zip shirts** — three SEO files extracted; not in UI yet.
+3. **Zip shirts** — three SEO files extracted; in the static catalog as Kids products (S2-T06).
 4. **Character-print outfits** — TBD; do not use or name as Disney/licensed.
 5. **Hero** — sleeveless-sets banner primary; dress-bloomer banner secondary.
 6. **Navy/tan dresses** — category TBD; do not infer Kids/Teens/Women.
 7. **Category images** — none dedicated; temporary product-photo reuse (table above).
 
-Remaining TBD: dedicated category art, standalone Option 1 lifestyle hero, Pigeon/Careers/character-print confirmation, navy/tan taxonomy.
+Remaining TBD: dedicated category art, standalone Option 1 lifestyle hero, Pigeon/Careers/character-print confirmation, navy/tan and other dress taxonomy (dusty-blue, cream-tiered, olive, beige), toys (no approved toy product assets).
 
 ---
 

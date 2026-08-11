@@ -26,7 +26,7 @@ Never start the next task automatically.
 
 ## Layering
 
-See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S2-T01).
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S2-T06).
 
 ```
 App / Pages → Presentation → Application → Domain → Repository interface
@@ -63,6 +63,8 @@ Product detail (S2-T03): `app/p/[slug]/page.tsx` calls `catalog.getProductPage`.
 Catalog nav (S2-T04): `app/layout.tsx` calls `catalog.listCategories` and `toCatalogNavItems`. `StorefrontShell` receives nav props. `Breadcrumbs` and `CatalogNavigation` are presentation-only. No `"use client"`. Breadcrumb JSON-LD remains Sprint 3.
 
 Listing filter/sort (S2-T05): **deferred**. Do not add facets, query-parameter listings, or placeholder Filter/Sort controls until business rules exist (`docs/requirements/CATALOG_FILTER_SORT.md`).
+
+Static catalog (S2-T06): 12 development products from approved assets. Do not invent toys, prices, or age taxonomy. Infants/teens/women remain empty on purpose.
 
 Metadata helpers live in `application/seo/`.
 

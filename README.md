@@ -143,11 +143,11 @@ Then implement **only** the current task.
 | Field | Value |
 |-------|--------|
 | Phase | Phase 1 — SEO-First Storefront |
-| Overall status | SPRINT_1_COMPLETED |
-| Current sprint | Sprint 1 — Foundation & Architecture (**COMPLETED**) |
-| Last completed | S1-T08 — Foundation Review and Documentation Sync |
-| Current task | S2-T01 — Category Listing Page (**NOT_STARTED**) |
+| Overall status | SPRINT_2_IN_PROGRESS |
+| Current sprint | Sprint 2 — Product Catalog (**IN_PROGRESS**) |
+| Last completed | S2-T06 — Expand Static Catalog Fixtures |
+| Current task | S2-T07 — Catalog Review (**NOT_STARTED**) |
 
-Do **not** start S2-T01 automatically. There is no S1-T09.
+Do **not** start S2-T07 automatically. There is no S1-T09.
 
-Phase 2 backend implementation has **not** started. Frontend Next.js is initialized in `frontend/` (App Router at `frontend/app/`). Layer folders exist (S1-T04). Static catalog is behind `config/catalog.ts` (S1-T05). Unit tests: Vitest (`npm test`). Design tokens + semantic shell: S1-T07. Sprint 1 reviewed in S1-T08.
+Phase 2 backend implementation has **not** started. Storefront: `/c/[slug]`, `/p/[slug]`, catalog nav + breadcrumbs. Static catalog: 12 approved products (S2-T06). Filter/sort deferred (S2-T05). Unit tests: Vitest (`npm test`).

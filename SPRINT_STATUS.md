@@ -71,10 +71,10 @@ Sprint 1 is complete. There is no S1-T09.
 | S2-T03 | Product Detail Page | **COMPLETED** |
 | S2-T04 | Catalog Navigation and Breadcrumbs (UI) | **COMPLETED** |
 | S2-T05 | Listing Filter/Sort (Placeholder) | **COMPLETED** (deferred) |
-| S2-T06 | Expand Static Catalog Fixtures | **NOT_STARTED** |
+| S2-T06 | Expand Static Catalog Fixtures | **COMPLETED** |
 | S2-T07 | Catalog Review | **NOT_STARTED** |
 
-S2-T01 delivered `/c/[slug]`. S2-T02 is complete with no duplicate route. S2-T03 delivered `/p/[slug]`. S2-T04 delivered catalog nav and shared breadcrumbs. S2-T05 deferred filter/sort (`docs/requirements/CATALOG_FILTER_SORT.md`). Do not start S2-T06 automatically.
+S2-T01 delivered `/c/[slug]`. S2-T02 is complete with no duplicate route. S2-T03 delivered `/p/[slug]`. S2-T04 delivered catalog nav and shared breadcrumbs. S2-T05 deferred filter/sort. S2-T06 expanded the static catalog to 12 approved products. Do not start S2-T07 automatically.
 
 ---
 

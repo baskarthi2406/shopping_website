@@ -286,7 +286,7 @@ Deferral is explicit in status/docs. S2-T06 recorded **NOT_STARTED**.
 
 ## S2-T06 — Expand Static Catalog Fixtures
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -300,9 +300,22 @@ S1-T05; typically after S2-T03.
 
 Do not claim real SKUs. Include at least one empty category if empty states exist.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Fixture updates only.
+Fixture updates only. Six approved product photos added as records. Existing ids/slugs preserved. No new categories, prices, UOM, variants, featured merchandising, or toys.
+
+### Current static catalog (after S2-T06)
+
+**12 products.** Categories unchanged: `baby-essentials`, `infants`, `kids`, `teens`, `women`.
+
+| Category | Products |
+|----------|----------|
+| baby-essentials | pink-white-pleated-baby-dress, sage-striped-baby-top-and-shorts, cream-grey-rose-tiered-baby-dress, **grey-pinafore-baby-set** |
+| kids | **kids-striped-shirts-burgundy-and-sage**, **kids-button-down-shirts-rose-and-burgundy**, **kids-linen-shirts-brown-and-sage** |
+| infants, teens, women | empty (empty-state coverage) |
+| Uncategorized | navy-star-tan-bow-dress, olive-green-patterned-dress, beige-motif-pleated-dress, **dusty-blue-floral-dress**, **cream-tiered-shirt-dress** |
+
+Kids shirts assigned from DESIGN_ASSETS “kids shirts” names/alts — not visual age guessing. Dusty-blue remains uncategorized (Teens stand-in is **not** taxonomy). Navy/tan category still TBD. No toy assets exist.
 
 ### Expected files/modules
 
@@ -316,11 +329,11 @@ Fixture updates only.
 
 ### Testing requirements
 
-Repository tests still pass.
+Repository tests still pass. Unique id/slug checks; category ids must exist.
 
 ### Definition of Done
 
-Fixtures support Sprint 2 pages.
+Fixtures support Sprint 2 pages. S2-T07 recorded **NOT_STARTED**.
 
 ---
 
