@@ -65,7 +65,7 @@ Unit tests for `getCategoryPage`, view-model mapping, and metadata. Page does no
 
 ### Definition of Done
 
-Page works on mock data; status updated. S2-T02 remains **NOT_STARTED**.
+Page works on mock data; status updated.
 
 ### Notes
 
@@ -73,19 +73,31 @@ Page works on mock data; status updated. S2-T02 remains **NOT_STARTED**.
 - Canonical **domain** remains TBD; canonical is the path `/c/{slug}`.
 - Category descriptions are currently `null`; metadata uses a factual fallback (`{name} at Mini Mystiq. Baby Clothes & Toys.`).
 - Visible breadcrumb is Home (link) + current category (not a link). Full catalog nav remains S2-T04.
-- S2-T02’s original `/c/[slug]` product-listing scope was delivered here. Do not rebuild the same route when S2-T02 starts; re-scope that task (possible remaining work: category index).
+- S2-T02’s original `/c/[slug]` product-listing scope was delivered here. S2-T02 closed as already satisfied (no duplicate route). The original S2-T01 category **index** was not built and is not part of S2-T02.
 
 ---
 
 ## S2-T02 — Category Product Listing Page
 
-**Status:** NOT_STARTED
-
-Do **not** start automatically. `/c/[slug]` product listing, `notFound()`, and empty states were implemented in **S2-T01**. Do not re-implement that route. Remaining work for this task is TBD when a human requests S2-T02 (the original S2-T01 category index is one candidate).
+**Status:** COMPLETED
 
 ### Objective
 
 Show products for a category slug via the product repository.
+
+### Overlap with S2-T01
+
+S2-T01 already implemented this task’s entire original scope at `/c/[slug]`. S2-T02 adds **no new storefront code**. A category **index** (`listCategories`) was the original S2-T01 outline, not S2-T02, and was not invented here.
+
+| S2-T02 requirement | S2-T01 coverage |
+|--------------------|-----------------|
+| Dynamic category route | `frontend/app/c/[slug]/page.tsx` |
+| `listProductsByCategory` (or equivalent) | `getCategoryPage` → `listProductsByCategory` |
+| Products render in HTML | Server-rendered `ProductCard` list |
+| Empty category without crash | Empty state copy; no fake products |
+| Unknown slug → not-found | `notFound()` + `app/not-found.tsx` |
+| Mobile-first listing | 2 → 3 → 4 column grid; tap-sized links |
+| Use-case tests; no UI → fixtures | `get-category-page.test.ts`, `catalog.test.ts` |
 
 ### Dependencies
 
@@ -95,35 +107,37 @@ S2-T01.
 
 Crawlable listing; 404 for unknown slug. URL pattern follows current architecture (final SEO URLs may be adjusted in S3-T01). Mobile-first product browsing.
 
-### Implementation scope
+### Implementation scope (as closed)
 
-Dynamic category route, listing UI, not-found handling.
+Documentation/status only. Did **not** rebuild `/c/[slug]`, `ProductCard`, or `getCategoryPage`.
 
 ### Expected files/modules
 
+Already present from S2-T01:
+
 - Dynamic category route
-- `listProductsByCategory` (or equivalent) use case
+- `listProductsByCategory` / `getCategoryPage`
 
 ### Acceptance criteria
 
-- Products for the category render in HTML
-- Empty category is handled without crashing
-- Unknown slug is a not-found response
-- Mobile-first listing: no horizontal scroll; touch-friendly product links/cards
+- Products for the category render in HTML — **met (S2-T01)**
+- Empty category is handled without crashing — **met (S2-T01)**
+- Unknown slug is a not-found response — **met (S2-T01)**
+- Mobile-first listing: no horizontal scroll; touch-friendly product links/cards — **met (S2-T01)**
 
 ### Testing requirements
 
-Use-case tests with mock repo; listing does not call infrastructure directly.
+Use-case tests with mock repo; listing does not call infrastructure directly. Existing tests cover this; no new tests (no new logic).
 
 ### Definition of Done
 
-Category listing complete on mock data.
+Category listing complete on mock data. Overlap documented. S2-T03 recorded **NOT_STARTED**.
 
 ---
 
 ## S2-T03 — Product Detail Page
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -135,17 +149,17 @@ S2-T02.
 
 ### Requirements
 
-Semantic product content (name, description, image placeholders). Variant/stock rules **TBD** — omit or show placeholder fields only if present on the type. Mobile-first product detail.
+Semantic product content (name, description, images). Variant/stock/price **TBD** — omitted, not invented. Mobile-first product detail. No cart. JSON-LD deferred to Sprint 3.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Product detail route + `getProduct` use case. No cart button required until Sprint 4 (a disabled placeholder is optional, not required).
-
-### Expected files/modules
-
-- Product detail route
-- Product detail presentational component
-- `getProduct` use case
+- Route: `frontend/app/p/[slug]/page.tsx` (Server Component)
+- Application: `getProductPage` → existing `getProductBySlug` + `CategoryRepository.getById` for known category links
+- View model: `toProductPageViewModel`
+- Metadata: `application/seo/product-metadata.ts`
+- Presentation: `components/storefront/product-detail.tsx`
+- Reuses `app/not-found.tsx` for unknown slugs
+- Copied remaining catalog product JPEGs into `frontend/public/` (SEO filenames; originals kept)
 
 ### Acceptance criteria
 
@@ -156,11 +170,19 @@ Product detail route + `getProduct` use case. No cart button required until Spri
 
 ### Testing requirements
 
-Use-case tests for found/not-found.
+Use-case tests for found/not-found; view-model and metadata tests. Page does not import fixtures.
 
 ### Definition of Done
 
-PDP works on mock data.
+PDP works on mock data. S2-T04 recorded **NOT_STARTED**.
+
+### Notes
+
+- JSON-LD Product schema is Sprint 3. Not invented here (no price/availability/offers).
+- Canonical **domain** remains TBD; canonical is the path `/p/{slug}`.
+- Uncategorized products (navy/tan, olive, beige) render without a fake category crumb or link.
+- Default variants, `uomCode`, and `inventoryStatus: unknown` are not displayed.
+- No `"use client"`. Primary image uses `priority` for LCP.
 
 ---
 
