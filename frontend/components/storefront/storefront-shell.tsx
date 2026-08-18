@@ -22,7 +22,7 @@ export function StorefrontShell({
       <div className="flex min-h-dvh flex-col bg-background text-foreground">
         <AnnouncementBar />
         <header className="border-b border-border bg-surface">
-          <Container className="flex flex-col gap-2 py-3 sm:flex-row sm:items-center sm:justify-between sm:gap-6">
+          <Container className="flex min-h-[var(--mm-header-min)] items-center justify-between gap-3 py-2 sm:gap-6">
             <Link
               href="/"
               className="inline-flex min-h-[var(--mm-tap-min)] shrink-0 items-center rounded-md"
@@ -33,8 +33,8 @@ export function StorefrontShell({
                 width={160}
                 height={73}
                 priority
-                className="h-10 w-auto max-w-[9rem] sm:h-12 sm:max-w-[11rem]"
-                style={{ width: "auto", height: "auto" }}
+                className="h-[var(--mm-logo-height)] w-auto object-contain"
+                style={{ width: "auto" }}
               />
             </Link>
             {navigation.length > 0 ? (

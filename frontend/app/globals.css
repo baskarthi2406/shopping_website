@@ -44,6 +44,9 @@
   --mm-space-page: 1rem;
   --mm-container-max: 72rem;
   --mm-tap-min: 2.75rem;
+  --mm-announcement-min: 2rem;
+  --mm-header-min: 4rem;
+  --mm-logo-height: 2rem;
 }
 
 @media (min-width: 640px) {
@@ -53,6 +56,8 @@
     --mm-font-h2: 1.5rem;
     --mm-font-h3: 1.25rem;
     --mm-space-page: 1.5rem;
+    --mm-header-min: 4.25rem;
+    --mm-logo-height: 2.25rem;
   }
 }
 
@@ -61,6 +66,8 @@
     --mm-font-display: 2.5rem;
     --mm-font-h1: 2.25rem;
     --mm-space-page: 2rem;
+    --mm-header-min: 4.5rem;
+    --mm-logo-height: 2.5rem;
   }
 }
 
