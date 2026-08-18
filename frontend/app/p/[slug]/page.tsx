@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/app/json-ld";
 import { toNextMetadata, toNextNotFoundMetadata } from "@/app/to-next-metadata";
 import { toProductPageViewModel } from "@/application/catalog";
+import { buildBreadcrumbStructuredData } from "@/application/seo/breadcrumb-structured-data";
 import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
 import { buildProductMetadata } from "@/application/seo/product-metadata";
 import { buildProductStructuredData } from "@/application/seo/product-structured-data";
@@ -41,13 +42,19 @@ export default async function ProductPage({ params }: ProductPageProps) {
 
   const view = toProductPageViewModel(data.product, data.categories);
   const origin = resolveSiteOrigin();
-  const structuredData = buildProductStructuredData(view, (path) =>
-    toCanonicalUrl(origin, path),
+  const toAbsoluteUrl = (path: string) => toCanonicalUrl(origin, path);
+  const productStructuredData = buildProductStructuredData(view, toAbsoluteUrl);
+  const breadcrumbStructuredData = buildBreadcrumbStructuredData(
+    view,
+    toAbsoluteUrl,
   );
 
   return (
     <>
-      {structuredData ? <JsonLd data={structuredData} /> : null}
+      {productStructuredData ? <JsonLd data={productStructuredData} /> : null}
+      {breadcrumbStructuredData ? (
+        <JsonLd data={breadcrumbStructuredData} />
+      ) : null}
       <Container className="py-6 sm:py-8 lg:py-10">
         <ProductDetail product={view} />
       </Container>

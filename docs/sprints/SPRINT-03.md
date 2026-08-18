@@ -300,7 +300,7 @@ Product schema shipped. S3-T07 recorded **NOT_STARTED**.
 
 ## S3-T07 — Breadcrumb Structured Data
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -314,13 +314,16 @@ S2-T04, S3-T06.
 
 Must match UI crumb trail.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Breadcrumb JSON-LD helper on category and product pages.
-
-### Expected files/modules
-
-- BreadcrumbList builder
+- Application helper `buildBreadcrumbStructuredData` (`application/seo/breadcrumb-structured-data.ts`)
+- Category and product Server Components render it via existing `app/json-ld.tsx`
+- Trail comes from the page view-model `breadcrumb` (same as UI)
+- Current page (`href: null`) uses the page `canonicalPath`; UI still does not link the last crumb
+- Absolute URLs via `toCanonicalUrl` / `config/site.ts`
+- Category: Home → Category. Product with known category: Home → Category → Product. Uncategorized: Home → Product
+- Unknown `/c/` and `/p/` slugs: `notFound()` — no BreadcrumbList JSON-LD
+- Product JSON-LD on PDPs is unchanged. No UI or URL changes. Organization schema is later.
 
 ### Acceptance criteria
 
@@ -333,7 +336,7 @@ Unit tests for list construction.
 
 ### Definition of Done
 
-Breadcrumb schema shipped.
+Breadcrumb schema shipped. S3-T08 recorded **NOT_STARTED**.
 
 ---
 

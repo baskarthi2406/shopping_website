@@ -16,4 +16,6 @@ Pages call helpers; they do not copy-paste metadata objects. The Next.js Metadat
 
 **S3-T05:** `app/robots.ts` — allow `/`, sitemap `{origin}/sitemap.xml`.
 
-**S3-T06:** `product-structured-data.ts` — Schema.org Product from catalog fields. `serialize-json-ld.ts` escapes `<`. Offers/brand/reviews omitted. BreadcrumbList / Organization remain later Sprint 3.
+**S3-T06:** `product-structured-data.ts` — Schema.org Product from catalog fields. `serialize-json-ld.ts` escapes `<`. Offers/brand/reviews omitted.
+
+**S3-T07:** `breadcrumb-structured-data.ts` — Schema.org BreadcrumbList from the UI view-model trail. Organization remains later Sprint 3.

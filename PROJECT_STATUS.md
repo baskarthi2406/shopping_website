@@ -32,16 +32,16 @@ Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
 ## Current Sprint
 
 **Sprint 3 — Homepage + SEO**  
-Status: **IN_PROGRESS** (S3-T01 … S3-T06 completed)
+Status: **IN_PROGRESS** (S3-T01 … S3-T07 completed)
 
 ---
 
 ## Current Task
 
-**S3-T07 — Breadcrumb Structured Data**  
+**S3-T08 — Organization Structured Data**  
 Status: **NOT_STARTED**
 
-Do not start S3-T07 automatically.
+Do not start S3-T08 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-03.md`.
 
@@ -77,6 +77,7 @@ Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
 - XML sitemap at `/sitemap.xml` from catalog repositories (S3-T04)
 - `/robots.txt` allows the storefront and references the sitemap (S3-T05)
 - Product JSON-LD on `/p/[slug]` (S3-T06; no invented offers/brand/reviews)
+- BreadcrumbList JSON-LD on `/c/[slug]` and `/p/[slug]` (S3-T07)
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
 ### Backend (Phase 2 — not started)
@@ -102,22 +103,23 @@ Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
 - S3-T04 — XML Sitemap
 - S3-T05 — robots.txt
 - S3-T06 — Product Structured Data
+- S3-T07 — Breadcrumb Structured Data
 
 ## In progress
 
-- None. Do not start S3-T07 automatically.
+- None. Do not start S3-T08 automatically.
 
 ## Pending
 
-- S3-T07 — Breadcrumb Structured Data (next)
+- S3-T08 — Organization Structured Data (next)
 - Deferred original S3-T01 — SEO-Friendly URL Strategy (not started)
 - Remainder of Sprint 3–11
 
 ## Blockers
 
-- None for starting S3-T07 when explicitly requested.
+- None for starting S3-T08 when explicitly requested.
 - Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan and several dress categories, dedicated category/hero lifestyle art, toys (no approved toy assets), pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules. Announcement/trust-bar copy is from Option 1; operations still TBD. Production canonical domain remains TBD — set `NEXT_PUBLIC_SITE_URL` before live deploy.
 
 ## Next task (do not start automatically)
 
-**S3-T07 — Breadcrumb Structured Data**
+**S3-T08 — Organization Structured Data**

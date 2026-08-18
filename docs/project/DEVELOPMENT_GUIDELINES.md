@@ -26,7 +26,7 @@ Never start the next task automatically.
 
 ## Layering
 
-See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S3-T06).
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S3-T07).
 
 ```
 App / Pages → Presentation → Application → Domain → Repository interface
@@ -60,13 +60,13 @@ Category listing (S2-T01; S2-T02 closed as already satisfied): `app/c/[slug]/pag
 
 Product detail (S2-T03): `app/p/[slug]/page.tsx` calls `catalog.getProductPage`. Presentation (`ProductDetail`) receives view-model props only. Do not display price, stock, or variants while those fields are TBD.
 
-Catalog nav (S2-T04): `app/layout.tsx` calls `catalog.listCategories` and `toCatalogNavItems`. `StorefrontShell` receives nav props. `Breadcrumbs` and `CatalogNavigation` are presentation-only. No `"use client"`. Breadcrumb JSON-LD remains Sprint 3.
+Catalog nav (S2-T04): `app/layout.tsx` calls `catalog.listCategories` and `toCatalogNavItems`. `StorefrontShell` receives nav props. `Breadcrumbs` and `CatalogNavigation` are presentation-only. No `"use client"`. BreadcrumbList JSON-LD is S3-T07.
 
 Listing filter/sort (S2-T05): **deferred**. Do not add facets, query-parameter listings, or placeholder Filter/Sort controls until business rules exist (`docs/requirements/CATALOG_FILTER_SORT.md`).
 
 Static catalog (S2-T06): 12 development products from approved assets. Do not invent toys, prices, or age taxonomy. Infants/teens/women remain empty on purpose.
 
-Metadata helpers live in `application/seo/`. Sitemap URL listing is `listIndexableUrls`; `app/sitemap.ts` and `app/robots.ts` are the Next.js SEO routes. Product JSON-LD is `buildProductStructuredData`; the product page renders it with `app/json-ld.tsx`.
+Metadata helpers live in `application/seo/`. Sitemap URL listing is `listIndexableUrls`; `app/sitemap.ts` and `app/robots.ts` are the Next.js SEO routes. Product JSON-LD is `buildProductStructuredData`; BreadcrumbList JSON-LD is `buildBreadcrumbStructuredData`. Pages render both with `app/json-ld.tsx`.
 
 ## Documentation
 

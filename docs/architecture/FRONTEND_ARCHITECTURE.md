@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S3-T06:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01); XML sitemap at `/sitemap.xml` (S3-T04); `/robots.txt` (S3-T05); Product JSON-LD on `/p/[slug]` (S3-T06).
+**Task:** S1-T02 (layer contract). **As implemented through S3-T07:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01); XML sitemap at `/sitemap.xml` (S3-T04); `/robots.txt` (S3-T05); Product JSON-LD on `/p/[slug]` (S3-T06); BreadcrumbList JSON-LD on `/c/[slug]` and `/p/[slug]` (S3-T07).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -184,7 +184,7 @@ Public product/category pages must remain crawlable.
 | Concern | Owner |
 |---------|--------|
 | Title, description, canonical, OpenGraph | Application SEO helpers, invoked from `generateMetadata` |
-| JSON-LD Product, BreadcrumbList, Organization | Product JSON-LD: `application/seo/product-structured-data.ts` + `app/json-ld.tsx` (S3-T06). BreadcrumbList / Organization later |
+| JSON-LD Product, BreadcrumbList, Organization | Product JSON-LD: `application/seo/product-structured-data.ts` (S3-T06). BreadcrumbList: `application/seo/breadcrumb-structured-data.ts` (S3-T07). Both render via `app/json-ld.tsx`. Organization later |
 | Breadcrumb **UI** | Presentation, data from application |
 | Sitemap, robots | `app/sitemap.ts` (S3-T04) calls `catalog.listIndexableUrls`; `app/robots.ts` (S3-T05) allows `/` and references `/sitemap.xml` via `config/site.ts` |
 | Semantic headings, landmarks | Presentation + layouts |
@@ -403,7 +403,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S3-T06)
+## 17. Folder structure (as implemented through S3-T07)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -432,10 +432,10 @@ frontend/
     sitemap.ts                   # S3-T04 /sitemap.xml from catalog + site origin
     robots.ts                    # S3-T05 /robots.txt allow + sitemap reference
     to-next-metadata.ts          # S3-T02 Next.js Metadata adapter
-    json-ld.tsx                  # S3-T06 JSON-LD script renderer
+    json-ld.tsx                  # S3-T06/S3-T07 JSON-LD script renderer
     not-found.tsx                # S2-T01
-    c/[slug]/page.tsx            # S2-T01 category listing
-    p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD
+    c/[slug]/page.tsx            # S2-T01 category listing; S3-T07 BreadcrumbList
+    p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD; S3-T07 BreadcrumbList
     globals.css
   public/
     mini-mystiq-logo.png
@@ -472,16 +472,16 @@ frontend/
   application/
     catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
-    seo/                         # metadata, listIndexableUrls, Product JSON-LD (S3-T06); BreadcrumbList/Organization later
+    seo/                         # metadata, listIndexableUrls, Product + BreadcrumbList JSON-LD; Organization later
   infrastructure/
     catalog/                     # Static*Repository — S1-T05
     cart/                        # browser storage adapter — Sprint 4
   lib/                           # shared technical utils only (empty aside from README)
 ```
 
-**S2-T01:** `/c/[slug]` is a Server Component. The page calls `catalog.getCategoryPage(slug)` (composition root). It must not import fixtures or `Static*Repository`. Unknown slug → `notFound()`.
+**S2-T01:** `/c/[slug]` is a Server Component. The page calls `catalog.getCategoryPage(slug)` (composition root). It must not import fixtures or `Static*Repository`. Unknown slug → `notFound()`. BreadcrumbList JSON-LD is S3-T07.
 
-**S2-T03:** `/p/[slug]` is a Server Component. The page calls `catalog.getProductPage(slug)`. Unknown slug → `notFound()`. Product JSON-LD is S3-T06.
+**S2-T03:** `/p/[slug]` is a Server Component. The page calls `catalog.getProductPage(slug)`. Unknown slug → `notFound()`. Product JSON-LD is S3-T06. BreadcrumbList JSON-LD is S3-T07.
 
 Future routes (`cart`, `checkout`) stay under `app/` when those sprints arrive.
 
@@ -519,4 +519,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T06 are complete. Next: **S3-T07** — do not start automatically.
+There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T07 are complete. Next: **S3-T08** — do not start automatically.

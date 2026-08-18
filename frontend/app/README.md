@@ -20,4 +20,6 @@ Pages stay thin Server Components by default. Do not put product, cart, or prici
 
 **S3-T06:** `p/[slug]/page.tsx` renders Product JSON-LD via `JsonLd` after `catalog.getProductPage`. Unknown slugs still `notFound()` with no Product JSON-LD.
 
+**S3-T07:** `c/[slug]/page.tsx` and `p/[slug]/page.tsx` render BreadcrumbList JSON-LD from the view-model trail.
+
 Future routes: cart belongs to a later sprint.

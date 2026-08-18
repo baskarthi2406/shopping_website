@@ -143,7 +143,18 @@ Product JSON-LD on valid `/p/{slug}` pages:
 - **Omitted (no reliable domain data):** `offers`, `price`, `priceCurrency`, `sku`, `availability`, `brand` (storefront name Mini Mystiq is not assumed to be the product brand), `aggregateRating`, `review`, seller, shipping, size/color
 - Category not emitted as Schema.org `category` (minimum truthful Product schema)
 - Google Rich Results / Search Console validation is a post-deployment step
-- BreadcrumbList, Organization, and Offer schemas are later Sprint 3 tasks
+- Organization and Offer schemas are later Sprint 3 tasks
+
+## Implemented (S3-T07)
+
+BreadcrumbList JSON-LD on valid `/c/{slug}` and `/p/{slug}` pages:
+
+- Application helper: `buildBreadcrumbStructuredData` from the same view-model `breadcrumb` trail as the UI
+- Render: existing `app/json-ld.tsx`. Last crumb (`href: null`) uses the page canonical URL; the UI still does not link it
+- Category: Home → Category. Product with a known category: Home → Category → Product. Uncategorized: Home → Product
+- Absolute `item` URLs from `toCanonicalUrl` / `config/site.ts`. Production domain remains **TBD**
+- Unknown category/product slugs: HTTP 404, no BreadcrumbList JSON-LD
+- Product JSON-LD on PDPs is unchanged. No extra invented levels. Organization schema is later.
 
 ## Reviewed (S2-T07)
 
