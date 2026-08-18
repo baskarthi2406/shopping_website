@@ -24,4 +24,6 @@ Pages stay thin Server Components by default. Do not put product, cart, or prici
 
 **S3-T08:** `layout.tsx` renders Organization JSON-LD once. Product and category pages must not add a second Organization block.
 
+**S3-T09:** `to-next-metadata.ts` remains the OpenGraph adapter (path canonicals + `metadataBase`). No page metadata rebuild.
+
 Future routes: cart belongs to a later sprint.

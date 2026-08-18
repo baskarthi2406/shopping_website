@@ -91,6 +91,30 @@ describe("buildProductMetadata", () => {
       src: "/pink-white-pleated-baby-dress.jpg",
       alt: "Pink and white pleated baby dress",
     });
+    expect(meta.image?.src).not.toBe("/mini-mystiq-logo.png");
+  });
+
+  it("still builds OG fields for an uncategorized product", () => {
+    const meta = buildProductMetadata(
+      product({
+        id: "olive-green-patterned-dress",
+        slug: "olive-green-patterned-dress",
+        name: "Olive green patterned dress",
+        description: "Olive green patterned dress on a wooden hanger",
+        categoryIds: [],
+        images: [
+          {
+            src: "/olive-green-patterned-dress.jpg",
+            alt: "Olive green patterned dress on a wooden hanger",
+          },
+        ],
+      }),
+    );
+
+    expect(meta.canonicalPath).toBe("/p/olive-green-patterned-dress");
+    expect(meta.canonicalPath).not.toContain("/c/");
+    expect(meta.title).toBe("Olive green patterned dress | Mini Mystiq");
+    expect(meta.image?.src).toBe("/olive-green-patterned-dress.jpg");
   });
 
   it("does not add query parameters to the canonical path", () => {

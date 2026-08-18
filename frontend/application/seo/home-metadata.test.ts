@@ -15,6 +15,7 @@ describe("buildHomeMetadata", () => {
     expect(meta.image.alt).toBe(
       "Sage and dusty rose baby sleeveless top and shorts sets",
     );
+    expect(meta.image.src).not.toMatch(/logo|hiring|pigeon|character/);
   });
 
   it("does not invent promotional claims", () => {
@@ -22,7 +23,7 @@ describe("buildHomeMetadata", () => {
     const combined = `${meta.title} ${meta.description}`;
 
     expect(combined).not.toMatch(
-      /\b(best|cheap|online|buy|premium|organic|handmade|designer|luxury|free delivery|lowest prices)\b/i,
+      /\b(best|cheap|cheapest|online|buy|premium|organic|handmade|designer|luxury|guaranteed|free delivery|COD|easy returns|lowest prices)\b/i,
     );
   });
 });

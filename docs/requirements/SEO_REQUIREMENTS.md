@@ -170,6 +170,20 @@ Organization JSON-LD from the root layout (`app/layout.tsx`):
 - **Omitted (not confirmed):** `legalName` (do not use “Enn2Gee Mini Mystiq” as a legal name), `sameAs` / social profiles, email, foundingDate, founder, tax/registration IDs, `priceRange`, ratings/reviews, `openingHours` (listing hours exist but are LocalBusiness-specific and not emitted), extra contactPoint fields, payment methods
 - Not `@type` LocalBusiness
 
+## Implemented (S3-T09)
+
+OpenGraph review — **no metadata rebuild**. Fields already shipped in S3-T02; absolute URLs already resolve via S3-T03 `metadataBase`.
+
+- Homepage: `og:type` website; title/description match the document; `og:url` = canonical `/`; image = hero `baby-sleeveless-sets-new-collection-banner.jpg`
+- Category: same type/title/description/url pairing; image = documented stand-in when present (`DESIGN_ASSETS.md` category table)
+- Product: primary catalog image; uncategorized products (e.g. `/p/olive-green-patterned-dress`) still receive OG at `/p/{slug}` with no invented category
+- `og:url` equals the HTML canonical. Both are path-only in helpers and become absolute against `config/site.ts`
+- Hosted production must set `NEXT_PUBLIC_SITE_URL` at **build and runtime** so prerendered `/` and on-demand `/c/` `/p/` share the same origin. Localhost is only the documented missing-env fallback
+- Logo, hiring flyer, Pigeon promo, and character-print assets are not used as page OG images
+- Invalid `/c/` and `/p/` slugs: HTTP 404, `noindex`, no canonical, no OpenGraph
+- OpenGraph does not include telephone, address, `legalName`, or social profiles
+- Mapping tests: `app/to-next-metadata.test.ts`
+
 ## Reviewed (S2-T07)
 
 12-product static catalog: unique titles, canonical `/p/{slug}` and `/c/{slug}`, OpenGraph, crawlable HTML, factual alts. Uncategorized products remain reachable at `/p/{slug}` only. Product JSON-LD is S3-T06; Offer/brand/review fields remain TBD.
@@ -177,6 +191,7 @@ Organization JSON-LD from the root layout (`app/layout.tsx`):
 ## TBD
 
 - Canonical domain
+- Dedicated OpenGraph / social-sharing image (page images are the documented hero, category stand-in, or primary product photo)
 - Legal entity / `legalName` (brand Mini Mystiq is not assumed to be the registered company name)
 - Trailing-slash policy (current homepage canonical/sitemap loc has no trailing slash; other paths have none)
 - Product brand, SKU, price, currency, availability, offers, reviews (extend JSON-LD when the domain has those fields)

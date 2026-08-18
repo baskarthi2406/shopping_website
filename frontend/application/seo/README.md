@@ -21,3 +21,5 @@ Pages call helpers; they do not copy-paste metadata objects. The Next.js Metadat
 **S3-T07:** `breadcrumb-structured-data.ts` — Schema.org BreadcrumbList from the UI view-model trail.
 
 **S3-T08:** `organization-structured-data.ts` — Schema.org Organization from `config/organization.ts`. `legalName`, social profiles, email, identifiers, and opening hours are omitted.
+
+**S3-T09:** OpenGraph review only. Existing home/category/product helpers and `app/to-next-metadata.ts` already satisfied the contract; mapping tests added. No dedicated social image.

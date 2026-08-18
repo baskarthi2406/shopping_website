@@ -104,9 +104,10 @@ See the live Sprint 2 section above. Status: **COMPLETED**.
 | S3-T06 | Product Structured Data | **COMPLETED** |
 | S3-T07 | Breadcrumb Structured Data | **COMPLETED** |
 | S3-T08 | Organization Structured Data | **COMPLETED** |
-| S3-T09 | OpenGraph | **NOT_STARTED** |
+| S3-T09 | OpenGraph | **COMPLETED** |
+| S3-T10 | Image Optimization | **NOT_STARTED** |
 
-Original “SEO-Friendly URL Strategy” was reordered out of S3-T01 and remains **NOT_STARTED** (deferred in `docs/sprints/SPRINT-03.md`). Do not start S3-T09 automatically.
+Original “SEO-Friendly URL Strategy” was reordered out of S3-T01 and remains **NOT_STARTED** (deferred in `docs/sprints/SPRINT-03.md`). Do not start S3-T10 automatically.
 
 ### Sprint 4 — Cart & Storefront Completion
 

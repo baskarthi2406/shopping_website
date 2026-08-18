@@ -394,40 +394,56 @@ Organization schema shipped. S3-T09 recorded **NOT_STARTED**.
 
 ## S3-T09 — OpenGraph
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-OpenGraph title, description, and image for indexable pages.
+OpenGraph title, description, image, and absolute URL for indexable pages.
 
 ### Dependencies
 
-S3-T02.
+S3-T02, S3-T03.
 
 ### Requirements
 
-Fallback image **TBD**; use placeholder asset if no product image.
+Do not invent a dedicated social image. Use documented page images. Fallback image remains **TBD** (omit `og:image` when no documented image exists).
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-OG metadata on routes.
+**Audit result:** OpenGraph was already implemented in S3-T02 (fields) and S3-T03 (`metadataBase` / absolute resolution). S3-T09 did **not** rebuild metadata helpers, titles, URLs, JSON-LD, or UI.
+
+Confirmed contract:
+
+- `buildHomeMetadata` / `buildCategoryMetadata` / `buildProductMetadata` → `app/to-next-metadata.ts` → Next.js Metadata
+- `og:type` `website`; OG title/description match document title/description
+- `og:url` equals the page canonical path; both resolve against `config/site.ts` `metadataBase`
+- Homepage image: approved hero `baby-sleeveless-sets-new-collection-banner.jpg` (not the logo)
+- Category image: documented product-photo stand-in when present
+- Product image: primary catalog image, including uncategorized products such as `/p/olive-green-patterned-dress`
+- Unknown slugs: 404, `noindex`, no canonical, no page OpenGraph
+- No business address/telephone/legalName in OpenGraph (Organization JSON-LD is separate)
+
+S3-T09 added mapping tests (`app/to-next-metadata.test.ts`) and uncategorized-product coverage. No helper logic changes.
 
 ### Expected files/modules
 
-- OG fields in metadata helpers
+- Existing metadata helpers (unchanged)
+- `frontend/app/to-next-metadata.ts` (unchanged mapping)
+- `frontend/app/to-next-metadata.test.ts` (new)
 
 ### Acceptance criteria
 
-- Product/category/home include OG title/description
-- Image field present (placeholder allowed)
+- Product/category/home include OG title/description/url/image as documented
+- Canonical URL matches `og:url`
+- Absolute URLs when `NEXT_PUBLIC_SITE_URL` is set (not localhost)
 
 ### Testing requirements
 
-Unit tests for OG field mapping.
+Unit tests for OG field mapping; uncategorized product; 404 has no OG; production origin has no localhost.
 
 ### Definition of Done
 
-OpenGraph shipped.
+OpenGraph reviewed and confirmed. S3-T10 recorded **NOT_STARTED**.
 
 ---
 
