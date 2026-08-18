@@ -128,6 +128,9 @@ describe("toCanonicalUrl", () => {
     expect(toCanonicalUrl(origin, "/p/pink-white-pleated-baby-dress")).toBe(
       "https://store.example/p/pink-white-pleated-baby-dress",
     );
+    expect(toCanonicalUrl(origin, "/sitemap.xml")).toBe(
+      "https://store.example/sitemap.xml",
+    );
     expect(toCanonicalUrl(origin, "/")).not.toContain("localhost");
   });
 });

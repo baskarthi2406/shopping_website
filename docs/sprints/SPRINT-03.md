@@ -216,7 +216,7 @@ Sitemap available. S3-T05 recorded **NOT_STARTED**.
 
 ## S3-T05 — robots.txt
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -230,13 +230,15 @@ S3-T04 recommended (sitemap reference).
 
 Link to sitemap if present. Do not invent aggressive disallow lists.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Next.js `robots` file/route.
-
-### Expected files/modules
-
-- robots configuration
+- Next.js App Router `frontend/app/robots.ts` → `/robots.txt`
+- One general policy: `User-agent: *` and `Allow: /` (covers `/`, `/c/{slug}`, `/p/{slug}`)
+- Sitemap reference: `toCanonicalUrl(origin, "/sitemap.xml")` from `config/site.ts` / `NEXT_PUBLIC_SITE_URL`
+- No `Host` directive, no crawler-specific rules, no query-parameter rules
+- No invented Disallow for cart/checkout/admin (those routes do not exist yet)
+- No catalog/repository/fixture access
+- No JSON-LD, sitemap redesign, analytics, or UI changes
 
 ### Acceptance criteria
 
@@ -245,11 +247,11 @@ Next.js `robots` file/route.
 
 ### Testing requirements
 
-Build/smoke that robots route exists.
+Build/smoke that robots route exists. Unit tests for allow policy, sitemap origin, and no fixture/domain hard-coding.
 
 ### Definition of Done
 
-robots.txt shipped.
+robots.txt shipped. S3-T06 recorded **NOT_STARTED**.
 
 ---
 

@@ -59,9 +59,11 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S3-T03:** `config/site.ts` reads `NEXT_PUBLIC_SITE_URL` and layout sets `metadataBase`. Production domain is TBD. Copy `.env.example` to `.env.local` to set a local origin; omit it to fall back to `http://localhost:3000`. Hosted production must set a non-localhost origin.
 
-**S3-T04:** `/sitemap.xml` from `app/sitemap.ts`. URLs come from `catalog.listIndexableUrls` (homepage, categories, products — including empty categories and uncategorized products). Origin is `config/site.ts`. No `lastmod` / `priority` / `changefreq`. `robots.ts` and JSON-LD are later.
+**S3-T04:** `/sitemap.xml` from `app/sitemap.ts`. URLs come from `catalog.listIndexableUrls` (homepage, categories, products — including empty categories and uncategorized products). Origin is `config/site.ts`. No `lastmod` / `priority` / `changefreq`. JSON-LD is later.
 
-**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`robots`, JSON-LD). SEO-friendly URL strategy is deferred from original S3-T01.
+**S3-T05:** `/robots.txt` from `app/robots.ts`. Allows `/` for all crawlers and references `{origin}/sitemap.xml` from `config/site.ts`. No invented Disallow rules.
+
+**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, JSON-LD. SEO-friendly URL strategy is deferred from original S3-T01.
 
 ## Architecture
 
@@ -136,7 +138,7 @@ Component and E2E testing remain later tasks. No coverage thresholds.
 
 ## SEO
 
-Category and product pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}` or `/p/{slug}`, OpenGraph). Product pages include the first product image in OpenGraph when present. `/sitemap.xml` lists homepage, category, and product URLs from catalog data using the same origin as `metadataBase`. `robots.ts` and JSON-LD remain later tasks. Canonical domain is TBD.
+Category and product pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}` or `/p/{slug}`, OpenGraph). Product pages include the first product image in OpenGraph when present. `/sitemap.xml` lists homepage, category, and product URLs from catalog data using the same origin as `metadataBase`. `/robots.txt` allows the public storefront and references that sitemap. JSON-LD remains a later task. Canonical domain is TBD.
 
 ## Mobile-first
 

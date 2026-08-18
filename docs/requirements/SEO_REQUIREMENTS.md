@@ -14,7 +14,7 @@ Brand: **Mini Mystiq**. Domain and legal entity remain **TBD**.
 | Dynamic metadata | Title, description per page type |
 | Canonical URLs | One canonical per indexable page |
 | Sitemap | XML sitemap of indexable URLs |
-| robots.txt | Allow catalog; disallow rules TBD |
+| robots.txt | Allow catalog; sitemap referenced; future Disallow TBD |
 | Product structured data | JSON-LD Product |
 | Breadcrumb structured data | JSON-LD BreadcrumbList |
 | Organization structured data | JSON-LD Organization (legal name TBD) |
@@ -116,6 +116,19 @@ XML sitemap at `/sitemap.xml` (`frontend/app/sitemap.ts`, Next.js `MetadataRoute
 - `robots.ts`, JSON-LD, Search Console submission, and analytics are not in this task
 
 Empty-category indexing is unchanged: empty category pages remain indexable routes, so they appear in the sitemap. Whether empty categories should later be `noindex` or omitted is **TBD** — do not invent a new rule here.
+
+## Implemented (S3-T05)
+
+`/robots.txt` (`frontend/app/robots.ts`, Next.js `MetadataRoute.Robots`):
+
+- One public policy: `User-agent: *` and `Allow: /` — `/`, `/c/{slug}`, and `/p/{slug}` are not blocked
+- Sitemap line is `{origin}/sitemap.xml` via `toCanonicalUrl` / `config/site.ts` / `NEXT_PUBLIC_SITE_URL` (same origin as `metadataBase` and sitemap locs). Production domain remains **TBD**
+- No `Host` directive, no crawler-specific rules, no query-parameter rules
+- No invented Disallow for cart/checkout/admin (those routes are not implemented)
+- Static assets are not blocked
+- JSON-LD, Search Console, and analytics are not in this task
+
+Future Disallow rules for non-indexable routes remain **TBD** until those routes exist.
 
 ## Reviewed (S2-T07)
 

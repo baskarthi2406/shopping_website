@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S3-T05.
+Only this task may be implemented. Do not start it until a human explicitly requests S3-T06.
 
 ---
 
@@ -8,57 +8,57 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S3-T04 |
-| Task | XML Sitemap |
+| Task ID | S3-T05 |
+| Task | robots.txt |
 | Status | **COMPLETED** |
-| Scope | `/sitemap.xml` from `app/sitemap.ts` via `listIndexableUrls` and `config/site.ts`. Empty categories and uncategorized products included. No lastModified/priority/changeFrequency. No robots, JSON-LD, or analytics. |
+| Scope | `/robots.txt` from `app/robots.ts`. Allows `/` for all crawlers. Sitemap `{origin}/sitemap.xml` from `config/site.ts`. No invented Disallow, JSON-LD, or analytics. |
 
 ---
 
 ## Task ID
 
-S3-T05
+S3-T06
 
 ## Task
 
-robots.txt
+Product Structured Data
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S3-T05 automatically.
+Do **not** implement S3-T06 automatically.
 
 The original S3-T01 “SEO-Friendly URL Strategy” remains **NOT_STARTED** (deferred). Do not start it until a human requests it.
 
 ## Objective
 
-See `docs/sprints/SPRINT-03.md` → S3-T05.
+See `docs/sprints/SPRINT-03.md` → S3-T06.
 
 ## Scope
 
-See `docs/sprints/SPRINT-03.md` → S3-T05.
+See `docs/sprints/SPRINT-03.md` → S3-T06.
 
 ## Dependencies
 
-S3-T04 recommended.
+S2-T03, S3-T01.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-03.md` → S3-T05.
+See `docs/sprints/SPRINT-03.md` → S3-T06.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-03.md` → S3-T05.
+See `docs/sprints/SPRINT-03.md` → S3-T06.
 
 ## Tests
 
-See `docs/sprints/SPRINT-03.md` → S3-T05.
+See `docs/sprints/SPRINT-03.md` → S3-T06.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-03.md` → S3-T05.
+See `docs/sprints/SPRINT-03.md` → S3-T06.
 
-## Next task after S3-T05 (do not start)
+## Next task after S3-T06 (do not start)
 
 See `docs/sprints/SPRINT-03.md`. Do not start it automatically.
