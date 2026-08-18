@@ -257,7 +257,7 @@ robots.txt shipped. S3-T06 recorded **NOT_STARTED**.
 
 ## S3-T06 — Product Structured Data
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -271,14 +271,17 @@ S2-T03, S3-T01.
 
 Valid Product JSON-LD for available fields. Offers/currency **TBD** — omit or mark placeholder only if price exists on the type.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-JSON-LD component/helper on PDP.
-
-### Expected files/modules
-
-- Product JSON-LD builder
-- PDP integration
+- Application helper `buildProductStructuredData` (`application/seo/product-structured-data.ts`)
+- Safe serializer `serializeJsonLd` (escapes `<` so product text cannot close the script)
+- PDP Server Component renders `<script type="application/ld+json">` via `app/json-ld.tsx`
+- Fields: `@context`, `@type` Product, `name`, `description` (when non-blank), primary `image` (absolute), `url` (canonical)
+- Origin from `config/site.ts` / `NEXT_PUBLIC_SITE_URL` via `toCanonicalUrl`
+- Omitted because the domain has no reliable data: offers, price, currency, SKU, availability, brand, reviews, ratings, seller, shipping, size/color
+- Category omitted (minimum truthful Product schema; not invented as Schema.org `category`)
+- Unknown `/p/{slug}`: `notFound()` — no Product JSON-LD
+- No UI changes, no Offer/BreadcrumbList/Organization schemas
 
 ### Acceptance criteria
 
@@ -291,7 +294,7 @@ Unit tests for JSON-LD shape.
 
 ### Definition of Done
 
-Product schema shipped.
+Product schema shipped. S3-T07 recorded **NOT_STARTED**.
 
 ---
 

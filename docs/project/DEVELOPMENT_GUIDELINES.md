@@ -26,7 +26,7 @@ Never start the next task automatically.
 
 ## Layering
 
-See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S3-T05).
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S3-T06).
 
 ```
 App / Pages → Presentation → Application → Domain → Repository interface
@@ -66,7 +66,7 @@ Listing filter/sort (S2-T05): **deferred**. Do not add facets, query-parameter l
 
 Static catalog (S2-T06): 12 development products from approved assets. Do not invent toys, prices, or age taxonomy. Infants/teens/women remain empty on purpose.
 
-Metadata helpers live in `application/seo/`. Sitemap URL listing is `listIndexableUrls`; `app/sitemap.ts` and `app/robots.ts` are the Next.js SEO routes.
+Metadata helpers live in `application/seo/`. Sitemap URL listing is `listIndexableUrls`; `app/sitemap.ts` and `app/robots.ts` are the Next.js SEO routes. Product JSON-LD is `buildProductStructuredData`; the product page renders it with `app/json-ld.tsx`.
 
 ## Documentation
 

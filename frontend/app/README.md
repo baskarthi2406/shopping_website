@@ -18,4 +18,6 @@ Pages stay thin Server Components by default. Do not put product, cart, or prici
 
 **S3-T05:** `robots.ts` allows `/` and references `/sitemap.xml` via `config/site.ts`. It must not import catalog data.
 
+**S3-T06:** `p/[slug]/page.tsx` renders Product JSON-LD via `JsonLd` after `catalog.getProductPage`. Unknown slugs still `notFound()` with no Product JSON-LD.
+
 Future routes: cart belongs to a later sprint.

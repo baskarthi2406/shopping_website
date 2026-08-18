@@ -130,14 +130,30 @@ Empty-category indexing is unchanged: empty category pages remain indexable rout
 
 Future Disallow rules for non-indexable routes remain **TBD** until those routes exist.
 
+## Implemented (S3-T06)
+
+Product JSON-LD on valid `/p/{slug}` pages:
+
+- Application helper: `buildProductStructuredData` (`application/seo/product-structured-data.ts`)
+- Render: Server Component `<script type="application/ld+json">` via `app/json-ld.tsx` (`serializeJsonLd` escapes `<`)
+- Properties: `@context` `https://schema.org`, `@type` `Product`, `name`, `description` (omitted when blank — same visible copy as the PDP; no second fallback), primary `image` (absolute), `url` (matches HTML canonical)
+- Absolute URLs from `config/site.ts` / `NEXT_PUBLIC_SITE_URL`. Production domain remains **TBD**
+- Uncategorized valid products still receive Product JSON-LD
+- Unknown products: HTTP 404, `noindex`, no Product JSON-LD
+- **Omitted (no reliable domain data):** `offers`, `price`, `priceCurrency`, `sku`, `availability`, `brand` (storefront name Mini Mystiq is not assumed to be the product brand), `aggregateRating`, `review`, seller, shipping, size/color
+- Category not emitted as Schema.org `category` (minimum truthful Product schema)
+- Google Rich Results / Search Console validation is a post-deployment step
+- BreadcrumbList, Organization, and Offer schemas are later Sprint 3 tasks
+
 ## Reviewed (S2-T07)
 
-12-product static catalog: unique titles, canonical `/p/{slug}` and `/c/{slug}`, OpenGraph, crawlable HTML, factual alts. Uncategorized products remain reachable at `/p/{slug}` only. JSON-LD still Sprint 3.
+12-product static catalog: unique titles, canonical `/p/{slug}` and `/c/{slug}`, OpenGraph, crawlable HTML, factual alts. Uncategorized products remain reachable at `/p/{slug}` only. Product JSON-LD is S3-T06; Offer/brand/review fields remain TBD.
 
 ## TBD
 
 - Canonical domain
 - Trailing-slash policy (current homepage canonical/sitemap loc has no trailing slash; other paths have none)
+- Product brand, SKU, price, currency, availability, offers, reviews (extend JSON-LD when the domain has those fields)
 - Pagination SEO
 - Filtered-listing SEO (when filters exist)
 - hreflang / locales
