@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S2-T06:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05).
+**Task:** S1-T02 (layer contract). **As implemented through S3-T09:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01); XML sitemap at `/sitemap.xml` (S3-T04); `/robots.txt` (S3-T05); Product JSON-LD on `/p/[slug]` (S3-T06); BreadcrumbList JSON-LD on `/c/[slug]` and `/p/[slug]` (S3-T07); Organization JSON-LD from the root layout (S3-T08); OpenGraph reviewed in S3-T09 (already present from S3-T02/S3-T03).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -152,7 +152,7 @@ No new utility library in this task.
 | `page.tsx` | Brand shell only. Does not call catalog services yet (Sprint 2). |
 | Route segments `c/[slug]`, `p/[slug]`, `cart`, `checkout` | Later sprints |
 | `loading.tsx` / `error.tsx` / `not-found.tsx` | Later |
-| `generateMetadata` (dynamic), `sitemap.ts`, `robots.ts` | Sprint 3; structure does not block them |
+| `generateMetadata` (dynamic), `sitemap.ts`, `robots.ts` | Metadata S3-T02; sitemap S3-T04; robots S3-T05 |
 
 ---
 
@@ -183,19 +183,19 @@ Public product/category pages must remain crawlable.
 
 | Concern | Owner |
 |---------|--------|
-| Title, description, canonical, OpenGraph | Application SEO helpers, invoked from `generateMetadata` |
-| JSON-LD Product, BreadcrumbList, Organization | Application SEO builders; page renders `<script type="application/ld+json">` |
+| Title, description, canonical, OpenGraph | Application SEO helpers, invoked from `generateMetadata`. OpenGraph mapping: `app/to-next-metadata.ts` (S3-T02; reviewed S3-T09). Absolute `og:url` / `og:image` via layout `metadataBase` (`config/site.ts`) |
+| JSON-LD Product, BreadcrumbList, Organization | Product: `application/seo/product-structured-data.ts` (S3-T06). BreadcrumbList: `application/seo/breadcrumb-structured-data.ts` (S3-T07). Organization: `application/seo/organization-structured-data.ts` from `config/organization.ts` (S3-T08). All render via `app/json-ld.tsx`. Organization is wired once in `app/layout.tsx` |
 | Breadcrumb **UI** | Presentation, data from application |
-| Sitemap, robots | `app` routes calling application/catalog |
+| Sitemap, robots | `app/sitemap.ts` (S3-T04) calls `catalog.listIndexableUrls`; `app/robots.ts` (S3-T05) allows `/` and references `/sitemap.xml` via `config/site.ts` |
 | Semantic headings, landmarks | Presentation + layouts |
 | Image alt | View model from application/domain data — **not** the filename |
 | Internal links | Presentation using `/c/{slug}`, `/p/{slug}` |
 
-Do not copy-paste metadata objects in every `page.tsx`. Reuse helpers under `application/seo/` (name TBD at S1-T04).
+Do not copy-paste metadata objects in every `page.tsx`. Reuse helpers under `application/seo/`. Pages map those fields through `app/to-next-metadata.ts`.
 
 Index: `/`, `/c/*`, `/p/*`. Do not index `/cart`, `/checkout`, admin.
 
-Canonical **domain** TBD (`NEXT_PUBLIC_SITE_URL`). Legal name TBD; brand Mini Mystiq.
+Canonical **domain** TBD. Configure `NEXT_PUBLIC_SITE_URL`; `config/site.ts` is the source of truth and layout sets `metadataBase`. Legal name TBD and omitted from Organization JSON-LD; brand Mini Mystiq.
 
 ---
 
@@ -286,7 +286,7 @@ Belong here (not in React):
 - Get category / list categories — **S1-T05**
 - List featured products — **S1-T05** (returns empty until merchandising exists)
 - Search / filter products (rules TBD)
-- Build home page data (hero refs, category stand-ins, featured)
+- Build home page data — **S3-T01** `getHomePage` + `toHomePageViewModel` (hero/promo asset refs, category stand-ins, `list()` products; not `listFeatured()`)
 - Cart: add, update qty, remove, read  
 
 **S2-T01 / S2-T02:** `getCategoryPage(categories, products, slug)` returns `{ category, products }` or `null` (unknown slug). S2-T02 did not add a second listing use case.
@@ -403,7 +403,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S2-T06)
+## 17. Folder structure (as implemented through S3-T07)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -427,14 +427,20 @@ These choices follow this contract. They are **not** an ADR.
 ```
 frontend/
   app/                           # routing (S1-T03); README boundary (S1-T04)
-    layout.tsx
-    page.tsx
+    layout.tsx                   # S3-T08 Organization JSON-LD (once)
+    page.tsx                     # S3-T01 Option 1 homepage; S3-T02 metadata
+    sitemap.ts                   # S3-T04 /sitemap.xml from catalog + site origin
+    robots.ts                    # S3-T05 /robots.txt allow + sitemap reference
+    to-next-metadata.ts          # S3-T02 Next.js Metadata adapter
+    json-ld.tsx                  # S3-T06–S3-T08 JSON-LD script renderer
     not-found.tsx                # S2-T01
-    c/[slug]/page.tsx            # S2-T01 category listing
-    p/[slug]/page.tsx            # S2-T03 product detail
+    c/[slug]/page.tsx            # S2-T01 category listing; S3-T07 BreadcrumbList
+    p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD; S3-T07 BreadcrumbList
     globals.css
   public/
     mini-mystiq-logo.png
+    baby-sleeveless-sets-new-collection-banner.jpg
+    baby-dress-bloomer-sets-new-collection-banner.jpg
     pink-white-pleated-baby-dress.jpg
     sage-striped-baby-top-and-shorts.jpg
     cream-grey-rose-tiered-baby-dress.jpg
@@ -454,26 +460,31 @@ frontend/
     storefront/product-detail.tsx # S2-T03; view-model props only
     storefront/breadcrumbs.tsx   # S2-T04; presentation items only
     storefront/catalog-navigation.tsx # S2-T04; presentation items only
+    storefront/announcement-bar.tsx   # S3-T01
+    storefront/home-*.tsx             # S3-T01 homepage sections
+    storefront/trust-bar.tsx          # S3-T01
   config/
     catalog.ts                   # composition root (S1-T05)
+    site.ts                      # S3-T03 canonical origin / metadataBase
+    organization.ts              # S3-T08 public Organization facts (not legalName)
   domain/
     catalog/                     # Product, Category, Uom — types in S1-T05
     cart/                        # Cart, CartItem — Sprint 4
   application/
     catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
-    seo/                         # category + product metadata; JSON-LD — Sprint 3
+    seo/                         # metadata, listIndexableUrls, Product + BreadcrumbList + Organization JSON-LD
   infrastructure/
     catalog/                     # Static*Repository — S1-T05
     cart/                        # browser storage adapter — Sprint 4
   lib/                           # shared technical utils only (empty aside from README)
 ```
 
-**S2-T01:** `/c/[slug]` is a Server Component. The page calls `catalog.getCategoryPage(slug)` (composition root). It must not import fixtures or `Static*Repository`. Unknown slug → `notFound()`.
+**S2-T01:** `/c/[slug]` is a Server Component. The page calls `catalog.getCategoryPage(slug)` (composition root). It must not import fixtures or `Static*Repository`. Unknown slug → `notFound()`. BreadcrumbList JSON-LD is S3-T07.
 
-**S2-T03:** `/p/[slug]` is a Server Component. The page calls `catalog.getProductPage(slug)`. Unknown slug → `notFound()`. JSON-LD is still Sprint 3.
+**S2-T03:** `/p/[slug]` is a Server Component. The page calls `catalog.getProductPage(slug)`. Unknown slug → `notFound()`. Product JSON-LD is S3-T06. BreadcrumbList JSON-LD is S3-T07.
 
-Future routes (`cart`, `checkout`, `sitemap.ts`, `robots.ts`) stay under `app/` when those sprints arrive.
+Future routes (`cart`, `checkout`) stay under `app/` when those sprints arrive.
 
 ---
 
@@ -509,4 +520,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. S2-T01–S2-T06 are complete. Next: **S2-T07** — do not start automatically.
+There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T09 are complete. Next: **S3-T10** — do not start automatically.

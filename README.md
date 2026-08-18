@@ -143,11 +143,11 @@ Then implement **only** the current task.
 | Field | Value |
 |-------|--------|
 | Phase | Phase 1 — SEO-First Storefront |
-| Overall status | SPRINT_2_IN_PROGRESS |
-| Current sprint | Sprint 2 — Product Catalog (**IN_PROGRESS**) |
-| Last completed | S2-T06 — Expand Static Catalog Fixtures |
-| Current task | S2-T07 — Catalog Review (**NOT_STARTED**) |
+| Overall status | SPRINT_3_IN_PROGRESS |
+| Current sprint | Sprint 3 — Homepage + SEO (**IN_PROGRESS**) |
+| Last completed | S3-T03 — Canonical Site URL and Metadata Base |
+| Current task | S3-T04 — XML Sitemap (**NOT_STARTED**) |
 
-Do **not** start S2-T07 automatically. There is no S1-T09.
+Do **not** start S3-T04 automatically. There is no S1-T09. There is no S2-T08. Original SEO URL strategy is deferred.
 
-Phase 2 backend implementation has **not** started. Storefront: `/c/[slug]`, `/p/[slug]`, catalog nav + breadcrumbs. Static catalog: 12 approved products (S2-T06). Filter/sort deferred (S2-T05). Unit tests: Vitest (`npm test`).
+Phase 2 backend implementation has **not** started. Storefront: Option 1 homepage `/`, `/c/[slug]`, `/p/[slug]`, catalog nav + breadcrumbs. Static catalog: 12 approved products. Filter/sort deferred (S2-T05). Dynamic metadata (S3-T02). Canonical origin via `NEXT_PUBLIC_SITE_URL` (S3-T03; production domain TBD). Unit tests: Vitest (`npm test`).

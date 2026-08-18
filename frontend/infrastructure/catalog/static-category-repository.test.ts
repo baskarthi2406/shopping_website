@@ -1,6 +1,10 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { isCatalogSlug } from "@/domain/catalog";
 import { StaticCategoryRepository } from "./static-category-repository";
+
+const publicDir = path.resolve(import.meta.dirname, "../../public");
 
 describe("StaticCategoryRepository", () => {
   const categories = new StaticCategoryRepository();
@@ -34,5 +38,15 @@ describe("StaticCategoryRepository", () => {
     const kids = await categories.getBySlug("kids");
     expect(kids?.image?.src).toBe("/kids-striped-shirts-burgundy-and-sage.jpg");
     expect(kids?.description).toBeNull();
+  });
+
+  it("points category stand-in images at files that exist in frontend/public", async () => {
+    const listed = await categories.list();
+
+    for (const category of listed) {
+      expect(category.image).not.toBeNull();
+      const filename = category.image?.src.replace(/^\//, "") ?? "";
+      expect(existsSync(path.join(publicDir, filename))).toBe(true);
+    }
   });
 });

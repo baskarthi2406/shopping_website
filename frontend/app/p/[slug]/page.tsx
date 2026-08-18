@@ -1,11 +1,17 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { JsonLd } from "@/app/json-ld";
+import { toNextMetadata, toNextNotFoundMetadata } from "@/app/to-next-metadata";
 import { toProductPageViewModel } from "@/application/catalog";
+import { buildBreadcrumbStructuredData } from "@/application/seo/breadcrumb-structured-data";
+import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
 import { buildProductMetadata } from "@/application/seo/product-metadata";
+import { buildProductStructuredData } from "@/application/seo/product-structured-data";
 import { ProductDetail } from "@/components/storefront/product-detail";
 import { Container } from "@/components/ui/container";
 import { catalog } from "@/config/catalog";
+import { resolveSiteOrigin, toCanonicalUrl } from "@/config/site";
 
 type ProductPageProps = {
   params: Promise<{ slug: string }>;
@@ -20,37 +26,10 @@ export async function generateMetadata({
   const data = await loadProductPage(slug);
 
   if (data === null) {
-    return {
-      title: "Page not found | Mini Mystiq",
-      robots: { index: false, follow: false },
-    };
+    return toNextNotFoundMetadata(buildNotFoundMetadata());
   }
 
-  const meta = buildProductMetadata(data.product);
-
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: {
-      canonical: meta.canonicalPath,
-    },
-    openGraph: {
-      title: meta.title,
-      description: meta.description,
-      url: meta.canonicalPath,
-      type: "website",
-      ...(meta.image
-        ? {
-            images: [
-              {
-                url: meta.image.src,
-                alt: meta.image.alt,
-              },
-            ],
-          }
-        : {}),
-    },
-  };
+  return toNextMetadata(buildProductMetadata(data.product));
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {
@@ -62,10 +41,23 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const view = toProductPageViewModel(data.product, data.categories);
+  const origin = resolveSiteOrigin();
+  const toAbsoluteUrl = (path: string) => toCanonicalUrl(origin, path);
+  const productStructuredData = buildProductStructuredData(view, toAbsoluteUrl);
+  const breadcrumbStructuredData = buildBreadcrumbStructuredData(
+    view,
+    toAbsoluteUrl,
+  );
 
   return (
-    <Container className="py-6 sm:py-8 lg:py-10">
-      <ProductDetail product={view} />
-    </Container>
+    <>
+      {productStructuredData ? <JsonLd data={productStructuredData} /> : null}
+      {breadcrumbStructuredData ? (
+        <JsonLd data={breadcrumbStructuredData} />
+      ) : null}
+      <Container className="py-6 sm:py-8 lg:py-10">
+        <ProductDetail product={view} />
+      </Container>
+    </>
   );
 }

@@ -6,6 +6,7 @@ export type ProductCardProps = {
   name: string;
   description: string;
   image: { src: string; alt: string } | null;
+  headingAs?: "h2" | "h3";
 };
 
 export function ProductCard({
@@ -13,7 +14,10 @@ export function ProductCard({
   name,
   description,
   image,
+  headingAs = "h2",
 }: ProductCardProps) {
+  const Heading = headingAs;
+
   return (
     <article className="h-full overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
       <Link
@@ -32,9 +36,9 @@ export function ProductCard({
           ) : null}
         </div>
         <div className="flex flex-1 flex-col gap-1 p-3">
-          <h2 className="text-small font-semibold text-foreground sm:text-body">
+          <Heading className="text-small font-semibold text-foreground sm:text-body">
             {name}
-          </h2>
+          </Heading>
           <p className="line-clamp-2 text-caption text-foreground-secondary">
             {description}
           </p>

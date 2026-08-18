@@ -1,6 +1,7 @@
 import {
   getCategoryBySlug,
   getCategoryPage,
+  getHomePage,
   getProductById,
   getProductBySlug,
   getProductPage,
@@ -12,6 +13,7 @@ import {
   type ProductRepository,
   type UomRepository,
 } from "@/application/catalog";
+import { listIndexableUrls } from "@/application/seo/list-indexable-urls";
 import { StaticCategoryRepository } from "@/infrastructure/catalog/static-category-repository";
 import { StaticProductRepository } from "@/infrastructure/catalog/static-product-repository";
 import { StaticUomRepository } from "@/infrastructure/catalog/static-uom-repository";
@@ -38,7 +40,10 @@ export const catalog = {
     getCategoryBySlug(categoryRepository, slug),
   getCategoryPage: (slug: string) =>
     getCategoryPage(categoryRepository, productRepository, slug),
+  getHomePage: () => getHomePage(categoryRepository, productRepository),
   listCategories: () => listCategories(categoryRepository),
+  listIndexableUrls: () =>
+    listIndexableUrls(categoryRepository, productRepository),
   listUoms: () => uomRepository.list(),
   getUomByCode: (code: string) => uomRepository.getByCode(code),
 };

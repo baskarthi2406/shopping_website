@@ -1,5 +1,12 @@
+import type { Metadata } from "next";
 import Link from "next/link";
+import { toNextNotFoundMetadata } from "@/app/to-next-metadata";
+import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
 import { Container } from "@/components/ui/container";
+
+export function generateMetadata(): Metadata {
+  return toNextNotFoundMetadata(buildNotFoundMetadata());
+}
 
 export default function NotFound() {
   return (

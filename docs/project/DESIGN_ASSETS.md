@@ -11,6 +11,8 @@ When Next.js is initialized (S1-T03), serve the **SEO-named** files from the Nex
 
 **S2-T03:** navy/tan, olive, and beige product photos copied into `frontend/public/`.
 
+**S2-T07:** catalog review compared this inventory to fixtures and `frontend/public/`. No asset rename, copy, or classification correction.
+
 **S2-T06:** remaining approved **product** photos copied into `frontend/public/`:
 
 - `grey-pinafore-baby-set.jpg`
@@ -20,7 +22,9 @@ When Next.js is initialized (S1-T03), serve the **SEO-named** files from the Nex
 - `kids-button-down-shirts-rose-and-burgundy.jpg`
 - `kids-linen-shirts-brown-and-sage.jpg`
 
-Do not copy hero/promo banners until a homepage task uses them. Do not delete originals.
+**S3-T01:** hero and secondary promo copied into `frontend/public/` (SEO filenames; originals kept).
+
+Do not delete originals.
 
 ---
 

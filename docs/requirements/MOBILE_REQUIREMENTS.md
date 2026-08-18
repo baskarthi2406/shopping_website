@@ -56,5 +56,5 @@ Admin UI **may prioritize desktop** usability (data tables, bulk edit) but **mus
 - Breakpoint pixel values — S1-T07 uses Tailwind defaults as **implementation defaults** (`sm` 640 / `md` 768 / `lg` 1024). Not a business lock.
 - Minimum tap-target size
 - Numeric Core Web Vitals / Lighthouse budgets
-- Mobile nav pattern (hamburger, bottom bar, etc.)
+- Mobile nav pattern (hamburger, bottom bar, etc.). S3-T01 uses `details`/`summary` “Categories” on small screens; wrapping nav from `sm` up. Not a finalized IA lock.
 - Whether a physical-device test lab is required vs browser device mode

@@ -4,21 +4,23 @@
 |-------|--------|
 | Sprint ID | S3 |
 | Phase | Phase 1 — SEO-First Storefront |
-| Objective | First-class SEO for the storefront |
-| Status | NOT_STARTED |
+| Objective | Customer homepage, then first-class SEO for the storefront |
+| Status | IN_PROGRESS |
 | Dependencies | Sprint 2 completed |
+
+Sprint 3 was **reordered**: S3-T01 is the Option 1 homepage (the storefront was still a shell). The original S3-T01 “SEO-Friendly URL Strategy” is **deferred**, not cancelled — see below. Remaining S3-T02 … S3-T11 stay SEO tasks.
 
 Follow `docs/requirements/SEO_REQUIREMENTS.md` and `docs/requirements/MOBILE_REQUIREMENTS.md`. Domain and legal names remain **TBD**. Storefront SEO work must not regress mobile-first layout or Core Web Vitals considerations.
 
 ---
 
-## S3-T01 — SEO-Friendly URL Strategy
+## S3-T01 — Homepage Storefront Implementation
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Document and implement catalog URL patterns (redirects if Sprint 2 URLs change).
+Replace the foundation homepage shell with the approved Option 1 customer storefront.
 
 ### Dependencies
 
@@ -26,36 +28,67 @@ Sprint 2.
 
 ### Requirements
 
-Human-readable slugs; no session IDs in URLs. Exact pattern TBD in this task; record the decision (ADR if it changes architecture).
+Mobile-first. Data-driven categories and products via application/catalog. Approved hero and promo assets. No cart, search, filter/sort, JSON-LD, backend, or invented featured merchandising.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Docs + route path updates + fixture slugs if needed.
+- `getHomePage` + `toHomePageViewModel` (uses `list()`, not `listFeatured()`)
+- Homepage sections: hero, category circles, catalog product grid, secondary promo, intro, trust bar
+- Header: announcement bar (Option 1 copy), logo, `details`/`summary` mobile category menu, desktop wrapping nav
+- Footer: brand + data-driven category links
+- `buildHomeMetadata` for `/`
+- Hero/promo JPEGs served from `frontend/public/` (originals kept in repository-root `public/`)
 
-### Expected files/modules
+### Homepage sections
 
-- `docs/requirements/SEO_REQUIREMENTS.md` (patterns filled in)
-- Next.js catalog routes
-- Optional ADR
+| Section | Source |
+|---------|--------|
+| Announcement bar | Option 1 copy (policies still operationally TBD) |
+| Hero | Option 1 headline/CTA + `baby-sleeveless-sets-new-collection-banner.jpg` |
+| Shop by category | `listCategories()` + documented product-photo stand-ins |
+| Clothing in the catalog | `listProducts()` — not featured |
+| Secondary promo | `baby-dress-bloomer-sets-new-collection-banner.jpg` |
+| Intro | Factual storefront copy (no toy inventory claim) |
+| Trust bar | Option 1 copy |
+| Footer | Brand + nav from `listCategories()` |
+
+Shop Now / promo link to the first category that has products (data-driven). No Client Component; mobile nav is `details`/`summary`.
 
 ### Acceptance criteria
 
-- URL scheme documented and implemented
-- Old paths either still work or redirect (if they existed)
+- Homepage is a real storefront, not an empty shell
+- UI does not import fixtures
+- Existing `/c/` and `/p/` routes still work
 
 ### Testing requirements
 
-Route tests or build-time path checks for fixture slugs.
+Unit tests for `getHomePage`, homepage view model, and home metadata. Lint, typecheck, build.
 
 ### Definition of Done
 
-URL strategy live and documented.
+Homepage live. S3-T02 recorded **NOT_STARTED**. Original SEO URL strategy remains deferred (not started).
+
+---
+
+## Deferred — SEO-Friendly URL Strategy (original S3-T01)
+
+**Status:** NOT_STARTED
+
+Reordered behind the homepage. Still required in Sprint 3. Do not skip.
+
+### Objective
+
+Document and implement catalog URL patterns (redirects if Sprint 2 URLs change).
+
+### Requirements
+
+Human-readable slugs; no session IDs in URLs. Exact pattern TBD in this task; record the decision (ADR if it changes architecture). Current Phase 1 paths remain `/`, `/c/{slug}`, `/p/{slug}`.
 
 ---
 
 ## S3-T02 — Dynamic Metadata
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -69,13 +102,16 @@ S3-T01.
 
 No generic identical title on all catalog pages. TBD brand suffix allowed as placeholder.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Next.js metadata API wired through application queries.
+Standardized application SEO helpers and Next.js wiring. No JSON-LD, sitemap, robots, or domain invention.
 
-### Expected files/modules
-
-- Metadata helpers / `generateMetadata` on routes
+- Shared `IndexablePageMetadata` + `buildNotFoundMetadata`
+- `buildHomeMetadata` / `buildCategoryMetadata` / `buildProductMetadata`
+- `app/to-next-metadata.ts` maps helpers to the Next.js Metadata API (routing layer)
+- Category OpenGraph uses documented product-photo stand-ins when present
+- Unknown `/c/` and `/p/` slugs: HTTP 404, `noindex`, no canonical
+- Canonicals remain paths (`/`, `/c/{slug}`, `/p/{slug}`). Site origin **TBD** (S3-T03). Build warns that OpenGraph image URLs fall back to `http://localhost:3000` until `metadataBase` exists — do not invent a production domain here.
 
 ### Acceptance criteria
 
@@ -83,21 +119,21 @@ Next.js metadata API wired through application queries.
 
 ### Testing requirements
 
-Unit tests for metadata builders.
+Unit tests for metadata builders, uniqueness, and no invented commercial claims.
 
 ### Definition of Done
 
-Dynamic metadata shipped.
+Dynamic metadata shipped. S3-T03 recorded **NOT_STARTED**.
 
 ---
 
-## S3-T03 — Canonical URLs
+## S3-T03 — Canonical Site URL and Metadata Base
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Emit a canonical URL for each indexable page.
+Emit a canonical URL for each indexable page, with a single configured site origin for `metadataBase`.
 
 ### Dependencies
 
@@ -105,16 +141,18 @@ S3-T01, S3-T02.
 
 ### Requirements
 
-Canonical domain **TBD** — use a documented placeholder base URL via env (no secrets).
+Canonical domain **TBD** — use a documented placeholder base URL via env (no secrets). Do not invent a Mini Mystiq hostname.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Canonical link/metadata on indexable routes.
-
-### Expected files/modules
-
-- Canonical helper
-- Env example without secrets (`NEXT_PUBLIC_SITE_URL` or equivalent)
+- `config/site.ts` is the single source of truth for `NEXT_PUBLIC_SITE_URL`
+- `layout.tsx` sets Next.js `metadataBase` from `getMetadataBase()`
+- SEO helpers still emit path-only canonicals (`/`, `/c/{slug}`, `/p/{slug}`); Next.js resolves them against `metadataBase`
+- `.env.example` documents the variable (empty; production domain TBD)
+- Local unset env falls back to `http://localhost:3000`
+- Hosted production (`VERCEL_ENV=production` or `REQUIRE_SITE_URL=true`) requires a non-localhost origin
+- Invalid `/c/` and `/p/` routes remain 404 + `noindex` with no canonical
+- No URL strategy change, JSON-LD, sitemap, or robots
 
 ### Acceptance criteria
 
@@ -123,17 +161,17 @@ Canonical link/metadata on indexable routes.
 
 ### Testing requirements
 
-Unit tests for canonical serialization.
+Unit tests for origin parsing, absolute URL joining, hosted-production guards, and path-only helper output.
 
 ### Definition of Done
 
-Canonicals present.
+Canonical origin infrastructure shipped. S3-T04 recorded **NOT_STARTED**.
 
 ---
 
 ## S3-T04 — XML Sitemap
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -141,20 +179,25 @@ Generate a sitemap of indexable home/category/product URLs from repositories.
 
 ### Dependencies
 
-S3-T01.
+S3-T01, S3-T03 recommended.
 
 ### Requirements
 
 Do not include admin or cart. Source URLs from repositories, not a handwritten stale list (fixtures may back the repo).
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Next.js sitemap route/file.
-
-### Expected files/modules
-
-- Sitemap module
-- Application query for indexable URLs
+- Next.js App Router `frontend/app/sitemap.ts` → `/sitemap.xml`
+- Application query `listIndexableUrls` (`application/seo/`); composed in `config/catalog.ts`
+- Origin from `config/site.ts` / `NEXT_PUBLIC_SITE_URL` via `toCanonicalUrl` (same HTML canonicals as S3-T03)
+- Included: `/`, all `/c/{slug}` from `listCategories`, all `/p/{slug}` from `listProducts`
+- Empty categories (currently infants, teens, women) included — they remain valid indexable routes
+- Uncategorized products included — they remain valid `/p/{slug}` pages
+- Excluded: unknown slugs, query/filter/sort URLs, cart, checkout, admin
+- `lastModified`, `changeFrequency`, and `priority` omitted (no reliable timestamps; values not specified)
+- Deterministic order: homepage, then categories in repository order, then products in repository order
+- No fixture imports in `sitemap.ts`; no hard-coded category/product lists
+- No `robots.ts`, JSON-LD, analytics, or UI changes
 
 ### Acceptance criteria
 
@@ -163,17 +206,17 @@ Next.js sitemap route/file.
 
 ### Testing requirements
 
-Unit test URL set from mock repo.
+Unit test URL set from mock repo. Composition test that sitemap URLs match catalog lists and site origin.
 
 ### Definition of Done
 
-Sitemap available.
+Sitemap available. S3-T05 recorded **NOT_STARTED**.
 
 ---
 
 ## S3-T05 — robots.txt
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -187,13 +230,15 @@ S3-T04 recommended (sitemap reference).
 
 Link to sitemap if present. Do not invent aggressive disallow lists.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Next.js `robots` file/route.
-
-### Expected files/modules
-
-- robots configuration
+- Next.js App Router `frontend/app/robots.ts` → `/robots.txt`
+- One general policy: `User-agent: *` and `Allow: /` (covers `/`, `/c/{slug}`, `/p/{slug}`)
+- Sitemap reference: `toCanonicalUrl(origin, "/sitemap.xml")` from `config/site.ts` / `NEXT_PUBLIC_SITE_URL`
+- No `Host` directive, no crawler-specific rules, no query-parameter rules
+- No invented Disallow for cart/checkout/admin (those routes do not exist yet)
+- No catalog/repository/fixture access
+- No JSON-LD, sitemap redesign, analytics, or UI changes
 
 ### Acceptance criteria
 
@@ -202,17 +247,17 @@ Next.js `robots` file/route.
 
 ### Testing requirements
 
-Build/smoke that robots route exists.
+Build/smoke that robots route exists. Unit tests for allow policy, sitemap origin, and no fixture/domain hard-coding.
 
 ### Definition of Done
 
-robots.txt shipped.
+robots.txt shipped. S3-T06 recorded **NOT_STARTED**.
 
 ---
 
 ## S3-T06 — Product Structured Data
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -226,14 +271,17 @@ S2-T03, S3-T01.
 
 Valid Product JSON-LD for available fields. Offers/currency **TBD** — omit or mark placeholder only if price exists on the type.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-JSON-LD component/helper on PDP.
-
-### Expected files/modules
-
-- Product JSON-LD builder
-- PDP integration
+- Application helper `buildProductStructuredData` (`application/seo/product-structured-data.ts`)
+- Safe serializer `serializeJsonLd` (escapes `<` so product text cannot close the script)
+- PDP Server Component renders `<script type="application/ld+json">` via `app/json-ld.tsx`
+- Fields: `@context`, `@type` Product, `name`, `description` (when non-blank), primary `image` (absolute), `url` (canonical)
+- Origin from `config/site.ts` / `NEXT_PUBLIC_SITE_URL` via `toCanonicalUrl`
+- Omitted because the domain has no reliable data: offers, price, currency, SKU, availability, brand, reviews, ratings, seller, shipping, size/color
+- Category omitted (minimum truthful Product schema; not invented as Schema.org `category`)
+- Unknown `/p/{slug}`: `notFound()` — no Product JSON-LD
+- No UI changes, no Offer/BreadcrumbList/Organization schemas
 
 ### Acceptance criteria
 
@@ -246,13 +294,13 @@ Unit tests for JSON-LD shape.
 
 ### Definition of Done
 
-Product schema shipped.
+Product schema shipped. S3-T07 recorded **NOT_STARTED**.
 
 ---
 
 ## S3-T07 — Breadcrumb Structured Data
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -266,13 +314,16 @@ S2-T04, S3-T06.
 
 Must match UI crumb trail.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Breadcrumb JSON-LD helper on category and product pages.
-
-### Expected files/modules
-
-- BreadcrumbList builder
+- Application helper `buildBreadcrumbStructuredData` (`application/seo/breadcrumb-structured-data.ts`)
+- Category and product Server Components render it via existing `app/json-ld.tsx`
+- Trail comes from the page view-model `breadcrumb` (same as UI)
+- Current page (`href: null`) uses the page `canonicalPath`; UI still does not link the last crumb
+- Absolute URLs via `toCanonicalUrl` / `config/site.ts`
+- Category: Home → Category. Product with known category: Home → Category → Product. Uncategorized: Home → Product
+- Unknown `/c/` and `/p/` slugs: `notFound()` — no BreadcrumbList JSON-LD
+- Product JSON-LD on PDPs is unchanged. No UI or URL changes. Organization JSON-LD is S3-T08 (root layout).
 
 ### Acceptance criteria
 
@@ -285,86 +336,114 @@ Unit tests for list construction.
 
 ### Definition of Done
 
-Breadcrumb schema shipped.
+Breadcrumb schema shipped. S3-T08 recorded **NOT_STARTED**.
 
 ---
 
 ## S3-T08 — Organization Structured Data
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-JSON-LD Organization on the layout or home. Legal name **TBD** — use documented placeholder.
+Factual Schema.org Organization JSON-LD on the storefront, without inventing a legal entity.
 
 ### Dependencies
 
-S3-T02.
+S3-T02, S3-T03, S3-T06 (shared `JsonLd` renderer).
 
 ### Requirements
 
-Do not invent a real company name; use TBD placeholder from config.
+Do not invent `legalName`. Use the project brand **Mini Mystiq**. Listing/trading name “Enn2Gee Mini Mystiq” is not confirmed as a legal name.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Organization JSON-LD helper.
+- Config: `frontend/config/organization.ts` (public listing facts; not a legal-entity record)
+- Application helper: `buildOrganizationStructuredData` (`application/seo/organization-structured-data.ts`)
+- Site-wide render: root `app/layout.tsx` via existing `app/json-ld.tsx`
+- Canonical `url` and logo URL via `toCanonicalUrl` / `config/site.ts`
+- Logo: approved `/mini-mystiq-logo.png` only
+- Product and category pages do **not** emit a second Organization schema
+- Unknown `/c/` and `/p/` slugs still `notFound()` — no Product or BreadcrumbList JSON-LD. Next.js 404 error HTML does not include an Organization JSON-LD script.
+
+**Emitted properties:** `@context`, `@type` Organization, `name` (Mini Mystiq), `url`, `logo`, `telephone`, `address` (PostalAddress from the supplied listing).
+
+**Intentionally omitted (not confirmed):** `legalName`, `sameAs` / social profiles, email, foundingDate, founder, tax/registration IDs, `priceRange`, `aggregateRating`, `review`, `openingHours` / hours (LocalBusiness-specific; listing hours are not used), extra `contactPoint` fields, payment methods.
 
 ### Expected files/modules
 
-- Organization JSON-LD builder
-- Config placeholders
+- `frontend/config/organization.ts`
+- `frontend/application/seo/organization-structured-data.ts`
+- `frontend/app/layout.tsx` (one `JsonLd`)
 
 ### Acceptance criteria
 
-- JSON-LD present
-- Values come from config, not hardcoded scattered strings (single config module allowed)
+- Exactly one Organization JSON-LD on `/`, `/c/{slug}`, `/p/{slug}`
+- Values come from `config/organization.ts` + `config/site.ts`, not scattered strings
+- Existing Product and BreadcrumbList JSON-LD unchanged
 
 ### Testing requirements
 
-Unit test builder.
+Unit tests for schema shape, omitted invented fields, absolute URLs, serialization, and no duplicate page wiring.
 
 ### Definition of Done
 
-Organization schema shipped.
+Organization schema shipped. S3-T09 recorded **NOT_STARTED**.
 
 ---
 
 ## S3-T09 — OpenGraph
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-OpenGraph title, description, and image for indexable pages.
+OpenGraph title, description, image, and absolute URL for indexable pages.
 
 ### Dependencies
 
-S3-T02.
+S3-T02, S3-T03.
 
 ### Requirements
 
-Fallback image **TBD**; use placeholder asset if no product image.
+Do not invent a dedicated social image. Use documented page images. Fallback image remains **TBD** (omit `og:image` when no documented image exists).
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-OG metadata on routes.
+**Audit result:** OpenGraph was already implemented in S3-T02 (fields) and S3-T03 (`metadataBase` / absolute resolution). S3-T09 did **not** rebuild metadata helpers, titles, URLs, JSON-LD, or UI.
+
+Confirmed contract:
+
+- `buildHomeMetadata` / `buildCategoryMetadata` / `buildProductMetadata` → `app/to-next-metadata.ts` → Next.js Metadata
+- `og:type` `website`; OG title/description match document title/description
+- `og:url` equals the page canonical path; both resolve against `config/site.ts` `metadataBase`
+- Homepage image: approved hero `baby-sleeveless-sets-new-collection-banner.jpg` (not the logo)
+- Category image: documented product-photo stand-in when present
+- Product image: primary catalog image, including uncategorized products such as `/p/olive-green-patterned-dress`
+- Unknown slugs: 404, `noindex`, no canonical, no page OpenGraph
+- No business address/telephone/legalName in OpenGraph (Organization JSON-LD is separate)
+
+S3-T09 added mapping tests (`app/to-next-metadata.test.ts`) and uncategorized-product coverage. No helper logic changes.
 
 ### Expected files/modules
 
-- OG fields in metadata helpers
+- Existing metadata helpers (unchanged)
+- `frontend/app/to-next-metadata.ts` (unchanged mapping)
+- `frontend/app/to-next-metadata.test.ts` (new)
 
 ### Acceptance criteria
 
-- Product/category/home include OG title/description
-- Image field present (placeholder allowed)
+- Product/category/home include OG title/description/url/image as documented
+- Canonical URL matches `og:url`
+- Absolute URLs when `NEXT_PUBLIC_SITE_URL` is set (not localhost)
 
 ### Testing requirements
 
-Unit tests for OG field mapping.
+Unit tests for OG field mapping; uncategorized product; 404 has no OG; production origin has no localhost.
 
 ### Definition of Done
 
-OpenGraph shipped.
+OpenGraph reviewed and confirmed. S3-T10 recorded **NOT_STARTED**.
 
 ---
 

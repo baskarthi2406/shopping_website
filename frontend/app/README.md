@@ -1,6 +1,6 @@
 # App / routing
 
-Next.js App Router only: routes, layouts, loading/error/not-found boundaries, metadata **calls**, and later `sitemap.ts` / `robots.ts`.
+Next.js App Router only: routes, layouts, loading/error/not-found boundaries, metadata **calls**, `sitemap.ts`, and `robots.ts`.
 
 **May import:** application use cases, presentation components, SEO helpers.
 
@@ -14,4 +14,16 @@ Pages stay thin Server Components by default. Do not put product, cart, or prici
 
 **S2-T04:** `layout.tsx` loads catalog nav via `catalog.listCategories`. It remains a Server Component.
 
-Future routes: cart and SEO files (`sitemap.ts`, `robots.ts`) belong to later sprints.
+**S3-T04:** `sitemap.ts` calls `catalog.listIndexableUrls` and `config/site.ts`. It must not import fixtures.
+
+**S3-T05:** `robots.ts` allows `/` and references `/sitemap.xml` via `config/site.ts`. It must not import catalog data.
+
+**S3-T06:** `p/[slug]/page.tsx` renders Product JSON-LD via `JsonLd` after `catalog.getProductPage`. Unknown slugs still `notFound()` with no Product JSON-LD.
+
+**S3-T07:** `c/[slug]/page.tsx` and `p/[slug]/page.tsx` render BreadcrumbList JSON-LD from the view-model trail.
+
+**S3-T08:** `layout.tsx` renders Organization JSON-LD once. Product and category pages must not add a second Organization block.
+
+**S3-T09:** `to-next-metadata.ts` remains the OpenGraph adapter (path canonicals + `metadataBase`). No page metadata rebuild.
+
+Future routes: cart belongs to a later sprint.

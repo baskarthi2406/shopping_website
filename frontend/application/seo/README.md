@@ -1,9 +1,25 @@
 # `application/seo`
 
-SEO helpers for `generateMetadata`, canonical URLs, OpenGraph, and JSON-LD (Product, BreadcrumbList, Organization).
+SEO helpers for `generateMetadata`, canonical paths, OpenGraph, and the sitemap URL list.
 
-Pages call helpers; they do not copy-paste metadata objects. `sitemap.ts` / `robots.ts` stay under `app/` and call this layer.
+Pages call helpers; they do not copy-paste metadata objects. The Next.js Metadata API is mapped in `app/to-next-metadata.ts`. `app/sitemap.ts` calls `catalog.listIndexableUrls`. `app/robots.ts` uses `config/site.ts` only.
 
-**S2-T01:** `category-metadata.ts` builds title, description, and canonical path `/c/{slug}` from category domain data.
+**S2-T01:** `category-metadata.ts` — title, description, canonical `/c/{slug}`.
 
-**S2-T03:** `product-metadata.ts` builds title, description, canonical path `/p/{slug}`, and optional first-image OpenGraph data. JSON-LD, sitemap, and robots remain Sprint 3. Canonical domain is TBD.
+**S2-T03:** `product-metadata.ts` — title, description, canonical `/p/{slug}`, optional first image.
+
+**S3-T01:** `home-metadata.ts` — homepage title, description, canonical `/`, hero image.
+
+**S3-T03:** `config/site.ts` + layout `metadataBase` from `NEXT_PUBLIC_SITE_URL`. Production domain TBD.
+
+**S3-T04:** `list-indexable-urls.ts` — homepage, then categories, then products in repository order. Empty categories and uncategorized products included. No lastModified / priority / changeFrequency.
+
+**S3-T05:** `app/robots.ts` — allow `/`, sitemap `{origin}/sitemap.xml`.
+
+**S3-T06:** `product-structured-data.ts` — Schema.org Product from catalog fields. `serialize-json-ld.ts` escapes `<`. Offers/brand/reviews omitted.
+
+**S3-T07:** `breadcrumb-structured-data.ts` — Schema.org BreadcrumbList from the UI view-model trail.
+
+**S3-T08:** `organization-structured-data.ts` — Schema.org Organization from `config/organization.ts`. `legalName`, social profiles, email, identifiers, and opening hours are omitted.
+
+**S3-T09:** OpenGraph review only. Existing home/category/product helpers and `app/to-next-metadata.ts` already satisfied the contract; mapping tests added. No dedicated social image.

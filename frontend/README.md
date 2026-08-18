@@ -37,7 +37,7 @@ npm start
 
 ## Current state
 
-Sprint 1 foundation is complete (S1-T08). Option 1 tokens and a semantic shell (`header` / `main` / `footer`) exist. The home page remains a brand shell (no catalog, hero, or nav).
+Sprint 1 foundation is complete (S1-T08). Option 1 tokens and a semantic shell (`header` / `main` / `footer`) exist.
 
 **S2-T01 / S2-T02:** crawlable category listing at `/c/[slug]` (Server Component). Built in S2-T01; S2-T02 added no duplicate route or ProductCard. Data comes from `catalog.getCategoryPage` only. Do not import `infrastructure/catalog/data` from `app/` or `components/`.
 
@@ -51,7 +51,27 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S2-T06:** static catalog expanded to 12 approved product photos. No invented products, prices, or categories. Toys pending approved assets.
 
-**Not implemented yet:** category index, homepage catalog, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD).
+**S2-T07:** catalog review passed. No fixture or UI corrections. Image-path tests confirm `frontend/public/` files. Uncategorized dresses and empty infants/teens/women remain intentional.
+
+**S3-T01:** Option 1 homepage at `/` — hero, category circles, catalog product grid (`listProducts`, not featured), secondary promo, intro, trust bar. Mobile category menu is `details`/`summary` (no Client Component). Announcement/trust copy from DESIGN_OPTION_1 (operations TBD). Search, wishlist, account, and cart chrome are not implemented.
+
+**S3-T02:** unique titles, factual descriptions, path canonicals, and OpenGraph for `/`, `/c/[slug]`, and `/p/[slug]`. Unknown slugs are 404 + `noindex`. Category OpenGraph uses documented stand-in images.
+
+**S3-T03:** `config/site.ts` reads `NEXT_PUBLIC_SITE_URL` and layout sets `metadataBase`. Production domain is TBD. Copy `.env.example` to `.env.local` to set a local origin; omit it to fall back to `http://localhost:3000`. Hosted production must set a non-localhost origin.
+
+**S3-T04:** `/sitemap.xml` from `app/sitemap.ts`. URLs come from `catalog.listIndexableUrls` (homepage, categories, products — including empty categories and uncategorized products). Origin is `config/site.ts`. No `lastmod` / `priority` / `changefreq`. JSON-LD is later.
+
+**S3-T05:** `/robots.txt` from `app/robots.ts`. Allows `/` for all crawlers and references `{origin}/sitemap.xml` from `config/site.ts`. No invented Disallow rules.
+
+**S3-T06:** Product JSON-LD on `/p/[slug]`. Fields: name, description, primary image, canonical URL. No offers, price, SKU, brand, availability, or reviews.
+
+**S3-T07:** BreadcrumbList JSON-LD on `/c/[slug]` and `/p/[slug]`, matching the UI trail. Uncategorized products are Home → Product.
+
+**S3-T08:** Organization JSON-LD from the root layout. Name Mini Mystiq; no `legalName`. Logo `/mini-mystiq-logo.png`. Listing telephone and address only.
+
+**S3-T09:** OpenGraph review. Existing S3-T02/S3-T03 metadata already met the contract (hero / category stand-in / primary product image; canonical equals `og:url`). Tests added; helpers unchanged.
+
+**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin. SEO-friendly URL strategy is deferred from original S3-T01.
 
 ## Architecture
 
@@ -95,12 +115,13 @@ Approved logo is served from `frontend/public/mini-mystiq-logo.png`. Catalog pro
 
 ## Configuration / environment variables
 
-No environment variables are required yet.
+| Name | Required | Purpose |
+|------|----------|---------|
+| `NEXT_PUBLIC_SITE_URL` | Hosted production | Public canonical origin (no path). Not a secret. Production hostname is **TBD**. |
 
-When they are needed:
+Local development may omit it; `config/site.ts` then uses `http://localhost:3000`. Copy `.env.example` to `.env.local` to set a value. Pages must not read `process.env` for this — use `config/site.ts`.
 
 - Put secrets in `.env.local` (gitignored). Never commit secrets.
-- Document non-secret names in `.env.example` only when a task actually introduces them.
 - Prefer server-only variables unless the value must reach the browser (`NEXT_PUBLIC_*`).
 - Bind infrastructure in `config/` (S1-T05+). Pages must not read ad-hoc `process.env` for data-source choice.
 
@@ -125,7 +146,7 @@ Component and E2E testing remain later tasks. No coverage thresholds.
 
 ## SEO
 
-Category and product pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}` or `/p/{slug}`, OpenGraph). Product pages include the first product image in OpenGraph when present. Site origin, sitemap, robots.txt, and JSON-LD remain later tasks. Canonical domain is TBD.
+Category and product pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}` or `/p/{slug}`, OpenGraph). Product pages include the first product image in OpenGraph when present. Valid PDPs also include Schema.org Product JSON-LD (name, description, image, canonical URL — no invented offers or brand). Category and product pages include BreadcrumbList JSON-LD matching the visible crumbs. The root layout emits Organization JSON-LD once (brand Mini Mystiq; no `legalName`). OpenGraph was reviewed in S3-T09: `og:url` matches canonical; images are the homepage hero, category stand-in, or primary product photo — not the logo. `/sitemap.xml` lists homepage, category, and product URLs from catalog data using the same origin as `metadataBase`. `/robots.txt` allows the public storefront and references that sitemap. Canonical domain is TBD.
 
 ## Mobile-first
 

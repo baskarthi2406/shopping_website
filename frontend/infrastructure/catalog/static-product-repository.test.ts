@@ -1,7 +1,15 @@
+import { existsSync } from "node:fs";
+import path from "node:path";
 import { describe, expect, it } from "vitest";
 import { isCatalogSlug } from "@/domain/catalog";
 import { StaticCategoryRepository } from "./static-category-repository";
 import { StaticProductRepository } from "./static-product-repository";
+
+const publicDir = path.resolve(import.meta.dirname, "../../public");
+const unapprovedSrcPattern =
+  /logo|banner|hiring|pigeon|character|wireframe|mockup|app-design/i;
+const unsupportedClaimPattern =
+  /\b(best|cheap|online|buy|premium|organic|handmade|designer|luxury|comfortable|soft|cotton|linen)\b/i;
 
 describe("StaticProductRepository", () => {
   const products = new StaticProductRepository();
@@ -98,5 +106,27 @@ describe("StaticProductRepository", () => {
 
   it("returns no featured products until merchandising exists", async () => {
     await expect(products.listFeatured()).resolves.toEqual([]);
+  });
+
+  it("references approved public assets with factual alts and names", async () => {
+    const listed = await products.list();
+
+    for (const product of listed) {
+      expect(product.name.trim().length).toBeGreaterThan(0);
+      expect(product.description.trim().length).toBeGreaterThan(0);
+      expect(product.name).not.toMatch(unsupportedClaimPattern);
+      expect(product.description).not.toMatch(unsupportedClaimPattern);
+      expect(product.images.length).toBeGreaterThan(0);
+
+      for (const image of product.images) {
+        expect(image.src.startsWith("/")).toBe(true);
+        expect(image.src).not.toMatch(unapprovedSrcPattern);
+        expect(image.alt.trim().length).toBeGreaterThan(0);
+        expect(image.alt).not.toBe(image.src.slice(1));
+
+        const filename = image.src.replace(/^\//, "");
+        expect(existsSync(path.join(publicDir, filename))).toBe(true);
+      }
+    }
   });
 });
