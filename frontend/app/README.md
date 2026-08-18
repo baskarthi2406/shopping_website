@@ -1,6 +1,6 @@
 # App / routing
 
-Next.js App Router only: routes, layouts, loading/error/not-found boundaries, metadata **calls**, and later `sitemap.ts` / `robots.ts`.
+Next.js App Router only: routes, layouts, loading/error/not-found boundaries, metadata **calls**, `sitemap.ts`, and later `robots.ts`.
 
 **May import:** application use cases, presentation components, SEO helpers.
 
@@ -14,4 +14,6 @@ Pages stay thin Server Components by default. Do not put product, cart, or prici
 
 **S2-T04:** `layout.tsx` loads catalog nav via `catalog.listCategories`. It remains a Server Component.
 
-Future routes: cart and SEO files (`sitemap.ts`, `robots.ts`) belong to later sprints.
+**S3-T04:** `sitemap.ts` calls `catalog.listIndexableUrls` and `config/site.ts`. It must not import fixtures.
+
+Future routes: cart and `robots.ts` belong to later sprints.

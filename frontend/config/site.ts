@@ -86,6 +86,19 @@ export function toAbsoluteSiteUrl(origin: SiteOrigin, path: string): string {
   return new URL(path, `${origin.href}/`).href;
 }
 
+/**
+ * Absolute URL matching S3-T03 HTML canonicals.
+ * Homepage uses origin.href (no trailing slash), same as Next.js
+ * metadataBase + canonical path `/`. Other paths use toAbsoluteSiteUrl.
+ */
+export function toCanonicalUrl(origin: SiteOrigin, path: string): string {
+  if (path === "/") {
+    return origin.href;
+  }
+
+  return toAbsoluteSiteUrl(origin, path);
+}
+
 export function resolveSiteOrigin(env: EnvLike = process.env): SiteOrigin {
   const raw = env[SITE_URL_ENV]?.trim();
 

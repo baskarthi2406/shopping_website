@@ -102,6 +102,21 @@ Standardized dynamic metadata for `/`, `/c/{slug}`, `/p/{slug}`:
 - Production Mini Mystiq domain remains **TBD** — set the env before live deploy
 - `.env.example` documents the variable. Invalid pages still have no canonical
 
+## Implemented (S3-T04)
+
+XML sitemap at `/sitemap.xml` (`frontend/app/sitemap.ts`, Next.js `MetadataRoute.Sitemap`):
+
+- URLs from `listIndexableUrls` via `config/catalog.ts` (repositories, not fixtures, not a hard-coded slug list)
+- Origin from `config/site.ts` / `NEXT_PUBLIC_SITE_URL` — same source as `metadataBase`. Production domain remains **TBD**
+- Each sitemap `loc` matches the page HTML canonical (`toCanonicalUrl`). Homepage has no trailing slash, matching Next.js `metadataBase` + path `/`
+- Included: `/`, every valid `/c/{slug}` (including empty infants/teens/women), every valid `/p/{slug}` (including uncategorized products)
+- Excluded: unknown slugs, query/filter/sort URLs, cart, checkout, admin
+- `lastmod` / `changefreq` / `priority` omitted — catalog models have no reliable timestamps; those values are not specified
+- Unique URLs; order is homepage, then categories, then products (repository order)
+- `robots.ts`, JSON-LD, Search Console submission, and analytics are not in this task
+
+Empty-category indexing is unchanged: empty category pages remain indexable routes, so they appear in the sitemap. Whether empty categories should later be `noindex` or omitted is **TBD** — do not invent a new rule here.
+
 ## Reviewed (S2-T07)
 
 12-product static catalog: unique titles, canonical `/p/{slug}` and `/c/{slug}`, OpenGraph, crawlable HTML, factual alts. Uncategorized products remain reachable at `/p/{slug}` only. JSON-LD still Sprint 3.
@@ -109,7 +124,7 @@ Standardized dynamic metadata for `/`, `/c/{slug}`, `/p/{slug}`:
 ## TBD
 
 - Canonical domain
-- Trailing-slash policy
+- Trailing-slash policy (current homepage canonical/sitemap loc has no trailing slash; other paths have none)
 - Pagination SEO
 - Filtered-listing SEO (when filters exist)
 - hreflang / locales

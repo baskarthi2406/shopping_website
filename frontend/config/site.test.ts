@@ -4,6 +4,7 @@ import {
   parseSiteOrigin,
   resolveSiteOrigin,
   toAbsoluteSiteUrl,
+  toCanonicalUrl,
 } from "./site";
 
 describe("parseSiteOrigin", () => {
@@ -111,6 +112,23 @@ describe("toAbsoluteSiteUrl", () => {
     expect(() => toAbsoluteSiteUrl(origin, "/c/kids?sort=name")).toThrow(
       /query or hash/,
     );
+  });
+});
+
+describe("toCanonicalUrl", () => {
+  const origin = resolveSiteOrigin({
+    NEXT_PUBLIC_SITE_URL: "https://store.example",
+  });
+
+  it("matches S3-T03 HTML canonicals without query parameters", () => {
+    expect(toCanonicalUrl(origin, "/")).toBe("https://store.example");
+    expect(toCanonicalUrl(origin, "/c/baby-essentials")).toBe(
+      "https://store.example/c/baby-essentials",
+    );
+    expect(toCanonicalUrl(origin, "/p/pink-white-pleated-baby-dress")).toBe(
+      "https://store.example/p/pink-white-pleated-baby-dress",
+    );
+    expect(toCanonicalUrl(origin, "/")).not.toContain("localhost");
   });
 });
 

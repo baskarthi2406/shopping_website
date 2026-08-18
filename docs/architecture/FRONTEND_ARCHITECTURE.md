@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S3-T03:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01).
+**Task:** S1-T02 (layer contract). **As implemented through S3-T04:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01); XML sitemap at `/sitemap.xml` (S3-T04).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -152,7 +152,7 @@ No new utility library in this task.
 | `page.tsx` | Brand shell only. Does not call catalog services yet (Sprint 2). |
 | Route segments `c/[slug]`, `p/[slug]`, `cart`, `checkout` | Later sprints |
 | `loading.tsx` / `error.tsx` / `not-found.tsx` | Later |
-| `generateMetadata` (dynamic), `sitemap.ts`, `robots.ts` | Sprint 3; structure does not block them |
+| `generateMetadata` (dynamic), `sitemap.ts`, `robots.ts` | Metadata S3-T02; sitemap S3-T04 (`app/sitemap.ts`); robots later |
 
 ---
 
@@ -186,7 +186,7 @@ Public product/category pages must remain crawlable.
 | Title, description, canonical, OpenGraph | Application SEO helpers, invoked from `generateMetadata` |
 | JSON-LD Product, BreadcrumbList, Organization | Application SEO builders; page renders `<script type="application/ld+json">` |
 | Breadcrumb **UI** | Presentation, data from application |
-| Sitemap, robots | `app` routes calling application/catalog |
+| Sitemap, robots | `app/sitemap.ts` (S3-T04) calls `catalog.listIndexableUrls`; robots later |
 | Semantic headings, landmarks | Presentation + layouts |
 | Image alt | View model from application/domain data — **not** the filename |
 | Internal links | Presentation using `/c/{slug}`, `/p/{slug}` |
@@ -403,7 +403,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S3-T03)
+## 17. Folder structure (as implemented through S3-T04)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -429,6 +429,7 @@ frontend/
   app/                           # routing (S1-T03); README boundary (S1-T04)
     layout.tsx
     page.tsx                     # S3-T01 Option 1 homepage; S3-T02 metadata
+    sitemap.ts                   # S3-T04 /sitemap.xml from catalog + site origin
     to-next-metadata.ts          # S3-T02 Next.js Metadata adapter
     not-found.tsx                # S2-T01
     c/[slug]/page.tsx            # S2-T01 category listing
@@ -469,7 +470,7 @@ frontend/
   application/
     catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
-    seo/                         # home + category + product + 404 metadata; JSON-LD — later Sprint 3
+    seo/                         # metadata + listIndexableUrls (S3-T04); JSON-LD — later Sprint 3
   infrastructure/
     catalog/                     # Static*Repository — S1-T05
     cart/                        # browser storage adapter — Sprint 4
@@ -480,7 +481,7 @@ frontend/
 
 **S2-T03:** `/p/[slug]` is a Server Component. The page calls `catalog.getProductPage(slug)`. Unknown slug → `notFound()`. JSON-LD is still Sprint 3.
 
-Future routes (`cart`, `checkout`, `sitemap.ts`, `robots.ts`) stay under `app/` when those sprints arrive.
+Future routes (`cart`, `checkout`, `robots.ts`) stay under `app/` when those sprints arrive.
 
 ---
 
@@ -516,4 +517,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T03 are complete. Next: **S3-T04** — do not start automatically.
+There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T04 are complete. Next: **S3-T05** — do not start automatically.

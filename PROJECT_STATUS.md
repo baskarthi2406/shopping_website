@@ -32,16 +32,16 @@ Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
 ## Current Sprint
 
 **Sprint 3 — Homepage + SEO**  
-Status: **IN_PROGRESS** (S3-T01 … S3-T03 completed)
+Status: **IN_PROGRESS** (S3-T01 … S3-T04 completed)
 
 ---
 
 ## Current Task
 
-**S3-T04 — XML Sitemap**  
+**S3-T05 — robots.txt**  
 Status: **NOT_STARTED**
 
-Do not start S3-T04 automatically.
+Do not start S3-T05 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-03.md`.
 
@@ -74,6 +74,7 @@ Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
 - Canonical site origin / `metadataBase` via `NEXT_PUBLIC_SITE_URL` (S3-T03; production domain TBD)
+- XML sitemap at `/sitemap.xml` from catalog repositories (S3-T04)
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
 ### Backend (Phase 2 — not started)
@@ -96,22 +97,23 @@ Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
 - S3-T01 — Homepage Storefront Implementation
 - S3-T02 — Dynamic Metadata
 - S3-T03 — Canonical Site URL and Metadata Base
+- S3-T04 — XML Sitemap
 
 ## In progress
 
-- None. Do not start S3-T04 automatically.
+- None. Do not start S3-T05 automatically.
 
 ## Pending
 
-- S3-T04 — XML Sitemap (next)
+- S3-T05 — robots.txt (next)
 - Deferred original S3-T01 — SEO-Friendly URL Strategy (not started)
 - Remainder of Sprint 3–11
 
 ## Blockers
 
-- None for starting S3-T04 when explicitly requested.
+- None for starting S3-T05 when explicitly requested.
 - Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan and several dress categories, dedicated category/hero lifestyle art, toys (no approved toy assets), pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules. Announcement/trust-bar copy is from Option 1; operations still TBD. Production canonical domain remains TBD — set `NEXT_PUBLIC_SITE_URL` before live deploy.
 
 ## Next task (do not start automatically)
 
-**S3-T04 — XML Sitemap**
+**S3-T05 — robots.txt**

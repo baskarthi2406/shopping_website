@@ -171,7 +171,7 @@ Canonical origin infrastructure shipped. S3-T04 recorded **NOT_STARTED**.
 
 ## S3-T04 — XML Sitemap
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -179,20 +179,25 @@ Generate a sitemap of indexable home/category/product URLs from repositories.
 
 ### Dependencies
 
-S3-T01.
+S3-T01, S3-T03 recommended.
 
 ### Requirements
 
 Do not include admin or cart. Source URLs from repositories, not a handwritten stale list (fixtures may back the repo).
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Next.js sitemap route/file.
-
-### Expected files/modules
-
-- Sitemap module
-- Application query for indexable URLs
+- Next.js App Router `frontend/app/sitemap.ts` → `/sitemap.xml`
+- Application query `listIndexableUrls` (`application/seo/`); composed in `config/catalog.ts`
+- Origin from `config/site.ts` / `NEXT_PUBLIC_SITE_URL` via `toCanonicalUrl` (same HTML canonicals as S3-T03)
+- Included: `/`, all `/c/{slug}` from `listCategories`, all `/p/{slug}` from `listProducts`
+- Empty categories (currently infants, teens, women) included — they remain valid indexable routes
+- Uncategorized products included — they remain valid `/p/{slug}` pages
+- Excluded: unknown slugs, query/filter/sort URLs, cart, checkout, admin
+- `lastModified`, `changeFrequency`, and `priority` omitted (no reliable timestamps; values not specified)
+- Deterministic order: homepage, then categories in repository order, then products in repository order
+- No fixture imports in `sitemap.ts`; no hard-coded category/product lists
+- No `robots.ts`, JSON-LD, analytics, or UI changes
 
 ### Acceptance criteria
 
@@ -201,11 +206,11 @@ Next.js sitemap route/file.
 
 ### Testing requirements
 
-Unit test URL set from mock repo.
+Unit test URL set from mock repo. Composition test that sitemap URLs match catalog lists and site origin.
 
 ### Definition of Done
 
-Sitemap available.
+Sitemap available. S3-T05 recorded **NOT_STARTED**.
 
 ---
 
