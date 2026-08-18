@@ -66,7 +66,7 @@ Listing filter/sort (S2-T05): **deferred**. Do not add facets, query-parameter l
 
 Static catalog (S2-T06): 12 development products from approved assets. Do not invent toys, prices, or age taxonomy. Infants/teens/women remain empty on purpose.
 
-Metadata helpers live in `application/seo/`. Sitemap URL listing is `listIndexableUrls`; `app/sitemap.ts` and `app/robots.ts` are the Next.js SEO routes. Product JSON-LD is `buildProductStructuredData`; BreadcrumbList JSON-LD is `buildBreadcrumbStructuredData`. Pages render both with `app/json-ld.tsx`.
+Metadata helpers live in `application/seo/`. Sitemap URL listing is `listIndexableUrls`; `app/sitemap.ts` and `app/robots.ts` are the Next.js SEO routes. Product JSON-LD is `buildProductStructuredData`; BreadcrumbList JSON-LD is `buildBreadcrumbStructuredData`; Organization JSON-LD is `buildOrganizationStructuredData` from `config/organization.ts`. The layout and pages render those objects with `app/json-ld.tsx`.
 
 ## Documentation
 

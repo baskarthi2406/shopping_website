@@ -22,4 +22,6 @@ Pages stay thin Server Components by default. Do not put product, cart, or prici
 
 **S3-T07:** `c/[slug]/page.tsx` and `p/[slug]/page.tsx` render BreadcrumbList JSON-LD from the view-model trail.
 
+**S3-T08:** `layout.tsx` renders Organization JSON-LD once. Product and category pages must not add a second Organization block.
+
 Future routes: cart belongs to a later sprint.

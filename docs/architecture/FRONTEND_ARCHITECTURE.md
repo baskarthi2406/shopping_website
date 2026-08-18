@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S3-T07:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01); XML sitemap at `/sitemap.xml` (S3-T04); `/robots.txt` (S3-T05); Product JSON-LD on `/p/[slug]` (S3-T06); BreadcrumbList JSON-LD on `/c/[slug]` and `/p/[slug]` (S3-T07).
+**Task:** S1-T02 (layer contract). **As implemented through S3-T08:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01); XML sitemap at `/sitemap.xml` (S3-T04); `/robots.txt` (S3-T05); Product JSON-LD on `/p/[slug]` (S3-T06); BreadcrumbList JSON-LD on `/c/[slug]` and `/p/[slug]` (S3-T07); Organization JSON-LD from the root layout (S3-T08).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -184,7 +184,7 @@ Public product/category pages must remain crawlable.
 | Concern | Owner |
 |---------|--------|
 | Title, description, canonical, OpenGraph | Application SEO helpers, invoked from `generateMetadata` |
-| JSON-LD Product, BreadcrumbList, Organization | Product JSON-LD: `application/seo/product-structured-data.ts` (S3-T06). BreadcrumbList: `application/seo/breadcrumb-structured-data.ts` (S3-T07). Both render via `app/json-ld.tsx`. Organization later |
+| JSON-LD Product, BreadcrumbList, Organization | Product: `application/seo/product-structured-data.ts` (S3-T06). BreadcrumbList: `application/seo/breadcrumb-structured-data.ts` (S3-T07). Organization: `application/seo/organization-structured-data.ts` from `config/organization.ts` (S3-T08). All render via `app/json-ld.tsx`. Organization is wired once in `app/layout.tsx` |
 | Breadcrumb **UI** | Presentation, data from application |
 | Sitemap, robots | `app/sitemap.ts` (S3-T04) calls `catalog.listIndexableUrls`; `app/robots.ts` (S3-T05) allows `/` and references `/sitemap.xml` via `config/site.ts` |
 | Semantic headings, landmarks | Presentation + layouts |
@@ -195,7 +195,7 @@ Do not copy-paste metadata objects in every `page.tsx`. Reuse helpers under `app
 
 Index: `/`, `/c/*`, `/p/*`. Do not index `/cart`, `/checkout`, admin.
 
-Canonical **domain** TBD. Configure `NEXT_PUBLIC_SITE_URL`; `config/site.ts` is the source of truth and layout sets `metadataBase`. Legal name TBD; brand Mini Mystiq.
+Canonical **domain** TBD. Configure `NEXT_PUBLIC_SITE_URL`; `config/site.ts` is the source of truth and layout sets `metadataBase`. Legal name TBD and omitted from Organization JSON-LD; brand Mini Mystiq.
 
 ---
 
@@ -427,12 +427,12 @@ These choices follow this contract. They are **not** an ADR.
 ```
 frontend/
   app/                           # routing (S1-T03); README boundary (S1-T04)
-    layout.tsx
+    layout.tsx                   # S3-T08 Organization JSON-LD (once)
     page.tsx                     # S3-T01 Option 1 homepage; S3-T02 metadata
     sitemap.ts                   # S3-T04 /sitemap.xml from catalog + site origin
     robots.ts                    # S3-T05 /robots.txt allow + sitemap reference
     to-next-metadata.ts          # S3-T02 Next.js Metadata adapter
-    json-ld.tsx                  # S3-T06/S3-T07 JSON-LD script renderer
+    json-ld.tsx                  # S3-T06–S3-T08 JSON-LD script renderer
     not-found.tsx                # S2-T01
     c/[slug]/page.tsx            # S2-T01 category listing; S3-T07 BreadcrumbList
     p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD; S3-T07 BreadcrumbList
@@ -466,13 +466,14 @@ frontend/
   config/
     catalog.ts                   # composition root (S1-T05)
     site.ts                      # S3-T03 canonical origin / metadataBase
+    organization.ts              # S3-T08 public Organization facts (not legalName)
   domain/
     catalog/                     # Product, Category, Uom — types in S1-T05
     cart/                        # Cart, CartItem — Sprint 4
   application/
     catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
-    seo/                         # metadata, listIndexableUrls, Product + BreadcrumbList JSON-LD; Organization later
+    seo/                         # metadata, listIndexableUrls, Product + BreadcrumbList + Organization JSON-LD
   infrastructure/
     catalog/                     # Static*Repository — S1-T05
     cart/                        # browser storage adapter — Sprint 4
@@ -519,4 +520,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T07 are complete. Next: **S3-T08** — do not start automatically.
+There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T08 are complete. Next: **S3-T09** — do not start automatically.

@@ -323,7 +323,7 @@ Must match UI crumb trail.
 - Absolute URLs via `toCanonicalUrl` / `config/site.ts`
 - Category: Home → Category. Product with known category: Home → Category → Product. Uncategorized: Home → Product
 - Unknown `/c/` and `/p/` slugs: `notFound()` — no BreadcrumbList JSON-LD
-- Product JSON-LD on PDPs is unchanged. No UI or URL changes. Organization schema is later.
+- Product JSON-LD on PDPs is unchanged. No UI or URL changes. Organization JSON-LD is S3-T08 (root layout).
 
 ### Acceptance criteria
 
@@ -342,41 +342,53 @@ Breadcrumb schema shipped. S3-T08 recorded **NOT_STARTED**.
 
 ## S3-T08 — Organization Structured Data
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-JSON-LD Organization on the layout or home. Legal name **TBD** — use documented placeholder.
+Factual Schema.org Organization JSON-LD on the storefront, without inventing a legal entity.
 
 ### Dependencies
 
-S3-T02.
+S3-T02, S3-T03, S3-T06 (shared `JsonLd` renderer).
 
 ### Requirements
 
-Do not invent a real company name; use TBD placeholder from config.
+Do not invent `legalName`. Use the project brand **Mini Mystiq**. Listing/trading name “Enn2Gee Mini Mystiq” is not confirmed as a legal name.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Organization JSON-LD helper.
+- Config: `frontend/config/organization.ts` (public listing facts; not a legal-entity record)
+- Application helper: `buildOrganizationStructuredData` (`application/seo/organization-structured-data.ts`)
+- Site-wide render: root `app/layout.tsx` via existing `app/json-ld.tsx`
+- Canonical `url` and logo URL via `toCanonicalUrl` / `config/site.ts`
+- Logo: approved `/mini-mystiq-logo.png` only
+- Product and category pages do **not** emit a second Organization schema
+- Unknown `/c/` and `/p/` slugs still `notFound()` — no Product or BreadcrumbList JSON-LD. Next.js 404 error HTML does not include an Organization JSON-LD script.
+
+**Emitted properties:** `@context`, `@type` Organization, `name` (Mini Mystiq), `url`, `logo`, `telephone`, `address` (PostalAddress from the supplied listing).
+
+**Intentionally omitted (not confirmed):** `legalName`, `sameAs` / social profiles, email, foundingDate, founder, tax/registration IDs, `priceRange`, `aggregateRating`, `review`, `openingHours` / hours (LocalBusiness-specific; listing hours are not used), extra `contactPoint` fields, payment methods.
 
 ### Expected files/modules
 
-- Organization JSON-LD builder
-- Config placeholders
+- `frontend/config/organization.ts`
+- `frontend/application/seo/organization-structured-data.ts`
+- `frontend/app/layout.tsx` (one `JsonLd`)
 
 ### Acceptance criteria
 
-- JSON-LD present
-- Values come from config, not hardcoded scattered strings (single config module allowed)
+- Exactly one Organization JSON-LD on `/`, `/c/{slug}`, `/p/{slug}`
+- Values come from `config/organization.ts` + `config/site.ts`, not scattered strings
+- Existing Product and BreadcrumbList JSON-LD unchanged
 
 ### Testing requirements
 
-Unit test builder.
+Unit tests for schema shape, omitted invented fields, absolute URLs, serialization, and no duplicate page wiring.
 
 ### Definition of Done
 
-Organization schema shipped.
+Organization schema shipped. S3-T09 recorded **NOT_STARTED**.
 
 ---
 

@@ -67,7 +67,9 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S3-T07:** BreadcrumbList JSON-LD on `/c/[slug]` and `/p/[slug]`, matching the UI trail. Uncategorized products are Home → Product.
 
-**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, Organization JSON-LD. SEO-friendly URL strategy is deferred from original S3-T01.
+**S3-T08:** Organization JSON-LD from the root layout. Name Mini Mystiq; no `legalName`. Logo `/mini-mystiq-logo.png`. Listing telephone and address only.
+
+**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin. SEO-friendly URL strategy is deferred from original S3-T01.
 
 ## Architecture
 
@@ -142,7 +144,7 @@ Component and E2E testing remain later tasks. No coverage thresholds.
 
 ## SEO
 
-Category and product pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}` or `/p/{slug}`, OpenGraph). Product pages include the first product image in OpenGraph when present. Valid PDPs also include Schema.org Product JSON-LD (name, description, image, canonical URL — no invented offers or brand). Category and product pages include BreadcrumbList JSON-LD matching the visible crumbs. `/sitemap.xml` lists homepage, category, and product URLs from catalog data using the same origin as `metadataBase`. `/robots.txt` allows the public storefront and references that sitemap. Organization JSON-LD remains a later task. Canonical domain is TBD.
+Category and product pages implement `generateMetadata` (unique title/description, canonical `/c/{slug}` or `/p/{slug}`, OpenGraph). Product pages include the first product image in OpenGraph when present. Valid PDPs also include Schema.org Product JSON-LD (name, description, image, canonical URL — no invented offers or brand). Category and product pages include BreadcrumbList JSON-LD matching the visible crumbs. The root layout emits Organization JSON-LD once (brand Mini Mystiq; no `legalName`). `/sitemap.xml` lists homepage, category, and product URLs from catalog data using the same origin as `metadataBase`. `/robots.txt` allows the public storefront and references that sitemap. Canonical domain is TBD.
 
 ## Mobile-first
 

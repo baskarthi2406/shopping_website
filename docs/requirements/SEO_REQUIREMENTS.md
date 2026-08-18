@@ -17,7 +17,7 @@ Brand: **Mini Mystiq**. Domain and legal entity remain **TBD**.
 | robots.txt | Allow catalog; sitemap referenced; future Disallow TBD |
 | Product structured data | JSON-LD Product |
 | Breadcrumb structured data | JSON-LD BreadcrumbList |
-| Organization structured data | JSON-LD Organization (legal name TBD) |
+| Organization structured data | JSON-LD Organization (`name` Mini Mystiq; legal name TBD / omitted) |
 | OpenGraph | Title, description, image |
 | Image optimization | Next.js image pipeline; SEO filenames + meaningful alt (not the filename); approved `public/` assets (`DESIGN_ASSETS.md`) |
 | Semantic HTML | Landmarks, headings, lists |
@@ -76,7 +76,7 @@ Filter/sort **deferred**. No `?sort=` / facet URLs. Category canonicals remain `
 
 ## Implemented (S3-T01)
 
-Homepage `/` is a crawlable Option 1 storefront (hero, categories, catalog products, promo). One H1. Crawlable `/c/{slug}` and `/p/{slug}` links. No JSON-LD.
+Homepage `/` is a crawlable Option 1 storefront (hero, categories, catalog products, promo). One H1. Crawlable `/c/{slug}` and `/p/{slug}` links. Organization JSON-LD is S3-T08 (site-wide layout).
 
 ## Implemented (S3-T02)
 
@@ -143,7 +143,7 @@ Product JSON-LD on valid `/p/{slug}` pages:
 - **Omitted (no reliable domain data):** `offers`, `price`, `priceCurrency`, `sku`, `availability`, `brand` (storefront name Mini Mystiq is not assumed to be the product brand), `aggregateRating`, `review`, seller, shipping, size/color
 - Category not emitted as Schema.org `category` (minimum truthful Product schema)
 - Google Rich Results / Search Console validation is a post-deployment step
-- Organization and Offer schemas are later Sprint 3 tasks
+- Offer schemas remain later. Organization JSON-LD is S3-T08.
 
 ## Implemented (S3-T07)
 
@@ -154,7 +154,21 @@ BreadcrumbList JSON-LD on valid `/c/{slug}` and `/p/{slug}` pages:
 - Category: Home → Category. Product with a known category: Home → Category → Product. Uncategorized: Home → Product
 - Absolute `item` URLs from `toCanonicalUrl` / `config/site.ts`. Production domain remains **TBD**
 - Unknown category/product slugs: HTTP 404, no BreadcrumbList JSON-LD
-- Product JSON-LD on PDPs is unchanged. No extra invented levels. Organization schema is later.
+- Product JSON-LD on PDPs is unchanged. No extra invented levels. Organization JSON-LD is S3-T08 (layout, not this page).
+
+## Implemented (S3-T08)
+
+Organization JSON-LD from the root layout (`app/layout.tsx`):
+
+- Application helper: `buildOrganizationStructuredData` (`application/seo/organization-structured-data.ts`)
+- Facts: `config/organization.ts`. Canonical origin: `config/site.ts` / `NEXT_PUBLIC_SITE_URL`. Production domain remains **TBD**
+- Render: existing `app/json-ld.tsx`. Product and category pages do not add a second Organization block
+- Properties: `@context` `https://schema.org`, `@type` `Organization`, `name` **Mini Mystiq**, `url` (homepage canonical), `logo` (absolute `/mini-mystiq-logo.png`), `telephone` `090257 99377`, `address` PostalAddress (Ponnaiah Konar Complex, Avanam Road, Mudapulikkadu / Peravurani / Tamil Nadu / 614804 / IN)
+- Telephone and address come from a supplied business listing. They are public contact facts, **not** proof of a legal entity
+- Mix: `/` Organization only; `/c/{slug}` Organization + BreadcrumbList; `/p/{slug}` Organization + BreadcrumbList + Product
+- Unknown `/c/` and `/p/` slugs: HTTP 404, no Product/BreadcrumbList JSON-LD. Next.js 404 error HTML does not include an Organization JSON-LD script.
+- **Omitted (not confirmed):** `legalName` (do not use “Enn2Gee Mini Mystiq” as a legal name), `sameAs` / social profiles, email, foundingDate, founder, tax/registration IDs, `priceRange`, ratings/reviews, `openingHours` (listing hours exist but are LocalBusiness-specific and not emitted), extra contactPoint fields, payment methods
+- Not `@type` LocalBusiness
 
 ## Reviewed (S2-T07)
 
@@ -163,8 +177,10 @@ BreadcrumbList JSON-LD on valid `/c/{slug}` and `/p/{slug}` pages:
 ## TBD
 
 - Canonical domain
+- Legal entity / `legalName` (brand Mini Mystiq is not assumed to be the registered company name)
 - Trailing-slash policy (current homepage canonical/sitemap loc has no trailing slash; other paths have none)
 - Product brand, SKU, price, currency, availability, offers, reviews (extend JSON-LD when the domain has those fields)
+- Organization `sameAs`, email, identifiers, and opening hours (listing hours exist; not emitted on Organization)
 - Pagination SEO
 - Filtered-listing SEO (when filters exist)
 - hreflang / locales
