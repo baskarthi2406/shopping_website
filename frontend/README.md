@@ -55,9 +55,11 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S3-T01:** Option 1 homepage at `/` — hero, category circles, catalog product grid (`listProducts`, not featured), secondary promo, intro, trust bar. Mobile category menu is `details`/`summary` (no Client Component). Announcement/trust copy from DESIGN_OPTION_1 (operations TBD). Search, wishlist, account, and cart chrome are not implemented.
 
-**S3-T02:** unique titles, factual descriptions, path canonicals, and OpenGraph for `/`, `/c/[slug]`, and `/p/[slug]`. Unknown slugs are 404 + `noindex`. Category OpenGraph uses documented stand-in images. Site origin / `metadataBase` TBD (S3-T03).
+**S3-T02:** unique titles, factual descriptions, path canonicals, and OpenGraph for `/`, `/c/[slug]`, and `/p/[slug]`. Unknown slugs are 404 + `noindex`. Category OpenGraph uses documented stand-in images.
 
-**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD, absolute canonical domain). SEO-friendly URL strategy is deferred from original S3-T01.
+**S3-T03:** `config/site.ts` reads `NEXT_PUBLIC_SITE_URL` and layout sets `metadataBase`. Production domain is TBD. Copy `.env.example` to `.env.local` to set a local origin; omit it to fall back to `http://localhost:3000`. Hosted production must set a non-localhost origin.
+
+**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD). SEO-friendly URL strategy is deferred from original S3-T01.
 
 ## Architecture
 
@@ -101,12 +103,13 @@ Approved logo is served from `frontend/public/mini-mystiq-logo.png`. Catalog pro
 
 ## Configuration / environment variables
 
-No environment variables are required yet.
+| Name | Required | Purpose |
+|------|----------|---------|
+| `NEXT_PUBLIC_SITE_URL` | Hosted production | Public canonical origin (no path). Not a secret. Production hostname is **TBD**. |
 
-When they are needed:
+Local development may omit it; `config/site.ts` then uses `http://localhost:3000`. Copy `.env.example` to `.env.local` to set a value. Pages must not read `process.env` for this — use `config/site.ts`.
 
 - Put secrets in `.env.local` (gitignored). Never commit secrets.
-- Document non-secret names in `.env.example` only when a task actually introduces them.
 - Prefer server-only variables unless the value must reach the browser (`NEXT_PUBLIC_*`).
 - Bind infrastructure in `config/` (S1-T05+). Pages must not read ad-hoc `process.env` for data-source choice.
 

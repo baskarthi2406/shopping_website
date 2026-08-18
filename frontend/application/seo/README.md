@@ -10,4 +10,4 @@ Pages call helpers; they do not copy-paste metadata objects. The Next.js Metadat
 
 **S3-T01:** `home-metadata.ts` — homepage title, description, canonical `/`, hero image.
 
-**S3-T02:** shared `IndexablePageMetadata`; category OpenGraph stand-in images; `buildNotFoundMetadata`; unique titles across page types. JSON-LD, sitemap, and robots remain later Sprint 3. Canonical domain / `metadataBase` is TBD (S3-T03).
+**S3-T03:** `config/site.ts` + layout `metadataBase` from `NEXT_PUBLIC_SITE_URL`. Production domain TBD. JSON-LD, sitemap, and robots remain later Sprint 3.

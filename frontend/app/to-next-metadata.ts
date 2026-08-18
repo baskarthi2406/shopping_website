@@ -6,7 +6,8 @@ import type {
 
 /**
  * Maps application SEO fields to the Next.js Metadata API.
- * Canonicals stay as paths; site origin remains TBD (S3-T03).
+ * Canonicals and OpenGraph URLs stay as paths; layout metadataBase
+ * (config/site.ts) supplies the site origin.
  */
 export function toNextMetadata(meta: IndexablePageMetadata): Metadata {
   return {

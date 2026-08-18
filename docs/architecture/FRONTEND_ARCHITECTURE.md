@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S3-T02:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01).
+**Task:** S1-T02 (layer contract). **As implemented through S3-T03:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01).
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
@@ -195,7 +195,7 @@ Do not copy-paste metadata objects in every `page.tsx`. Reuse helpers under `app
 
 Index: `/`, `/c/*`, `/p/*`. Do not index `/cart`, `/checkout`, admin.
 
-Canonical **domain** TBD (`NEXT_PUBLIC_SITE_URL`). Legal name TBD; brand Mini Mystiq.
+Canonical **domain** TBD. Configure `NEXT_PUBLIC_SITE_URL`; `config/site.ts` is the source of truth and layout sets `metadataBase`. Legal name TBD; brand Mini Mystiq.
 
 ---
 
@@ -403,7 +403,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S3-T02)
+## 17. Folder structure (as implemented through S3-T03)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -462,6 +462,7 @@ frontend/
     storefront/trust-bar.tsx          # S3-T01
   config/
     catalog.ts                   # composition root (S1-T05)
+    site.ts                      # S3-T03 canonical origin / metadataBase
   domain/
     catalog/                     # Product, Category, Uom — types in S1-T05
     cart/                        # Cart, CartItem — Sprint 4
@@ -515,4 +516,4 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01 homepage and S3-T02 metadata are complete. Next: **S3-T03** — do not start automatically.
+There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T03 are complete. Next: **S3-T04** — do not start automatically.

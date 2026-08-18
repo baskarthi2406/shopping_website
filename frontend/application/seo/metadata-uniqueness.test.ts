@@ -49,5 +49,9 @@ describe("indexable metadata uniqueness", () => {
     expect(home.canonicalPath).toBe("/");
     expect(kids.canonicalPath).toBe("/c/kids");
     expect(dress.canonicalPath).toBe("/p/pink-white-pleated-baby-dress");
+    expect(home.canonicalPath + kids.canonicalPath + dress.canonicalPath).not.toContain(
+      "?",
+    );
+    expect(home.canonicalPath).not.toMatch(/^https?:\/\//);
   });
 });

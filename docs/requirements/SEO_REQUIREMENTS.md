@@ -42,7 +42,7 @@ Category pages at `/c/{slug}`:
 - `generateMetadata` from category data via `buildCategoryMetadata` (`application/seo/category-metadata.ts`)
 - Unique title `{Category name} | Mini Mystiq`
 - Description from category copy when present; otherwise a factual fallback (`{name} at Mini Mystiq. Baby Clothes & Toys.`) — no invented marketing claims
-- Canonical path `/c/{slug}` (no query parameters). Absolute origin remains TBD (`NEXT_PUBLIC_SITE_URL`)
+- Canonical path `/c/{slug}` (no query parameters). Absolute origin from `NEXT_PUBLIC_SITE_URL` / `metadataBase` (S3-T03). Production domain TBD.
 - OpenGraph title, description, and path `url`
 - One H1 (category name); crawlable `/p/{slug}` product links; image `alt` from catalog data
 - Unknown category: HTTP 404 + `noindex` (Next.js `notFound()`). Do not index fake categories
@@ -90,7 +90,17 @@ Standardized dynamic metadata for `/`, `/c/{slug}`, `/p/{slug}`:
 - Product OpenGraph image: primary product image
 - Unknown catalog slugs and `not-found.tsx`: title `Page not found | Mini Mystiq`, description “That page does not exist.”, `noindex`, no canonical
 - No JSON-LD, sitemap, or `robots.ts`
-- Absolute OG image host / `metadataBase` remains TBD (S3-T03). Do not invent a production domain.
+
+## Implemented (S3-T03)
+
+- Single source of truth: `config/site.ts` (`NEXT_PUBLIC_SITE_URL`)
+- `app/layout.tsx` sets `metadataBase` from `getMetadataBase()`
+- Path canonicals unchanged; Next.js resolves them to `{origin}/`, `{origin}/c/{slug}`, `{origin}/p/{slug}`
+- OpenGraph `url` and `image` resolve against the same origin
+- Missing env: local fallback `http://localhost:3000` (not for hosted production)
+- Hosted production (`VERCEL_ENV=production` or `REQUIRE_SITE_URL=true`) requires a non-localhost origin
+- Production Mini Mystiq domain remains **TBD** — set the env before live deploy
+- `.env.example` documents the variable. Invalid pages still have no canonical
 
 ## Reviewed (S2-T07)
 

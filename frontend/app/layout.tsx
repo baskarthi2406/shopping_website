@@ -2,9 +2,11 @@ import type { Metadata } from "next";
 import { toCatalogNavItems } from "@/application/catalog";
 import { StorefrontShell } from "@/components/storefront/storefront-shell";
 import { catalog } from "@/config/catalog";
+import { getMetadataBase } from "@/config/site";
 import "./globals.css";
 
 export const metadata: Metadata = {
+  metadataBase: getMetadataBase(),
   title: "Mini Mystiq",
   description: "Baby Clothes & Toys",
 };

@@ -127,13 +127,13 @@ Dynamic metadata shipped. S3-T03 recorded **NOT_STARTED**.
 
 ---
 
-## S3-T03 — Canonical URLs
+## S3-T03 — Canonical Site URL and Metadata Base
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Emit a canonical URL for each indexable page.
+Emit a canonical URL for each indexable page, with a single configured site origin for `metadataBase`.
 
 ### Dependencies
 
@@ -141,16 +141,18 @@ S3-T01, S3-T02.
 
 ### Requirements
 
-Canonical domain **TBD** — use a documented placeholder base URL via env (no secrets).
+Canonical domain **TBD** — use a documented placeholder base URL via env (no secrets). Do not invent a Mini Mystiq hostname.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Canonical link/metadata on indexable routes.
-
-### Expected files/modules
-
-- Canonical helper
-- Env example without secrets (`NEXT_PUBLIC_SITE_URL` or equivalent)
+- `config/site.ts` is the single source of truth for `NEXT_PUBLIC_SITE_URL`
+- `layout.tsx` sets Next.js `metadataBase` from `getMetadataBase()`
+- SEO helpers still emit path-only canonicals (`/`, `/c/{slug}`, `/p/{slug}`); Next.js resolves them against `metadataBase`
+- `.env.example` documents the variable (empty; production domain TBD)
+- Local unset env falls back to `http://localhost:3000`
+- Hosted production (`VERCEL_ENV=production` or `REQUIRE_SITE_URL=true`) requires a non-localhost origin
+- Invalid `/c/` and `/p/` routes remain 404 + `noindex` with no canonical
+- No URL strategy change, JSON-LD, sitemap, or robots
 
 ### Acceptance criteria
 
@@ -159,11 +161,11 @@ Canonical link/metadata on indexable routes.
 
 ### Testing requirements
 
-Unit tests for canonical serialization.
+Unit tests for origin parsing, absolute URL joining, hosted-production guards, and path-only helper output.
 
 ### Definition of Done
 
-Canonicals present.
+Canonical origin infrastructure shipped. S3-T04 recorded **NOT_STARTED**.
 
 ---
 

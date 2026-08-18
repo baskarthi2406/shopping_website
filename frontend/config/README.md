@@ -1,6 +1,6 @@
 # Configuration
 
-Binds which repository implementation to use (static vs HTTP). Holds non-secret public settings such as site URL for canonicals (**TBD**).
+Binds which repository implementation to use (static vs HTTP). Holds non-secret public settings such as the canonical site origin.
 
 **Must not contain:** secrets, business rules, catalog fixture rows.
 
@@ -8,4 +8,6 @@ Binds which repository implementation to use (static vs HTTP). Holds non-secret 
 
 Phase 2 swaps implementations in this file only (ADR 0004).
 
-Secrets go in `.env.local` (gitignored). No environment variables are required yet.
+`site.ts` is the single source of truth for `NEXT_PUBLIC_SITE_URL` (canonical origin / `metadataBase`). The production domain is **TBD** and is not hardcoded. Copy `.env.example` to `.env.local` when you need a local override. Hosted production (`VERCEL_ENV=production` or `REQUIRE_SITE_URL=true`) must set a non-localhost origin.
+
+Secrets go in `.env.local` (gitignored). The site URL is not a secret.
