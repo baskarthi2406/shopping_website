@@ -55,7 +55,9 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S3-T01:** Option 1 homepage at `/` — hero, category circles, catalog product grid (`listProducts`, not featured), secondary promo, intro, trust bar. Mobile category menu is `details`/`summary` (no Client Component). Announcement/trust copy from DESIGN_OPTION_1 (operations TBD). Search, wishlist, account, and cart chrome are not implemented.
 
-**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD). SEO-friendly URL strategy is deferred from original S3-T01.
+**S3-T02:** unique titles, factual descriptions, path canonicals, and OpenGraph for `/`, `/c/[slug]`, and `/p/[slug]`. Unknown slugs are 404 + `noindex`. Category OpenGraph uses documented stand-in images. Site origin / `metadataBase` TBD (S3-T03).
+
+**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin, SEO suite remainder (`sitemap`, `robots`, JSON-LD, absolute canonical domain). SEO-friendly URL strategy is deferred from original S3-T01.
 
 ## Architecture
 

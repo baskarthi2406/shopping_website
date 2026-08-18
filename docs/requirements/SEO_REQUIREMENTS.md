@@ -76,15 +76,21 @@ Filter/sort **deferred**. No `?sort=` / facet URLs. Category canonicals remain `
 
 ## Implemented (S3-T01)
 
-Homepage `/`:
+Homepage `/` is a crawlable Option 1 storefront (hero, categories, catalog products, promo). One H1. Crawlable `/c/{slug}` and `/p/{slug}` links. No JSON-LD.
 
-- `generateMetadata` via `buildHomeMetadata`
-- Title `Mini Mystiq | Baby Clothes & Toys`
-- Factual description (clothing catalog; no invented offers)
-- Canonical `/`
-- OpenGraph title, description, hero image
-- One H1 (Option 1 hero headline); crawlable `/c/{slug}` and `/p/{slug}` links
-- No JSON-LD
+## Implemented (S3-T02)
+
+Standardized dynamic metadata for `/`, `/c/{slug}`, `/p/{slug}`:
+
+- Application helpers: `buildHomeMetadata`, `buildCategoryMetadata`, `buildProductMetadata`, `buildNotFoundMetadata`
+- Next.js mapping: `app/to-next-metadata.ts` (routing layer; application stays framework-free)
+- Unique titles; factual descriptions; path canonicals; OpenGraph title/description/url/`website` type
+- Homepage OpenGraph image: approved hero `baby-sleeveless-sets-new-collection-banner.jpg`
+- Category OpenGraph image: documented product-photo stand-in when present
+- Product OpenGraph image: primary product image
+- Unknown catalog slugs and `not-found.tsx`: title `Page not found | Mini Mystiq`, description “That page does not exist.”, `noindex`, no canonical
+- No JSON-LD, sitemap, or `robots.ts`
+- Absolute OG image host / `metadataBase` remains TBD (S3-T03). Do not invent a production domain.
 
 ## Reviewed (S2-T07)
 

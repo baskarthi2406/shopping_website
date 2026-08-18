@@ -97,9 +97,10 @@ See the live Sprint 2 section above. Status: **COMPLETED**.
 | Task ID | Name | Status |
 |---------|------|--------|
 | S3-T01 | Homepage Storefront Implementation | **COMPLETED** |
-| S3-T02 | Dynamic Metadata | **NOT_STARTED** |
+| S3-T02 | Dynamic Metadata | **COMPLETED** |
+| S3-T03 | Canonical URLs | **NOT_STARTED** |
 
-Original “SEO-Friendly URL Strategy” was reordered out of S3-T01 and remains **NOT_STARTED** (deferred in `docs/sprints/SPRINT-03.md`). Do not start S3-T02 automatically.
+Original “SEO-Friendly URL Strategy” was reordered out of S3-T01 and remains **NOT_STARTED** (deferred in `docs/sprints/SPRINT-03.md`). Do not start S3-T03 automatically.
 
 ### Sprint 4 — Cart & Storefront Completion
 

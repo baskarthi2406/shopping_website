@@ -88,7 +88,7 @@ Human-readable slugs; no session IDs in URLs. Exact pattern TBD in this task; re
 
 ## S3-T02 — Dynamic Metadata
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
@@ -102,13 +102,16 @@ S3-T01.
 
 No generic identical title on all catalog pages. TBD brand suffix allowed as placeholder.
 
-### Implementation scope
+### Implementation scope (as implemented)
 
-Next.js metadata API wired through application queries.
+Standardized application SEO helpers and Next.js wiring. No JSON-LD, sitemap, robots, or domain invention.
 
-### Expected files/modules
-
-- Metadata helpers / `generateMetadata` on routes
+- Shared `IndexablePageMetadata` + `buildNotFoundMetadata`
+- `buildHomeMetadata` / `buildCategoryMetadata` / `buildProductMetadata`
+- `app/to-next-metadata.ts` maps helpers to the Next.js Metadata API (routing layer)
+- Category OpenGraph uses documented product-photo stand-ins when present
+- Unknown `/c/` and `/p/` slugs: HTTP 404, `noindex`, no canonical
+- Canonicals remain paths (`/`, `/c/{slug}`, `/p/{slug}`). Site origin **TBD** (S3-T03). Build warns that OpenGraph image URLs fall back to `http://localhost:3000` until `metadataBase` exists — do not invent a production domain here.
 
 ### Acceptance criteria
 
@@ -116,11 +119,11 @@ Next.js metadata API wired through application queries.
 
 ### Testing requirements
 
-Unit tests for metadata builders.
+Unit tests for metadata builders, uniqueness, and no invented commercial claims.
 
 ### Definition of Done
 
-Dynamic metadata shipped.
+Dynamic metadata shipped. S3-T03 recorded **NOT_STARTED**.
 
 ---
 

@@ -12,5 +12,17 @@ describe("buildHomeMetadata", () => {
     expect(meta.image.src).toBe(
       "/baby-sleeveless-sets-new-collection-banner.jpg",
     );
+    expect(meta.image.alt).toBe(
+      "Sage and dusty rose baby sleeveless top and shorts sets",
+    );
+  });
+
+  it("does not invent promotional claims", () => {
+    const meta = buildHomeMetadata();
+    const combined = `${meta.title} ${meta.description}`;
+
+    expect(combined).not.toMatch(
+      /\b(best|cheap|online|buy|premium|organic|handmade|designer|luxury|free delivery|lowest prices)\b/i,
+    );
   });
 });

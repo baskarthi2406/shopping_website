@@ -105,4 +105,22 @@ describe("buildProductMetadata", () => {
     expect(meta.canonicalPath).toBe("/p/teens-item");
     expect(meta.canonicalPath).not.toContain("?");
   });
+
+  it("does not invent price, stock, or material claims", () => {
+    const meta = buildProductMetadata(
+      product({
+        id: "olive-green-patterned-dress",
+        slug: "olive-green-patterned-dress",
+        name: "Olive green patterned dress",
+        description: "Olive green patterned dress on a wooden hanger",
+      }),
+    );
+    const combined = `${meta.title} ${meta.description}`;
+
+    expect(combined).not.toMatch(
+      /\b(best|cheap|premium|organic|handmade|linen|in stock|sku)\b/i,
+    );
+    expect(meta).not.toHaveProperty("price");
+    expect(meta).not.toHaveProperty("availability");
+  });
 });

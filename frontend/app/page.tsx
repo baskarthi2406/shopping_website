@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { toNextMetadata } from "@/app/to-next-metadata";
 import { toHomePageViewModel } from "@/application/catalog";
 import { buildHomeMetadata } from "@/application/seo/home-metadata";
 import { HomeCategories } from "@/components/storefront/home-categories";
@@ -10,27 +11,7 @@ import { TrustBar } from "@/components/storefront/trust-bar";
 import { catalog } from "@/config/catalog";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const meta = buildHomeMetadata();
-
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: {
-      canonical: meta.canonicalPath,
-    },
-    openGraph: {
-      title: meta.title,
-      description: meta.description,
-      url: meta.canonicalPath,
-      type: "website",
-      images: [
-        {
-          url: meta.image.src,
-          alt: meta.image.alt,
-        },
-      ],
-    },
-  };
+  return toNextMetadata(buildHomeMetadata());
 }
 
 export default async function Home() {

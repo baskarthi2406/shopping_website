@@ -1,8 +1,7 @@
-export type HomeMetadata = {
-  readonly title: string;
-  readonly description: string;
-  readonly canonicalPath: string;
-  readonly image: { readonly src: string; readonly alt: string };
+import type { IndexablePageMetadata, SeoImage } from "./page-metadata";
+
+export type HomeMetadata = IndexablePageMetadata & {
+  readonly image: SeoImage;
 };
 
 /**

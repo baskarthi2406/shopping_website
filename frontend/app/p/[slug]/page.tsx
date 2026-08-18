@@ -1,7 +1,9 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { toNextMetadata, toNextNotFoundMetadata } from "@/app/to-next-metadata";
 import { toProductPageViewModel } from "@/application/catalog";
+import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
 import { buildProductMetadata } from "@/application/seo/product-metadata";
 import { ProductDetail } from "@/components/storefront/product-detail";
 import { Container } from "@/components/ui/container";
@@ -20,37 +22,10 @@ export async function generateMetadata({
   const data = await loadProductPage(slug);
 
   if (data === null) {
-    return {
-      title: "Page not found | Mini Mystiq",
-      robots: { index: false, follow: false },
-    };
+    return toNextNotFoundMetadata(buildNotFoundMetadata());
   }
 
-  const meta = buildProductMetadata(data.product);
-
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: {
-      canonical: meta.canonicalPath,
-    },
-    openGraph: {
-      title: meta.title,
-      description: meta.description,
-      url: meta.canonicalPath,
-      type: "website",
-      ...(meta.image
-        ? {
-            images: [
-              {
-                url: meta.image.src,
-                alt: meta.image.alt,
-              },
-            ],
-          }
-        : {}),
-    },
-  };
+  return toNextMetadata(buildProductMetadata(data.product));
 }
 
 export default async function ProductPage({ params }: ProductPageProps) {

@@ -1,11 +1,7 @@
 import type { Product } from "@/domain/catalog";
+import type { IndexablePageMetadata } from "./page-metadata";
 
-export type ProductMetadata = {
-  readonly title: string;
-  readonly description: string;
-  readonly canonicalPath: string;
-  readonly image: { readonly src: string; readonly alt: string } | null;
-};
+export type ProductMetadata = IndexablePageMetadata;
 
 /**
  * Product document metadata from catalog data.

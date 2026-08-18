@@ -32,16 +32,16 @@ Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
 ## Current Sprint
 
 **Sprint 3 — Homepage + SEO**  
-Status: **IN_PROGRESS** (S3-T01 completed)
+Status: **IN_PROGRESS** (S3-T01 … S3-T02 completed)
 
 ---
 
 ## Current Task
 
-**S3-T02 — Dynamic Metadata**  
+**S3-T03 — Canonical URLs**  
 Status: **NOT_STARTED**
 
-Do not start S3-T02 automatically.
+Do not start S3-T03 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-03.md`.
 
@@ -72,6 +72,7 @@ Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
 - Catalog nav + shared breadcrumbs (S2-T04)
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
+- Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
 ### Backend (Phase 2 — not started)
@@ -92,22 +93,23 @@ Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
 - S2-T06 — Expand Static Catalog Fixtures
 - S2-T07 — Catalog Review (**Sprint 2 COMPLETED**)
 - S3-T01 — Homepage Storefront Implementation
+- S3-T02 — Dynamic Metadata
 
 ## In progress
 
-- None. Do not start S3-T02 automatically.
+- None. Do not start S3-T03 automatically.
 
 ## Pending
 
-- S3-T02 — Dynamic Metadata (next)
+- S3-T03 — Canonical URLs (next)
 - Deferred original S3-T01 — SEO-Friendly URL Strategy (not started)
 - Remainder of Sprint 3–11
 
 ## Blockers
 
-- None for starting S3-T02 when explicitly requested.
-- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan and several dress categories, dedicated category/hero lifestyle art, toys (no approved toy assets), pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules. Announcement/trust-bar copy is from Option 1; operations still TBD.
+- None for starting S3-T03 when explicitly requested.
+- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan and several dress categories, dedicated category/hero lifestyle art, toys (no approved toy assets), pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules. Announcement/trust-bar copy is from Option 1; operations still TBD. Canonical site origin remains TBD (`metadataBase` / `NEXT_PUBLIC_SITE_URL`).
 
 ## Next task (do not start automatically)
 
-**S3-T02 — Dynamic Metadata**
+**S3-T03 — Canonical URLs**

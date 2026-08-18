@@ -63,6 +63,37 @@ describe("buildCategoryMetadata", () => {
     );
   });
 
+  it("includes the documented stand-in image when present", () => {
+    const meta = buildCategoryMetadata(
+      category({
+        id: "kids",
+        slug: "kids",
+        name: "Kids",
+        image: {
+          src: "/kids-striped-shirts-burgundy-and-sage.jpg",
+          alt: "Burgundy and sage striped kids shirts",
+        },
+      }),
+    );
+
+    expect(meta.image).toEqual({
+      src: "/kids-striped-shirts-burgundy-and-sage.jpg",
+      alt: "Burgundy and sage striped kids shirts",
+    });
+  });
+
+  it("omits image when the category has no stand-in", () => {
+    const meta = buildCategoryMetadata(
+      category({
+        id: "infants",
+        slug: "infants",
+        name: "Infants",
+      }),
+    );
+
+    expect(meta.image).toBeNull();
+  });
+
   it("does not add query parameters to the canonical path", () => {
     const meta = buildCategoryMetadata(
       category({
@@ -74,5 +105,19 @@ describe("buildCategoryMetadata", () => {
 
     expect(meta.canonicalPath).toBe("/c/teens");
     expect(meta.canonicalPath).not.toContain("?");
+  });
+
+  it("does not invent promotional claims in the fallback description", () => {
+    const meta = buildCategoryMetadata(
+      category({
+        id: "women",
+        slug: "women",
+        name: "Women",
+      }),
+    );
+
+    expect(meta.description).not.toMatch(
+      /\b(best|cheap|premium|sale|discount)\b/i,
+    );
   });
 });

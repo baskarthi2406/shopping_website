@@ -1,8 +1,10 @@
 import { cache } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
+import { toNextMetadata, toNextNotFoundMetadata } from "@/app/to-next-metadata";
 import { toCategoryPageViewModel } from "@/application/catalog";
 import { buildCategoryMetadata } from "@/application/seo/category-metadata";
+import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
 import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
 import { ProductCard } from "@/components/storefront/product-card";
 import { Container } from "@/components/ui/container";
@@ -21,27 +23,10 @@ export async function generateMetadata({
   const data = await loadCategoryPage(slug);
 
   if (data === null) {
-    return {
-      title: "Page not found | Mini Mystiq",
-      robots: { index: false, follow: false },
-    };
+    return toNextNotFoundMetadata(buildNotFoundMetadata());
   }
 
-  const meta = buildCategoryMetadata(data.category);
-
-  return {
-    title: meta.title,
-    description: meta.description,
-    alternates: {
-      canonical: meta.canonicalPath,
-    },
-    openGraph: {
-      title: meta.title,
-      description: meta.description,
-      url: meta.canonicalPath,
-      type: "website",
-    },
-  };
+  return toNextMetadata(buildCategoryMetadata(data.category));
 }
 
 export default async function CategoryPage({ params }: CategoryPageProps) {
