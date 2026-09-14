@@ -1,6 +1,27 @@
 export type { CategoryRepository } from "./category-repository";
 export type { ProductRepository } from "./product-repository";
 export type { UomRepository } from "./uom-repository";
+export {
+  createCollectionResponse,
+  createDetailResponse,
+  createErrorResponse,
+  createPaginatedResponse,
+  createPagination,
+  toProductSummary,
+  type CatalogErrorCode,
+  type CategoryDetailResult,
+  type CategoryListResult,
+  type CollectionResult,
+  type CollectionResponse,
+  type DetailResult,
+  type DetailResponse,
+  type ErrorResponse,
+  type PaginatedResult,
+  type PaginatedResponse,
+  type Pagination,
+  type ProductDetailResult,
+  type ProductListResult,
+} from "./catalog-contracts";
 export type { BreadcrumbItemViewModel } from "./breadcrumb-view-model";
 export {
   toCatalogNavItems,

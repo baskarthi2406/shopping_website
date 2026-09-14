@@ -14,9 +14,9 @@ work must not be mistaken for this production backend.
 | Database | PostgreSQL |
 | Shape | **Modular monolith** (ADR 0003) |
 
-ORM and migrations: **TBD** in Sprint 6. The stable storefront-facing API/domain
-contract starts in S4-T03; runtime, versioning, and error envelope remain TBD
-until that task.
+ORM and migrations: **TBD** in Sprint 6. S4-T03 defined transport-neutral
+storefront domain and response contracts. Runtime, versioning, endpoint paths,
+and transport status-code mapping remain implementation decisions.
 
 ADR 0005 requires raw dummy and Zoho DTOs to remain behind infrastructure
 mappers.
@@ -79,7 +79,7 @@ Routers do not contain business rules and do not import ORM models.
 
 ## API boundary
 
-The Mini Mystiq-owned API contract is defined before implementation in S4-T03.
+The Mini Mystiq-owned API contract was defined before implementation in S4-T03.
 Version/prefix are TBD; `/api/v1/` is only a prior proposal.
 
 Frontend `Http*Repository` implementations consume this API from the storefront.

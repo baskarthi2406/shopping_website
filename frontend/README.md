@@ -86,6 +86,13 @@ hierarchy dropdowns. Search, Account, Cart, and Track Your Order are disabled
 visual entry points only. Homepage category tiles remain the existing five
 image-backed categories.
 
+**S4-T03:** provider-independent contracts define recursive categories,
+product summaries/details, generic variant attributes, nullable SKU/UOM/
+pricing/inventory, publication and availability status, product pagination,
+and consistent detail errors. Static fixtures keep unknown commerce values
+null and no longer synthesize default variants. See
+`docs/architecture/STOREFRONT_CONTRACTS.md`.
+
 **Not implemented yet:** dummy API, API repository, cart/search/account/order
 behavior, filters/sort, admin, or Zoho integration. S3-T10 Image Optimization
 and the original SEO-friendly URL strategy are deferred.

@@ -46,13 +46,9 @@ These are model/contract gaps, not defects to fix in S4-T01:
 
 - Category hierarchy/UI gap: resolved in S4-T02 with `parentId`, derived
   recursive `children`, `visibility`, `showInMenu`, and recursive navigation.
-  API nullability/order and category SEO transport fields remain S4-T03.
-- `Product` already has images, category ids, variants, UOM, and inventory
-  status. Future contracts need nullable/optional SKU, pricing, richer
-  inventory, publication/status, and an explicit category relationship.
-- `ProductVariant` currently has only `id`, optional `size`, and optional
-  `color`. Future contracts need nullable/optional SKU, generic
-  attributes/options, pricing, inventory, and status.
+  S4-T03 later formalized ordered recursive category responses.
+- S4-T03 resolved the product/variant contract gaps with nullable SKU/UOM/
+  pricing/inventory, publication status, and generic variant attributes.
 - `listByCategorySlug` needs descendant-category semantics to be decided before
   hierarchical category listings are implemented.
 - `StaticProductRepository.listByCategorySlug()` directly imports static
@@ -60,8 +56,8 @@ These are model/contract gaps, not defects to fix in S4-T01:
   implementation; later HTTP/Zoho repositories should use an API query,
   category id, or application orchestration instead of copying this
   cross-fixture coupling.
-- Dummy transport DTOs, stable Mini Mystiq API DTOs, domain models, view models,
-  and future Zoho DTOs must be separate types with explicit mappers.
+- Raw dummy/Zoho DTOs, stable Mini Mystiq domain/application contracts, and
+  view models must remain separate with explicit mappers.
 
 Unknown values must remain nullable/optional. This audit does not add fields or
 invent catalog values.
@@ -127,14 +123,14 @@ Mini Mystiq-owned domain/API contracts.
 
 - The exact Zoho POS API schema, authentication, rate limits, pagination, and
   availability are unverified; they remain TBD until S7.
-- The dummy API runtime and transport are TBD until S4-T03. S4-T01 does not
-  choose Next.js route handlers, FastAPI, or another server.
+- S4-T03 defined transport-neutral response contracts but intentionally did not
+  choose Next.js route handlers, FastAPI, or another dummy runtime.
 - S4-T02 validates category cycles/orphans and preserves repository order;
-  S4-T03 must formalize API menu ordering.
+  S4-T03 formalized response order as presentation-significant.
 - Product/category cardinality and whether category listings include descendants
   must be explicit before API implementation.
-- Pricing currency, tax, inventory quantities, status values, variant option
-  vocabulary, and SKU ownership remain TBD.
+- Pricing/tax values, inventory quantities, variant option values, and SKU/UOM
+  source data remain TBD; their nullable provider-independent shapes are fixed.
 - Search, account, cart, and Track Your Order are customer navigation goals, not
   implemented behavior in this task.
 

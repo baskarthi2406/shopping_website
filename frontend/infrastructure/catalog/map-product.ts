@@ -14,8 +14,11 @@ export function mapProduct(record: ProductRecord): Product {
     description: record.description,
     images: record.images,
     categoryIds: record.categoryIds,
-    variants: [{ id: `${record.id}-default` }],
-    uomCode: null,
-    inventoryStatus: "unknown",
+    sku: null,
+    uom: null,
+    pricing: null,
+    inventory: null,
+    status: "active",
+    variants: [],
   };
 }

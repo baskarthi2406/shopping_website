@@ -14,5 +14,11 @@ for static, dummy API, production, and Zoho-backed repositories.
 
 **S4-T02:** `toCatalogNavItems` selects visible, menu-enabled roots and maps
 recursive domain children to `/c/{slug}` navigation view models. It contains no
-customer taxonomy constants. API/transport contracts remain S4-T03; transport
-and Zoho DTOs must not be added here.
+customer taxonomy constants.
+
+**S4-T03:** `catalog-contracts.ts` defines transport-neutral collection, detail,
+pagination, and error envelopes. Category lists are ordered recursive trees;
+product lists contain `ProductSummary` plus minimal page pagination; details
+contain full products. Dummy/Zoho DTOs must not be added here.
+
+Full semantics: `docs/architecture/STOREFRONT_CONTRACTS.md`.

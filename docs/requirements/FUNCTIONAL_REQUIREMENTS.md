@@ -27,10 +27,13 @@ The public site must eventually allow visitors to:
   descendant-listing behavior are **TBD**.
 - Categories require parent/child hierarchy, visibility, and menu-display
   semantics. S4-T02 implements these in the domain/static repository and
-  recursive UI; S4-T03 will formalize transport contracts.
-- Units of measure (UOM) are a planned domain concept (needed in Phase 2 admin; Phase 1 mock data may include a simple UOM field).
-- Product attributes beyond name, description, images, price display, and category: **TBD**.
-- Variants (size/color): **TBD**.
+  recursive UI; S4-T03 defines ordered recursive application responses.
+- Units of measure (UOM) use a nullable code/label contract; actual values and
+  management behavior are **TBD**.
+- Product SKU, pricing, inventory, and publication fields have nullable
+  provider-independent shapes; actual business values remain **TBD**.
+- Variants use generic name/value attributes for size, color, or other options;
+  actual option vocabulary and values remain **TBD**.
 - Stock display on the storefront: **TBD**.
 - Listing filter/sort: **TBD**. S2-T05 deferred this; see `CATALOG_FILTER_SORT.md`. Do not invent facets.
 - Phase 1 static catalog (S2-T06, reviewed S2-T07): 12 approved product photos. Toys pending assets. Five dresses remain uncategorized (age/taxonomy TBD). Infants/teens/women may stay empty.

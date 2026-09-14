@@ -29,13 +29,27 @@ export function mapCategories(
   records: readonly CategoryRecord[],
 ): readonly Category[] {
   const recordsById = new Map<string, CategoryRecord>();
+  const categoryIdsBySlug = new Map<string, string>();
   const childrenByParentId = new Map<string, CategoryRecord[]>();
 
   for (const record of records) {
+    if (record.id.trim().length === 0) {
+      throw new Error("Category id must be non-empty");
+    }
+    if (record.name.trim().length === 0) {
+      throw new Error(`Category name must be non-empty: ${record.id}`);
+    }
     if (recordsById.has(record.id)) {
       throw new Error(`Duplicate category id: ${record.id}`);
     }
+    const existingSlugId = categoryIdsBySlug.get(record.slug);
+    if (existingSlugId !== undefined) {
+      throw new Error(
+        `Duplicate category slug ${record.slug}: ${existingSlugId}, ${record.id}`,
+      );
+    }
     recordsById.set(record.id, record);
+    categoryIdsBySlug.set(record.slug, record.id);
 
     if (record.parentId !== null) {
       const siblings = childrenByParentId.get(record.parentId) ?? [];

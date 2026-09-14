@@ -34,17 +34,32 @@ later sprints.
 
 - Dummy and Zoho implementations must satisfy the same application semantics so
   replacing one does not require a storefront rewrite.
-- The dummy API runtime, endpoint paths, pagination, error envelope, and exact
-  DTO fields remain TBD for S4-T03. This ADR does not select a server framework.
+- Recursive categories are data-driven and have no fixed maximum depth.
+- Product lists use `ProductSummary`; details use `Product` with generic
+  name/value variant attributes. Unknown SKU, UOM, price, and inventory values
+  are nullable, and absent real variants are an empty collection.
+- Pricing uses current price plus optional compare-at price. Inventory separates
+  nullable on-hand, available-to-sell, and reserved quantities from availability
+  status. Neither contract implements calculations or synchronization.
+- Product lists use minimal page-number pagination (`page`, `pageSize`, `total`,
+  `hasNext`). Category navigation trees are ordered and unpaginated.
+- Success uses a `data` envelope; errors use a provider-independent `error`
+  envelope. Missing detail is `not_found`; empty lists remain successful.
+- Application IDs and public SEO slugs are separate identities. Public routes
+  remain `/c/{slug}` and `/p/{slug}` and never expose Zoho item IDs by default.
+- The response contract is transport-neutral. Dummy API runtime, endpoint paths,
+  and transport status-code mapping remain implementation decisions; this ADR
+  does not select a server framework.
 - The planned FastAPI modular-monolith direction (ADR 0003) remains accepted for
   the production backend unless a later ADR changes it. Its schedule moves to
   Sprint 6.
 
 ## Consequences
 
-- S4-T02 can design hierarchical, data-driven navigation without embedding
-  customer taxonomy in React.
-- S4-T03 must define separate API DTO, domain, and view-model types.
+- Hierarchical navigation does not embed customer taxonomy in React.
+- S4-T03 defines provider-independent domain models and application response
+  envelopes. Raw dummy and Zoho DTOs remain separate infrastructure types when
+  introduced; no duplicate transport model is created before a transport exists.
 - S4-T04–S4-T06 may add dummy API implementations, but cannot leak raw transport
   records into UI.
 - S7 must verify actual Zoho documentation before implementing mappings; fields
@@ -53,3 +68,5 @@ later sprints.
   vendor-specific field names, nullability, identifiers, and error behavior.
 - ADR 0004 remains valid; references to an HTTP repository are now generalized
   to dummy and future production/Zoho-backed implementations.
+- Detailed field semantics and invariants are maintained in
+  `docs/architecture/STOREFRONT_CONTRACTS.md`.

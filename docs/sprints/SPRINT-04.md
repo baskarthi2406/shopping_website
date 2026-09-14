@@ -159,21 +159,56 @@ existing repository/domain/application boundaries. S4-T03 is recorded
 
 ## S4-T03 — API/Domain Contracts
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Define stable Mini Mystiq category, product, variant, pricing, and inventory API
-contracts plus explicit transport-to-domain mappings.
+Define stable Mini Mystiq category, product, variant, pricing, inventory, and
+application response contracts plus an explicit external-provider boundary.
 
 ### Scope
 
-Nullability, IDs, hierarchy, pagination/error semantics, and dummy API runtime
-are decided here. Unknown values remain optional/nullable.
+Implemented provider-independent:
+
+- recursive category entities with visibility/menu configuration
+- product summary/detail models with separate IDs and SEO slugs
+- generic variant attributes and nullable product/variant SKU
+- nullable UOM, current/compare-at pricing, and inventory snapshots
+- active/inactive publication status separated from stock availability
+- ordered category collection, paginated product list, detail, and error
+  envelopes
+- contract validation for hierarchy, IDs/slugs, attributes, monetary values,
+  quantities, and pagination
+
+Unknown fixture values remain null and missing variants remain empty. Existing
+static records map into the evolved domain without fabricated commerce data.
+The response contract is transport-neutral; dummy routes, runtime, status-code
+mapping, and default product page size remain implementation details for the
+scheduled dummy API tasks.
 
 ### Guardrails
 
 Do not expose Zoho DTOs to UI/application consumers. No real Zoho calls.
+
+### Tests
+
+- Category hierarchy validation and arbitrary nesting
+- Product/variant, optional pricing/inventory, SKU/UOM, and slug invariants
+- Collection/detail, pagination, empty collection, and not-found shapes
+- Full storefront regression suite
+
+### Validation
+
+- `npm test`: 35 files, 146 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Stable catalog contracts and external-provider boundaries are documented and
+validated. S4-T04 is recorded as the next task and remains **NOT_STARTED**.
 
 ---
 

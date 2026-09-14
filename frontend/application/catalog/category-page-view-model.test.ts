@@ -29,9 +29,12 @@ const product: Product = {
     },
   ],
   categoryIds: ["baby-essentials"],
-  variants: [{ id: "sage-striped-baby-top-and-shorts-default" }],
-  uomCode: null,
-  inventoryStatus: "unknown",
+  sku: null,
+  uom: null,
+  pricing: null,
+  inventory: null,
+  status: "active",
+  variants: [],
 };
 
 describe("toProductCardViewModel", () => {
@@ -55,7 +58,7 @@ describe("toProductCardViewModel", () => {
   it("does not invent price or inventory display fields", () => {
     expect(toProductCardViewModel(product)).not.toHaveProperty("price");
     expect(toProductCardViewModel(product)).not.toHaveProperty(
-      "inventoryStatus",
+      "inventory",
     );
   });
 });

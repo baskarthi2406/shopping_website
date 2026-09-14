@@ -17,8 +17,9 @@ This directory contains documentation only. Do **not** create FastAPI apps,
 Python packages, Docker files, or database schemas until Sprint 6 and the
 current task explicitly requires it.
 Production backend work is now scheduled for Sprint 6. Sprint 4 dummy API tasks
-do not authorize Python/PostgreSQL implementation here unless S4-T03 explicitly
-changes the runtime through an accepted decision.
+do not authorize Python/PostgreSQL implementation here. S4-T03 kept the
+storefront contract transport-neutral and did not select this directory as the
+dummy API runtime.
 
 ## Architecture intent
 

@@ -12,9 +12,12 @@ function product(
     description: "In-memory test product",
     images: [],
     categoryIds: [],
-    variants: [{ id: `${overrides.id}-default` }],
-    uomCode: null,
-    inventoryStatus: "unknown",
+    sku: null,
+    uom: null,
+    pricing: null,
+    inventory: null,
+    status: "active",
+    variants: [],
     ...overrides,
   };
 }

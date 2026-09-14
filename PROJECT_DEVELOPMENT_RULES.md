@@ -392,7 +392,8 @@ Examples:
 - Do not add a dependency unless the current task requires it.
 - Prefer the existing stack: Next.js, React, TypeScript, Tailwind; Python,
   FastAPI, PostgreSQL for the planned production backend. Dummy API runtime is
-  decided in S4-T03, not assumed.
+  selected only by its scheduled implementation task; S4-T03 contracts remain
+  transport-neutral.
 - New libraries need a short justification in the task notes or an ADR if they affect architecture.
 - Do not install packages during documentation-only tasks.
 

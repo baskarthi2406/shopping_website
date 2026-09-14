@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **Implemented through S4-T02:** App Router
+**Task:** S1-T02 (layer contract). **Implemented through S4-T03:** App Router
 at `frontend/app/` (no `src/`); static catalog behind application-owned
 repository interfaces; S3-T01–S3-T09 storefront/SEO complete; S3-T10 deferred.
 The S4-T01 audit found no backend/API implementation or obsolete backend code.
@@ -84,7 +84,9 @@ Pages are **Server Components by default**. They stay thin.
 
 ### 2.4 Application / service layer
 
-**Owns:** Use cases (see §11). Orchestration. Repository interfaces. Mapping infrastructure/domain → view models for pages.
+**Owns:** Use cases (see §11). Orchestration. Repository interfaces.
+Transport-neutral application response envelopes. Mapping domain → list/detail
+contracts and view models for pages.
 
 **Does not own:** JSX, Tailwind, Next.js cookies (except later auth — Phase 2), SQL.
 
@@ -98,7 +100,9 @@ Services must be unit-testable with fake repositories.
 
 ### 2.5 Domain layer
 
-**Owns:** `Product`, `Category`, `ProductVariant`, `Uom`, inventory status values, `Cart`, `CartItem`, slug shape rules, cart line math.
+**Owns:** `Product`, `ProductSummary`, `Category`, generic `ProductVariant`,
+`Pricing`, `Inventory`, `ProductStatus`, `Uom`, `Cart`, `CartItem`, slug shape
+rules, contract invariants, and cart line math.
 
 **Does not own:** HTTP, React, file paths as a framework concern (image **filename strings** as data are OK).
 
@@ -129,6 +133,22 @@ adapters; mapping **raw static/API/vendor records → domain**.
 | May depend on | Must not depend on |
 |---------------|-------------------|
 | Domain, repository interfaces | Presentation, `app/` pages |
+
+---
+
+### 2.7.1 Catalog contract boundary
+
+S4-T03 contracts are owned by domain and application:
+
+- domain entities contain no dummy, HTTP, database, or Zoho field names
+- category responses are ordered recursive trees
+- product lists use paginated `ProductSummary`; detail uses full `Product`
+- unknown SKU, UOM, pricing, inventory, and variants remain null/empty
+- generic variant attributes represent size, color, and future options
+- missing detail uses the shared `not_found` error envelope
+
+Static, dummy, production, and Zoho infrastructure must map their own records or
+DTOs into these contracts. See `STOREFRONT_CONTRACTS.md` and ADR 0005.
 
 ---
 
@@ -235,21 +255,23 @@ Track Your Order as disabled entry points only; no behavior/routes exist.
 
 | Model | Role |
 |-------|------|
-| **Domain** | `Product`, `Category`, `ProductVariant`, `Uom`, inventory status, `Cart`, `CartItem` — framework-free |
+| **Domain** | `Product`, `ProductSummary`, `Category`, `ProductVariant`, `Pricing`, `Inventory`, `Uom`, `Cart`, `CartItem` — framework-free |
 | **Raw / DTO** | Static fixture shape or FastAPI JSON — infrastructure only |
-| **View model / UI props** | What components receive (display price string TBD, image `src` + `alt`, href) |
+| **Application response** | Provider-independent collection/detail/pagination/error envelopes |
+| **View model / UI props** | What components receive (display price formatting TBD, image `src` + `alt`, href) |
 
 Never pass API/fixture DTOs into presentation. Infrastructure maps DTO → domain; application maps domain → view model.
 
-### 7.1 Domain concepts (fields TBD except notes)
+### 7.1 Domain concepts
 
 | Concept | Notes |
 |---------|--------|
-| Product | Implemented: id, slug, name, description, images, category ids, variants, nullable UOM, inventory status. Future nullable/optional SKU, pricing, publication/status, and richer inventory are S4-T03/S4-T08 |
-| Category | Implemented through S4-T02: id, slug, name, nullable parentId, arbitrary-depth children, visibility, showInMenu, nullable description/image. API nullability/order and SEO fields remain S4-T03 |
-| ProductVariant | Implemented: id plus optional size/color. Future nullable/optional SKU, generic options, pricing, inventory, and status are S4-T07/S4-T08 |
-| Uom | Code + label; Phase 1 may be a simple field |
-| Inventory status | Enum TBD (`in_stock` / `out_of_stock` / unknown) — display TBD |
+| Product | S4-T03: id, SEO slug, content/images/category ids, nullable SKU/UOM/pricing/inventory, publication status; detail adds variants |
+| Category | id, slug, name, nullable parentId, arbitrary-depth children, visibility, showInMenu, nullable description/image |
+| ProductVariant | id, nullable SKU, generic name/value attributes, nullable pricing/inventory, publication status |
+| Uom | Nullable code + label value |
+| Pricing | Current money plus nullable compare-at money; no discount/tax calculations |
+| Inventory | Nullable on-hand/available/reserved quantities plus `unknown` / `in_stock` / `out_of_stock` |
 | Cart | Collection of cart items + totals rules |
 | CartItem | Product identity, quantity, selected variant id if any |
 
@@ -538,9 +560,9 @@ No page rewrite. ADR 0004/0005.
 
 ## 20. TBD
 
-- Exact category hierarchy/menu order and descendant-listing semantics
-- Exact product/variant/pricing/inventory/status fields
-- Dummy API runtime, endpoint/version/error/pagination contracts
+- Category descendant-listing semantics and a future persisted menu-order field
+- Pricing/inventory/SKU/UOM/variant business values and display behavior
+- Dummy API runtime, endpoint/version/status-code mapping, and default page size
 - Verified Zoho API schema/auth/rate limits/synchronization behavior
 - Search/filter rules (S2-T05 deferred; `CATALOG_FILTER_SORT.md`)  
 - Cart storage API (`localStorage` vs memory)  
@@ -553,5 +575,5 @@ No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T02 are complete.
-Next: **S4-T03** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T03 are complete.
+Next: **S4-T04** — do not start automatically.

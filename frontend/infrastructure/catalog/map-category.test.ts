@@ -48,4 +48,19 @@ describe("mapCategories", () => {
       mapCategories([record("first", "second"), record("second", "first")]),
     ).toThrow("Category hierarchy cycle");
   });
+
+  it("rejects empty identity fields and duplicate routing slugs", () => {
+    expect(() => mapCategories([record("")])).toThrow(
+      "Category id must be non-empty",
+    );
+    expect(() =>
+      mapCategories([{ ...record("unnamed"), name: " " }]),
+    ).toThrow("Category name must be non-empty");
+    expect(() =>
+      mapCategories([
+        record("first"),
+        { ...record("second"), slug: "first" },
+      ]),
+    ).toThrow("Duplicate category slug first");
+  });
 });

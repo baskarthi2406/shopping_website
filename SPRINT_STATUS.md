@@ -127,7 +127,7 @@ deferred.
 |---------|------|--------|
 | S4-T01 | Backend/API Audit & Cleanup | **COMPLETED** |
 | S4-T02 | Customer Navigation & Hierarchical Category UI | **COMPLETED** |
-| S4-T03 | API/Domain Contracts | **NOT_STARTED** |
+| S4-T03 | API/Domain Contracts | **COMPLETED** |
 | S4-T04 | Dummy Category API | **NOT_STARTED** |
 | S4-T05 | Dummy Product API | **NOT_STARTED** |
 | S4-T06 | Dummy Product Detail API | **NOT_STARTED** |

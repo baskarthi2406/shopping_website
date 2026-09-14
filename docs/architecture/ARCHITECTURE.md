@@ -1,6 +1,6 @@
 # Target Architecture
 
-**Status:** Accepted for S1-T01; revised by S4-T01 and ADR 0005.
+**Status:** Accepted for S1-T01; revised through S4-T03 and ADR 0005.
 Significant changes require an ADR.
 
 **Product:** Mini Mystiq — Baby Clothes & Toys  
@@ -72,7 +72,7 @@ Logical domains (modules). Not services.
 |--------|--------------------|-----------------|
 | Catalog (Product, Category, UOM) | Yes (static) | Yes |
 | Cart | Commerce UI planned Sprint 5 | Persistence/workflow TBD Sprint 6/8 |
-| Inventory | Contract planned S4-T08 | Production/Zoho integration S6–S7 |
+| Inventory | Provider-independent snapshot contract (S4-T03) | Production/Zoho integration S6–S7 |
 | Ordering | No implementation | Sprint 8 |
 | Identity / Customer | Navigation expectation only | Sprint 8 scope TBD |
 | Admin / Audit | No implementation | Production/operations scope TBD |
@@ -133,6 +133,10 @@ Next.js
 
 Next.js **never** opens a DB connection.
 
+S4-T03 defines recursive category, product summary/detail, generic variant,
+nullable pricing/inventory/SKU/UOM, minimal product pagination, and
+provider-independent error contracts. See `STOREFRONT_CONTRACTS.md`.
+
 ---
 
 ## 8. Frontend (summary)
@@ -146,8 +150,9 @@ Next.js **never** opens a DB connection.
 
 ## 9. Backend/API roadmap (summary)
 
-- Sprint 4 defines stable contracts and dummy APIs; runtime/transport is TBD
-  until S4-T03.
+- Sprint 4 defines stable contracts and dummy APIs. The S4-T03 contracts are
+  transport-neutral; the dummy runtime and endpoint/status mapping remain
+  implementation decisions for the scheduled dummy API tasks.
 - Sprint 6 implements the production backend. Python + FastAPI + PostgreSQL and
   modular-monolith shape remain accepted (ADR 0003) unless superseded.
 - Sprint 7 implements Zoho adapters. Vendor DTOs are infrastructure-only
@@ -279,7 +284,7 @@ shopping/
 
 - Domain, trailing slash, locales
 - Exact Tailwind breakpoint px and CWV budgets
-- Dummy API runtime, transport, pagination, and error envelope (S4-T03)
+- Dummy API runtime, endpoint/status-code mapping, and default product page size
 - ORM and migration tool (Sprint 6)
 - Admin UI host and schedule
 - Auth provider and scope (Sprint 8)

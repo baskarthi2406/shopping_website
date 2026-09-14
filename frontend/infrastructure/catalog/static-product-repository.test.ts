@@ -95,11 +95,12 @@ describe("StaticProductRepository", () => {
   it("maps fixtures to domain defaults without invented commerce fields", async () => {
     const dress = await products.getBySlug("olive-green-patterned-dress");
 
-    expect(dress?.uomCode).toBeNull();
-    expect(dress?.inventoryStatus).toBe("unknown");
-    expect(dress?.variants).toEqual([
-      { id: "olive-green-patterned-dress-default" },
-    ]);
+    expect(dress?.sku).toBeNull();
+    expect(dress?.uom).toBeNull();
+    expect(dress?.pricing).toBeNull();
+    expect(dress?.inventory).toBeNull();
+    expect(dress?.status).toBe("active");
+    expect(dress?.variants).toEqual([]);
     expect(dress?.images[0]?.src).toBe("/olive-green-patterned-dress.jpg");
     expect(dress?.images[0]?.alt).not.toBe("olive-green-patterned-dress.jpg");
   });
