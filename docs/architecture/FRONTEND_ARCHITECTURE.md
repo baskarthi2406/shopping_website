@@ -145,6 +145,9 @@ S4-T03 contracts are owned by domain and application:
 - product lists use paginated `ProductSummary`; detail uses full `Product`
 - unknown SKU, UOM, pricing, inventory, and variants remain null/empty
 - generic variant attributes represent size, color, and future options
+- money is a non-negative major-unit amount with a three-letter currency
+- inventory nullability is preserved; known quantity relationships and
+  availability contradictions are rejected
 - missing detail uses the shared `not_found` error envelope
 
 Static, dummy, production, and Zoho infrastructure must map their own records or
@@ -273,8 +276,8 @@ Never pass API/fixture DTOs into presentation. Infrastructure maps DTO → domai
 | Category | id, slug, name, nullable parentId, arbitrary-depth children, visibility, showInMenu, nullable description/image |
 | ProductVariant | Generic `name`/`value` attributes for size, color, or any option; unique combinations; nullable SKU/pricing/inventory |
 | Uom | Nullable code + label value |
-| Pricing | Current money plus nullable compare-at money; no discount/tax calculations |
-| Inventory | Nullable on-hand/available/reserved quantities plus `unknown` / `in_stock` / `out_of_stock` |
+| Pricing | Current major-unit money plus nullable compare-at money; compare-at must not be below current when both are known; no discount/tax/FX calculations |
+| Inventory | Nullable on-hand/available/reserved integers plus `unknown` / `in_stock` / `out_of_stock`; null ≠ 0; known quantities and status must stay consistent |
 | Cart | Collection of cart items + totals rules |
 | CartItem | Product identity, quantity, selected variant id if any |
 
@@ -578,5 +581,5 @@ No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T07 are complete.
-Next: **S4-T08** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T08 are complete.
+Next: **S4-T09** — do not start automatically.

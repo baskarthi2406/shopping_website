@@ -440,17 +440,60 @@ S4-T08 is next and remains **NOT_STARTED**.
 
 ## S4-T08 — Pricing/Inventory Model
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Define nullable pricing and inventory contracts without inventing commercial
-facts.
+Finalize the provider-independent pricing and inventory domain model already
+introduced in S4-T03, without inventing commercial facts.
+
+### Scope
+
+- Reused S4-T03 `Money`, `Pricing`, and `Inventory` types. Did not add parallel
+  models or change the major-unit `amount: number` representation.
+- Exported `validateMoney`. Current price remains required; compare-at remains
+  nullable; matching currencies and compare-at ≥ current are enforced when
+  both amounts are valid.
+- Inventory quantities remain nullable and distinct from zero. Known values
+  must be non-negative integers and internally consistent with availability.
+- Product and variant continue to own independent nullable pricing/inventory.
+  Generic variant attributes are unchanged; no size/color commerce fields.
+- Left all 12 approved products at `sku`, `uom`, `pricing`, `inventory` null
+  and `variants: []`.
+- Did not add API endpoints, UI wiring, Zoho types, discounts, tax, FX,
+  reservation, deduction, or inventory synchronization.
 
 ### Guardrails
 
-Currency, tax, discounts, stock quantities, reservations, and availability
-policies require confirmed requirements.
+Catalog prices, currency display, tax, discounts, stock counts, reservations,
+and availability policies remain TBD until an authoritative source supplies
+them. This task defines invariants for values that exist; it does not invent
+those values.
+
+### Tests
+
+- Valid/invalid money amounts and currencies
+- Valid current price; nullable, valid, and invalid compare-at
+- Compare-at must not be below current price; no discount calculation
+- Valid on-hand, available-to-sell, and reserved quantities
+- Null inventory remains distinct from zero; negatives and inconsistent
+  quantity/availability relationships are rejected
+- Variant nullable and populated pricing/inventory on generic attributes
+- Existing Product model, 12 fixtures, and dummy APIs remain compatible
+- No Zoho/provider DTO leakage
+
+### Validation
+
+- `npm test`: 44 files, 215 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+The pricing and inventory model is validated without fabricated commerce data.
+S4-T09 is next and remains **NOT_STARTED**.
 
 ---
 

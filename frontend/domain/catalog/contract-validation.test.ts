@@ -52,14 +52,26 @@ describe("catalog contract validation", () => {
             { name: "Size", value: "0-3M" },
             { name: "Color", value: "Pink" },
           ],
-          pricing: null,
-          inventory: null,
+          pricing: {
+            price: { amount: 749, currency: "INR" },
+            compareAtPrice: null,
+          },
+          inventory: {
+            stockOnHand: 3,
+            availableToSell: 3,
+            reserved: 0,
+            status: "in_stock",
+          },
           status: "active",
         },
       ],
     });
 
     expect(validateProduct(populated)).toEqual([]);
+    expect(populated.pricing?.price.amount).toBe(799);
+    expect(populated.variants[0]?.pricing?.price.amount).toBe(749);
+    expect(populated.inventory?.stockOnHand).toBe(12);
+    expect(populated.variants[0]?.inventory?.stockOnHand).toBe(3);
   });
 
   it("rejects invalid money and inventory quantities", () => {

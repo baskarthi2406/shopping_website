@@ -33,11 +33,12 @@ function validateOptionalIdentifier(
   }
 }
 
-function validateMoney(
+export function validateMoney(
   money: Money,
-  path: string,
-  issues: ContractViolation[],
-): void {
+  path = "money",
+): readonly ContractViolation[] {
+  const issues: ContractViolation[] = [];
+
   if (!Number.isFinite(money.amount) || money.amount < 0) {
     add(issues, `${path}.amount`, "must be a finite, non-negative number");
   }
@@ -45,6 +46,8 @@ function validateMoney(
   if (!CURRENCY_CODE_PATTERN.test(money.currency)) {
     add(issues, `${path}.currency`, "must be a three-letter uppercase code");
   }
+
+  return issues;
 }
 
 export function validatePricing(
@@ -52,15 +55,30 @@ export function validatePricing(
   path = "pricing",
 ): readonly ContractViolation[] {
   const issues: ContractViolation[] = [];
-  validateMoney(pricing.price, `${path}.price`, issues);
+  issues.push(...validateMoney(pricing.price, `${path}.price`));
 
   if (pricing.compareAtPrice !== null) {
-    validateMoney(pricing.compareAtPrice, `${path}.compareAtPrice`, issues);
+    issues.push(
+      ...validateMoney(pricing.compareAtPrice, `${path}.compareAtPrice`),
+    );
     if (pricing.compareAtPrice.currency !== pricing.price.currency) {
       add(
         issues,
         `${path}.compareAtPrice.currency`,
         "must match the current price currency",
+      );
+    }
+    if (
+      Number.isFinite(pricing.price.amount) &&
+      pricing.price.amount >= 0 &&
+      Number.isFinite(pricing.compareAtPrice.amount) &&
+      pricing.compareAtPrice.amount >= 0 &&
+      pricing.compareAtPrice.amount < pricing.price.amount
+    ) {
+      add(
+        issues,
+        `${path}.compareAtPrice.amount`,
+        "must not be less than the current price",
       );
     }
   }
@@ -80,11 +98,59 @@ export function validateInventory(
   ] as const;
 
   for (const [name, value] of quantities) {
-    if (value !== null && (!Number.isFinite(value) || value < 0)) {
+    if (value !== null && (!Number.isInteger(value) || value < 0)) {
       add(
         issues,
         `${path}.${name}`,
-        "must be null or a finite, non-negative number",
+        "must be null or a finite, non-negative integer",
+      );
+    }
+  }
+
+  const { stockOnHand, availableToSell, reserved } = inventory;
+  const knownQuantitiesAreValid =
+    (stockOnHand === null || (Number.isInteger(stockOnHand) && stockOnHand >= 0)) &&
+    (availableToSell === null ||
+      (Number.isInteger(availableToSell) && availableToSell >= 0)) &&
+    (reserved === null || (Number.isInteger(reserved) && reserved >= 0));
+
+  if (knownQuantitiesAreValid) {
+    if (reserved !== null && stockOnHand !== null && reserved > stockOnHand) {
+      add(issues, `${path}.reserved`, "must not exceed stockOnHand");
+    }
+    if (
+      availableToSell !== null &&
+      stockOnHand !== null &&
+      availableToSell > stockOnHand
+    ) {
+      add(issues, `${path}.availableToSell`, "must not exceed stockOnHand");
+    }
+    if (
+      availableToSell !== null &&
+      reserved !== null &&
+      stockOnHand !== null &&
+      availableToSell + reserved > stockOnHand
+    ) {
+      add(
+        issues,
+        `${path}.availableToSell`,
+        "plus reserved must not exceed stockOnHand",
+      );
+    }
+
+    const knownSellable = availableToSell ?? stockOnHand;
+    if (knownSellable === 0 && inventory.status === "in_stock") {
+      add(
+        issues,
+        `${path}.status`,
+        "must not be in_stock when available quantity is 0",
+      );
+    }
+    if (knownSellable !== null && knownSellable > 0 && inventory.status === "out_of_stock") {
+      add(
+        issues,
+        `${path}.status`,
+        "must not be out_of_stock when available quantity is greater than 0",
       );
     }
   }

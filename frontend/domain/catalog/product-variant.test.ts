@@ -208,6 +208,32 @@ describe("generic product variant model", () => {
     expect(optionalCommerce.inventory).toBeNull();
   });
 
+  it("can attach generic-attribute pricing and inventory without size or color fields", () => {
+    const priced = variant({
+      id: "baby-frock-0-3m-pink",
+      attributes: [
+        { name: "size", value: "0-3M" },
+        { name: "color", value: "Pink" },
+      ],
+      pricing: {
+        price: { amount: 799, currency: "INR" },
+        compareAtPrice: null,
+      },
+      inventory: {
+        stockOnHand: 4,
+        availableToSell: 4,
+        reserved: 0,
+        status: "in_stock",
+      },
+    });
+
+    expect(validateVariant(priced)).toEqual([]);
+    expect(priced).not.toHaveProperty("size");
+    expect(priced).not.toHaveProperty("color");
+    expect(priced).not.toHaveProperty("rate");
+    expect(priced).not.toHaveProperty("stock_on_hand");
+  });
+
   it("accepts products whose current fixtures have no variants", () => {
     expect(validateProduct(product({ variants: [] }))).toEqual([]);
   });

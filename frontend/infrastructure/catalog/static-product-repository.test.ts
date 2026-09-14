@@ -19,6 +19,15 @@ describe("StaticProductRepository", () => {
     expect(listed).toHaveLength(12);
     expect(listed.every((item) => isCatalogSlug(item.slug))).toBe(true);
     expect(listed.every((item) => item.variants.length === 0)).toBe(true);
+    expect(
+      listed.every(
+        (item) =>
+          item.sku === null &&
+          item.uom === null &&
+          item.pricing === null &&
+          item.inventory === null,
+      ),
+    ).toBe(true);
     expect(listed.flatMap((item) => validateProduct(item))).toEqual([]);
   });
 

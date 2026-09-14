@@ -1,8 +1,9 @@
 import type { InventoryStatus } from "./inventory-status";
 
 /**
- * Provider-independent inventory snapshot. Quantities are nullable because a
- * source may expose only availability. No reservation behavior is implemented.
+ * Provider-independent inventory snapshot. Null quantities mean unknown and
+ * are distinct from zero. No reservation, deduction, or synchronization is
+ * implemented.
  */
 export type Inventory = {
   readonly stockOnHand: number | null;

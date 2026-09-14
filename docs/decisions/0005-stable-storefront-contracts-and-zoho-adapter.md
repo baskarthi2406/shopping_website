@@ -42,7 +42,10 @@ later sprints.
   collection.
 - Pricing uses current price plus optional compare-at price. Inventory separates
   nullable on-hand, available-to-sell, and reserved quantities from availability
-  status. Neither contract implements calculations or synchronization.
+  status. S4-T08 enforces consistency when those values are known; it does not
+  calculate discounts, tax, currency conversion, reservations, or stock
+  deductions. Current catalog fixtures keep pricing and inventory null until an
+  authoritative source supplies them.
 - Product lists use minimal page-number pagination (`page`, `pageSize`, `total`,
   `hasNext`). Category navigation trees are ordered and unpaginated.
 - Success uses a `data` envelope; errors use a provider-independent `error`
@@ -70,6 +73,9 @@ later sprints.
   not confirmed by Zoho remain TBD.
 - Additional mapping code is intentional. It protects the storefront from
   vendor-specific field names, nullability, identifiers, and error behavior.
+- S4-T08 finalized provider-independent money and inventory invariants in
+  domain validation. Zoho `rate` / `stock_on_hand` style fields remain adapter
+  concerns and must not appear on domain, application, or UI types.
 - ADR 0004 remains valid; references to an HTTP repository are now generalized
   to dummy and future production/Zoho-backed implementations.
 - Detailed field semantics and invariants are maintained in

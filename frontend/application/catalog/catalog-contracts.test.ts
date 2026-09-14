@@ -95,6 +95,29 @@ describe("catalog application contracts", () => {
     ]);
   });
 
+  it("keeps pricing and inventory nullable in list and detail envelopes", () => {
+    const summary = toProductSummary(product());
+    const detail = createDetailResponse(product()).data;
+
+    expect(summary.pricing).toBeNull();
+    expect(summary.inventory).toBeNull();
+    expect(detail.pricing).toBeNull();
+    expect(detail.inventory).toBeNull();
+    expect(detail.variants[0]?.pricing).toBeNull();
+    expect(detail.variants[0]?.inventory).toBeNull();
+  });
+
+  it("does not leak Zoho or provider DTO fields into application contracts", () => {
+    const serialized = JSON.stringify({
+      summary: toProductSummary(product()),
+      detail: createDetailResponse(product()),
+    });
+
+    expect(serialized).not.toMatch(
+      /item_id|item_group_id|stock_on_hand|purchase_rate|attribute_id1|zoho/i,
+    );
+  });
+
   it("uses a consistent transport-neutral not-found error", () => {
     expect(
       createErrorResponse("not_found", "Product was not found"),

@@ -159,7 +159,9 @@ Next.js **never** opens a DB connection.
 
 S4-T03 defines recursive category, product summary/detail, generic variant,
 nullable pricing/inventory/SKU/UOM, minimal product pagination, and
-provider-independent error contracts. See `STOREFRONT_CONTRACTS.md`.
+provider-independent error contracts. S4-T08 finalized money and inventory
+invariants without populating catalog commerce values. See
+`STOREFRONT_CONTRACTS.md`.
 
 ---
 

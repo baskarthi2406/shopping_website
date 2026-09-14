@@ -30,6 +30,15 @@ describe("GET /api/products", () => {
       "kids-linen-shirts-brown-and-sage",
     );
     expect(result.data.every((product) => !("variants" in product))).toBe(true);
+    expect(
+      result.data.every(
+        (product) =>
+          product.sku === null &&
+          product.uom === null &&
+          product.pricing === null &&
+          product.inventory === null,
+      ),
+    ).toBe(true);
     expect(result.pagination).toEqual({
       page: 1,
       pageSize: 12,

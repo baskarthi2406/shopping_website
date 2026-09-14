@@ -1,6 +1,6 @@
 # Stable Storefront Contracts
 
-**Status:** Implemented by S4-T03
+**Status:** Implemented by S4-T03; pricing/inventory invariants finalized by S4-T08
 **Decision:** ADR 0005
 **Scope:** Provider-independent catalog domain and application response shapes
 
@@ -76,8 +76,8 @@ array when a source has no options. SKU, pricing, and inventory stay nullable.
 Current approved fixtures intentionally contain no populated variants.
 
 Provider-specific option IDs, item-group names, and Zoho field names stay in
-adapters. S4-T08 owns pricing/inventory behavior; this contract only preserves
-nullable shapes.
+adapters. Pricing and inventory stay on the generic variant; there are no
+size- or color-specific commerce fields.
 
 SKU may be product-level, variant-level, both when a provider legitimately
 supplies both concepts, or absent. `Uom` is a nullable product-level
@@ -87,12 +87,19 @@ mapping.
 ## Pricing
 
 `Pricing` contains a current `price` and nullable `compareAtPrice`. Each `Money`
-contains a non-negative numeric `amount` and three-letter uppercase `currency`.
+contains a non-negative major-unit `amount` (`number`) and a three-letter
+uppercase `currency`. This is the S4-T03 representation; the domain does not
+store minor units and does not perform rounding beyond that numeric type.
 
-The current price can represent a sale price when reference pricing exists.
-There is no separate discount percentage, tax behavior, currency conversion,
-or discount calculation. Those policies are not approved requirements.
-Product and variant pricing are independently nullable.
+The current price is required whenever a `Pricing` object exists. Compare-at
+price may be `null`. When both amounts are valid, compare-at must not be less
+than the current price and both values must use the same currency. That
+relationship is a consistency check only: the domain does not calculate a
+discount, percentage off, tax, currency conversion, or rounded sale price.
+
+Product and variant pricing are independently nullable. Current approved
+fixtures keep `pricing: null` because no authoritative commerce source has
+supplied values. Do not invent catalog prices to exercise the model.
 
 ## Inventory and status
 
@@ -100,9 +107,25 @@ Product and variant pricing are independently nullable.
 `availableToSell`, and `reserved` quantities plus `status`:
 `unknown`, `in_stock`, or `out_of_stock`.
 
-Quantities are capabilities, not promises that every provider supplies all
-three. The contract does not calculate availability, reserve stock, synchronize
-inventory, or enforce relationships among provider quantities.
+Null quantity means unknown and is distinct from zero. Mappers must not convert
+`null` to `0`, and unknown inventory must not be treated as in stock, out of
+stock, or unavailable. Quantities, when present, are non-negative integers.
+
+When the relevant values are known, they must be internally consistent:
+
+- reserved must not exceed on-hand
+- available-to-sell must not exceed on-hand
+- available-to-sell plus reserved must not exceed on-hand
+- `in_stock` is invalid when the known sellable quantity is `0`
+- `out_of_stock` is invalid when the known sellable quantity is greater than `0`
+
+Sellable quantity is `availableToSell` when that field is present, otherwise
+`stockOnHand`. `unknown` remains valid even when quantities are known. The
+contract does not invent a warehouse/location model, reservation workflow,
+stock deduction, synchronization, or availability state machine.
+
+Product and variant inventory are independently nullable. Current approved
+fixtures keep `inventory: null`.
 
 Product and variant publication status is deliberately limited to `active` and
 `inactive`. “Unavailable” is not a product lifecycle state: sellability is
@@ -215,8 +238,9 @@ GET /api/products/{slug}
 The response is the full product, including empty `variants` where no confirmed
 option data exists. Unknown SKU, UOM, pricing, and inventory remain null.
 Category relationships remain `categoryIds`. The storefront PDP at `/p/{slug}`
-does not fetch this endpoint; UI/API integration remains S4-T09. Pricing and
-inventory population remain S4-T08.
+does not fetch this endpoint; UI/API integration remains S4-T09. S4-T08
+finalized pricing/inventory invariants without populating fixture commerce
+values.
 
 ## IDs and SEO slugs
 
@@ -249,8 +273,14 @@ Current runtime validation enforces:
 - variant attribute combinations are unique per product regardless of
   attribute order or name casing
 - optional SKU and UOM values are null or non-empty
-- money is finite and non-negative; current/reference currencies match
-- represented inventory quantities are finite and non-negative
+- money is a finite, non-negative major-unit number; currency is a three-letter
+  uppercase code; current and compare-at currencies match
+- when both current and compare-at amounts are valid, compare-at must not be
+  less than the current price
+- represented inventory quantities are null or non-negative integers; null is
+  distinct from zero
+- known reserved/available quantities must not exceed on-hand, including their
+  sum; availability status must not contradict a known sellable quantity
 - pagination values are valid integers
 
 External adapters remain responsible for parsing untrusted DTOs before mapping
@@ -263,8 +293,8 @@ bindings, call Zoho, create persistence, or add commerce behavior.
 
 S4-T04–S4-T06 implemented dummy category/product collection and detail
 responses. S4-T07 confirmed the generic variant attribute model without
-populating fixture option values. S4-T08 may populate and exercise
-pricing/inventory behavior without replacing these provider-independent
-shapes. S4-T09 will introduce the repository swap; S4-T10 owns rendered
+populating fixture option values. S4-T08 finalized pricing and inventory
+invariants without inventing catalog prices, stock, SKU, or availability.
+S4-T09 will introduce the repository swap; S4-T10 owns rendered
 loading/error/empty states. Actual Zoho DTOs, authentication, and mapping
 belong to Sprint 7.
