@@ -1,6 +1,6 @@
 # Frontend — Mini Mystiq
 
-Phase 1 SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys).
+SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys).
 
 ## Stack
 
@@ -11,7 +11,8 @@ Phase 1 SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys)
 - ESLint (`eslint-config-next`)
 - Vitest 4 (unit tests)
 
-Server Components are the default. No state-management library. No API client. No backend dependencies.
+Server Components are the default. No state-management library. No API client
+or backend dependencies exist as of the S4-T01 audit.
 
 ## Run
 
@@ -71,7 +72,14 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S3-T09:** OpenGraph review. Existing S3-T02/S3-T03 metadata already met the contract (hero / category stand-in / primary product image; canonical equals `og:url`). Tests added; helpers unchanged.
 
-**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin. SEO-friendly URL strategy is deferred from original S3-T01.
+**S4-T01:** repository-wide backend/API audit found no API routes, server
+actions, backend application, DB/ORM, HTTP client, auth, or obsolete backend
+dependency. Existing static repositories and clean interfaces remain.
+
+**Not implemented yet:** hierarchical category navigation, dummy API, API
+repository, cart, search, account, Track Your Order, filters/sort, admin, Zoho
+integration. S3-T10 Image Optimization and the original SEO-friendly URL
+strategy are deferred.
 
 ## Architecture
 
@@ -92,7 +100,8 @@ App / Pages → Presentation → Application → Domain → Repository interface
 Infrastructure implements repositories. Configuration binds them.
 ```
 
-**Forbidden:** React → static JSON; React → FastAPI/SQL; Domain → Next.js/React.
+**Forbidden:** React → static/dummy/Zoho DTOs; React → FastAPI/SQL; Domain →
+Next.js/React. Infrastructure maps transport/vendor DTOs to domain contracts.
 
 There is no top-level `repositories/` or `types/` folder. Canonical domain models belong in `domain/`.
 

@@ -1,298 +1,261 @@
-# Sprint 4 — Cart & Storefront Completion
+# Sprint 4 — Customer Storefront + Dummy API Foundation
 
 | Field | Value |
-|-------|--------|
+|-------|-------|
 | Sprint ID | S4 |
-| Phase | Phase 1 — SEO-First Storefront |
-| Objective | Client-side cart, storefront completion, Phase 1 review. No payments. |
-| Status | NOT_STARTED |
-| Dependencies | Sprint 3 completed |
+| Phase | Phase 1 — Storefront + Dummy API |
+| Objective | Align customer navigation and define a vendor-isolated dummy catalog API without regressing the storefront |
+| Status | IN_PROGRESS |
+| Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
+| Task IDs | S4-T01 … S4-T12 |
 
-Cart and remaining storefront UI are **mobile-first**. See `docs/requirements/MOBILE_REQUIREMENTS.md`.
+The dummy API is a development adapter, not Zoho integration or a production
+backend. Follow ADR 0005. Raw dummy/Zoho-shaped DTOs must not reach pages or
+components.
+
+## S4-T01 — Backend/API Audit & Cleanup
+
+**Status:** COMPLETED
+
+### Objective
+
+Audit the repository for backend/API implementation, remove only proven
+obsolete code, assess catalog boundaries, and align the roadmap.
+
+### Dependencies
+
+S3-T09.
+
+### Requirements
+
+- Do not implement a dummy API, Zoho integration, cart, checkout, or auth.
+- Retain domain types, repository interfaces, static repositories, catalog
+  fixtures, pages, components, and SEO.
+- Remove code/dependencies only with evidence that they are obsolete and unused.
+
+### Implementation scope (as completed)
+
+- Repository-wide code, manifest, and dependency audit
+- Catalog/domain/repository/navigation architecture assessment
+- ADR 0005 for stable storefront contracts and a Zoho anti-corruption boundary
+- Roadmap/status documentation alignment
+- No application code, package, or dependency changes
+
+### Findings
+
+- No backend/API/server implementation exists.
+- `backend/` contains only its README.
+- No API route handlers, server actions, HTTP repositories, databases, ORM,
+  migrations, controllers, auth infrastructure, or mock API servers exist.
+- No obsolete backend dependency exists in `frontend/package.json`.
+- Current category navigation is data-driven from repository data; category
+  names are not hardcoded in React.
+- Current repository boundaries are suitable for replacement. Hierarchy,
+  richer product/variant fields, and DTO mappings are explicitly later work.
+
+Detailed evidence: `docs/architecture/BACKEND_API_AUDIT.md`.
+
+### Acceptance criteria
+
+- Findings classified as Keep / Remove / Refactor later / Do not touch
+- Obsolete backend code removed only if proven (none found)
+- Existing storefront and SEO unchanged
+- Revised S4–S8 roadmap documented
+
+### Testing requirements
+
+Documentation/consistency review plus existing frontend test, typecheck, lint,
+and production build.
+
+### Validation results
+
+- `npm test`: passed (31 files, 123 tests)
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- `npm install`: not required; manifests unchanged and dependencies present
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Audit recorded, no unjustified cleanup performed, and S4-T02 recorded
+**NOT_STARTED**.
 
 ---
 
-## S4-T01 — Cart Domain Model
+## S4-T02 — Customer Navigation/Category Hierarchy
 
 **Status:** NOT_STARTED
 
 ### Objective
 
-Define cart entity/value objects and pure domain operations (add, update qty, remove).
+Define the data-driven customer navigation and category hierarchy needed for
+prominent ecommerce navigation.
 
-### Dependencies
+### Scope
 
-S1-T05 (product type).
+Model parent/child categories, menu visibility/order, and a recursive navigation
+view model. Confirm customer taxonomy before adding values.
 
-### Requirements
+### Guardrails
 
-Domain must not import React. Persistence **TBD** (client storage chosen in S4-T02).
-
-### Implementation scope
-
-Domain + tests only.
-
-### Expected files/modules
-
-- Cart types and functions in `frontend` domain/application
-
-### Acceptance criteria
-
-- Add/update/remove are unit-tested
-- Unknown product handling defined (reject vs ignore) and tested
-
-### Testing requirements
-
-Unit tests for cart operations.
-
-### Definition of Done
-
-Domain complete; no UI required in this task.
+No hardcoded category tree in React. No API implementation, search behavior,
+account, cart, or Track Your Order behavior. Preserve existing routes unless a
+separate URL decision is approved.
 
 ---
 
-## S4-T02 — Cart Persistence Adapter (Client)
+## S4-T03 — API/Domain Contracts
 
 **Status:** NOT_STARTED
 
 ### Objective
 
-Implement a cart repository for the browser (e.g. memory + `localStorage`). Choice documented; not server-backed.
+Define stable Mini Mystiq category, product, variant, pricing, and inventory API
+contracts plus explicit transport-to-domain mappings.
 
-### Dependencies
+### Scope
 
-S4-T01.
+Nullability, IDs, hierarchy, pagination/error semantics, and dummy API runtime
+are decided here. Unknown values remain optional/nullable.
 
-### Requirements
+### Guardrails
 
-Infrastructure implements a cart repository interface. No FastAPI.
-
-### Implementation scope
-
-Cart repository + wiring.
-
-### Expected files/modules
-
-- `CartRepository` interface
-- Client storage implementation
-- Docs note on persistence
-
-### Acceptance criteria
-
-- Cart survives reload if localStorage chosen
-- SSR catalog pages do not break (cart is a client concern)
-
-### Testing requirements
-
-Unit tests with a fake storage.
-
-### Definition of Done
-
-Adapter tested.
+Do not expose Zoho DTOs to UI/application consumers. No real Zoho calls.
 
 ---
 
-## S4-T03 — Add / Update / Remove Cart UI
+## S4-T04 — Dummy Category API
 
 **Status:** NOT_STARTED
 
 ### Objective
 
-Client Component controls on PDP (and listing if simple) to mutate the cart.
+Implement the S4-T03 category contract using development data, including the
+approved hierarchy/menu semantics.
 
-### Dependencies
+### Guardrails
 
-S4-T02, S2-T03.
-
-### Requirements
-
-Keyboard accessible and touch-friendly buttons. Do not block crawlable product HTML behind the cart island. Mobile-first PDP cart controls.
-
-### Implementation scope
-
-Cart buttons + application service used by client island.
-
-### Expected files/modules
-
-- Add-to-cart client component
-- Cart application service
-
-### Acceptance criteria
-
-- User can add a mock product and change quantity
-- Product content remains in server HTML
-- Controls are usable on a narrow viewport (touch, not hover-only)
-
-### Testing requirements
-
-Unit tests for the service; component test if runner supports it.
-
-### Definition of Done
-
-Mutations work on mock products.
+No production database or Zoho integration. Static repositories remain
+available during migration.
 
 ---
 
-## S4-T04 — Cart Page
+## S4-T05 — Dummy Product API
 
 **Status:** NOT_STARTED
 
 ### Objective
 
-Cart page listing lines, quantities, remove. Not indexable as a catalog page.
+Implement list/query product responses using the S4-T03 contract and approved
+catalog data.
 
-### Dependencies
+### Guardrails
 
-S4-T03.
-
-### Requirements
-
-Semantic table/list. No payment. SEO: do not add cart to sitemap. Mobile-first cart page (no horizontal scroll).
-
-### Implementation scope
-
-Cart route + UI.
-
-### Expected files/modules
-
-- Cart page
-- Line item component
-
-### Acceptance criteria
-
-- Empty cart state
-- Lines reflect repository
-- No checkout charge
-- Cart is usable on a phone: quantities and remove are touch-friendly; no horizontal scroll
-
-### Testing requirements
-
-Build + unit tests for line calculations (if any). Currency formatting **TBD**.
-
-### Definition of Done
-
-Cart page complete.
+Do not invent products, categories, prices, SKU, inventory, or status values.
 
 ---
 
-## S4-T05 — Checkout UI Shell (No Payment)
+## S4-T06 — Dummy Product Detail API
 
 **Status:** NOT_STARTED
 
 ### Objective
 
-Non-functional or form-only checkout shell stating payment is not available. No provider integration.
+Implement product-detail lookup and not-found behavior through the stable API
+contract.
 
-### Dependencies
+### Guardrails
 
-S4-T04.
-
-### Requirements
-
-Do not collect real payment data. Do not pretend orders persist on a server. Mobile-first shell.
-
-### Implementation scope
-
-Checkout route shell + copy that Phase 3 will implement payment.
-
-### Expected files/modules
-
-- Checkout page shell
-- Not in sitemap
-
-### Acceptance criteria
-
-- Page exists and is clearly non-charging
-- No FastAPI order API
-- Usable on a narrow viewport; no horizontal scroll
-
-### Testing requirements
-
-Build; no payment tests.
-
-### Definition of Done
-
-Shell only.
+Preserve `/p/{slug}`, metadata, and product structured data behavior.
 
 ---
 
-## S4-T06 — Home Page Shell and Accessibility Pass
+## S4-T07 — Variant/Size/Color Model
 
 **Status:** NOT_STARTED
 
 ### Objective
 
-Home page with internal links to catalog; accessibility pass on storefront shell. Merchandising content **TBD**.
+Define variant identity and generic option/attribute semantics.
 
-### Dependencies
+### Guardrails
 
-S2 catalog routes, S1-T07.
-
-### Requirements
-
-Do not invent campaigns. Placeholder hero/copy allowed if labeled as placeholder. Mobile-first home and a11y pass including touch.
-
-### Implementation scope
-
-Home content + a11y fixes (focus, alt, headings).
-
-### Expected files/modules
-
-- Home page
-- Shared shell fixes
-
-### Acceptance criteria
-
-- Home links into catalog
-- Heading order valid on home/category/product/cart
-- Keyboard access to nav and cart controls
-- Mobile-first: no horizontal scroll; touch-friendly nav and cart controls
-
-### Testing requirements
-
-Lint, build, manual a11y checklist recorded in the task notes or docs.
-
-### Definition of Done
-
-A11y pass documented; home is a shell not a marketing CMS.
+Sizes, colors, SKU values, and option vocabularies remain TBD until confirmed.
 
 ---
 
-## S4-T07 — Phase 1 Storefront Review
+## S4-T08 — Pricing/Inventory Model
 
 **Status:** NOT_STARTED
 
 ### Objective
 
-Confirm Phase 1 DoD: SEO storefront, mobile-first UX, mock repos, cart client-side, no backend. Sync docs.
+Define nullable pricing and inventory contracts without inventing commercial
+facts.
 
-### Dependencies
+### Guardrails
 
-S4-T01 … S4-T06.
+Currency, tax, discounts, stock quantities, reservations, and availability
+policies require confirmed requirements.
 
-### Requirements
+---
 
-No Phase 2 leakage.
+## S4-T09 — Connect UI to Dummy API
 
-### Implementation scope
+**Status:** NOT_STARTED
 
-Review, doc sync, small fixes.
+### Objective
 
-### Expected files/modules
+Add repository adapters/composition wiring so current pages consume the dummy
+API without changing presentation contracts.
 
-- Status + architecture + README
+### Guardrails
 
-### Acceptance criteria
+Keep catalog HTML server-rendered and SEO behavior stable. Retain a controlled
+static fallback until the migration is verified.
 
-- No FastAPI/PostgreSQL implementation
-- Repository interfaces still the persistence boundary
-- Sprint 3 SEO features still present
-- Storefront is mobile-first (nav, listing, PDP, cart); no horizontal scroll at mobile widths
+---
 
-### Testing requirements
+## S4-T10 — Loading/Error/Empty States
 
-Full frontend test + lint + build.
+**Status:** NOT_STARTED
 
-### Definition of Done
+### Objective
 
-Phase 1 implementation closed in status; S5-T01 recorded, not started. Do not start Phase 2.
+Handle API loading, repository failure, not-found, and valid empty catalog
+states.
+
+### Guardrails
+
+Do not convert crawlable pages into client-only shells.
+
+---
+
+## S4-T11 — API-driven Navigation
+
+**Status:** NOT_STARTED
+
+### Objective
+
+Render the approved hierarchy from API/application navigation contracts.
+
+### Guardrails
+
+Customer category names and nesting come from data. Search, account, cart, and
+Track Your Order behavior remain separate tasks unless explicitly included.
+
+---
+
+## S4-T12 — Sprint Review
+
+**Status:** NOT_STARTED
+
+### Objective
+
+Verify the storefront, dummy API boundary, hierarchy, responsive behavior, and
+SEO regressions; synchronize documentation.
+
+### Guardrails
+
+Do not start Sprint 5 automatically.

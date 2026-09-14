@@ -96,7 +96,8 @@ Option 1 **shows** Wishlist and Account. Customer accounts are Phase 2 (Sprint 8
 
 Offers / New Arrivals links are design IA. Coupon engine is not Phase 1. Destination pages **TBD**.
 
-Cart icon is in scope for Sprint 4.
+Cart and other commerce chrome are planned for Sprint 5. S4-T02/S4-T11 focus
+on data-driven customer navigation/category hierarchy.
 
 ---
 

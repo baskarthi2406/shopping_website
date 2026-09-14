@@ -22,7 +22,7 @@ Charge orders via a payment provider. Provider **TBD**.
 
 ### Dependencies
 
-S7-T03, S8-T02 (if customer payment methods require accounts).
+Sprint 8 order/checkout contracts; authentication if approved and required.
 
 ### Requirements
 
@@ -63,7 +63,7 @@ Transactional email (order confirmation at minimum). Provider **TBD**.
 
 ### Dependencies
 
-S9-T01 or S7-T03 if emails on order-create without pay.
+S9-T01 or the Sprint 8 order workflow if emails are sent before payment.
 
 ### Requirements
 
@@ -142,7 +142,7 @@ Shipping rates/labels. Carrier **TBD**. Do not invent rate tables.
 
 ### Dependencies
 
-S7-T03.
+Sprint 8 order workflow.
 
 ### Requirements
 
@@ -182,7 +182,7 @@ Apply coupons at cart/checkout if in scope. Rules **TBD**. Admin coupons module 
 
 ### Dependencies
 
-S7-T02; admin shell.
+Sprint 8 cart/order workflow; admin/operations shell if approved.
 
 ### Requirements
 

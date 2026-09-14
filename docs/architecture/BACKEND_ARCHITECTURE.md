@@ -1,6 +1,7 @@
 # Backend Architecture
 
-Phase 2. **Not started.** Do not implement in Phase 1.
+Production backend. **Not started.** Scheduled for Sprint 6. Sprint 4 dummy API
+work must not be mistaken for this production backend.
 
 ---
 
@@ -13,7 +14,12 @@ Phase 2. **Not started.** Do not implement in Phase 1.
 | Database | PostgreSQL |
 | Shape | **Modular monolith** (ADR 0003) |
 
-ORM, migrations, and API error envelope: **TBD** in Sprint 5 (then ADR if needed).
+ORM and migrations: **TBD** in Sprint 6. The stable storefront-facing API/domain
+contract starts in S4-T03; runtime, versioning, and error envelope remain TBD
+until that task.
+
+ADR 0005 requires raw dummy and Zoho DTOs to remain behind infrastructure
+mappers.
 
 ---
 
@@ -64,7 +70,7 @@ Routers do not contain business rules and do not import ORM models.
 ## PostgreSQL boundary
 
 - System of record for catalog, UOM, inventory, carts, orders, customers, users, audit (as those sprints land)
-- Schema via migrations (tool TBD S5-T02)
+- Schema via migrations (tool TBD in Sprint 6 planning)
 - **Only** backend infrastructure talks to Postgres
 - Next.js never uses a DB driver
 - Undecided columns stay TBD — do not invent catalog fields
@@ -73,18 +79,28 @@ Routers do not contain business rules and do not import ORM models.
 
 ## API boundary
 
-Proposal for Sprint 5 (not implemented): `/api/v1/`. Confirm in S5-T04 + ADR.
+The Mini Mystiq-owned API contract is defined before implementation in S4-T03.
+Version/prefix are TBD; `/api/v1/` is only a prior proposal.
 
-Frontend `Http*Repository` is the only consumer of this API from the storefront.
+Frontend `Http*Repository` implementations consume this API from the storefront.
+Pages/components do not consume transport DTOs directly.
 
-CORS, rate limits, auth: TBD Sprint 5/8.
+CORS, rate limits, auth: TBD Sprint 6/8.
+
+## Dummy and Zoho adapters
+
+- S4-T04–S4-T06: dummy catalog APIs implementing the stable S4-T03 contract.
+- S7: Zoho POS transport DTOs, mappings, and repository adapters.
+- Dummy payloads may resemble verified Zoho responses inside infrastructure,
+  but Zoho field names/nullability/identifiers do not become UI contracts.
+- No real Zoho calls in CI.
 
 ---
 
 ## Admin
 
 - Same application/domain modules as the public API where practical
-- Admin UI host TBD (ADR in S6-T04): Next.js app vs separate
+- Admin UI host and schedule TBD
 - Desktop-priority, responsive, `noindex`, auth + RBAC (Sprint 8)
 - Planned modules: `docs/requirements/ADMIN_REQUIREMENTS.md`
 

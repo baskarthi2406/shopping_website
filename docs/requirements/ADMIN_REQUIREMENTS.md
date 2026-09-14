@@ -1,6 +1,7 @@
 # Admin Requirements
 
-**Admin implementation belongs to Phase 2.** Do not build admin UI or admin APIs in Phase 1.
+**Admin implementation belongs to future production/operations work.** Do not
+build admin UI or admin APIs unless the current task explicitly schedules them.
 
 Module list is a **roadmap**, not a Sprint 1 backlog. Workflows, fields, and permissions are **TBD**.
 
@@ -11,11 +12,11 @@ Module list is a **roadmap**, not a Sprint 1 backlog. Workflows, fields, and per
 | Module | Intent | Earliest sprint (planned) |
 |--------|--------|---------------------------|
 | Dashboard | Operational overview | TBD (after core entities exist) |
-| Products | Create/edit catalog products | Sprint 6 |
-| Categories | Catalog taxonomy | Sprint 6 |
-| UOM | Units of measure | Sprint 6 |
-| Inventory | Stock levels / movements TBD | Sprint 7 |
-| Orders | Order operations | Sprint 7 |
+| Products | Create/edit catalog products | TBD after production backend |
+| Categories | Catalog taxonomy | TBD after production backend |
+| UOM | Units of measure | TBD after production backend |
+| Inventory | Stock levels / movements TBD | TBD after S7 integration |
+| Orders | Order operations | Sprint 8 or later |
 | Customers | Customer records | Sprint 8 |
 | Coupons | Promotions TBD | Sprint 9 (or later) |
 | Content | Storefront content TBD | TBD |
@@ -28,7 +29,8 @@ Module list is a **roadmap**, not a Sprint 1 backlog. Workflows, fields, and per
 ## Rules
 
 - Admin must not be publicly indexable.
-- Admin requires authentication and RBAC (Sprint 8). Until then, any early admin shell in Sprint 6 must not be treated as production-safe (**TBD** temporary protection).
+- Admin requires authentication and RBAC (scope planned Sprint 8, details TBD).
+  Do not expose an unauthenticated temporary admin shell.
 - Prefer reusing backend application services rather than duplicating domain rules in the admin UI.
 - Admin may **prioritize desktop** usability but **must remain responsive**. Unlike the customer storefront, admin is not required to be mobile-first.
 

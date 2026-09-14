@@ -11,6 +11,6 @@ Canonical models live here. Do **not** duplicate `Product` / `Category` / `Cart`
 | Folder | Concepts |
 |--------|----------|
 | `catalog/` | Product, Category, ProductVariant, Uom, inventory status (S1-T05 types; many fields TBD) |
-| `cart/` | Cart, CartItem, line math (Sprint 4) |
+| `cart/` | Cart, CartItem, line math (planned Commerce UI; exact task TBD) |
 
 Grouped as **catalog** + **cart** (S1-T01/S1-T02). Not separate top-level `product/` and `category/` trees.

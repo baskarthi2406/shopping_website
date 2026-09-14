@@ -22,7 +22,7 @@ Define and persist customer segments. Rules **TBD** (do not invent RFM unless ap
 
 ### Dependencies
 
-S8-T01.
+Sprint 8 customer/order data, if approved and available.
 
 ### Requirements
 

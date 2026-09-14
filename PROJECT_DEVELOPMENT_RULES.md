@@ -112,7 +112,9 @@ Every task specification must include:
 - Execute sprints in order unless status files explicitly record a change.
 - A sprint is not started until its first task is the current task.
 - Do not pull work from a later sprint into the current sprint.
-- Phase 1 must not implement FastAPI, PostgreSQL, admin backends, payments, or marketing platforms.
+- Phase 1 may implement the explicitly scheduled dummy API behind stable
+  contracts. It must not implement the production backend, PostgreSQL, Zoho,
+  admin backends, payments, or marketing platforms.
 - Phase 2 must not implement Phase 3+ commerce integrations unless the current task says so.
 - Update `SPRINT_STATUS.md` when a task or sprint status changes.
 
@@ -150,13 +152,17 @@ Intended layers:
 
 - **Domain** — entities, value objects, domain rules
 - **Application** — use cases / services
-- **Infrastructure** — repositories, HTTP, CMS, database, filesystem
-- **Interface / API** — Next.js pages/routes (Phase 1), FastAPI endpoints (Phase 2)
+- **Infrastructure** — static/dummy/vendor repositories, HTTP, CMS, database,
+  filesystem
+- **Interface / API** — Next.js pages/routes and scheduled dummy API;
+  production FastAPI endpoints later
 
 Rules:
 
 - UI talks to application services or use cases, not to data stores.
-- Repositories are abstractions. Phase 1 may use static/mock data. Phase 2 may use FastAPI + PostgreSQL.
+- Repositories are abstractions. Current development may use static/mock data
+  and an explicitly scheduled dummy API. Production may use FastAPI/PostgreSQL
+  and Zoho adapters.
 - Replacing a static repository with an API repository must not require a storefront rewrite.
 - Do not bypass layers “for convenience”.
 - Do not redesign architecture without an ADR.
@@ -172,17 +178,18 @@ Rules:
 | Infrastructure | Domain, Application interfaces | UI components |
 | UI / HTTP adapters | Application | SQL, ORM, other UI frameworks’ internals |
 
-Phase 1 data flow:
+Current data flow:
 
 ```
 Next.js UI → Application → Repository interface → Static/mock repository
 ```
 
-Phase 2 data flow:
+Planned data flow:
 
 ```
 Next.js UI → Application → Repository interface → API client
-    → FastAPI → Application/Domain → Repository → PostgreSQL
+    → Mini Mystiq API contract → dummy or production implementation
+    → optional Zoho adapter
 ```
 
 ---
@@ -193,7 +200,9 @@ Next.js UI → Application → Repository interface → API client
 - Use Next.js App Router unless an ADR changes this.
 - Prefer Server Components for crawlable catalog/content pages.
 - Use Client Components only for interactive islands (cart controls, forms).
-- Do not fetch from a FastAPI backend until Phase 2 tasks require it.
+- Do not fetch from any API until the current Sprint 4 task explicitly requires
+  the dummy repository/adapter. Production FastAPI and Zoho wait for their
+  scheduled sprints.
 - Keep page files thin: compose domain/application modules; do not embed catalog rules in `page.tsx`.
 - Semantic HTML is required.
 - Storefront UI is mobile-first (Mobile → Tablet → Desktop). See Section 14.
@@ -294,11 +303,11 @@ Details: `docs/requirements/MOBILE_REQUIREMENTS.md`.
 
 ---
 
-## 15. FastAPI Rules (Phase 2)
+## 15. Production Backend Rules (Sprint 6+)
 
 - Backend lives in `backend/`.
-- Phase 2 shape is a **modular monolith** (ADR 0003), not microservices.
-- Do **not** implement FastAPI during Phase 1.
+- Planned shape is a **modular monolith** (ADR 0003), not microservices.
+- Do **not** implement FastAPI or PostgreSQL during dummy API tasks.
 - FastAPI handles HTTP only: validation, authn/authz hooks, status codes.
 - Business rules belong in application/domain modules, not in route functions.
 - Use a documented error model and API versioning strategy (details TBD until Sprint 5).
@@ -306,9 +315,10 @@ Details: `docs/requirements/MOBILE_REQUIREMENTS.md`.
 
 ---
 
-## 16. PostgreSQL Rules (Phase 2)
+## 16. PostgreSQL Rules (Sprint 6+)
 
-- PostgreSQL is the Phase 2 system of record.
+- PostgreSQL is the planned production-backend system of record unless a later
+  ADR changes it.
 - Schema changes go through migrations (tool TBD in Sprint 5).
 - Do not access the database from Next.js in Phase 2; go through the API.
 - Do not invent schema for undecided business fields; mark them TBD.
@@ -380,7 +390,9 @@ Examples:
 ## 21. Dependency Rules
 
 - Do not add a dependency unless the current task requires it.
-- Prefer the existing stack: Next.js, React, TypeScript, Tailwind (Phase 1); Python, FastAPI, PostgreSQL (Phase 2).
+- Prefer the existing stack: Next.js, React, TypeScript, Tailwind; Python,
+  FastAPI, PostgreSQL for the planned production backend. Dummy API runtime is
+  decided in S4-T03, not assumed.
 - New libraries need a short justification in the task notes or an ADR if they affect architecture.
 - Do not install packages during documentation-only tasks.
 
@@ -449,8 +461,8 @@ After a task is completed:
 
 | Phase | Allowed | Not allowed |
 |-------|---------|-------------|
-| Phase 1 | SEO-first Next.js storefront, static/mock repositories | FastAPI, PostgreSQL, admin implementation, payments |
-| Phase 2 | FastAPI, PostgreSQL, admin, auth, inventory, orders | Payment/email/shipping providers unless a Phase 2 task explicitly includes a stub |
+| Storefront + dummy API (S1–S5) | Next.js storefront, static/mock repositories, explicitly scheduled dummy API | Production DB/backend, Zoho, admin implementation, payments |
+| Production + integration (S6–S8) | FastAPI/PostgreSQL as approved, Zoho adapter, explicitly scheduled operations | Payment/email/shipping providers unless explicitly approved |
 | Phase 3 | Payment, email, messaging, shipping | Production cutover |
 | Phase 4 | Segmentation, campaigns, analytics | Unrelated storefront rewrites |
 | Phase 5 | Production readiness and deployment | New major product features |

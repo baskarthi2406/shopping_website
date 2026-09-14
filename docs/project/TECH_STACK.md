@@ -15,12 +15,13 @@
 | Visual assets | `public/` (logo + product/promo photos) | Approved; inventory in `DESIGN_ASSETS.md` |
 | Image pipeline | Next.js Image | In use for the approved logo (`frontend/public/mini-mystiq-logo.png`) |
 | Routing | App Router at `frontend/app/` (no `src/`) | Decided (ADR 0002); S1-T03 |
-| Data | Static/mock repositories | Implemented S1-T05 (`config/catalog.ts` → ports → static repos) |
+| Data | Static/mock repositories | Implemented S1-T05 (`config/catalog.ts` → ports → static repos); retained by S4-T01 |
+| Dummy API | Runtime/transport TBD | Contracts in S4-T03; implementation S4-T04–S4-T06 |
 | Testing tools | Vitest 4.1.10 (Node environment) | Decided S1-T06; colocate `*.test.ts` |
 | Linting | ESLint 9.39.5 + `eslint-config-next` 16.3.0 | Reviewed S1-T06; keep Next Core Web Vitals + TypeScript |
 | Formatting | No Prettier | Decided S1-T06 — avoid a second style tool; ESLint + editor defaults |
 
-## Phase 2 — Backend
+## Planned production backend — Sprint 6
 
 | Concern | Choice | Status |
 |---------|--------|--------|
@@ -31,13 +32,22 @@
 | ORM / SQL layer | TBD | Sprint 5 |
 | Auth | TBD | Sprint 8 |
 
+## Planned integration — Sprint 7
+
+| Concern | Choice | Status |
+|---------|--------|--------|
+| POS integration | Zoho POS behind repository/mapper adapters | Planned; API details TBD |
+| Vendor isolation | Mini Mystiq contracts + anti-corruption mapping | Decided; ADR 0005 |
+
 ## Phase 3+
 
 Payment, email, messaging, shipping, analytics, hosting, CI/CD: **TBD**.
 
-## Explicitly out of Phase 1
+## Explicitly out of current S4-T01
 
 - FastAPI application code
 - PostgreSQL schema
+- Dummy API implementation
+- Zoho integration
 - Admin implementation
 - Payment processing

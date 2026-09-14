@@ -14,7 +14,9 @@ Phase 1 storefront lives in `frontend/`. Stack: Next.js, React, TypeScript, Tail
 - Client Components only for interactive islands (cart, forms).
 - Domain types must not import React or Next.js.
 - Do not use `any` without a one-line justification. Prefer `unknown`.
-- Do not call FastAPI until a Phase 2 task requires the HTTP repository.
+- Do not call an API until the current task schedules the repository adapter.
+  Dummy API work starts in Sprint 4; production FastAPI waits for Sprint 6 and
+  Zoho for Sprint 7.
 - Semantic HTML: `header`, `main`, `footer`, headings in order, real links.
 - Storefront is mobile-first: Mobile → Tablet → Desktop. Desktop extends mobile; do not design desktop-first and squeeze.
 - Touch-friendly controls (no hover-only actions). No horizontal scrolling. Responsive type and images.
@@ -24,6 +26,7 @@ Phase 1 storefront lives in `frontend/`. Stack: Next.js, React, TypeScript, Tail
 
 SEO is first-class: crawlable category/product HTML, metadata from data, canonicals, sitemap, robots, JSON-LD, OpenGraph, Next.js `Image`, internal links. Do not ship client-only catalog shells.
 
-Cart in Phase 1 is client-side. Checkout must not charge cards in Phase 1.
+Cart/commerce UI belongs to the revised Sprint 5 plan. Checkout/order behavior
+belongs to Sprint 8 and must not charge cards without an approved payment task.
 
 Do not add dependencies unless the current task requires them. Do not create `package.json` during documentation-only tasks.

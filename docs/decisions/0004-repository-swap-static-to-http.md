@@ -3,20 +3,30 @@
 - **Status:** Accepted
 - **Date:** 2026-08-11
 
+Extended by ADR 0005 (stable storefront contracts and Zoho adapter boundary).
+
 ## Context
 
-Phase 1 has no FastAPI. Phase 2 must not rewrite the storefront. UI must not bind to JSON files or `fetch` URLs.
+The current storefront has no API server. Introducing dummy HTTP and later
+production/Zoho implementations must not rewrite the storefront. UI must not
+bind to JSON files, vendor DTOs, or `fetch` URLs.
 
 ## Decision
 
-- Application layer depends on **repository interfaces** (`IProductRepository`, `ICategoryRepository`, later cart/order).
+- Application layer depends on **repository interfaces** (`ProductRepository`,
+  `CategoryRepository`, later cart/order).
 - Phase 1 infrastructure: static/mock repositories + fixtures (image paths = SEO filenames).
-- Phase 2 frontend infrastructure: HTTP repositories calling FastAPI with the **same interfaces**.
-- Phase 2 backend: SQL repositories behind the same domain ideas.
+- HTTP repositories call the Mini Mystiq API contract with the **same
+  application interfaces**. Sprint 4 first exercises this boundary with a dummy
+  API; later production/Zoho adapters replace it.
+- Production backend repositories remain behind the same domain ideas.
 - Composition root (config/env) selects the implementation. Pages never choose.
 
 ## Consequences
 
 - S1-T05 introduces interfaces + static impl + tests.
-- S5-T06 adds HTTP adapters; UI use cases stay.
+- S4-T03 defines the API/domain contract; S4-T04–S4-T09 introduce and connect
+  dummy implementations. Production/Zoho adapters arrive in later sprints.
 - Bypassing the interface from a page is an architecture violation.
+- Vendor DTOs are mapped inside infrastructure and do not become UI contracts
+  (ADR 0005).

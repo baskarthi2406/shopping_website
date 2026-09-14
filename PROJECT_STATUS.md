@@ -23,37 +23,42 @@ This file is the live index of project state. A new AI session must read it afte
 
 ## Current Phase
 
-**Phase 1 — SEO-First Storefront**
+**Phase 1 — Customer Storefront + Dummy API Foundation**
 
-Do **not** implement FastAPI, PostgreSQL, or admin during this phase.
+Do **not** implement the production backend, Zoho integration, auth, checkout,
+or payments unless the current task explicitly schedules them.
 
 ---
 
 ## Current Sprint
 
-**Sprint 3 — Homepage + SEO**  
-Status: **IN_PROGRESS** (S3-T01 … S3-T09 completed)
+**Sprint 4 — Customer Storefront + Dummy API Foundation**
+Status: **IN_PROGRESS** (S4-T01 completed)
+
+Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
+Optimization intentionally deferred.
 
 ---
 
 ## Current Task
 
-**S3-T10 — Image Optimization**  
+**S4-T02 — Customer Navigation/Category Hierarchy**
 Status: **NOT_STARTED**
 
-Do not start S3-T10 automatically.
+Do not start S4-T02 automatically.
 
-Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-03.md`.
+Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
 There is **no S1-T09**. There is **no S2-T08**.
 
-Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
+S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” are
+**deferred**.
 
 ---
 
 ## Overall Status
 
-**SPRINT_3_IN_PROGRESS**
+**SPRINT_4_IN_PROGRESS**
 
 ---
 
@@ -82,9 +87,13 @@ Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
 - OpenGraph reviewed (S3-T09; already present from S3-T02/S3-T03)
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
-### Backend (Phase 2 — not started)
+### API/backend roadmap (implementation not started)
 
-- Python, FastAPI modular monolith (ADR 0003), PostgreSQL
+- Sprint 4: stable Mini Mystiq API/domain contracts and dummy catalog APIs
+- Sprint 6: production backend (planned FastAPI modular monolith + PostgreSQL;
+  ADR 0003)
+- Sprint 7: Zoho POS adapter behind repository interfaces (ADR 0005)
+- No backend/API/server implementation exists as of S4-T01
 
 ---
 
@@ -108,22 +117,37 @@ Original S3-T01 “SEO-Friendly URL Strategy” is **deferred** (not started).
 - S3-T07 — Breadcrumb Structured Data
 - S3-T08 — Organization Structured Data
 - S3-T09 — OpenGraph
+- S4-T01 — Backend/API Audit & Cleanup (no obsolete implementation found)
 
 ## In progress
 
-- None. Do not start S3-T10 automatically.
+- None. Do not start S4-T02 automatically.
 
 ## Pending
 
-- S3-T10 — Image Optimization (next)
-- Deferred original S3-T01 — SEO-Friendly URL Strategy (not started)
-- Remainder of Sprint 3–11
+- S4-T02 — Customer Navigation/Category Hierarchy (next)
+- S4-T03–S4-T12 — API contracts, dummy catalog APIs, API-driven storefront,
+  and review
+- Sprint 5 — Commerce UI
+- Sprint 6 — Production Backend
+- Sprint 7 — Zoho POS Integration
+- Sprint 8 — Orders, Checkout & Operations
+- S3-T10 — Image Optimization (**DEFERRED**)
+- Original S3-T01 — SEO-Friendly URL Strategy (**DEFERRED**)
+- Sprints 9–11 remain future plans
 
 ## Blockers
 
-- None for starting S3-T10 when explicitly requested.
-- Business TBD: domain, legal entity, catalog taxonomy, vendors, Pigeon/Careers/character-print, navy/tan and several dress categories, dedicated category/hero lifestyle art, toys (no approved toy assets), pricing, UOM, variants, inventory display, brand-guide hex, WCAG/CWV numeric targets, listing filter/sort rules. Announcement/trust-bar copy is from Option 1; operations still TBD. Production canonical domain remains TBD — set `NEXT_PUBLIC_SITE_URL` before live deploy.
+- None for starting S4-T02 when explicitly requested.
+- Business/API TBD: exact category hierarchy/order, descendant-listing semantics,
+  Zoho API access/schema/auth/rate limits, dummy API runtime/error/pagination
+  shape, pricing/currency/tax, SKU ownership, UOM, variants/options, inventory,
+  product status, search behavior, account/auth, cart, Track Your Order,
+  checkout/operations, production domain, and deployment.
+- Existing business/asset TBDs remain: legal entity, Pigeon/Careers/
+  character-print, several dress categories, dedicated category/hero art, toys,
+  brand-guide hex, WCAG/CWV targets, and filter/sort rules.
 
 ## Next task (do not start automatically)
 
-**S3-T10 — Image Optimization**
+**S4-T02 — Customer Navigation/Category Hierarchy**

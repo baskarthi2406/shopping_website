@@ -5,10 +5,13 @@
 | Sprint ID | S3 |
 | Phase | Phase 1 — SEO-First Storefront |
 | Objective | Customer homepage, then first-class SEO for the storefront |
-| Status | IN_PROGRESS |
+| Status | MOSTLY_COMPLETE |
 | Dependencies | Sprint 2 completed |
 
-Sprint 3 was **reordered**: S3-T01 is the Option 1 homepage (the storefront was still a shell). The original S3-T01 “SEO-Friendly URL Strategy” is **deferred**, not cancelled — see below. Remaining S3-T02 … S3-T11 stay SEO tasks.
+Sprint 3 was **reordered**: S3-T01 is the Option 1 homepage (the storefront was
+still a shell). The original S3-T01 “SEO-Friendly URL Strategy” is deferred, not
+cancelled. S3-T01–S3-T09 are complete; S3-T10 is deferred and the S3-T11 review
+scope moved to S4-T12 during S4-T01 roadmap alignment.
 
 Follow `docs/requirements/SEO_REQUIREMENTS.md` and `docs/requirements/MOBILE_REQUIREMENTS.md`. Domain and legal names remain **TBD**. Storefront SEO work must not regress mobile-first layout or Core Web Vitals considerations.
 
@@ -449,7 +452,7 @@ OpenGraph reviewed and confirmed. S3-T10 recorded **NOT_STARTED**.
 
 ## S3-T10 — Image Optimization
 
-**Status:** NOT_STARTED
+**Status:** DEFERRED
 
 ### Objective
 
@@ -486,11 +489,17 @@ Build; component test optional.
 
 Optimized images on catalog pages.
 
+### Deferral note
+
+Intentionally deferred during the S4-T01 roadmap alignment. Existing successful
+image behavior is unchanged. Do not implement S3-T10 unless a human explicitly
+reactivates it.
+
 ---
 
 ## S3-T11 — Internal Linking and SEO Review
 
-**Status:** NOT_STARTED
+**Status:** DEFERRED (review scope moved to S4-T12)
 
 ### Objective
 
@@ -525,4 +534,5 @@ Lint, unit tests, build.
 
 ### Definition of Done
 
-Sprint 3 completed in status; S4-T01 recorded, not started.
+Deferred during S4-T01 roadmap alignment. Existing internal linking and SEO
+remain unchanged; the cross-cutting regression review is now part of S4-T12.

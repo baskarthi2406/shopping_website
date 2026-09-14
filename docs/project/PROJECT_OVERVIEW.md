@@ -12,7 +12,9 @@ Tagline: **Delivering Style & Tech**
 
 ## Purpose
 
-Deliver an SEO-first public storefront for baby clothes and toys, then a FastAPI + PostgreSQL backend, admin, commerce integrations, marketing, and production deployment.
+Deliver an SEO-first public storefront for baby clothes and toys, define stable
+Mini Mystiq application/API contracts with dummy implementations, then add a
+production backend and Zoho POS integration without rebuilding the UI.
 
 ## Business goal
 
@@ -23,11 +25,16 @@ Enable customers to discover, browse, and (in later phases) purchase baby clothe
 - Git is the source of truth.
 - Cursor is the implementation tool.
 - One task at a time.
-- Phase 1: Next.js + React + TypeScript + Tailwind storefront with mock/static repositories.
+- Current storefront: Next.js + React + TypeScript + Tailwind with mock/static
+  repositories.
 - Storefront is mobile-first (Mobile → Tablet → Desktop). Admin (Phase 2) may be desktop-priority but must stay responsive.
 - Brand: Mini Mystiq. Approved logo and photos live in `public/`. See `docs/project/DESIGN_ASSETS.md`. Do not replace the logo or invent stock imagery.
 - Homepage visual design: **Option 1 finalized** (`docs/project/DESIGN_OPTION_1.md`, ADR 0001).
-- Phase 2: FastAPI + PostgreSQL **modular monolith** (not microservices); admin implementation.
+- Sprint 4: customer navigation hierarchy, stable contracts, and dummy catalog
+  APIs.
+- Sprint 6: planned FastAPI + PostgreSQL **modular monolith** production backend.
+- Sprint 7: Zoho POS integration behind repository adapters (ADR 0005).
+- Sprint 8: orders, checkout, and operations as requirements are confirmed.
 - Phases 3–5: commerce, marketing, production.
 
 ## TBD (do not invent)
@@ -36,10 +43,11 @@ Enable customers to discover, browse, and (in later phases) purchase baby clothe
 - Trading name vs Mini Mystiq on invoices/legal pages
 - Domain and hosting
 - Target markets and languages
-- Catalog taxonomy (exact categories)
+- Catalog taxonomy (exact full hierarchy/order and menu visibility)
 - Pricing, tax, shipping, returns
 - Payment, email, SMS, analytics vendors
 - Inventory and fulfillment model
+- Zoho API capabilities, credentials, identifiers, rate limits, and sync model
 - Content and merchandising strategy
 
 ## Related documents

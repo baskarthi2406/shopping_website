@@ -1,6 +1,7 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly requests S3-T10.
+Only this task may be implemented. Do not start it until a human explicitly
+requests S4-T02.
 
 ---
 
@@ -8,57 +9,58 @@ Only this task may be implemented. Do not start it until a human explicitly requ
 
 | Field | Value |
 |-------|--------|
-| Task ID | S3-T09 |
-| Task | OpenGraph |
+| Task ID | S4-T01 |
+| Task | Backend/API Audit & Cleanup |
 | Status | **COMPLETED** |
-| Scope | Reviewed existing OpenGraph from S3-T02/S3-T03. No metadata rebuild. Added mapping tests. Homepage hero, category stand-ins, primary product images; canonical equals `og:url`. |
+| Scope | Repository-wide backend/API/dependency audit, catalog architecture assessment, and roadmap alignment. No obsolete backend code existed; no application code or dependencies were removed. |
 
 ---
 
 ## Task ID
 
-S3-T10
+S4-T02
 
 ## Task
 
-Image Optimization
+Customer Navigation/Category Hierarchy
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S3-T10 automatically.
+Do **not** implement S4-T02 automatically.
 
-The original S3-T01 “SEO-Friendly URL Strategy” remains **NOT_STARTED** (deferred). Do not start it until a human requests it.
+S3-T10 Image Optimization and the original “SEO-Friendly URL Strategy” remain
+**DEFERRED**. Do not start either automatically.
 
 ## Objective
 
-See `docs/sprints/SPRINT-03.md` → S3-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T02.
 
 ## Scope
 
-See `docs/sprints/SPRINT-03.md` → S3-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T02.
 
 ## Dependencies
 
-S2-T03.
+S4-T01.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-03.md` → S3-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T02.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-03.md` → S3-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T02.
 
 ## Tests
 
-See `docs/sprints/SPRINT-03.md` → S3-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T02.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-03.md` → S3-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T02.
 
-## Next task after S3-T10 (do not start)
+## Next task after S4-T02 (do not start)
 
-See `docs/sprints/SPRINT-03.md`. Do not start it automatically.
+See `docs/sprints/SPRINT-04.md`. Do not start it automatically.

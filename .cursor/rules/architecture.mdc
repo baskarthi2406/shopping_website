@@ -17,18 +17,22 @@ Workflow: Plan → Implement → Test → Review → Document → Update status 
 
 - Domain: no Next.js, React, FastAPI, SQL, or Tailwind.
 - Application: use cases; depends on domain and repository interfaces only.
-- Infrastructure: static/mock repos (Phase 1) or API/SQL (Phase 2).
+- Infrastructure: static/mock repos now; dummy HTTP, production SQL, and vendor
+  adapters only in their scheduled tasks.
 - UI/HTTP: thin pages and routers.
 
-Phase 1: `Next.js → Application → Repository interface → static/mock data`.
-Phase 2: same frontend interfaces; `HttpRepository → FastAPI → Domain → PostgreSQL`.
+Current: `Next.js → Application → Repository interface → static/mock data`.
+Planned: same frontend interfaces; `HttpRepository → Mini Mystiq API contract →
+dummy or production implementation → optional Zoho adapter`.
 
 Do not rewrite the storefront when replacing mock repositories with API repositories.
 
 ## Phase guardrails
 
 - Storefront is mobile-first (Mobile → Tablet → Desktop). Admin may be desktop-priority but must stay responsive.
-- Phase 1: no FastAPI, PostgreSQL, admin implementation, or payments.
+- Sprint 4 may implement only its scheduled dummy API. FastAPI/PostgreSQL
+  production backend waits for Sprint 6; Zoho waits for Sprint 7. No admin or
+  payments without an explicit task.
 - Do not initialize Next.js or install packages unless the current task says so.
 - Significant architecture changes require an ADR in `docs/decisions/`.
 - Undecided business facts are TBD. Do not invent them.

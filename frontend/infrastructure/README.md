@@ -1,14 +1,17 @@
 # Infrastructure
 
-Concrete adapters. Implements application repository interfaces. Maps raw static/API records → domain.
+Concrete adapters. Implements application repository interfaces. Maps raw
+static/API/vendor records → domain.
 
 **May depend on:** domain, repository interfaces.
 
 **Must not depend on:** `app/` pages, presentation components.
 
-| Folder | Phase 1 | Phase 2 |
+| Folder | Current | Planned |
 |--------|---------|---------|
-| `catalog/` | `Static*Repository` + fixtures (S1-T05) | `Api*Repository` + HTTP client |
-| `cart/` | Browser storage adapter (Sprint 4) | HTTP cart repository (Sprint 7) |
+| `catalog/` | `Static*Repository` + fixtures (S1-T05) | Dummy HTTP (S4), production (S6), Zoho adapter (S7) |
+| `cart/` | README only | Commerce/order repository contract TBD in S5/S8 |
 
-Do not add FastAPI, PostgreSQL, or HTTP clients in Phase 1. Do not implement the static catalog in S1-T04.
+S4-T01 found no HTTP client or backend code. Do not add one until the current
+task explicitly schedules it. Zoho DTOs must stay inside infrastructure
+(ADR 0005).

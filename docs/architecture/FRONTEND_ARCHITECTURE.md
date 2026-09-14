@@ -1,13 +1,18 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **As implemented through S3-T09:** App Router at `frontend/app/` (no `src/`); layers in S1-T04; static catalog in S1-T05 (expanded S2-T06: 12 products); Vitest in S1-T06; Option 1 tokens + semantic shell in S1-T07; category listing at `/c/[slug]`; product detail at `/p/[slug]`; catalog nav + shared breadcrumbs (S2-T04); listing filter/sort deferred (S2-T05); Option 1 homepage at `/` (S3-T01); XML sitemap at `/sitemap.xml` (S3-T04); `/robots.txt` (S3-T05); Product JSON-LD on `/p/[slug]` (S3-T06); BreadcrumbList JSON-LD on `/c/[slug]` and `/p/[slug]` (S3-T07); Organization JSON-LD from the root layout (S3-T08); OpenGraph reviewed in S3-T09 (already present from S3-T02/S3-T03).
+**Task:** S1-T02 (layer contract). **Reviewed through S4-T01:** App Router
+at `frontend/app/` (no `src/`); static catalog behind application-owned
+repository interfaces; S3-T01–S3-T09 storefront/SEO complete; S3-T10 deferred.
+The S4-T01 audit found no backend/API implementation or obsolete backend code.
+See `BACKEND_API_AUDIT.md` and ADR 0005.
 
 This file is the contract for where frontend code belongs. It refines S1-T01. Conflicts with this file vs `ARCHITECTURE.md` should be reported; layer **rules** here win for `frontend/`.
 
 **Product:** Mini Mystiq  
 **UI:** Design Option 1 only (`DESIGN_OPTION_1.md`, ADR 0001)  
 **Stack:** Next.js App Router, React, TypeScript, Tailwind (ADR 0002)  
-**Data:** Repository interfaces; Phase 1 static, Phase 2 HTTP (ADR 0004)
+**Data:** Repository interfaces; static now, dummy HTTP then production/Zoho
+adapters later (ADR 0004/0005)
 
 ---
 
@@ -115,7 +120,9 @@ Lived next to application (TypeScript interfaces under `application/catalog/` an
 
 ### 2.7 Infrastructure / data layer
 
-**Owns:** `StaticProductRepository`, `StaticCategoryRepository`, `StaticUomRepository` (Phase 1); `ApiProductRepository` etc. (Phase 2); browser cart storage adapter; mapping **raw static/API records → domain**.
+**Owns:** `StaticProductRepository`, `StaticCategoryRepository`,
+`StaticUomRepository` (current); future dummy/production/Zoho repository
+adapters; mapping **raw static/API/vendor records → domain**.
 
 **Does not own:** Use-case policy, JSX.
 
@@ -127,7 +134,8 @@ Lived next to application (TypeScript interfaces under `application/catalog/` an
 
 ### 2.8 Configuration layer
 
-**Owns:** Which repository implementation to bind (static vs HTTP), public site URL for canonicals, feature flags.
+**Owns:** Which repository implementation to bind (static vs dummy/production/
+Zoho HTTP), public site URL for canonicals, feature flags.
 
 **Does not own:** Business rules. Pages must not `if (PHASE === 1) import json`.
 
@@ -234,9 +242,9 @@ Never pass API/fixture DTOs into presentation. Infrastructure maps DTO → domai
 
 | Concept | Notes |
 |---------|--------|
-| Product | Identity, slug, name, description, images (SEO filenames), category id(s), uom, variant list TBD |
-| Category | Identity, slug, name, optional image stand-in from `DESIGN_ASSETS.md` |
-| ProductVariant | Size/color **TBD** — model the type even if Phase 1 data has a single default variant |
+| Product | Implemented: id, slug, name, description, images, category ids, variants, nullable UOM, inventory status. Future nullable/optional SKU, pricing, publication/status, and richer inventory are S4-T03/S4-T08 |
+| Category | Implemented: id, slug, name, nullable description/image. Future parentId, derived children/tree, visibility, showInMenu, ordering, and SEO fields are S4-T02/S4-T03 |
+| ProductVariant | Implemented: id plus optional size/color. Future nullable/optional SKU, generic options, pricing, inventory, and status are S4-T07/S4-T08 |
 | Uom | Code + label; Phase 1 may be a simple field |
 | Inventory status | Enum TBD (`in_stock` / `out_of_stock` / unknown) — display TBD |
 | Cart | Collection of cart items + totals rules |
@@ -248,8 +256,12 @@ Navy/tan dresses: product image exists; **category TBD** — do not infer Kids/T
 
 ## 8. Repository interfaces (as implemented, S1-T05)
 
-Phase 1: Application → interface → `Static*Repository` → static records under `infrastructure/catalog/data/`.  
-Phase 2: same interface → `Api*Repository` → FastAPI (not created). Composition: `config/catalog.ts`.
+Current: Application → interface → `Static*Repository` → static records under
+`infrastructure/catalog/data/`.
+
+Planned: same application semantics → dummy HTTP repository (Sprint 4) →
+production/Zoho-backed repositories (Sprints 6–7). Composition remains
+`config/catalog.ts`; no API repository exists yet.
 
 Methods:
 
@@ -273,7 +285,8 @@ Methods:
 - `list(): Promise<readonly Uom[]>` — empty in Phase 1 fixtures
 - `getByCode(code): Promise<Uom | null>`
 
-Cart: `CartRepository` (client) — `get`, `save` — Sprint 4. Storage library **TBD**; do not add one in this task.
+`CartRepository` is not implemented. Its UI/persistence contract belongs to the
+revised commerce roadmap; details remain TBD.
 
 ---
 
@@ -293,7 +306,11 @@ Belong here (not in React):
 
 **S2-T03:** `getProductPage(products, categories, slug)` returns `{ product, categories }` or `null`. Reuses `getProductBySlug`; does not add a second product lookup. Unresolved category ids are omitted.
 
-**S2-T04:** `toCatalogNavItems(categories)` maps `listCategories()` to `{ label, href: /c/{slug} }`. Layout loads nav; `StorefrontShell` / `CatalogNavigation` / `Breadcrumbs` receive props only.
+**S2-T04:** `toCatalogNavItems(categories)` maps `listCategories()` to
+`{ label, href: /c/{slug} }`. Layout loads nav; `StorefrontShell` /
+`CatalogNavigation` / `Breadcrumbs` receive props only. S4-T01 confirmed that
+customer category names are not hardcoded in React. S4-T02/S4-T11 will add a
+hierarchical data-driven contract.
 
 Pages call `config/catalog.ts`, not fixtures. View models map domain → presentation props (no price/inventory).
 
@@ -301,7 +318,7 @@ Test with in-memory fake repositories (runner: S1-T06). No JSX.
 
 ---
 
-## 10. Cart boundary (Phase 1)
+## 10. Cart boundary (future commerce UI)
 
 ```
 Cart UI (Client Component)
@@ -317,7 +334,8 @@ Browser storage adapter (localStorage or memory — TBD Sprint 4)
 
 The cart UI **must not** read/write `localStorage` directly.
 
-Phase 2/Sprint 7: HTTP `CartRepository`; same service API as far as practical.
+Future HTTP cart/order persistence follows the same service boundary; exact
+details remain TBD in the revised S5/S8 plans.
 
 ---
 
@@ -403,7 +421,7 @@ No coverage thresholds. No component or E2E framework in this task.
 
 ---
 
-## 17. Folder structure (as implemented through S3-T07)
+## 17. Folder structure (reviewed through S4-T01)
 
 Compatible with S1-T01. Names `application` / `infrastructure` are the approved terms (not a parallel `services/` + `repositories/` tree).
 
@@ -469,7 +487,7 @@ frontend/
     organization.ts              # S3-T08 public Organization facts (not legalName)
   domain/
     catalog/                     # Product, Category, Uom — types in S1-T05
-    cart/                        # Cart, CartItem — Sprint 4
+    cart/                        # README only; commerce model planned Sprint 5
   application/
     catalog/                     # use cases + repository interfaces (S1-T05)
     cart/
@@ -488,28 +506,32 @@ Future routes (`cart`, `checkout`) stay under `app/` when those sprints arrive.
 
 ---
 
-## 18. Admin boundary (Phase 2)
+## 18. Admin boundary (future production/operations)
 
-- Separate from public storefront (route group or later app — ADR in S6-T04)
+- Separate from public storefront (route group or later app — decision TBD)
 - Desktop-priority, responsive, authenticated, not indexed  
 - Must not import storefront marketing pages as admin  
 - May reuse `components/ui` primitives  
 - Must not leak admin actions into public catalog components  
-- No admin code in Phase 1  
+- No admin code exists; do not add it outside an explicitly approved task
 
 ---
 
-## 19. Phase 1 → Phase 2
+## 19. Static → Dummy API → Production/Zoho
 
-UI + application + domain + interfaces stay.  
-`StaticProductRepository` replaced by `ApiProductRepository` in infrastructure + config.  
-No page rewrite. ADR 0004.
+UI + application + domain + interfaces stay.
+`Static*Repository` implementations are joined/replaced by dummy HTTP,
+production, and Zoho-backed adapters in infrastructure + config.
+No page rewrite. ADR 0004/0005.
 
 ---
 
 ## 20. TBD
 
-- Exact domain fields, variants, inventory display  
+- Exact category hierarchy/menu order and descendant-listing semantics
+- Exact product/variant/pricing/inventory/status fields
+- Dummy API runtime, endpoint/version/error/pagination contracts
+- Verified Zoho API schema/auth/rate limits/synchronization behavior
 - Search/filter rules (S2-T05 deferred; `CATALOG_FILTER_SORT.md`)  
 - Cart storage API (`localStorage` vs memory)  
 - Breakpoint px as a **business** lock (S1-T07 uses Tailwind sm/md/lg as implementation defaults)  
@@ -520,4 +542,6 @@ No page rewrite. ADR 0004.
 
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
-There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete. S3-T01–S3-T09 are complete. Next: **S3-T10** — do not start automatically.
+There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01 is complete. Next:
+**S4-T02** — do not start automatically.

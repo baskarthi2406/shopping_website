@@ -26,7 +26,8 @@ Never start the next task automatically.
 
 ## Layering
 
-See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S3-T07).
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; audited
+through S4-T01).
 
 ```
 App / Pages → Presentation → Application → Domain → Repository interface
@@ -35,8 +36,9 @@ Infrastructure implements repositories. Configuration binds them.
 
 **Forbidden:** React → static JSON; React → FastAPI/SQL; Domain → Next.js/React.
 
-Phase 1 infrastructure = static/mock data.  
-Phase 2 infrastructure = HTTP client → FastAPI + PostgreSQL behind the same frontend repository interface.
+Current infrastructure = static/mock data.
+Planned infrastructure = dummy HTTP repository → production backend → Zoho
+adapter behind the same frontend repository interfaces (ADR 0005).
 
 Pages are Server Components by default. Client Components are small interactive islands only.
 
@@ -61,6 +63,11 @@ Category listing (S2-T01; S2-T02 closed as already satisfied): `app/c/[slug]/pag
 Product detail (S2-T03): `app/p/[slug]/page.tsx` calls `catalog.getProductPage`. Presentation (`ProductDetail`) receives view-model props only. Do not display price, stock, or variants while those fields are TBD.
 
 Catalog nav (S2-T04): `app/layout.tsx` calls `catalog.listCategories` and `toCatalogNavItems`. `StorefrontShell` receives nav props. `Breadcrumbs` and `CatalogNavigation` are presentation-only. No `"use client"`. BreadcrumbList JSON-LD is S3-T07.
+
+Backend/API audit (S4-T01): no API routes, server actions, backend application,
+database/ORM, auth, or HTTP client code exists. Keep static repositories and
+their interfaces. S4-T02+ must keep category hierarchy data-driven. Raw
+dummy/Zoho DTOs stay in infrastructure and map to Mini Mystiq contracts.
 
 Listing filter/sort (S2-T05): **deferred**. Do not add facets, query-parameter listings, or placeholder Filter/Sort controls until business rules exist (`docs/requirements/CATALOG_FILTER_SORT.md`).
 
