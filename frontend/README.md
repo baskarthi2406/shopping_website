@@ -46,7 +46,10 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S2-T03:** crawlable product detail at `/p/[slug]` via `catalog.getProductPage`. Example: `/p/pink-white-pleated-baby-dress`. Unknown slugs use `notFound()`. No price, stock, variants, or cart. JSON-LD is Sprint 3.
 
-**S2-T04:** header catalog nav (categories from `listCategories`) and a shared `Breadcrumbs` component on `/c/` and `/p/`. Wrapping links, no hamburger Client Component, no cart/search. Breadcrumb JSON-LD is Sprint 3.
+**S2-T04:** header catalog nav (categories from `listCategories`) and a shared
+`Breadcrumbs` component on `/c/` and `/p/`. S4-T02 later replaced the flat
+header rendering with recursive customer navigation while preserving this data
+flow and the existing routes.
 
 **S2-T05:** listing filter/sort deferred. Category pages do not expose Filter/Sort UI or query parameters. See `docs/requirements/CATALOG_FILTER_SORT.md`.
 
@@ -76,10 +79,16 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 actions, backend application, DB/ORM, HTTP client, auth, or obsolete backend
 dependency. Existing static repositories and clean interfaces remain.
 
-**Not implemented yet:** hierarchical category navigation, dummy API, API
-repository, cart, search, account, Track Your Order, filters/sort, admin, Zoho
-integration. S3-T10 Image Optimization and the original SEO-friendly URL
-strategy are deferred.
+**S4-T02:** customer-reference taxonomy is represented as flat infrastructure
+records mapped to recursive domain `children`. Mobile uses a scrollable Menu
+disclosure; tablet/desktop use a prominent single-row category bar and
+hierarchy dropdowns. Search, Account, Cart, and Track Your Order are disabled
+visual entry points only. Homepage category tiles remain the existing five
+image-backed categories.
+
+**Not implemented yet:** dummy API, API repository, cart/search/account/order
+behavior, filters/sort, admin, or Zoho integration. S3-T10 Image Optimization
+and the original SEO-friendly URL strategy are deferred.
 
 ## Architecture
 

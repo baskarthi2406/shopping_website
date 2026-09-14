@@ -149,13 +149,13 @@ Then implement **only** the current task.
 | Phase | Phase 1 — Customer Storefront + Dummy API Foundation |
 | Overall status | SPRINT_4_IN_PROGRESS |
 | Current sprint | Sprint 4 — Customer Storefront + Dummy API Foundation (**IN_PROGRESS**) |
-| Last completed | S4-T01 — Backend/API Audit & Cleanup |
-| Current task | S4-T02 — Customer Navigation/Category Hierarchy (**NOT_STARTED**) |
+| Last completed | S4-T02 — Customer Navigation & Hierarchical Category UI |
+| Current task | S4-T03 — API/Domain Contracts (**NOT_STARTED**) |
 
-Do **not** start S4-T02 automatically. S3-T10 Image Optimization and the
+Do **not** start S4-T03 automatically. S3-T10 Image Optimization and the
 original SEO URL strategy are deferred.
 
-S4-T01 found no backend/API implementation to remove. Storefront: Option 1
-homepage `/`, `/c/[slug]`, `/p/[slug]`, catalog nav + breadcrumbs, static
-catalog, and S3-T01–S3-T09 SEO. See
-`docs/architecture/BACKEND_API_AUDIT.md`.
+S4-T02 adds customer-reference hierarchical categories and prominent
+mobile/tablet/desktop navigation through the existing static repository and
+`/c/[slug]` routes. Search, Account, Cart, and Track Your Order are clearly
+non-functional visual entry points. No API/backend or Zoho integration exists.

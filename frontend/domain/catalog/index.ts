@@ -1,5 +1,5 @@
 export type { CatalogImage } from "./catalog-image";
-export type { Category } from "./category";
+export type { Category, CategoryVisibility } from "./category";
 export type { InventoryStatus } from "./inventory-status";
 export type { Product } from "./product";
 export type { ProductVariant } from "./product-variant";

@@ -9,6 +9,10 @@ const category: Category = {
   id: "baby-essentials",
   slug: "baby-essentials",
   name: "Baby Essentials",
+  parentId: null,
+  children: [],
+  visibility: "visible",
+  showInMenu: true,
   description: null,
   image: null,
 };

@@ -26,7 +26,8 @@ The public site must eventually allow visitors to:
 - Products may belong to one or more categories; exact cardinality and
   descendant-listing behavior are **TBD**.
 - Categories require parent/child hierarchy, visibility, and menu-display
-  semantics in S4-T02/S4-T03.
+  semantics. S4-T02 implements these in the domain/static repository and
+  recursive UI; S4-T03 will formalize transport contracts.
 - Units of measure (UOM) are a planned domain concept (needed in Phase 2 admin; Phase 1 mock data may include a simple UOM field).
 - Product attributes beyond name, description, images, price display, and category: **TBD**.
 - Variants (size/color): **TBD**.

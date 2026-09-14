@@ -2,12 +2,17 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnnouncementBar } from "@/components/storefront/announcement-bar";
-import { CatalogNavigation } from "@/components/storefront/catalog-navigation";
+import {
+  DesktopCatalogNavigation,
+  MobileCatalogNavigation,
+  StoreToolPlaceholders,
+  type CatalogNavItem,
+} from "@/components/storefront/catalog-navigation";
 import { Container } from "@/components/ui/container";
 
 type StorefrontShellProps = {
   children: ReactNode;
-  navigation?: readonly { label: string; href: string }[];
+  navigation?: readonly CatalogNavItem[];
 };
 
 export function StorefrontShell({
@@ -22,7 +27,7 @@ export function StorefrontShell({
       <div className="flex min-h-dvh flex-col bg-background text-foreground">
         <AnnouncementBar />
         <header className="border-b border-border bg-surface">
-          <Container className="flex min-h-[var(--mm-header-min)] items-center justify-between gap-3 py-2 sm:gap-6">
+          <Container className="relative flex min-h-[var(--mm-header-min)] items-center justify-between gap-3 py-2 md:gap-6">
             <Link
               href="/"
               className="inline-flex min-h-[var(--mm-tap-min)] shrink-0 items-center rounded-md"
@@ -37,20 +42,14 @@ export function StorefrontShell({
                 style={{ width: "auto" }}
               />
             </Link>
-            {navigation.length > 0 ? (
-              <details className="sm:hidden">
-                <summary className="inline-flex min-h-[var(--mm-tap-min)] cursor-pointer list-none items-center rounded-md text-small font-medium text-foreground [&::-webkit-details-marker]:hidden">
-                  Categories
-                </summary>
-                <div className="pt-1">
-                  <CatalogNavigation items={navigation} />
-                </div>
-              </details>
-            ) : null}
-            <div className="hidden sm:block">
-              <CatalogNavigation items={navigation} />
-            </div>
+            <StoreToolPlaceholders className="hidden items-center gap-1 md:flex" />
+            <MobileCatalogNavigation items={navigation} />
           </Container>
+          <div className="hidden border-t border-border md:block">
+            <Container>
+              <DesktopCatalogNavigation items={navigation} />
+            </Container>
+          </div>
         </header>
         <main id="main-content" className="flex-1">
           {children}
@@ -70,7 +69,7 @@ export function StorefrontShell({
             </div>
             {navigation.length > 0 ? (
               <nav aria-label="Footer categories">
-                <ul className="flex flex-col gap-1 sm:items-end">
+                <ul className="grid grid-cols-2 gap-x-4 sm:flex sm:flex-col sm:items-end">
                   {navigation.map((item) => (
                     <li key={item.href}>
                       <Link

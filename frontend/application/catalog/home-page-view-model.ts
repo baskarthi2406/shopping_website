@@ -69,13 +69,20 @@ export function toHomePageViewModel(data: HomePageData): HomePageViewModel {
       ctaHref: shopHref,
       image: HOME_HERO_IMAGE,
     },
-    categories: data.categories.map((category) => ({
-      name: category.name,
-      href: `/c/${category.slug}`,
-      image: category.image
-        ? { src: category.image.src, alt: category.image.alt }
-        : null,
-    })),
+    categories: data.categories
+      .filter(
+        (category) =>
+          category.parentId === null &&
+          category.visibility === "visible" &&
+          category.image !== null,
+      )
+      .map((category) => ({
+        name: category.name,
+        href: `/c/${category.slug}`,
+        image: category.image
+          ? { src: category.image.src, alt: category.image.alt }
+          : null,
+      })),
     products: data.products.map(toProductCardViewModel),
     promo: {
       href: shopHref,

@@ -44,11 +44,9 @@ current storefront and the intended replacement seam.
 
 These are model/contract gaps, not defects to fix in S4-T01:
 
-- `Category` is flat. S4-T02/S4-T03 must define nullable/optional `parentId`,
-  hierarchy projection (`children` should normally be derived rather than
-  duplicated), `visibility`, `showInMenu`, and category SEO fields.
-- `CategoryRepository.list()` and the flat `toCatalogNavItems()` are sufficient
-  for today's navigation but need a documented hierarchy/menu contract.
+- Category hierarchy/UI gap: resolved in S4-T02 with `parentId`, derived
+  recursive `children`, `visibility`, `showInMenu`, and recursive navigation.
+  API nullability/order and category SEO transport fields remain S4-T03.
 - `Product` already has images, category ids, variants, UOM, and inventory
   status. Future contracts need nullable/optional SKU, pricing, richer
   inventory, publication/status, and an explicit category relationship.
@@ -84,10 +82,9 @@ Customer category names are not hardcoded in React components.
 static infrastructure records and tests. The generic disclosure label
 “Categories” is UI copy, not taxonomy data.
 
-The current UI contract is flat. Supporting `Infants → Baby Girl/Baby Boy → …`
-requires a hierarchical navigation view model in S4-T02/S4-T11, but no
-component currently depends on Zoho response objects or hardcoded customer
-taxonomy.
+S4-T02 now supports `Infants → Baby Girl/Baby Boy → …` through a recursive
+navigation view model. No component depends on Zoho response objects or
+hardcoded customer taxonomy. S4-T11 remains the API-source switch.
 
 ## Dependency audit
 
@@ -132,8 +129,8 @@ Mini Mystiq-owned domain/API contracts.
   availability are unverified; they remain TBD until S7.
 - The dummy API runtime and transport are TBD until S4-T03. S4-T01 does not
   choose Next.js route handlers, FastAPI, or another server.
-- A recursive category graph needs cycle/orphan handling and deterministic menu
-  ordering in later contracts.
+- S4-T02 validates category cycles/orphans and preserves repository order;
+  S4-T03 must formalize API menu ordering.
 - Product/category cardinality and whether category listings include descendants
   must be explicit before API implementation.
 - Pricing currency, tax, inventory quantities, status values, variant option

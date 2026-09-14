@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **Reviewed through S4-T01:** App Router
+**Task:** S1-T02 (layer contract). **Implemented through S4-T02:** App Router
 at `frontend/app/` (no `src/`); static catalog behind application-owned
 repository interfaces; S3-T01–S3-T09 storefront/SEO complete; S3-T10 deferred.
 The S4-T01 audit found no backend/API implementation or obsolete backend code.
@@ -224,7 +224,10 @@ Do not invent another visual language.
 
 **S1-T07 tokens:** CSS variables in `frontend/app/globals.css` (`--mm-*`), mapped into Tailwind v4 `@theme inline`. Primary `#016C37` sampled from Option 1. Hex values are **implementation defaults**, not a locked brand guide (`DESIGN_OPTION_1.md`).
 
-Primitives: `components/ui/container.tsx`. Shell: `components/storefront/storefront-shell.tsx` (skip link, header logo + catalog nav props, main, footer). Search/wishlist/account/cart chrome is still not implemented.
+Primitives: `components/ui/container.tsx`. Shell:
+`components/storefront/storefront-shell.tsx` (skip link, header, recursive
+catalog nav props, main, footer). S4-T02 displays Search, Account, Cart, and
+Track Your Order as disabled entry points only; no behavior/routes exist.
 
 ---
 
@@ -243,7 +246,7 @@ Never pass API/fixture DTOs into presentation. Infrastructure maps DTO → domai
 | Concept | Notes |
 |---------|--------|
 | Product | Implemented: id, slug, name, description, images, category ids, variants, nullable UOM, inventory status. Future nullable/optional SKU, pricing, publication/status, and richer inventory are S4-T03/S4-T08 |
-| Category | Implemented: id, slug, name, nullable description/image. Future parentId, derived children/tree, visibility, showInMenu, ordering, and SEO fields are S4-T02/S4-T03 |
+| Category | Implemented through S4-T02: id, slug, name, nullable parentId, arbitrary-depth children, visibility, showInMenu, nullable description/image. API nullability/order and SEO fields remain S4-T03 |
 | ProductVariant | Implemented: id plus optional size/color. Future nullable/optional SKU, generic options, pricing, inventory, and status are S4-T07/S4-T08 |
 | Uom | Code + label; Phase 1 may be a simple field |
 | Inventory status | Enum TBD (`in_stock` / `out_of_stock` / unknown) — display TBD |
@@ -308,9 +311,11 @@ Belong here (not in React):
 
 **S2-T04:** `toCatalogNavItems(categories)` maps `listCategories()` to
 `{ label, href: /c/{slug} }`. Layout loads nav; `StorefrontShell` /
-`CatalogNavigation` / `Breadcrumbs` receive props only. S4-T01 confirmed that
-customer category names are not hardcoded in React. S4-T02/S4-T11 will add a
-hierarchical data-driven contract.
+`CatalogNavigation` / `Breadcrumbs` receive props only. S4-T02 maps visible,
+menu-enabled root categories and recursive children to view models. The client
+navigation component renders those props for mobile and tablet/desktop; it
+contains no customer category names. S4-T11 will replace the static repository
+source with API-driven navigation after S4-T03–S4-T09.
 
 Pages call `config/catalog.ts`, not fixtures. View models map domain → presentation props (no price/inventory).
 
@@ -379,7 +384,12 @@ Every storefront UI task: mobile layout, touch (no hover-only), responsive type/
 
 Admin (Phase 2): desktop-priority, still responsive.
 
-Breakpoints: business **TBD**. S1-T07 uses Tailwind defaults as implementation defaults (`sm` 640 / `md` 768 / `lg` 1024). Nav pattern / CWV numbers: **TBD**. Hero LCP: `baby-sleeveless-sets-new-collection-banner.jpg`. Secondary: `baby-dress-bloomer-sets-new-collection-banner.jpg`.
+Breakpoints: business **TBD**. Tailwind defaults remain implementation defaults.
+S4-T02 uses mobile `< md` (compact recursive disclosure), tablet `md–lg`
+(single-row overflow-safe category bar with tighter spacing), and desktop `lg+`
+(same prominent bar with roomier spacing/full-width dropdown panels). Hero LCP:
+`baby-sleeveless-sets-new-collection-banner.jpg`. Secondary:
+`baby-dress-bloomer-sets-new-collection-banner.jpg`.
 
 ---
 
@@ -543,5 +553,5 @@ No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01 is complete. Next:
-**S4-T02** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T02 are complete.
+Next: **S4-T03** — do not start automatically.

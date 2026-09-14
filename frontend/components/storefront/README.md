@@ -8,6 +8,10 @@ Storefront composites. Receive view-model props. Do not import repositories or f
 
 **S2-T03:** `ProductDetail` — presentation only (name, description, images, breadcrumb, category links). No cart, price, or variant selectors.
 
-**S2-T04:** `Breadcrumbs` and `CatalogNavigation` — presentation props only. Shell header shows category links; pages pass breadcrumb items from view models.
+**S2-T04:** `Breadcrumbs` and `CatalogNavigation` — presentation props only.
+S4-T02 evolves `CatalogNavigation` to recursively render supplied child items:
+mobile Menu disclosure, tablet/desktop category bar, and hierarchy dropdowns.
+Components still contain no customer category names or repository imports.
 
-Hero, search/wishlist/account/cart chrome: later tasks.
+Search, Account, Cart, and Track Your Order are disabled visual entry points in
+S4-T02. Their behavior, plus wishlist, belongs to later tasks.

@@ -10,6 +10,9 @@ Depends on domain + these interfaces only. Bind implementations in
 `config/catalog.ts`.
 
 **S4-T01 audit:** retain all ports/use cases. They are the clean swap boundary
-for static, dummy API, production, and Zoho-backed repositories. Current
-category/navigation contracts are flat; hierarchy/menu semantics are S4-T02/
-S4-T03. Transport and Zoho DTOs must not be added here.
+for static, dummy API, production, and Zoho-backed repositories.
+
+**S4-T02:** `toCatalogNavItems` selects visible, menu-enabled roots and maps
+recursive domain children to `/c/{slug}` navigation view models. It contains no
+customer taxonomy constants. API/transport contracts remain S4-T03; transport
+and Zoho DTOs must not be added here.

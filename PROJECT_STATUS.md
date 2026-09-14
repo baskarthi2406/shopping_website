@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01 completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T02 completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -42,10 +42,10 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-**S4-T02 — Customer Navigation/Category Hierarchy**
+**S4-T03 — API/Domain Contracts**
 Status: **NOT_STARTED**
 
-Do not start S4-T02 automatically.
+Do not start S4-T03 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -75,6 +75,9 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - Category listing `/c/[slug]` (S2-T01; S2-T02 closed as already satisfied)
 - Product detail `/p/[slug]` (S2-T03)
 - Catalog nav + shared breadcrumbs (S2-T04)
+- Customer-reference hierarchical category model and prominent responsive
+  navigation (S4-T02); Search, Account, Cart, and Track Your Order are disabled
+  visual entry points only
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
@@ -118,15 +121,16 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S3-T08 — Organization Structured Data
 - S3-T09 — OpenGraph
 - S4-T01 — Backend/API Audit & Cleanup (no obsolete implementation found)
+- S4-T02 — Customer Navigation & Hierarchical Category UI
 
 ## In progress
 
-- None. Do not start S4-T02 automatically.
+- None. Do not start S4-T03 automatically.
 
 ## Pending
 
-- S4-T02 — Customer Navigation/Category Hierarchy (next)
-- S4-T03–S4-T12 — API contracts, dummy catalog APIs, API-driven storefront,
+- S4-T03 — API/Domain Contracts (next)
+- S4-T04–S4-T12 — dummy catalog APIs, API-driven storefront,
   and review
 - Sprint 5 — Commerce UI
 - Sprint 6 — Production Backend
@@ -138,9 +142,10 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- None for starting S4-T02 when explicitly requested.
-- Business/API TBD: exact category hierarchy/order, descendant-listing semantics,
-  Zoho API access/schema/auth/rate limits, dummy API runtime/error/pagination
+- None for starting S4-T03 when explicitly requested.
+- Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
+  descendant-listing semantics, API menu-order field, Zoho API access/schema/
+  auth/rate limits, dummy API runtime/error/pagination
   shape, pricing/currency/tax, SKU ownership, UOM, variants/options, inventory,
   product status, search behavior, account/auth, cart, Track Your Order,
   checkout/operations, production domain, and deployment.
@@ -150,4 +155,4 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S4-T02 — Customer Navigation/Category Hierarchy**
+**S4-T03 — API/Domain Contracts**

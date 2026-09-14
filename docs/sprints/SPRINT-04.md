@@ -85,23 +85,75 @@ Audit recorded, no unjustified cleanup performed, and S4-T02 recorded
 
 ## S4-T02 — Customer Navigation/Category Hierarchy
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Define the data-driven customer navigation and category hierarchy needed for
-prominent ecommerce navigation.
+Implement the customer-reference taxonomy and prominent, responsive,
+hierarchical ecommerce navigation without hardcoding categories in React.
 
-### Scope
+### Implementation scope (as completed)
 
-Model parent/child categories, menu visibility/order, and a recursive navigation
-view model. Confirm customer taxonomy before adding values.
+- Extended `Category` with `parentId`, recursive `children`, `visibility`, and
+  `showInMenu`.
+- Kept infrastructure records flat and derived arbitrary-depth trees in the
+  category mapper with duplicate, orphan, and cycle protection.
+- Added only customer-supplied category names. The duplicated Women “Nighties”
+  entry maps to one category/URL.
+- Preserved the five existing top-level category URLs and added reference routes
+  for Kid's Wear, Boy's Wear, Girl's Wear, Boutique, and supplied descendants.
+- Added tablet/desktop primary navigation with hierarchy dropdowns and a
+  scroll-safe single-row treatment.
+- Added a compact mobile Menu disclosure with the same recursive hierarchy.
+- Added clearly disabled Search, Account, Cart, and Track Your Order visual
+  entry points; no fake routes or behavior.
+- Kept homepage category tiles limited to top-level categories with approved
+  imagery, preserving the existing five tiles.
 
 ### Guardrails
 
-No hardcoded category tree in React. No API implementation, search behavior,
-account, cart, or Track Your Order behavior. Preserve existing routes unless a
-separate URL decision is approved.
+- Taxonomy exists only in static infrastructure records; components receive
+  recursive view-model props.
+- No API endpoint, dummy backend, Zoho type, search/cart/account/order behavior,
+  product fixture, or S3-T10 work.
+- Existing `/c/{slug}` routing, catalog pages, sitemap, metadata, and SEO remain
+  the only category URL mechanism.
+
+### Accessibility and responsive behavior
+
+- Semantic category navigation, links, native `details`/`summary` disclosures
+- Escape closes an open disclosure and restores summary focus
+- Focus leaving a disclosure closes it; opening one desktop dropdown closes its
+  sibling
+- 44px minimum mobile/disclosure targets and visible global focus styles
+- Mobile: compact header + scrollable recursive menu
+- Tablet: single-row, horizontally overflow-safe category bar with tighter
+  spacing
+- Desktop: prominent category bar with full-width dropdown/mega-menu panels
+
+### Testing requirements and results
+
+- Recursive mapper tests: record order, arbitrary depth, empty roots, duplicate
+  ids, missing parents, cycles
+- Repository tests: top-level order, nested relationships, empty categories,
+  stable slugs
+- Application tests: recursive nav URLs and visibility/menu filtering
+- Presentation contract tests: mobile/desktop treatments, semantic disclosures,
+  Escape handling, no hardcoded category names, no fake utility routes
+- `npm test`: passed (33 files, 132 tests)
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Responsive review: closed mobile (500 CSS px), tablet (820px), and desktop
+  (1440px); open mobile panel measured full-width with 54 category/view-all
+  links and bounded vertical scrolling
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Customer-reference hierarchy and responsive navigation are implemented through
+existing repository/domain/application boundaries. S4-T03 is recorded
+**NOT_STARTED**.
 
 ---
 

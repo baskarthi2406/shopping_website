@@ -24,6 +24,10 @@ function category(
 ): Category {
   return {
     name: "Test category",
+    parentId: null,
+    children: [],
+    visibility: "visible",
+    showInMenu: true,
     description: null,
     image: null,
     ...overrides,
