@@ -33,7 +33,8 @@ The public site must eventually allow visitors to:
 - Product SKU, pricing, inventory, and publication fields have nullable
   provider-independent shapes; actual business values remain **TBD**.
 - Variants use generic name/value attributes for size, color, or other options;
-  actual option vocabulary and values remain **TBD**.
+  actual option vocabulary and values remain **TBD**. Current fixtures have no
+  populated variants. Do not invent sizes or colors.
 - Stock display on the storefront: **TBD**.
 - Listing filter/sort: **TBD**. S2-T05 deferred this; see `CATALOG_FILTER_SORT.md`. Do not invent facets.
 - Phase 1 static catalog (S2-T06, reviewed S2-T07): 12 approved product photos. Toys pending assets. Five dresses remain uncategorized (age/taxonomy TBD). Infants/teens/women may stay empty.

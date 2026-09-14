@@ -8,10 +8,10 @@ Framework-free catalog types: `Product`, `ProductSummary`, `Category`,
 `visibility`, and `showInMenu`. Hierarchy depth is not fixed. Infrastructure
 derives children from flat records; domain does not import fixture/API types.
 
-**S4-T03:** Product and variant commerce fields are provider-independent and
-nullable when unknown. Variant options are generic name/value attributes;
-missing fixture variants are empty rather than synthetic. Contract validation
-checks IDs/slugs, variant structure, money, and inventory quantities.
+**S4-T07:** Generic `VariantAttribute` name/value options represent size, color,
+age, material, style, or any future option. Duplicate names and duplicate
+combinations are rejected. Current fixtures keep `variants: []`. Do not invent
+option values.
 
 **Must not import:** React, Next.js, Tailwind, `fetch`, browser storage, FastAPI, SQL.
 

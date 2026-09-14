@@ -1,7 +1,7 @@
 import type { Inventory } from "./inventory";
 import type { Money, Pricing } from "./pricing";
 import type { Product } from "./product";
-import type { ProductVariant } from "./product-variant";
+import type { ProductVariant, VariantAttribute } from "./product-variant";
 import { isCatalogSlug } from "./slug";
 
 export type ContractViolation = {
@@ -92,9 +92,29 @@ export function validateInventory(
   return issues;
 }
 
-function validateVariant(
+function normalizeAttributeName(name: string): string {
+  return name.trim().toLowerCase();
+}
+
+/**
+ * Stable signature for a variant's option set. Attribute order does not matter;
+ * names are compared case-insensitively after trim.
+ */
+export function variantAttributeSignature(
+  attributes: readonly VariantAttribute[],
+): string {
+  return attributes
+    .map(
+      (attribute) =>
+        `${normalizeAttributeName(attribute.name)}=${attribute.value.trim()}`,
+    )
+    .sort()
+    .join("|");
+}
+
+export function validateVariant(
   variant: ProductVariant,
-  path: string,
+  path = "variant",
 ): readonly ContractViolation[] {
   const issues: ContractViolation[] = [];
 
@@ -106,7 +126,7 @@ function validateVariant(
   const attributeNames = new Set<string>();
   variant.attributes.forEach((attribute, index) => {
     const attributePath = `${path}.attributes[${index}]`;
-    const normalizedName = attribute.name.trim().toLowerCase();
+    const normalizedName = normalizeAttributeName(attribute.name);
 
     if (!isPresent(attribute.name)) {
       add(issues, `${attributePath}.name`, "must be non-empty");
@@ -176,6 +196,7 @@ export function validateProduct(
   }
 
   const variantIds = new Set<string>();
+  const combinationKeys = new Set<string>();
   product.variants.forEach((variant, index) => {
     const variantPath = `${path}.variants[${index}]`;
     if (variantIds.has(variant.id)) {
@@ -183,6 +204,18 @@ export function validateProduct(
     } else {
       variantIds.add(variant.id);
     }
+
+    const signature = variantAttributeSignature(variant.attributes);
+    if (combinationKeys.has(signature)) {
+      add(
+        issues,
+        `${variantPath}.attributes`,
+        "must be a unique attribute combination within the product",
+      );
+    } else {
+      combinationKeys.add(signature);
+    }
+
     issues.push(...validateVariant(variant, variantPath));
   });
 

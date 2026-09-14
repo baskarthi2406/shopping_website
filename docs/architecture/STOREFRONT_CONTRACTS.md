@@ -63,9 +63,21 @@ variant data.
 `ProductVariant` has its own application ID, nullable SKU, generic ordered
 `attributes`, nullable pricing and inventory, and publication status.
 
-Each `VariantAttribute` is a `name`/`value` pair. Size, color, age range, or a
-future item-group option uses the same structure; option names and values are
-not hardcoded into domain types.
+Each `VariantAttribute` is a `name`/`value` pair. Size, color, age, material,
+style, or a future item-group option uses the same structure. There are no
+domain fields named `size` or `color`.
+
+Attribute names are unique within a variant after trim and case-insensitive
+comparison. Two variants on the same product may not share the same attribute
+combination; order and name casing do not create a distinct option set.
+
+Empty `variants: []` is valid. A variant may also have an empty attributes
+array when a source has no options. SKU, pricing, and inventory stay nullable.
+Current approved fixtures intentionally contain no populated variants.
+
+Provider-specific option IDs, item-group names, and Zoho field names stay in
+adapters. S4-T08 owns pricing/inventory behavior; this contract only preserves
+nullable shapes.
 
 SKU may be product-level, variant-level, both when a provider legitimately
 supplies both concepts, or absent. `Uom` is a nullable product-level
@@ -203,8 +215,8 @@ GET /api/products/{slug}
 The response is the full product, including empty `variants` where no confirmed
 option data exists. Unknown SKU, UOM, pricing, and inventory remain null.
 Category relationships remain `categoryIds`. The storefront PDP at `/p/{slug}`
-does not fetch this endpoint; UI/API integration remains S4-T09. Variant,
-pricing, and inventory population remain S4-T07/S4-T08.
+does not fetch this endpoint; UI/API integration remains S4-T09. Pricing and
+inventory population remain S4-T08.
 
 ## IDs and SEO slugs
 
@@ -234,6 +246,8 @@ Current runtime validation enforces:
 - category IDs and variant IDs are unique within their scopes
 - variant attribute names are non-empty and unique per variant; values are
   non-empty
+- variant attribute combinations are unique per product regardless of
+  attribute order or name casing
 - optional SKU and UOM values are null or non-empty
 - money is finite and non-negative; current/reference currencies match
 - represented inventory quantities are finite and non-negative
@@ -248,8 +262,9 @@ S4-T03 does not implement API routes, select an HTTP runtime, alter repository
 bindings, call Zoho, create persistence, or add commerce behavior.
 
 S4-T04–S4-T06 implemented dummy category/product collection and detail
-responses. S4-T07 and
-S4-T08 may populate and exercise variant/pricing/inventory behavior without
-replacing these provider-independent shapes. S4-T09 will introduce the
-repository swap; S4-T10 owns rendered loading/error/empty states. Actual Zoho
-DTOs, authentication, and mapping belong to Sprint 7.
+responses. S4-T07 confirmed the generic variant attribute model without
+populating fixture option values. S4-T08 may populate and exercise
+pricing/inventory behavior without replacing these provider-independent
+shapes. S4-T09 will introduce the repository swap; S4-T10 owns rendered
+loading/error/empty states. Actual Zoho DTOs, authentication, and mapping
+belong to Sprint 7.

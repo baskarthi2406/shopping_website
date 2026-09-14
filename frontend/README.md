@@ -110,6 +110,10 @@ for an approved public SEO slug. Unknown well-formed slugs return 404
 Unknown SKU/UOM/pricing/inventory remain null and variants remain empty. The
 existing UI does not fetch this endpoint.
 
+**S4-T07:** variants are generic `name`/`value` attributes. Size and color are
+examples, not typed fields. Current fixtures keep `variants: []`. No variant
+UI, API, or invented option values.
+
 **Not implemented yet:** API repository/UI wiring, cart/search/account/order
 behavior, filters/sort, admin, or Zoho integration. S3-T10 Image Optimization
 and the original SEO-friendly URL strategy remain deferred.

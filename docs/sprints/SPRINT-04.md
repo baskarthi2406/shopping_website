@@ -394,15 +394,47 @@ changing UI data access. S4-T07 is next and remains **NOT_STARTED**.
 
 ## S4-T07 — Variant/Size/Color Model
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
 Define variant identity and generic option/attribute semantics.
 
+### Scope
+
+- Reused the S4-T03 `ProductVariant` / `VariantAttribute` types. Size and color
+  are generic `name`/`value` pairs, not typed domain fields.
+- Exported `validateVariant` and `variantAttributeSignature`.
+- Enforced unique attribute names per variant and unique attribute
+  combinations per product (order and name casing ignored).
+- Kept SKU, pricing, and inventory nullable. Did not invent option values.
+- Left all 12 approved products at `variants: []`.
+- Did not add API endpoints, UI selectors, or Zoho types.
+
 ### Guardrails
 
 Sizes, colors, SKU values, and option vocabularies remain TBD until confirmed.
+
+### Tests
+
+- One attribute, multiple attributes, size, color, size+color, material/style/age
+- Empty name/value, duplicate names, duplicate combinations
+- Nullable SKU/pricing/inventory
+- Existing fixtures remain valid with empty variants
+- No Zoho/provider field leakage
+
+### Validation
+
+- `npm test`: 42 files, 198 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+The generic variant model is validated without fabricated commerce data.
+S4-T08 is next and remains **NOT_STARTED**.
 
 ---
 

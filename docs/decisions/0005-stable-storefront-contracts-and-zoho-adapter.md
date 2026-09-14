@@ -36,8 +36,10 @@ later sprints.
   replacing one does not require a storefront rewrite.
 - Recursive categories are data-driven and have no fixed maximum depth.
 - Product lists use `ProductSummary`; details use `Product` with generic
-  name/value variant attributes. Unknown SKU, UOM, price, and inventory values
-  are nullable, and absent real variants are an empty collection.
+  name/value variant attributes. Size and color are examples of those
+  attributes, not dedicated domain fields. Unknown SKU, UOM, price, and
+  inventory values are nullable, and absent real variants are an empty
+  collection.
 - Pricing uses current price plus optional compare-at price. Inventory separates
   nullable on-hand, available-to-sell, and reserved quantities from availability
   status. Neither contract implements calculations or synchronization.

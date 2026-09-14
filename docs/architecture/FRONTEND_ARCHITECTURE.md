@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **Implemented through S4-T06:** App Router
+**Task:** S1-T02 (layer contract). **Implemented through S4-T07:** App Router
 at `frontend/app/` (no `src/`); static catalog behind application-owned
 repository interfaces; S3-T01–S3-T09 storefront/SEO complete; S3-T10 deferred.
 The S4-T01 audit found no backend/API implementation or obsolete backend code.
@@ -271,7 +271,7 @@ Never pass API/fixture DTOs into presentation. Infrastructure maps DTO → domai
 |---------|--------|
 | Product | S4-T03: id, SEO slug, content/images/category ids, nullable SKU/UOM/pricing/inventory, publication status; detail adds variants |
 | Category | id, slug, name, nullable parentId, arbitrary-depth children, visibility, showInMenu, nullable description/image |
-| ProductVariant | id, nullable SKU, generic name/value attributes, nullable pricing/inventory, publication status |
+| ProductVariant | Generic `name`/`value` attributes for size, color, or any option; unique combinations; nullable SKU/pricing/inventory |
 | Uom | Nullable code + label value |
 | Pricing | Current money plus nullable compare-at money; no discount/tax calculations |
 | Inventory | Nullable on-hand/available/reserved quantities plus `unknown` / `in_stock` / `out_of_stock` |
@@ -578,5 +578,5 @@ No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T06 are complete.
-Next: **S4-T07** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T07 are complete.
+Next: **S4-T08** — do not start automatically.

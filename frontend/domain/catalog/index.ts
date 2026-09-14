@@ -5,6 +5,8 @@ export {
   validatePricing,
   validateProduct,
   validateProductCatalog,
+  validateVariant,
+  variantAttributeSignature,
   type ContractViolation,
 } from "./contract-validation";
 export type { Inventory } from "./inventory";

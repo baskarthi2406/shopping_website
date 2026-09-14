@@ -149,14 +149,13 @@ Then implement **only** the current task.
 | Phase | Phase 1 — Customer Storefront + Dummy API Foundation |
 | Overall status | SPRINT_4_IN_PROGRESS |
 | Current sprint | Sprint 4 — Customer Storefront + Dummy API Foundation (**IN_PROGRESS**) |
-| Last completed | S4-T06 — Dummy Product Detail API |
-| Current task | S4-T07 — Variant/Size/Color Model (**NOT_STARTED**) |
+| Last completed | S4-T07 — Variant/Size/Color Model |
+| Current task | S4-T08 — Pricing/Inventory Model (**NOT_STARTED**) |
 
-Do **not** start S4-T07 automatically. S3-T10 Image Optimization and the
+Do **not** start S4-T08 automatically. S3-T10 Image Optimization and the
 original SEO URL strategy are deferred.
 
-S4-T04–S4-T06 provide dummy `GET /api/categories`, paginated
-`GET /api/products`, and `GET /api/products/[slug]` through existing
-repository/application boundaries. Static fixtures still power the storefront
-directly; UI/API integration, production backend, and Zoho integration are not
-implemented.
+S4-T07 confirms generic variant attributes (size/color are examples, not
+special types). Approved fixtures still have empty variants. Dummy catalog
+APIs remain category/product/detail only; UI/API integration, production
+backend, and Zoho integration are not implemented.

@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T06 completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T07 completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -42,10 +42,10 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-**S4-T07 — Variant/Size/Color Model**
+**S4-T08 — Pricing/Inventory Model**
 Status: **NOT_STARTED**
 
-Do not start S4-T07 automatically.
+Do not start S4-T08 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -87,6 +87,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   deterministic page/pageSize behavior and safe errors
 - Dummy product-detail API at `GET /api/products/[slug]` (S4-T06); lookup is by
   public SEO slug and unknown slugs return `not_found`
+- Generic variant attribute/value model (S4-T07); current fixtures keep
+  `variants: []` and do not invent size/color values
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
@@ -136,15 +138,16 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T04 — Dummy Category API
 - S4-T05 — Dummy Product API
 - S4-T06 — Dummy Product Detail API
+- S4-T07 — Variant/Size/Color Model
 
 ## In progress
 
-- None. Do not start S4-T07 automatically.
+- None. Do not start S4-T08 automatically.
 
 ## Pending
 
-- S4-T07 — Variant/Size/Color Model (next)
-- S4-T08–S4-T12 — dummy catalog APIs, API-driven storefront,
+- S4-T08 — Pricing/Inventory Model (next)
+- S4-T09–S4-T12 — dummy catalog APIs, API-driven storefront,
   and review
 - Sprint 5 — Commerce UI
 - Sprint 6 — Production Backend
@@ -156,7 +159,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- None for starting S4-T07 when explicitly requested.
+- None for starting S4-T08 when explicitly requested.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
   auth/rate limits, future product filters/search,
@@ -169,4 +172,4 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S4-T07 — Variant/Size/Color Model**
+**S4-T08 — Pricing/Inventory Model**
