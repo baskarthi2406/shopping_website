@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T10B completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T10C completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -102,6 +102,9 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   display/UI fonts, boutique mega-menu, card/CTA hover, homepage rhythm
 - Mega-menu boutique refinement (S4-T10B): cream panel, primary accent line,
   hover/focus child rows, stronger View all; navigation data unchanged
+- Final mega-menu visual refinement (S4-T10C): content-aligned panel, tighter
+  boutique spacing, balanced 3-column grid, refined hover/focus/View all;
+  mega-menu visual design frozen; navigation data unchanged
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
@@ -157,6 +160,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T10 — Loading/Error/Empty States
 - S4-T10A — Classic-Modern Storefront UI Polish
 - S4-T10B — Refine Mega Menu Boutique UI
+- S4-T10C — Final Mega Menu Visual Refinement
 
 ## In progress
 

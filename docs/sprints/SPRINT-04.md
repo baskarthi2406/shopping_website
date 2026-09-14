@@ -7,7 +7,7 @@
 | Objective | Align customer navigation and define a vendor-isolated dummy catalog API without regressing the storefront |
 | Status | IN_PROGRESS |
 | Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
-| Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B) |
+| Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B, S4-T10C) |
 
 The dummy API is a development adapter, not Zoho integration or a production
 backend. Follow ADR 0005. Raw dummy/Zoho-shaped DTOs must not reach pages or
@@ -659,7 +659,8 @@ social, legal pages, prices, or trust badges. Header IA unchanged.
 ### Definition of Done
 
 Classic-modern storefront UI polish completed. S4-T10B later refined the
-mega-menu presentation. S4-T11 is next and remains **NOT_STARTED**.
+mega-menu presentation. S4-T10C froze that visual design. S4-T11 is next and
+remains **NOT_STARTED**.
 
 ---
 
@@ -705,8 +706,65 @@ No API, domain, fixture, header IA, footer, or catalog data changes.
 
 ### Definition of Done
 
-Final mega-menu visual refinement completed. S4-T11 is next and remains
-**NOT_STARTED**.
+Mega-menu boutique refinement completed. S4-T10C later froze the visual design.
+S4-T11 remains **NOT_STARTED**.
+
+---
+
+## S4-T10C — Final Mega Menu Visual Refinement
+
+**Status:** COMPLETED
+
+### Objective
+
+Final visual polish of the desktop mega-menu toward a premium local boutique
+storefront. After this task, the mega-menu visual design is frozen.
+
+### Implementation scope (as completed)
+
+- Kept the approved T10A/T10B direction: warm cream panel, green accent line,
+  serif category heading, Shop by category / Explore the collection / View all,
+  three-column children, keyboard/Escape behavior
+- Constrained the panel to the storefront content width (`inset-inline: 0` of
+  the container nav, `max-width: 100%`); tablet tabs wrap instead of clipping
+  the panel
+- Tightened header/panel spacing about 10–15%; lighter header divider
+- Balanced three-column grid (`items-start`, `auto-rows-min`, narrower column
+  gap); no column cards or hardcoded taxonomy
+- Refined link hover/focus: subtle warm-green tint, arrow, visible focus ring
+- Slightly more premium View all (green, medium weight, underline + arrow)
+- Open parent tab stacks above the panel (`z-50`) with warm accent + primary
+  text so it reads as attached
+- Soft one-layer shadow; no extra decorative motif beyond the existing green
+  top line
+- Mobile disclosure unchanged (not converted to the desktop mega-menu)
+
+### Guardrails
+
+No API, domain, fixture, header IA, footer, or catalog data changes.
+Mega-menu visual design is frozen.
+
+### Tests
+
+- Mega-menu panel/header/link/view-all classes, content-width, 3-column grid,
+  focus rings, reduced-motion, active parent stacking
+- Existing navigation, Escape, no hardcoded taxonomy, no fake tool routes
+
+### Validation
+
+- `npm test`: 54 files, 252 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual (`next dev`): `/`, `/c/baby-essentials`, `/c/infants`,
+  `/p/pink-white-pleated-baby-dress` 200; View all for Baby Essentials/Infants/
+  Women present; static chunks 200 (no 500)
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Final mega-menu visual refinement completed and mega-menu visual design frozen.
+S4-T11 is next and remains **NOT_STARTED**.
 
 ---
 

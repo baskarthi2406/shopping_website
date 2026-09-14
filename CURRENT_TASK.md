@@ -9,10 +9,10 @@ requests S4-T11.
 
 | Field | Value |
 |-------|--------|
-| Task ID | S4-T10B |
-| Task | Refine Mega Menu Boutique UI |
+| Task ID | S4-T10C |
+| Task | Final Mega Menu Visual Refinement |
 | Status | **COMPLETED** |
-| Scope | Final mega-menu visual refinement completed. |
+| Scope | Final mega-menu visual refinement completed and mega-menu visual design frozen. |
 
 ---
 
@@ -43,7 +43,7 @@ See `docs/sprints/SPRINT-04.md` → S4-T11.
 
 ## Dependencies
 
-S4-T10B.
+S4-T10C.
 
 ## Requirements
 

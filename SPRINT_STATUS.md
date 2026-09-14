@@ -121,7 +121,7 @@ deferred.
 | Objective | Customer navigation, stable API/domain contracts, dummy catalog APIs, and API-driven storefront |
 | Status | **IN_PROGRESS** |
 | Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
-| Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B) |
+| Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B, S4-T10C) |
 
 | Task ID | Name | Status |
 |---------|------|--------|
@@ -137,6 +137,7 @@ deferred.
 | S4-T10 | Loading/Error/Empty States | **COMPLETED** |
 | S4-T10A | Classic-Modern Storefront UI Polish | **COMPLETED** |
 | S4-T10B | Refine Mega Menu Boutique UI | **COMPLETED** |
+| S4-T10C | Final Mega Menu Visual Refinement | **COMPLETED** |
 | S4-T11 | API-driven Navigation | **NOT_STARTED** |
 | S4-T12 | Sprint Review | **NOT_STARTED** |
 

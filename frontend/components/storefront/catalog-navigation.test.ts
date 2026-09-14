@@ -61,17 +61,26 @@ describe("catalog navigation presentation contract", () => {
     );
 
     expect(navigationSource).toContain("mm-mega-panel");
+    expect(navigationSource).toContain("mm-mega-header");
     expect(navigationSource).toContain("Shop by category");
     expect(navigationSource).toContain("Explore the collection");
     expect(navigationSource).toContain("View all {item.label}");
     expect(navigationSource).toContain("lg:grid-cols-3");
+    expect(navigationSource).toContain("auto-rows-min");
+    expect(navigationSource).toContain("items-start");
     expect(navigationSource).toContain("mm-mega-link");
     expect(navigationSource).toContain("mm-mega-view-all");
+    expect(navigationSource).toContain("group-open:z-50");
+    expect(navigationSource).toContain("group-open:bg-surface-accent");
+    expect(navigationSource).toContain("lg:flex-nowrap");
     expect(navigationSource).toContain("md:hidden");
     expect(tokens).toContain(".mm-mega-panel");
+    expect(tokens).toContain(".mm-mega-header");
     expect(tokens).toContain("inset-inline: 0");
+    expect(tokens).toContain("max-width: 100%");
     expect(tokens).toContain(".mm-mega-link:focus-visible");
     expect(tokens).toContain(".mm-mega-view-all:focus-visible");
+    expect(tokens).toContain("outline: 2px solid var(--mm-color-focus)");
     expect(tokens).toContain("prefers-reduced-motion");
   });
 });

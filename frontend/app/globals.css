@@ -207,13 +207,29 @@
     inset-inline: 0;
     top: 100%;
     z-index: 40;
+    box-sizing: border-box;
+    width: 100%;
+    max-width: 100%;
+    overflow: visible;
     border: 1px solid var(--mm-color-border);
     border-top: 2px solid var(--mm-color-primary);
     border-bottom-left-radius: var(--radius-lg);
     border-bottom-right-radius: var(--radius-lg);
     background-color: var(--mm-color-surface-muted);
-    padding: 1.25rem 1.5rem 1.5rem;
-    box-shadow: var(--shadow-sm);
+    padding: 1.05rem 1.35rem 1.15rem;
+    box-shadow: 0 4px 14px rgb(31 27 24 / 0.06);
+  }
+
+  .mm-mega-header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 0.65rem 1.25rem;
+    margin-bottom: 0.8rem;
+    padding-bottom: 0.7rem;
+    border-bottom: 1px solid
+      color-mix(in srgb, var(--mm-color-border) 68%, transparent);
   }
 
   .mm-mega-link {
@@ -224,7 +240,7 @@
     justify-content: space-between;
     gap: 0.75rem;
     border-radius: var(--radius-sm);
-    padding-inline: 0.5rem;
+    padding-inline: 0.7rem;
     font-weight: 500;
     color: var(--mm-color-foreground);
     transition:
@@ -234,8 +250,17 @@
 
   .mm-mega-link:hover,
   .mm-mega-link:focus-visible {
-    background-color: var(--mm-color-surface-accent);
+    background-color: color-mix(
+      in srgb,
+      var(--mm-color-primary) 8%,
+      var(--mm-color-surface-muted)
+    );
     color: var(--mm-color-primary);
+  }
+
+  .mm-mega-link:focus-visible {
+    outline: 2px solid var(--mm-color-focus);
+    outline-offset: 2px;
   }
 
   .mm-mega-link-arrow {
@@ -265,7 +290,9 @@
     min-height: var(--mm-tap-min);
     align-items: center;
     gap: 0.35rem;
+    border-radius: var(--radius-sm);
     font-weight: 500;
+    letter-spacing: 0.01em;
     color: var(--mm-color-primary);
     text-underline-offset: 0.22em;
     transition:
@@ -277,6 +304,11 @@
   .mm-mega-view-all:focus-visible {
     color: var(--mm-color-primary-hover);
     text-decoration: underline;
+  }
+
+  .mm-mega-view-all:focus-visible {
+    outline: 2px solid var(--mm-color-focus);
+    outline-offset: 3px;
   }
 
   .mm-mega-view-all-arrow {

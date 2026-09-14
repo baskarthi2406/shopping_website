@@ -96,8 +96,8 @@ function DesktopMenuItems({
     <ul
       className={
         depth === 0
-          ? "grid w-full grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3"
-          : "mt-1 space-y-0.5"
+          ? "grid w-full auto-rows-min grid-cols-1 items-start gap-x-5 gap-y-0.5 sm:grid-cols-2 lg:grid-cols-3"
+          : "mt-0.5 space-y-0.5"
       }
     >
       {items.map((item) => (
@@ -176,7 +176,7 @@ export function DesktopCatalogNavigation({
       aria-label="Primary categories"
       className="relative hidden min-h-13 w-full items-stretch md:flex"
     >
-      <ul className="flex w-full items-stretch gap-1 overflow-x-auto lg:justify-center lg:gap-3">
+      <ul className="flex w-full flex-wrap items-stretch gap-1 lg:flex-nowrap lg:justify-center lg:gap-3">
         {items.map((item) => (
           <li key={item.href} className="flex shrink-0 items-stretch">
             {item.children.length > 0 ? (
@@ -187,22 +187,22 @@ export function DesktopCatalogNavigation({
                 onKeyDown={handleMenuKeyDown}
                 onToggle={handleDesktopToggle}
               >
-                <summary className="flex min-h-13 cursor-pointer list-none items-center gap-1.5 rounded-md px-2 text-small font-semibold text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary group-open:rounded-t-md group-open:bg-surface-accent group-open:text-primary lg:px-3 [&::-webkit-details-marker]:hidden">
+                <summary className="flex min-h-13 cursor-pointer list-none items-center gap-1.5 rounded-md px-2 text-small font-semibold text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary group-open:relative group-open:z-50 group-open:rounded-t-md group-open:bg-surface-accent group-open:text-primary lg:px-3 [&::-webkit-details-marker]:hidden">
                   <span>{item.label}</span>
                   <span aria-hidden="true" className="text-caption">
                     ▾
                   </span>
                 </summary>
                 <div className="mm-mega-panel">
-                  <div className="mb-5 flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
+                  <div className="mm-mega-header">
                     <div>
                       <p className="text-caption font-semibold tracking-[0.14em] text-foreground-muted uppercase">
                         Shop by category
                       </p>
-                      <p className="mt-1 font-display text-h3 font-semibold text-foreground">
+                      <p className="mt-0.5 font-display text-h3 font-semibold leading-snug text-foreground">
                         {item.label}
                       </p>
-                      <p className="mt-1 text-caption text-foreground-muted">
+                      <p className="mt-0.5 text-caption text-foreground-muted">
                         Explore the collection
                       </p>
                     </div>
