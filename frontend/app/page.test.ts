@@ -9,6 +9,7 @@ describe("homepage metadata wiring", () => {
     expect(source).toContain("buildHomeMetadata");
     expect(source).toContain("toNextMetadata");
     expect(source).toContain('from "@/config/catalog"');
+    expect(source).toContain("CatalogUnavailable");
     expect(source).not.toMatch(/product-records|category-records/);
     expect(source).not.toContain("process.env");
     expect(source).not.toContain("buildOrganizationStructuredData");

@@ -75,4 +75,13 @@ describe("toProductPageViewModel", () => {
     expect(view).not.toHaveProperty("inventory");
     expect(view).not.toHaveProperty("variants");
   });
+
+  it("keeps null pricing, null inventory, and empty variants as a valid product", () => {
+    expect(product.pricing).toBeNull();
+    expect(product.inventory).toBeNull();
+    expect(product.variants).toEqual([]);
+    expect(toProductPageViewModel(product, [babyEssentials]).name).toBe(
+      product.name,
+    );
+  });
 });

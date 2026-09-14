@@ -7,8 +7,12 @@ Catalog use cases and repository interfaces (S1-T05).
 **Use cases:** get/list products and categories; `getCategoryPage` (S2-T01) returns category + products or `null`; `getProductPage` (S2-T03) returns product + known categories or `null`. View-model mappers: `toCategoryPageViewModel`, `toProductPageViewModel`, `toCatalogNavItems` (S2-T04). No search, pricing, or inventory engines.
 
 Depends on domain + these interfaces only. Bind implementations in `config/`.
-Storefront pages use `config/catalog.ts` (HTTP repositories). Dummy API routes
+**S4-T09:** Storefront pages use `config/catalog.ts` (HTTP repositories). Dummy API routes
 use `config/catalog-source.ts` (static repositories).
+
+**S4-T10:** `CATALOG_UNAVAILABLE_MESSAGE` is the public catalog failure copy.
+Empty collections are successful `[]` results, not errors. Null pricing,
+inventory, and empty variants stay valid product data.
 
 **S4-T01 audit:** retain all ports/use cases. They are the clean swap boundary
 for static, dummy API, production, and Zoho-backed repositories.

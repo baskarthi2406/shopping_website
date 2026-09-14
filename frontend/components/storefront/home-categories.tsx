@@ -1,5 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
+import { CatalogSectionEmpty } from "@/components/storefront/catalog-empty-state";
 import { Container } from "@/components/ui/container";
 
 type HomeCategoriesProps = {
@@ -12,7 +13,13 @@ type HomeCategoriesProps = {
 
 export function HomeCategories({ categories }: HomeCategoriesProps) {
   if (categories.length === 0) {
-    return null;
+    return (
+      <CatalogSectionEmpty
+        headingId="home-categories-heading"
+        heading="Shop by category"
+        message="Categories will appear here when they are available."
+      />
+    );
   }
 
   return (

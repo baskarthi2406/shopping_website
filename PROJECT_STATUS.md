@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T09 completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T10 completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -42,10 +42,10 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-**S4-T10 — Loading/Error/Empty States**
+**S4-T11 — API-driven Navigation**
 Status: **NOT_STARTED**
 
-Do not start S4-T10 automatically.
+Do not start S4-T11 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -93,6 +93,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   and current fixtures keep commerce values unknown
 - Storefront pages consume dummy category/product APIs through HTTP
   repositories (S4-T09); dummy routes/sitemap/nav keep the static backing store
+- Loading, sanitized catalog errors, not-found, and empty collection states
+  (S4-T10); null pricing/inventory/variants remain valid product data
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
@@ -145,15 +147,16 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T07 — Variant/Size/Color Model
 - S4-T08 — Pricing/Inventory Model
 - S4-T09 — Connect UI to Dummy API
+- S4-T10 — Loading/Error/Empty States
 
 ## In progress
 
-- None. Do not start S4-T10 automatically.
+- None. Do not start S4-T11 automatically.
 
 ## Pending
 
-- S4-T10 — Loading/Error/Empty States (next)
-- S4-T11–S4-T12 — API-driven navigation and sprint review
+- S4-T11 — API-driven Navigation (next)
+- S4-T12 — Sprint Review
 - Sprint 5 — Commerce UI
 - Sprint 6 — Production Backend
 - Sprint 7 — Zoho POS Integration
@@ -164,7 +167,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- None for starting S4-T10 when explicitly requested.
+- None for starting S4-T11 when explicitly requested.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
   auth/rate limits, future product filters/search,
@@ -177,4 +180,4 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S4-T10 — Loading/Error/Empty States**
+**S4-T11 — API-driven Navigation**

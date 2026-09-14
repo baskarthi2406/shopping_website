@@ -162,7 +162,8 @@ nullable pricing/inventory/SKU/UOM, minimal product pagination, and
 provider-independent error contracts. S4-T08 finalized money and inventory
 invariants without populating catalog commerce values. S4-T09 connected
 storefront pages to the dummy category/product APIs through a provider-neutral
-client. See `STOREFRONT_CONTRACTS.md`.
+client. S4-T10 added loading, sanitized catalog errors, not-found, and empty
+collection states. See `STOREFRONT_CONTRACTS.md`.
 
 ---
 

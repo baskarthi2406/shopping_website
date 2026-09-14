@@ -393,16 +393,20 @@ Image `src` in view models uses **SEO filenames** from `DESIGN_ASSETS.md`.
 
 ## 12. Error and loading
 
+S4-T10 storefront states:
+
 | Situation | Flow |
 |-----------|------|
-| Loading a route | `loading.tsx` (routing layer) |
-| Empty list | Application returns `[]`; presentation empty state |
-| Unknown slug | Application `null` → page `notFound()` → `not-found.tsx` |
-| Repository failure | Typed application error → page error UI or `error.tsx` |
-| Unexpected throw | `error.tsx` |
-| Cart mutation failure | Service result → client island message |
+| Loading a catalog route | Route `loading.tsx` skeleton using existing surface tokens |
+| Empty product/category collection | Successful `[]` → explicit empty copy (`role="status"`) |
+| Unknown category or product slug | Application `null` → page `notFound()` → `not-found.tsx` |
+| Catalog API/application failure | Sanitized “Catalog is temporarily unavailable” via `error.tsx`, or homepage static sections plus that message |
+| Unexpected throw | `error.tsx` (no stack, digest, repository, or provider details) |
+| Null pricing/inventory/empty variants | Valid product data, not empty/error |
 
-Do not swallow errors in presentation.
+Homepage hero, promo, intro, and trust remain when catalog reads fail. Do not invent fallback products or categories. Null commerce fields are not empty states.
+
+Retry uses the error-boundary `reset` or a same-page reload. Do not leak internals.
 
 ---
 
@@ -586,5 +590,5 @@ later. No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T09 are complete.
-Next: **S4-T10** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T10 are complete.
+Next: **S4-T11** — do not start automatically.

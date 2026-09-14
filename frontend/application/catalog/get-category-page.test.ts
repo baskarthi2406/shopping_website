@@ -130,4 +130,11 @@ describe("getCategoryPage", () => {
     expect(page?.category).toEqual(infants);
     expect(page?.products).toEqual([]);
   });
+
+  it("treats an empty product list as success, not a missing category", async () => {
+    const page = await getCategoryPage(categories, products, "infants");
+
+    expect(page).not.toBeNull();
+    expect(page?.products).toEqual([]);
+  });
 });

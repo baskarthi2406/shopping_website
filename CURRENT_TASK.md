@@ -1,7 +1,7 @@
 # Current Task
 
 Only this task may be implemented. Do not start it until a human explicitly
-requests S4-T10.
+requests S4-T11.
 
 ---
 
@@ -9,58 +9,58 @@ requests S4-T10.
 
 | Field | Value |
 |-------|--------|
-| Task ID | S4-T09 |
-| Task | Connect UI to Dummy API |
+| Task ID | S4-T10 |
+| Task | Loading/Error/Empty States |
 | Status | **COMPLETED** |
-| Scope | Storefront homepage, category, and product pages consume dummy APIs through HTTP repositories and a provider-neutral client. Dummy routes/sitemap/nav keep the static backing composition. No UI redesign, commerce UI, or invented prices/stock. |
+| Scope | Route loading skeletons, sanitized catalog errors with retry, 404 for unknown slugs, explicit empty collections. Homepage static sections remain on catalog failure. Null commerce data is not an empty/error state. |
 
 ---
 
 ## Task ID
 
-S4-T10
+S4-T11
 
 ## Task
 
-Loading/Error/Empty States
+API-driven Navigation
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S4-T10 automatically.
+Do **not** implement S4-T11 automatically.
 
 S3-T10 Image Optimization and the original “SEO-Friendly URL Strategy” remain
 **DEFERRED**. Do not start either automatically.
 
 ## Objective
 
-See `docs/sprints/SPRINT-04.md` → S4-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T11.
 
 ## Scope
 
-See `docs/sprints/SPRINT-04.md` → S4-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T11.
 
 ## Dependencies
 
-S4-T09.
+S4-T10.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-04.md` → S4-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T11.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-04.md` → S4-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T11.
 
 ## Tests
 
-See `docs/sprints/SPRINT-04.md` → S4-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T11.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-04.md` → S4-T10.
+See `docs/sprints/SPRINT-04.md` → S4-T11.
 
-## Next task after S4-T10 (do not start)
+## Next task after S4-T11 (do not start)
 
 See `docs/sprints/SPRINT-04.md`. Do not start it automatically.

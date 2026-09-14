@@ -300,6 +300,8 @@ responses. S4-T07 confirmed the generic variant attribute model without
 populating fixture option values. S4-T08 finalized pricing and inventory
 invariants without inventing catalog prices, stock, SKU, or availability.
 S4-T09 connected storefront pages to those dummy APIs through HTTP
-repositories and a provider-neutral API client. S4-T10 owns rendered
-loading/error/empty states; S4-T11 owns API-driven navigation. Actual Zoho
-DTOs, authentication, and mapping belong to Sprint 7.
+repositories and a provider-neutral API client. S4-T10 added route loading
+skeletons, sanitized catalog errors, not-found for unknown slugs, and explicit
+empty collections. Null pricing, inventory, and empty variants remain valid
+product data, not empty or error states. S4-T11 owns API-driven navigation.
+Actual Zoho DTOs, authentication, and mapping belong to Sprint 7.

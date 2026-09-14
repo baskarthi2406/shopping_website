@@ -81,4 +81,12 @@ describe("toCategoryPageViewModel", () => {
       { label: "Baby Essentials", href: null },
     ]);
   });
+
+  it("keeps a valid category with zero products as an empty collection", () => {
+    const view = toCategoryPageViewModel(category, []);
+
+    expect(view.productCount).toBe(0);
+    expect(view.products).toEqual([]);
+    expect(view.name).toBe("Baby Essentials");
+  });
 });

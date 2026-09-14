@@ -1,3 +1,4 @@
+import { CatalogSectionEmpty } from "@/components/storefront/catalog-empty-state";
 import { ProductCard } from "@/components/storefront/product-card";
 import { Container } from "@/components/ui/container";
 
@@ -12,7 +13,13 @@ type HomeProductsProps = {
 
 export function HomeProducts({ products }: HomeProductsProps) {
   if (products.length === 0) {
-    return null;
+    return (
+      <CatalogSectionEmpty
+        headingId="home-products-heading"
+        heading="Clothing in the catalog"
+        message="No products in the catalog yet."
+      />
+    );
   }
 
   return (

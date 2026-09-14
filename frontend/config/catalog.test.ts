@@ -37,6 +37,17 @@ describe("storefront catalog composition", () => {
     await expect(catalog.getProductPage("missing-product")).resolves.toBeNull();
   });
 
+  it("maps an unknown category slug to a missing page result", async () => {
+    await expect(catalog.getCategoryPage("missing-category")).resolves.toBeNull();
+  });
+
+  it("returns an empty product list for a valid category without products", async () => {
+    const page = await catalog.getCategoryPage("infants");
+
+    expect(page?.category.slug).toBe("infants");
+    expect(page?.products).toEqual([]);
+  });
+
   it("does not bind static product or category repositories in the storefront catalog", () => {
     const source = readFileSync(new URL("./catalog.ts", import.meta.url), "utf8");
 

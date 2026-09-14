@@ -123,6 +123,9 @@ describe("getProductPage", () => {
     );
 
     expect(page?.product).toEqual(uncategorized);
+    expect(page?.product.pricing).toBeNull();
+    expect(page?.product.inventory).toBeNull();
+    expect(page?.product.variants).toEqual([]);
     expect(page?.categories).toEqual([]);
   });
 

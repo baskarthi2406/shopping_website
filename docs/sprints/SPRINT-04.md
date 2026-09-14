@@ -556,16 +556,53 @@ S4-T10 is next and remains **NOT_STARTED**.
 
 ## S4-T10 — Loading/Error/Empty States
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
 Handle API loading, repository failure, not-found, and valid empty catalog
 states.
 
+### Scope
+
+- Route `loading.tsx` skeletons for homepage, category, and PDP using existing
+  surface tokens.
+- Shared `error.tsx` catalog failure UI: “Catalog is temporarily unavailable”,
+  Try again, no internals.
+- Homepage keeps hero/promo/intro/trust when catalog reads fail.
+- Valid empty collections show explicit empty copy; unknown slugs stay on
+  `not-found.tsx`.
+- Null pricing/inventory and `variants: []` remain valid product data.
+
 ### Guardrails
 
-Do not convert crawlable pages into client-only shells.
+Pages stay server-rendered. No client-side catalog fetching, filter/sort,
+variant/price/stock UI, or invented fallback catalog.
+
+### Tests
+
+- Loading boundaries and no leaked internals
+- Generic failure UI, retry control, no stack/repository/provider details
+- Empty homepage/category collections vs API failure
+- Unknown category/product remain 404
+- Null commerce fields do not error
+- Existing homepage/category/PDP, SEO, and API contract tests remain
+
+### Validation
+
+- `npm test`: 52 files, 242 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual (`next start`): homepage/category/PDP 200; `/c/infants` empty collection
+  copy; unknown category/product render `not-found` without internals; no fake
+  price/SKU/stock UI
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Loading, error, not-found, and empty states are in place without a storefront
+redesign. S4-T11 is next and remains **NOT_STARTED**.
 
 ---
 

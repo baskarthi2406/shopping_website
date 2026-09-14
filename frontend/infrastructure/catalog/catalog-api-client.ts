@@ -1,4 +1,5 @@
 import {
+  CATALOG_UNAVAILABLE_MESSAGE,
   DEFAULT_PRODUCT_PAGE,
   DEFAULT_PRODUCT_PAGE_SIZE,
   type PaginatedResponse,
@@ -6,9 +7,7 @@ import {
 } from "@/application/catalog";
 import type { Category, Product, ProductSummary } from "@/domain/catalog";
 
-export const CATALOG_UNAVAILABLE_MESSAGE =
-  "Catalog is temporarily unavailable";
-
+export { CATALOG_UNAVAILABLE_MESSAGE };
 export type CatalogApiDispatch = (url: URL) => Promise<Response>;
 
 export type CatalogApiClient = {
