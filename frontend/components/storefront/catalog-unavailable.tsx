@@ -38,7 +38,7 @@ export function CatalogUnavailable({
         <button
           type="button"
           onClick={handleRetry}
-          className="inline-flex min-h-[var(--mm-tap-min)] items-center rounded-md bg-primary px-5 text-small font-medium text-primary-foreground hover:bg-primary-hover"
+          className="mm-btn-primary"
         >
           Try again
         </button>

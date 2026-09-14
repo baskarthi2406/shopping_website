@@ -3,6 +3,7 @@
 import type {
   FocusEvent,
   KeyboardEvent,
+  ReactNode,
   SyntheticEvent,
 } from "react";
 import Link from "next/link";
@@ -67,9 +68,11 @@ function handleDesktopToggle(event: SyntheticEvent<HTMLDetailsElement>) {
 function MenuLink({
   item,
   className,
+  children,
 }: {
   item: CatalogNavItem;
   className: string;
+  children?: ReactNode;
 }) {
   return (
     <Link
@@ -77,7 +80,7 @@ function MenuLink({
       className={className}
       onClick={(event) => closeMenuFromLink(event.currentTarget)}
     >
-      {item.label}
+      {children ?? item.label}
     </Link>
   );
 }
@@ -93,7 +96,7 @@ function DesktopMenuItems({
     <ul
       className={
         depth === 0
-          ? "grid gap-x-8 gap-y-5 sm:grid-cols-2 lg:grid-cols-3"
+          ? "grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3"
           : "mt-1 space-y-0.5"
       }
     >
@@ -103,8 +106,8 @@ function DesktopMenuItems({
             item={item}
             className={
               depth === 0
-                ? "inline-flex min-h-[var(--mm-tap-min)] items-center font-semibold text-foreground hover:text-primary"
-                : "inline-flex min-h-9 items-center text-small text-foreground-secondary hover:text-primary"
+                ? "inline-flex min-h-[var(--mm-tap-min)] items-center rounded-sm px-1.5 font-medium text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary"
+                : "inline-flex min-h-9 items-center rounded-sm px-1.5 text-small text-foreground-secondary transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary"
             }
           />
           {item.children.length > 0 ? (
@@ -132,7 +135,7 @@ function MobileMenuItems({
               onBlur={handleMenuBlur}
               onKeyDown={handleMenuKeyDown}
             >
-              <summary className="flex min-h-[var(--mm-tap-min)] cursor-pointer list-none items-center justify-between gap-3 rounded-md px-2 font-medium text-foreground hover:bg-surface-muted [&::-webkit-details-marker]:hidden">
+              <summary className="flex min-h-[var(--mm-tap-min)] cursor-pointer list-none items-center justify-between gap-3 rounded-md px-2 font-medium text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted [&::-webkit-details-marker]:hidden">
                 <span>{item.label}</span>
                 <span aria-hidden="true" className="text-foreground-muted">
                   +
@@ -149,7 +152,7 @@ function MobileMenuItems({
           ) : (
             <MenuLink
               item={item}
-              className="inline-flex min-h-[var(--mm-tap-min)] w-full items-center rounded-md px-2 text-small text-foreground hover:bg-surface-muted hover:text-primary"
+              className="inline-flex min-h-[var(--mm-tap-min)] w-full items-center rounded-md px-2 text-small text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary"
             />
           )}
         </li>
@@ -181,24 +184,37 @@ export function DesktopCatalogNavigation({
                 onKeyDown={handleMenuKeyDown}
                 onToggle={handleDesktopToggle}
               >
-                <summary className="flex min-h-13 cursor-pointer list-none items-center gap-1.5 rounded-md px-2 text-small font-semibold text-foreground hover:bg-surface-muted hover:text-primary group-open:text-primary lg:px-3 [&::-webkit-details-marker]:hidden">
+                <summary className="flex min-h-13 cursor-pointer list-none items-center gap-1.5 rounded-md px-2 text-small font-semibold text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary group-open:bg-surface-muted group-open:text-primary lg:px-3 [&::-webkit-details-marker]:hidden">
                   <span>{item.label}</span>
                   <span aria-hidden="true" className="text-caption">
                     ▾
                   </span>
                 </summary>
-                <div className="absolute inset-x-0 top-full z-40 border-y border-border bg-surface p-5 shadow-md lg:p-6">
-                  <MenuLink
-                    item={{ ...item, label: `View all ${item.label}` }}
-                    className="mb-3 inline-flex min-h-[var(--mm-tap-min)] items-center font-semibold text-primary"
-                  />
+                <div className="absolute inset-x-0 top-full z-40 rounded-b-lg border-x border-b border-border bg-background p-5 shadow-sm lg:p-6">
+                  <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-border pb-3">
+                    <div>
+                      <p className="font-display text-h3 font-semibold text-foreground">
+                        {item.label}
+                      </p>
+                      <p className="mt-1 text-caption text-foreground-muted">
+                        Explore the collection
+                      </p>
+                    </div>
+                    <MenuLink
+                      item={item}
+                      className="inline-flex min-h-[var(--mm-tap-min)] items-center gap-1 font-medium text-primary transition-colors duration-[var(--mm-duration)] hover:text-primary-hover"
+                    >
+                      View all {item.label}
+                      <span aria-hidden="true">→</span>
+                    </MenuLink>
+                  </div>
                   <DesktopMenuItems items={item.children} />
                 </div>
               </details>
             ) : (
               <MenuLink
                 item={item}
-                className="inline-flex min-h-13 items-center rounded-md px-2 text-small font-semibold text-foreground hover:bg-surface-muted hover:text-primary lg:px-3"
+                className="inline-flex min-h-13 items-center rounded-md px-2 text-small font-semibold text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary lg:px-3"
               />
             )}
           </li>
@@ -219,10 +235,10 @@ export function MobileCatalogNavigation({ items }: CatalogNavigationProps) {
       onBlur={handleMenuBlur}
       onKeyDown={handleMenuKeyDown}
     >
-      <summary className="inline-flex min-h-[var(--mm-tap-min)] cursor-pointer list-none items-center rounded-md px-2 text-small font-semibold text-foreground hover:bg-surface-muted [&::-webkit-details-marker]:hidden">
+      <summary className="inline-flex min-h-[var(--mm-tap-min)] cursor-pointer list-none items-center rounded-md px-2 text-small font-semibold text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted [&::-webkit-details-marker]:hidden">
         Menu
       </summary>
-      <div className="absolute inset-x-0 top-full z-50 max-h-[calc(100dvh-6rem)] overflow-y-auto border-y border-border bg-surface px-[var(--mm-space-page)] py-3 shadow-md">
+      <div className="absolute inset-x-0 top-full z-50 max-h-[calc(100dvh-6rem)] overflow-y-auto border-y border-border bg-background px-[var(--mm-space-page)] py-3 shadow-sm">
         <MobileMenuItems items={items} />
         <div className="mt-3 border-t border-border pt-3">
           <p className="px-2 text-caption font-semibold uppercase tracking-wide text-foreground-muted">

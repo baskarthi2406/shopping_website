@@ -32,10 +32,10 @@ export function CatalogSectionEmpty({
 }: CatalogSectionEmptyProps) {
   return (
     <section aria-labelledby={headingId}>
-      <Container className="py-8 sm:py-10">
+      <Container className="py-10 sm:py-12">
         <h2
           id={headingId}
-          className="text-h2 font-semibold tracking-tight text-foreground"
+          className="font-display text-h2 font-semibold tracking-tight text-foreground"
         >
           {heading}
         </h2>

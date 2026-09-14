@@ -24,10 +24,10 @@ export function HomeProducts({ products }: HomeProductsProps) {
 
   return (
     <section aria-labelledby="home-products-heading">
-      <Container className="py-8 sm:py-10">
+      <Container className="py-10 sm:py-12">
         <h2
           id="home-products-heading"
-          className="text-h2 font-semibold tracking-tight text-foreground"
+          className="font-display text-h2 font-semibold tracking-tight text-foreground"
         >
           Clothing in the catalog
         </h2>
@@ -35,7 +35,7 @@ export function HomeProducts({ products }: HomeProductsProps) {
           Current products from the Mini Mystiq catalog. This is not a featured
           selection.
         </p>
-        <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
+        <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
           {products.map((product) => (
             <li key={product.href} className="min-w-0">
               <ProductCard {...product} headingAs="h3" />

@@ -606,52 +606,60 @@ redesign.
 
 ---
 
-## S4-T10A — Storefront Footer and UI Polish
+## S4-T10A — Classic-Modern Storefront UI Polish
 
 **Status:** COMPLETED
 
 ### Objective
 
-Perform a focused customer-facing UI polish pass, primarily the footer and
-small visual details, without changing architecture or catalog data.
+Classic boutique + modern ecommerce + friendly baby-store visual polish,
+without changing information architecture, catalog data, or APIs.
 
 ### Implementation scope (as completed)
 
-- Structured footer: brand, Shop, Collections, Contact, service claims, copyright
-- Shop/Collections columns derived from existing category data (image-backed
-  top-level menu categories vs remaining top-level menu categories)
-- Contact uses verified organization name, address, and a `tel:` phone link
-- Service strip reuses announcement claims only
-- No Customer Care/policy/account links (those routes do not exist)
-- Header/navigation, homepage, category, and PDP presentation left unchanged
-- Footer data still comes from `catalogSource` (S4-T11 remains next)
+- Warmed design tokens: off-white background, soft pink secondary, soft purple
+  accent, warmer charcoal/borders; primary green unchanged
+- Self-hosted Source Sans 3 + Cormorant Garamond via `next/font` (swap +
+  system fallbacks)
+- Header/nav structure preserved; hover, open, and focus treatments refined
+- Mega-menu: warm panel, rounded bottom corners, collection header, View all →,
+  tighter three-column spacing, hover surfaces
+- CSS-only 180ms color/zoom transitions with reduced-motion support
+- Shared `.mm-btn-primary`; hero keeps existing CTA copy with a visual arrow
+- Category circles and product cards: framing, hover zoom, no commerce fields
+- Homepage section rhythm aligned; trust row simplified (existing claims only)
+- Footer: brand, Shop, Collections, in-page Contact Us, verified contact/`tel:`,
+  service claims, copyright
+- Footer/nav still use `catalogSource` (S4-T11 remains next)
 
 ### Guardrails
 
 No domain, API, repository, fixture, SEO, or Zoho changes. No invented email,
-social, legal pages, or commerce values.
+social, legal pages, prices, or trust badges. Header IA unchanged.
 
 ### Tests
 
-- Footer nav view-model split and filtering
-- Footer renders category links from props, verified `tel:` href, existing
-  claims, semantic structure, no fake routes
+- Footer nav split, `tel:` href, claims, no fake routes
+- Mega-menu still data-driven; Escape/disclosures unchanged
+- Tokens, self-hosted fonts, product cards without commerce fields
+- Existing loading/error/empty, API, and SEO tests remain
 
 ### Validation
 
-- `npm test`: 53 files, 248 tests passed
+- `npm test`: 54 files, 252 tests passed
 - `npm run typecheck`: passed
 - `npm run lint`: passed
 - `npm run build`: passed
-- Manual (`next dev`): homepage, category, and PDP footers include Shop,
-  Collections, contact address, `tel:09025799377`, and copyright; header
-  unchanged; robots/sitemap unchanged
+- Manual (`next dev`): `/`, `/c/baby-essentials`, `/c/infants`,
+  `/p/pink-white-pleated-baby-dress` 200; footer/tel/JSON-LD present; static
+  chunks 200 (no 500); robots/sitemap 200
 - Non-blocking npm warning: unknown user config `devdir`
+- Non-blocking Next image `sizes` warning on the homepage promo
 
 ### Definition of Done
 
-Focused storefront footer/UI polish completed without architectural/API
-changes. S4-T11 is next and remains **NOT_STARTED**.
+Classic-modern storefront UI polish completed. S4-T11 is next and remains
+**NOT_STARTED**.
 
 ---
 

@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/app/json-ld";
+import { cormorant, sourceSans } from "@/app/fonts";
 import { toCatalogNavItems, toFooterNavViewModel } from "@/application/catalog";
 import { buildOrganizationStructuredData } from "@/application/seo/organization-structured-data";
 import { StorefrontShell } from "@/components/storefront/storefront-shell";
@@ -25,7 +26,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   );
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${sourceSans.variable} ${cormorant.variable}`}>
       <body>
         {organizationStructuredData ? (
           <JsonLd data={organizationStructuredData} />

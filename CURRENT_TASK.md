@@ -10,9 +10,9 @@ requests S4-T11.
 | Field | Value |
 |-------|--------|
 | Task ID | S4-T10A |
-| Task | Storefront Footer and UI Polish |
+| Task | Classic-Modern Storefront UI Polish |
 | Status | **COMPLETED** |
-| Scope | Focused storefront footer/UI polish completed without architectural/API changes. |
+| Scope | Classic-modern storefront UI polish completed without architectural/API changes. |
 
 ---
 

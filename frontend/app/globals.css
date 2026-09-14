@@ -1,12 +1,11 @@
 @import "tailwindcss";
 
 /*
-  Mini Mystiq design tokens — S1-T07 foundation.
+  Mini Mystiq design tokens — S1-T07 foundation, refined S4-T10A.
 
-  Colors: implementation defaults derived from Design Option 1 (top-left mockup).
-  Primary green sampled from the announcement bar (~#016C37).
-  Pastel peach sampled from a category surface (~#FCF1D8).
-  These are NOT a finalized brand-guide decision; refine if Option 1 art is re-measured.
+  Colors: implementation defaults derived from Design Option 1 (top-left mockup),
+  warmed for a classic-boutique storefront. Primary green sampled from the
+  announcement bar (~#016C37). These are NOT a finalized brand-guide decision.
 
   Breakpoints: Tailwind defaults used as implementation defaults (business TBD):
   sm 640px (tablet start), md 768px, lg 1024px (desktop start).
@@ -16,22 +15,26 @@
   --mm-color-primary: #016c37;
   --mm-color-primary-hover: #01552c;
   --mm-color-primary-foreground: #ffffff;
-  --mm-color-background: #ffffff;
+  --mm-color-secondary: #e8c5ce;
+  --mm-color-accent: #c9bdd6;
+  --mm-color-background: #faf6f1;
   --mm-color-surface: #ffffff;
-  --mm-color-surface-muted: #f4f7f6;
-  --mm-color-surface-accent: #e8f4ee;
-  --mm-color-surface-warm: #fcf1d8;
-  --mm-color-foreground: #171717;
-  --mm-color-foreground-secondary: #525252;
-  --mm-color-foreground-muted: #737373;
-  --mm-color-border: #e5e7eb;
+  --mm-color-surface-muted: #f3eee8;
+  --mm-color-surface-accent: #eef3ec;
+  --mm-color-surface-warm: #f8e6e1;
+  --mm-color-foreground: #1f1b18;
+  --mm-color-foreground-secondary: #5c534c;
+  --mm-color-foreground-muted: #7a716a;
+  --mm-color-border: #e7e0d8;
   --mm-color-focus: #016c37;
   --mm-color-success: #016c37;
   --mm-color-warning: #b45309;
   --mm-color-error: #b42318;
 
-  --mm-font-sans: ui-sans-serif, system-ui, "Segoe UI", Roboto, "Helvetica Neue",
-    Arial, sans-serif;
+  --mm-font-sans: var(--font-mm-sans), ui-sans-serif, system-ui, "Segoe UI",
+    Roboto, "Helvetica Neue", Arial, sans-serif;
+  --mm-type-display: var(--font-mm-display), "Iowan Old Style",
+    "Palatino Linotype", Palatino, Georgia, serif;
 
   --mm-font-display: 1.75rem;
   --mm-font-h1: 1.5rem;
@@ -47,6 +50,7 @@
   --mm-announcement-min: 2rem;
   --mm-header-min: 4.25rem;
   --mm-logo-height: 2.25rem;
+  --mm-duration: 180ms;
 }
 
 @media (min-width: 640px) {
@@ -75,6 +79,8 @@
   --color-primary: var(--mm-color-primary);
   --color-primary-hover: var(--mm-color-primary-hover);
   --color-primary-foreground: var(--mm-color-primary-foreground);
+  --color-secondary: var(--mm-color-secondary);
+  --color-accent: var(--mm-color-accent);
   --color-background: var(--mm-color-background);
   --color-surface: var(--mm-color-surface);
   --color-surface-muted: var(--mm-color-surface-muted);
@@ -90,6 +96,7 @@
   --color-error: var(--mm-color-error);
 
   --font-sans: var(--mm-font-sans);
+  --font-display: var(--mm-type-display);
 
   --text-display: var(--mm-font-display);
   --text-display--line-height: 1.2;
@@ -106,13 +113,15 @@
   --text-caption: var(--mm-font-caption);
   --text-caption--line-height: 1.4;
 
-  --radius-sm: 0.5rem;
-  --radius-md: 0.75rem;
-  --radius-lg: 1.25rem;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
   --radius-full: 9999px;
 
-  --shadow-sm: 0 1px 2px rgb(15 23 42 / 0.06);
-  --shadow-md: 0 4px 16px rgb(15 23 42 / 0.06);
+  --shadow-sm: 0 1px 2px rgb(31 27 24 / 0.06);
+  --shadow-md: 0 8px 24px rgb(31 27 24 / 0.08);
+
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 @layer base {
@@ -132,23 +141,27 @@
     -moz-osx-font-smoothing: grayscale;
   }
 
+  h1,
+  h2,
+  h3 {
+    font-family: var(--mm-type-display);
+    font-weight: 600;
+  }
+
   h1 {
     font-size: var(--mm-font-h1);
     line-height: 1.25;
-    font-weight: 600;
     letter-spacing: -0.02em;
   }
 
   h2 {
     font-size: var(--mm-font-h2);
     line-height: 1.3;
-    font-weight: 600;
   }
 
   h3 {
     font-size: var(--mm-font-h3);
     line-height: 1.35;
-    font-weight: 600;
   }
 
   :focus-visible {
@@ -158,6 +171,35 @@
 
   :focus:not(:focus-visible) {
     outline: none;
+  }
+}
+
+@layer components {
+  .mm-btn-primary {
+    display: inline-flex;
+    min-height: var(--mm-tap-min);
+    align-items: center;
+    border-radius: var(--radius-md);
+    background-color: var(--mm-color-primary);
+    padding-inline: 1.25rem;
+    font-size: var(--mm-font-small);
+    font-weight: 500;
+    color: var(--mm-color-primary-foreground);
+    transition:
+      background-color var(--mm-duration) var(--ease-out),
+      color var(--mm-duration) var(--ease-out);
+  }
+
+  .mm-btn-primary:hover {
+    background-color: var(--mm-color-primary-hover);
+  }
+
+  .mm-hover-zoom {
+    transition: transform var(--mm-duration) var(--ease-out);
+  }
+
+  .group:hover .mm-hover-zoom {
+    transform: scale(1.03);
   }
 }
 
@@ -195,7 +237,9 @@
     transition-duration: 0.01ms !important;
   }
 
-  .skip-link {
-    transition: none;
+  .skip-link,
+  .mm-hover-zoom,
+  .group:hover .mm-hover-zoom {
+    transform: none !important;
   }
 }

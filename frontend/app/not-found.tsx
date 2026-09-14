@@ -11,7 +11,7 @@ export function generateMetadata(): Metadata {
 export default function NotFound() {
   return (
     <Container className="py-12">
-      <h1 className="text-h1 font-semibold tracking-tight text-foreground">
+      <h1 className="font-display text-h1 font-semibold tracking-tight text-foreground">
         Page not found
       </h1>
       <p className="mt-2 text-body text-foreground-secondary">

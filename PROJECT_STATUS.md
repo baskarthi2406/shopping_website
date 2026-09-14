@@ -98,6 +98,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - Storefront footer polish (S4-T10A): brand, category-derived Shop/Collections,
   verified contact/`tel:` link, existing service claims, and copyright; header
   and catalog architecture unchanged
+- Classic-modern visual refinement (S4-T10A): warmed tokens, self-hosted
+  display/UI fonts, boutique mega-menu, card/CTA hover, homepage rhythm
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
@@ -151,7 +153,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T08 — Pricing/Inventory Model
 - S4-T09 — Connect UI to Dummy API
 - S4-T10 — Loading/Error/Empty States
-- S4-T10A — Storefront Footer and UI Polish
+- S4-T10A — Classic-Modern Storefront UI Polish
 
 ## In progress
 

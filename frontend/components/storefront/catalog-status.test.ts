@@ -24,7 +24,7 @@ describe("storefront catalog status presentation", () => {
     expect(unavailable).toContain("{CATALOG_UNAVAILABLE_MESSAGE}");
     expect(unavailable).toContain("Try again");
     expect(unavailable).toContain("type=\"button\"");
-    expect(unavailable).toContain("min-h-[var(--mm-tap-min)]");
+    expect(unavailable).toContain("mm-btn-primary");
     expect(unavailable).not.toMatch(leakPattern);
     expect(unavailable).not.toContain("error.message");
     expect(unavailable).not.toContain("error.stack");

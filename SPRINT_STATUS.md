@@ -135,7 +135,7 @@ deferred.
 | S4-T08 | Pricing/Inventory Model | **COMPLETED** |
 | S4-T09 | Connect UI to Dummy API | **COMPLETED** |
 | S4-T10 | Loading/Error/Empty States | **COMPLETED** |
-| S4-T10A | Storefront Footer and UI Polish | **COMPLETED** |
+| S4-T10A | Classic-Modern Storefront UI Polish | **COMPLETED** |
 | S4-T11 | API-driven Navigation | **NOT_STARTED** |
 | S4-T12 | Sprint Review | **NOT_STARTED** |
 

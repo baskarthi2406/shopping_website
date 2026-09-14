@@ -58,7 +58,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <Breadcrumbs items={view.breadcrumb} />
 
         <header className="mt-4">
-          <h1 className="text-h1 font-semibold tracking-tight text-foreground">
+          <h1 className="font-display text-h1 font-semibold tracking-tight text-foreground">
             {view.name}
           </h1>
           {view.description ? (

@@ -22,7 +22,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
 
       <article className="mt-4 grid gap-6 lg:grid-cols-2 lg:items-start lg:gap-10">
         <div>
-          <div className="relative aspect-[3/4] overflow-hidden rounded-lg bg-surface-muted">
+          <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border bg-surface">
             {primaryImage ? (
               <Image
                 src={primaryImage.src}
@@ -55,7 +55,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
         </div>
 
         <div>
-          <h1 className="text-h1 font-semibold tracking-tight text-foreground">
+          <h1 className="font-display text-h1 font-semibold tracking-tight text-foreground">
             {product.name}
           </h1>
           {product.description ? (

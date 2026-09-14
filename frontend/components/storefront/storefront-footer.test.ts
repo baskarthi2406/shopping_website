@@ -72,6 +72,9 @@ describe("storefront footer", () => {
     expect(footerSource).not.toContain('href="/privacy"');
     expect(footerSource).not.toContain('href="/terms"');
     expect(footerSource).not.toContain('href="/contact"');
+    expect(footerSource).toContain('href="#storefront-contact"');
+    expect(footerSource).toContain("Customer Care");
+    expect(footerSource).toContain("Contact Us");
     expect(footerSource).not.toContain('href="/track');
     expect(footerSource).not.toContain("mailto:");
     expect(footerSource).not.toContain("facebook.com");

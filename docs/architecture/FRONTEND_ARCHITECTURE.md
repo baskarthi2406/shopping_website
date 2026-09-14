@@ -250,7 +250,7 @@ Primitives have **no** catalog fetching. `ProductCard` receives a product view m
 
 Do not invent another visual language.
 
-**S1-T07 tokens:** CSS variables in `frontend/app/globals.css` (`--mm-*`), mapped into Tailwind v4 `@theme inline`. Primary `#016C37` sampled from Option 1. Hex values are **implementation defaults**, not a locked brand guide (`DESIGN_OPTION_1.md`).
+**S1-T07 tokens:** CSS variables in `frontend/app/globals.css` (`--mm-*`), mapped into Tailwind v4 `@theme inline`. Primary `#016C37` sampled from Option 1. S4-T10A refined warm surfaces, secondary/accent, and self-hosted display/UI fonts. Hex values are **implementation defaults**, not a locked brand guide (`DESIGN_OPTION_1.md`).
 
 Primitives: `components/ui/container.tsx`. Shell:
 `components/storefront/storefront-shell.tsx` (skip link, header, recursive

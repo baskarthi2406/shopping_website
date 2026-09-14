@@ -53,4 +53,12 @@ describe("catalog navigation presentation contract", () => {
     expect(navigationSource).not.toContain('href="/account"');
     expect(navigationSource).not.toContain('href="/track');
   });
+
+  it("refines mega-menu panels without hardcoding taxonomy", () => {
+    expect(navigationSource).toContain("absolute inset-x-0 top-full");
+    expect(navigationSource).toContain("Explore the collection");
+    expect(navigationSource).toContain("View all {item.label}");
+    expect(navigationSource).toContain("lg:grid-cols-3");
+    expect(navigationSource).toContain("duration-[var(--mm-duration)]");
+  });
 });

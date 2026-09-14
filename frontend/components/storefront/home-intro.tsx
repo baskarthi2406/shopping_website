@@ -8,10 +8,10 @@ type HomeIntroProps = {
 export function HomeIntro({ title, body }: HomeIntroProps) {
   return (
     <section aria-labelledby="home-intro-heading">
-      <Container className="py-8 sm:py-10">
+      <Container className="py-10 sm:py-12">
         <h2
           id="home-intro-heading"
-          className="text-h2 font-semibold tracking-tight text-foreground"
+          className="font-display text-h2 font-semibold tracking-tight text-foreground"
         >
           {title}
         </h2>

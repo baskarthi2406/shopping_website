@@ -109,13 +109,17 @@ S1-T07 derived CSS tokens from Option 1. Treat as implementation defaults until 
 |-------|--------|--------|
 | Primary / announcement / CTA | `#016C37` | Sampled from Option 1 announcement bar |
 | Primary hover | `#01552C` | Darker shade of the sampled primary |
-| Page background / surface | `#FFFFFF` | Option 1 white |
-| Surface muted | `#F4F7F6` | Sampled near Option 1 header |
-| Surface warm (pastel) | `#FCF1D8` | Sampled Option 1 category surface |
-| Surface accent (pastel mint) | `#E8F4EE` | Soft wash of primary; supporting only |
-| Foreground | `#171717` | Option 1 near-black text |
+| Secondary (soft pink) | `#E8C5CE` | S4-T10A boutique accent; supporting only |
+| Accent (soft purple) | `#C9BDD6` | S4-T10A boutique accent; supporting only |
+| Page background | `#FAF6F1` | S4-T10A warm off-white |
+| Surface | `#FFFFFF` | Option 1 white |
+| Surface muted | `#F3EEE8` | S4-T10A warm muted |
+| Surface warm (pastel) | `#F8E6E1` | Soft pink wash of Option 1 peach |
+| Surface accent (pastel mint) | `#EEF3EC` | Soft wash of primary; supporting only |
+| Foreground | `#1F1B18` | Warm charcoal |
+| Border | `#E7E0D8` | Warm gray |
 | Breakpoints | `sm` 640px, `md` 768px, `lg` 1024px | Tailwind defaults (business TBD) |
-| Type | System UI sans-serif | No extra font package |
+| Type | Source Sans 3 + Cormorant Garamond via `next/font` | S4-T10A; self-hosted with system fallbacks |
 | Tap target min | 44px (`2.75rem`) | A11y implementation default (MOBILE_REQUIREMENTS TBD) |
 
 Tokens live in `frontend/app/globals.css`. Do not scatter raw hex in components.
