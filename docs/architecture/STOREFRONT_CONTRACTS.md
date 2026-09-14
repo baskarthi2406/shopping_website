@@ -173,8 +173,38 @@ GET /api/products
 
 The route does not access fixtures and never returns product `variants`.
 Category relationships remain `categoryIds`; the category tree is not
-duplicated. Filtering, search, sorting, product detail, and UI/API integration
-are intentionally deferred.
+duplicated. Filtering, search, sorting, and UI/API integration are
+intentionally deferred.
+
+## Dummy product detail implementation
+
+S4-T06 implements `GET /api/products/{slug}` as a Next.js App Router route:
+
+- lookup key is the public SEO slug already used by `/p/{slug}`
+- no request body, credentials, authentication, or supported query parameters
+- `200` with `{ data: Product }` for an existing slug
+- `404` with `not_found` for a well-formed unknown slug
+- `400` with `invalid_request` for invalid slug syntax or unsupported query
+  parameters
+- unexpected product loading failures return sanitized `500` with
+  `temporarily_unavailable`
+
+The route is dynamic because output varies by slug, but lookups are
+deterministic. `getProductDetail` owns slug validation and the detail envelope:
+
+```text
+GET /api/products/{slug}
+  → getProductDetail
+    → ProductRepository.getBySlug
+      → StaticProductRepository
+        → approved 12-product records
+```
+
+The response is the full product, including empty `variants` where no confirmed
+option data exists. Unknown SKU, UOM, pricing, and inventory remain null.
+Category relationships remain `categoryIds`. The storefront PDP at `/p/{slug}`
+does not fetch this endpoint; UI/API integration remains S4-T09. Variant,
+pricing, and inventory population remain S4-T07/S4-T08.
 
 ## IDs and SEO slugs
 
@@ -217,7 +247,8 @@ and applying these application invariants.
 S4-T03 does not implement API routes, select an HTTP runtime, alter repository
 bindings, call Zoho, create persistence, or add commerce behavior.
 
-S4-T04–S4-T06 will implement dummy category/product responses. S4-T07 and
+S4-T04–S4-T06 implemented dummy category/product collection and detail
+responses. S4-T07 and
 S4-T08 may populate and exercise variant/pricing/inventory behavior without
 replacing these provider-independent shapes. S4-T09 will introduce the
 repository swap; S4-T10 owns rendered loading/error/empty states. Actual Zoho

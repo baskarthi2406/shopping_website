@@ -64,6 +64,14 @@ describe("StaticProductRepository", () => {
     await expect(products.getById("missing-product")).resolves.toBeNull();
   });
 
+  it("looks up products by public SEO slug deterministically", async () => {
+    const first = await products.getBySlug("pink-white-pleated-baby-dress");
+    const second = await products.getBySlug("pink-white-pleated-baby-dress");
+
+    expect(first?.slug).toBe("pink-white-pleated-baby-dress");
+    expect(second).toEqual(first);
+  });
+
   it("lists products in baby-essentials and kids, and none for unknown or empty categories", async () => {
     const babyEssentials = await products.listByCategorySlug("baby-essentials");
     expect(babyEssentials.map((item) => item.slug).sort()).toEqual([

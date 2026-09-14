@@ -333,16 +333,62 @@ without changing UI data access. S4-T06 is next and remains **NOT_STARTED**.
 
 ## S4-T06 — Dummy Product Detail API
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
 Implement product-detail lookup and not-found behavior through the stable API
 contract.
 
+### Scope
+
+- Added `GET /api/products/[slug]` using the existing Next.js dummy API
+  convention.
+- Reused `getBySlug`, the 12 approved records, and
+  `StaticProductRepository`; no duplicate product model or fixture source.
+- Added `getProductDetail` to validate catalog-slug syntax, look up by public
+  SEO slug, and return the S4-T03 `{ data: Product }` envelope or `not_found`.
+- Kept existing storefront pages, including `/p/{slug}`, on their current
+  static composition.
+
 ### Guardrails
 
 Preserve `/p/{slug}`, metadata, and product structured data behavior.
+
+### Request and HTTP behavior
+
+- Lookup key: public SEO slug; no Zoho identifiers
+- `200`: existing product in the detail envelope, including empty variants
+- `404`: well-formed unknown slug as `not_found`
+- `400`: invalid slug syntax or unsupported query parameters
+- `500`: unexpected repository failure as sanitized `temporarily_unavailable`
+- No invented commerce values, variant expansion, auth, database, or Zoho
+
+Lookups vary by slug, so the route is dynamic; fixture results are
+deterministic.
+
+### Tests
+
+- Repository slug lookup and determinism
+- Application detail envelope, unknown slug, invalid syntax, and failure
+  propagation
+- Route 200 fixture match, nullable fields, 404, 400, sanitized 500, no
+  pagination envelope, and no internal/Zoho leakage
+
+### Validation
+
+- `npm test`: 41 files, 186 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual API: approved slug returned 200 detail; unknown slug returned 404;
+  invalid slug returned 400
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+The dummy product-detail endpoint satisfies the S4-T03 contract without
+changing UI data access. S4-T07 is next and remains **NOT_STARTED**.
 
 ---
 

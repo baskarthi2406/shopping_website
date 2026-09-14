@@ -6,7 +6,7 @@ HTTP). Holds non-secret public settings such as the canonical site origin.
 **Must not contain:** secrets, business rules, catalog fixture rows.
 
 `catalog.ts` is the Phase 1 composition root (`Static*Repository`). Pages,
-`app/sitemap.ts`, and the S4-T04/S4-T05 category/product API routes call
+`app/sitemap.ts`, and the S4-T04–S4-T06 category/product API routes call
 `catalog.*` use-case wrappers. They must not import
 `infrastructure/catalog/data`.
 

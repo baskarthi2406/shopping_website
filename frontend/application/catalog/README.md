@@ -29,4 +29,8 @@ envelope. Repository failures propagate to the HTTP adapter for safe mapping.
 one-based page slicing, maps only `ProductSummary`, and returns the S4-T03
 pagination envelope. Default page/page size are 1/12 at the API boundary.
 
+**S4-T06:** `getProductDetail` looks up one product by public SEO slug and
+returns the S4-T03 detail envelope or `not_found`. Invalid catalog-slug syntax
+is `invalid_request`. Repository failures propagate to the HTTP adapter.
+
 Full semantics: `docs/architecture/STOREFRONT_CONTRACTS.md`.

@@ -104,10 +104,15 @@ approved records. Supported queries are positive integer `page` and `pageSize`;
 defaults are 1 and 12. Invalid/unsupported queries return the shared 400 error,
 and repository failures return a sanitized 500. No filters are implemented.
 
-**Not implemented yet:** product detail API, API repository/UI wiring,
-cart/search/account/order behavior, filters/sort, admin, or Zoho integration.
-S3-T10 Image Optimization and the original SEO-friendly URL strategy remain
-deferred.
+**S4-T06:** `GET /api/products/[slug]` returns the full product-detail envelope
+for an approved public SEO slug. Unknown well-formed slugs return 404
+`not_found`; invalid slug syntax and unsupported query parameters return 400.
+Unknown SKU/UOM/pricing/inventory remain null and variants remain empty. The
+existing UI does not fetch this endpoint.
+
+**Not implemented yet:** API repository/UI wiring, cart/search/account/order
+behavior, filters/sort, admin, or Zoho integration. S3-T10 Image Optimization
+and the original SEO-friendly URL strategy remain deferred.
 
 ## Architecture
 

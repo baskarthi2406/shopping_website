@@ -6,6 +6,7 @@ import {
   getProductById,
   getProductBySlug,
   getProductCollection,
+  getProductDetail,
   getProductPage,
   listCategories,
   listFeaturedProducts,
@@ -35,6 +36,8 @@ export const catalog = {
   getProductBySlug: (slug: string) => getProductBySlug(productRepository, slug),
   getProductCollection: (query: ProductCollectionQuery) =>
     getProductCollection(productRepository, query),
+  getProductDetail: (slug: string) =>
+    getProductDetail(productRepository, slug),
   getProductPage: (slug: string) =>
     getProductPage(productRepository, categoryRepository, slug),
   listProducts: () => listProducts(productRepository),

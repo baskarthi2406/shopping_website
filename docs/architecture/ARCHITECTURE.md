@@ -117,7 +117,7 @@ Next.js (Server Components for catalog)
 No production API, FastAPI, PostgreSQL, Zoho, auth, or admin implementation
 exists.
 
-S4-T04/S4-T05 additionally expose separate development paths without changing
+S4-T04/S4-T05/S4-T06 additionally expose separate development paths without changing
 UI data access:
 
 ```text
@@ -129,6 +129,12 @@ GET /api/categories
 
 GET /api/products?page={page}&pageSize={pageSize}
   → getProductCollection
+    → ProductRepository
+      → StaticProductRepository
+        → approved static product records
+
+GET /api/products/{slug}
+  → getProductDetail
     → ProductRepository
       → StaticProductRepository
         → approved static product records

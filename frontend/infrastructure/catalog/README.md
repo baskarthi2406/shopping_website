@@ -21,6 +21,10 @@ S4-T05 similarly reuses `StaticProductRepository` and the 12 approved product
 records for `GET /api/products`. Pagination and summary mapping remain in the
 application layer; infrastructure does not create API response envelopes.
 
+S4-T06 reuses the same repository `getBySlug` path for
+`GET /api/products/[slug]`. Detail envelope construction stays in the
+application layer.
+
 Planned evolution: add dummy HTTP repositories in Sprint 4, production
 repositories in Sprint 6, and Zoho adapters in Sprint 7. Bind implementations
 in `config/catalog.ts` (ADR 0004/0005). Keep raw API/vendor DTOs in

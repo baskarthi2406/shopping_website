@@ -46,6 +46,7 @@ export {
 } from "./get-category-page";
 export { getProductById } from "./get-product-by-id";
 export { getProductBySlug } from "./get-product-by-slug";
+export { getProductDetail } from "./get-product-detail";
 export {
   DEFAULT_PRODUCT_PAGE,
   DEFAULT_PRODUCT_PAGE_SIZE,

@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **Implemented through S4-T04:** App Router
+**Task:** S1-T02 (layer contract). **Implemented through S4-T06:** App Router
 at `frontend/app/` (no `src/`); static catalog behind application-owned
 repository interfaces; S3-T01–S3-T09 storefront/SEO complete; S3-T10 deferred.
 The S4-T01 audit found no backend/API implementation or obsolete backend code.
@@ -183,6 +183,7 @@ No new utility library in this task.
 | `generateMetadata` (dynamic), `sitemap.ts`, `robots.ts` | Metadata S3-T02; sitemap S3-T04; robots S3-T05 |
 | `app/api/categories/route.ts` | S4-T04 force-static dummy category collection; transport only |
 | `app/api/products/route.ts` | S4-T05 query-aware paginated product summaries; transport only |
+| `app/api/products/[slug]/route.ts` | S4-T06 slug lookup returning a product-detail envelope; transport only |
 
 ---
 
@@ -577,5 +578,5 @@ No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T05 are complete.
-Next: **S4-T06** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T06 are complete.
+Next: **S4-T07** — do not start automatically.
