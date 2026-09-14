@@ -74,6 +74,14 @@ describe("StaticCategoryRepository", () => {
     await expect(categories.getById("missing")).resolves.toBeNull();
   });
 
+  it("returns deterministic hierarchy results", async () => {
+    const first = await categories.list();
+    const second = await categories.list();
+
+    expect(second).toBe(first);
+    expect(second).toEqual(first);
+  });
+
   it("uses documented stand-in images, not invented category art", async () => {
     const kids = await categories.getBySlug("kids");
     expect(kids?.image?.src).toBe("/kids-striped-shirts-burgundy-and-sage.jpg");

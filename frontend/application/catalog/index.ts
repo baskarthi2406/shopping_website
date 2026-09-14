@@ -33,6 +33,7 @@ export {
   type CategoryPageViewModel,
   type ProductCardViewModel,
 } from "./category-page-view-model";
+export { getCategoryCollection } from "./get-category-collection";
 export { getCategoryBySlug } from "./get-category-by-slug";
 export { getHomePage, type HomePageData } from "./get-home-page";
 export {

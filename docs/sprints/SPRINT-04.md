@@ -214,17 +214,61 @@ validated. S4-T04 is recorded as the next task and remains **NOT_STARTED**.
 
 ## S4-T04 — Dummy Category API
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
 Implement the S4-T03 category contract using development data, including the
 approved hierarchy/menu semantics.
 
+### Scope
+
+- Added force-static `GET /api/categories` in the Next.js App Router.
+- Reused approved category records, `mapCategories`, and
+  `StaticCategoryRepository`; no duplicate fixture or repository was created.
+- Added `getCategoryCollection` to return ordered roots with recursive
+  descendants in the stable `{ data }` envelope.
+- Added a thin handler factory that maps stable application errors to HTTP and
+  sanitizes unexpected repository failures.
+- Kept all existing storefront pages on their current static composition.
+
 ### Guardrails
 
 No production database or Zoho integration. Static repositories remain
 available during migration.
+
+### HTTP behavior
+
+- `200`: successful recursive category collection
+- `400`: stable `invalid_request` mapping (not currently produced; no inputs)
+- `404`: stable `not_found` mapping (not currently produced; no detail lookup)
+- `500`: unexpected load failure as safe `temporarily_unavailable`
+
+The endpoint has no body, query parameters, auth, secrets, or custom caching
+infrastructure. Its force-static response is deterministic from approved dummy
+records.
+
+### Tests
+
+- Repository hierarchy, empty categories, relationships, and deterministic data
+- Application root/tree success, empty collection, and failure propagation
+- Route response envelope, hierarchy, status mapping, sanitized failure, and no
+  fixture/Zoho detail leakage
+
+### Validation
+
+- `npm test`: 37 files, 156 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual `GET /api/categories`: HTTP 200, JSON, 9 ordered roots, nested infant
+  grandchild confirmed
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+The dummy category endpoint satisfies the S4-T03 contract without changing UI
+data access. S4-T05 is next and remains **NOT_STARTED**.
 
 ---
 

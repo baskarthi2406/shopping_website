@@ -1,6 +1,6 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **Implemented through S4-T03:** App Router
+**Task:** S1-T02 (layer contract). **Implemented through S4-T04:** App Router
 at `frontend/app/` (no `src/`); static catalog behind application-owned
 repository interfaces; S3-T01–S3-T09 storefront/SEO complete; S3-T10 deferred.
 The S4-T01 audit found no backend/API implementation or obsolete backend code.
@@ -181,6 +181,7 @@ No new utility library in this task.
 | Route segments `c/[slug]`, `p/[slug]`, `cart`, `checkout` | Later sprints |
 | `loading.tsx` / `error.tsx` / `not-found.tsx` | Later |
 | `generateMetadata` (dynamic), `sitemap.ts`, `robots.ts` | Metadata S3-T02; sitemap S3-T04; robots S3-T05 |
+| `app/api/categories/route.ts` | S4-T04 force-static dummy category collection; transport only |
 
 ---
 
@@ -562,7 +563,7 @@ No page rewrite. ADR 0004/0005.
 
 - Category descendant-listing semantics and a future persisted menu-order field
 - Pricing/inventory/SKU/UOM/variant business values and display behavior
-- Dummy API runtime, endpoint/version/status-code mapping, and default page size
+- Remaining product endpoint/query mapping and default product page size
 - Verified Zoho API schema/auth/rate limits/synchronization behavior
 - Search/filter rules (S2-T05 deferred; `CATALOG_FILTER_SORT.md`)  
 - Cart storage API (`localStorage` vs memory)  
@@ -575,5 +576,5 @@ No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T03 are complete.
-Next: **S4-T04** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T04 are complete.
+Next: **S4-T05** — do not start automatically.

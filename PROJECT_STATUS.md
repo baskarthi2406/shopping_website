@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T03 completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T04 completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -42,10 +42,10 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-**S4-T04 — Dummy Category API**
+**S4-T05 — Dummy Product API**
 Status: **NOT_STARTED**
 
-Do not start S4-T04 automatically.
+Do not start S4-T05 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -81,6 +81,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - Stable provider-independent catalog domain/application contracts (S4-T03);
   recursive categories, product summaries/details, generic variants, nullable
   commerce data, pagination, and error envelopes
+- Force-static dummy category API at `GET /api/categories` (S4-T04); existing
+  storefront pages remain bound to static repositories until S4-T09
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
@@ -93,13 +95,14 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - OpenGraph reviewed (S3-T09; already present from S3-T02/S3-T03)
 - Layer contract: `docs/architecture/FRONTEND_ARCHITECTURE.md`
 
-### API/backend roadmap (implementation not started)
+### API/backend roadmap
 
 - Sprint 4: stable Mini Mystiq API/domain contracts and dummy catalog APIs
 - Sprint 6: production backend (planned FastAPI modular monolith + PostgreSQL;
   ADR 0003)
 - Sprint 7: Zoho POS adapter behind repository interfaces (ADR 0005)
-- No backend/API/server implementation exists as of S4-T01
+- Read-only dummy category route implemented in Next.js; no production backend
+  implementation exists
 
 ---
 
@@ -126,15 +129,16 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T01 — Backend/API Audit & Cleanup (no obsolete implementation found)
 - S4-T02 — Customer Navigation & Hierarchical Category UI
 - S4-T03 — API/Domain Contracts
+- S4-T04 — Dummy Category API
 
 ## In progress
 
-- None. Do not start S4-T04 automatically.
+- None. Do not start S4-T05 automatically.
 
 ## Pending
 
-- S4-T04 — Dummy Category API (next)
-- S4-T05–S4-T12 — dummy catalog APIs, API-driven storefront,
+- S4-T05 — Dummy Product API (next)
+- S4-T06–S4-T12 — dummy catalog APIs, API-driven storefront,
   and review
 - Sprint 5 — Commerce UI
 - Sprint 6 — Production Backend
@@ -146,11 +150,11 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- None for starting S4-T04 when explicitly requested.
+- None for starting S4-T05 when explicitly requested.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
-  auth/rate limits, dummy API runtime/routes/status-code mapping/default product
-  page size, pricing/currency/tax values, SKU/UOM/variant/inventory source data,
+  auth/rate limits, product endpoint/query/default-page-size details,
+  pricing/currency/tax values, SKU/UOM/variant/inventory source data,
   search behavior, account/auth, cart, Track Your Order,
   checkout/operations, production domain, and deployment.
 - Existing business/asset TBDs remain: legal entity, Pigeon/Careers/
@@ -159,4 +163,4 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S4-T04 — Dummy Category API**
+**S4-T05 — Dummy Product API**

@@ -149,13 +149,13 @@ Then implement **only** the current task.
 | Phase | Phase 1 — Customer Storefront + Dummy API Foundation |
 | Overall status | SPRINT_4_IN_PROGRESS |
 | Current sprint | Sprint 4 — Customer Storefront + Dummy API Foundation (**IN_PROGRESS**) |
-| Last completed | S4-T03 — API/Domain Contracts |
-| Current task | S4-T04 — Dummy Category API (**NOT_STARTED**) |
+| Last completed | S4-T04 — Dummy Category API |
+| Current task | S4-T05 — Dummy Product API (**NOT_STARTED**) |
 
-Do **not** start S4-T04 automatically. S3-T10 Image Optimization and the
+Do **not** start S4-T05 automatically. S3-T10 Image Optimization and the
 original SEO URL strategy are deferred.
 
-S4-T03 defines provider-independent recursive category, product summary/detail,
-generic variant, nullable pricing/inventory/SKU/UOM, pagination, and error
-contracts. Static fixtures still power the storefront; no API/backend or Zoho
-integration exists.
+S4-T04 adds force-static `GET /api/categories` through the existing category
+repository and S4-T03 response contract. Static fixtures still power the
+storefront directly; UI/API integration, product APIs, production backend, and
+Zoho integration are not implemented.

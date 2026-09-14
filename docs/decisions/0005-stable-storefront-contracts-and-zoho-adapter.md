@@ -47,9 +47,10 @@ later sprints.
   envelope. Missing detail is `not_found`; empty lists remain successful.
 - Application IDs and public SEO slugs are separate identities. Public routes
   remain `/c/{slug}` and `/p/{slug}` and never expose Zoho item IDs by default.
-- The response contract is transport-neutral. Dummy API runtime, endpoint paths,
-  and transport status-code mapping remain implementation decisions; this ADR
-  does not select a server framework.
+- The response contract is transport-neutral. S4-T04 selected the existing
+  Next.js App Router for development dummy endpoints, beginning with
+  `GET /api/categories`; this does not change the planned FastAPI production
+  boundary.
 - The planned FastAPI modular-monolith direction (ADR 0003) remains accepted for
   the production backend unless a later ADR changes it. Its schedule moves to
   Sprint 6.

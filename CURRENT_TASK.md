@@ -1,7 +1,7 @@
 # Current Task
 
 Only this task may be implemented. Do not start it until a human explicitly
-requests S4-T04.
+requests S4-T05.
 
 ---
 
@@ -9,58 +9,58 @@ requests S4-T04.
 
 | Field | Value |
 |-------|--------|
-| Task ID | S4-T03 |
-| Task | API/Domain Contracts |
+| Task ID | S4-T04 |
+| Task | Dummy Category API |
 | Status | **COMPLETED** |
-| Scope | Defined provider-independent category, product, variant, SKU/UOM, pricing, inventory, status, pagination, and error contracts with invariants. No API route, backend, Zoho, or commerce behavior. |
+| Scope | Added force-static `GET /api/categories` through the existing category repository and application contract. The storefront UI remains on static composition; no product API, Zoho, database, auth, or commerce behavior. |
 
 ---
 
 ## Task ID
 
-S4-T04
+S4-T05
 
 ## Task
 
-Dummy Category API
+Dummy Product API
 
 ## Status
 
 **NOT_STARTED**
 
-Do **not** implement S4-T04 automatically.
+Do **not** implement S4-T05 automatically.
 
 S3-T10 Image Optimization and the original “SEO-Friendly URL Strategy” remain
 **DEFERRED**. Do not start either automatically.
 
 ## Objective
 
-See `docs/sprints/SPRINT-04.md` → S4-T04.
+See `docs/sprints/SPRINT-04.md` → S4-T05.
 
 ## Scope
 
-See `docs/sprints/SPRINT-04.md` → S4-T04.
+See `docs/sprints/SPRINT-04.md` → S4-T05.
 
 ## Dependencies
 
-S4-T03.
+S4-T04.
 
 ## Requirements
 
-See `docs/sprints/SPRINT-04.md` → S4-T04.
+See `docs/sprints/SPRINT-04.md` → S4-T05.
 
 ## Acceptance criteria
 
-See `docs/sprints/SPRINT-04.md` → S4-T04.
+See `docs/sprints/SPRINT-04.md` → S4-T05.
 
 ## Tests
 
-See `docs/sprints/SPRINT-04.md` → S4-T04.
+See `docs/sprints/SPRINT-04.md` → S4-T05.
 
 ## Definition of Done
 
-See `docs/sprints/SPRINT-04.md` → S4-T04.
+See `docs/sprints/SPRINT-04.md` → S4-T05.
 
-## Next task after S4-T04 (do not start)
+## Next task after S4-T05 (do not start)
 
 See `docs/sprints/SPRINT-04.md`. Do not start it automatically.

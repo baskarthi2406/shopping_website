@@ -15,8 +15,9 @@ work must not be mistaken for this production backend.
 | Shape | **Modular monolith** (ADR 0003) |
 
 ORM and migrations: **TBD** in Sprint 6. S4-T03 defined transport-neutral
-storefront domain and response contracts. Runtime, versioning, endpoint paths,
-and transport status-code mapping remain implementation decisions.
+storefront domain and response contracts. S4-T04 selected Next.js route
+handlers for the development dummy API only. Production versioning, endpoint
+paths, and transport status-code mapping remain future decisions.
 
 ADR 0005 requires raw dummy and Zoho DTOs to remain behind infrastructure
 mappers.
@@ -81,6 +82,9 @@ Routers do not contain business rules and do not import ORM models.
 
 The Mini Mystiq-owned API contract was defined before implementation in S4-T03.
 Version/prefix are TBD; `/api/v1/` is only a prior proposal.
+
+The dummy category endpoint is `GET /api/categories` in Next.js. It does not
+imply that the production FastAPI URL prefix or deployment topology is fixed.
 
 Frontend `Http*Repository` implementations consume this API from the storefront.
 Pages/components do not consume transport DTOs directly.

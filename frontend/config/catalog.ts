@@ -1,4 +1,5 @@
 import {
+  getCategoryCollection,
   getCategoryBySlug,
   getCategoryPage,
   getHomePage,
@@ -38,6 +39,7 @@ export const catalog = {
   listFeaturedProducts: () => listFeaturedProducts(productRepository),
   getCategoryBySlug: (slug: string) =>
     getCategoryBySlug(categoryRepository, slug),
+  getCategoryCollection: () => getCategoryCollection(categoryRepository),
   getCategoryPage: (slug: string) =>
     getCategoryPage(categoryRepository, productRepository, slug),
   getHomePage: () => getHomePage(categoryRepository, productRepository),

@@ -13,6 +13,10 @@ missing variants as `[]`; it does not synthesize SKU, UOM, pricing, inventory,
 or default variants. Future external DTO parsing and mapping stays in this
 layer and must satisfy the domain validators.
 
+S4-T04 reuses `StaticCategoryRepository` as the dummy category data source for
+`GET /api/categories`. This avoids a duplicate repository or taxonomy while
+the existing UI remains bound to the same static implementation.
+
 Planned evolution: add dummy HTTP repositories in Sprint 4, production
 repositories in Sprint 6, and Zoho adapters in Sprint 7. Bind implementations
 in `config/catalog.ts` (ADR 0004/0005). Keep raw API/vendor DTOs in

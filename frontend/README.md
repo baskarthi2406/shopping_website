@@ -11,8 +11,9 @@ SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys).
 - ESLint (`eslint-config-next`)
 - Vitest 4 (unit tests)
 
-Server Components are the default. No state-management library. No API client
-or backend dependencies exist as of the S4-T01 audit.
+Server Components are the default. No state-management library or API-client/
+backend dependency has been added. The first read-only dummy route is the
+S4-T04 category endpoint.
 
 ## Run
 
@@ -93,9 +94,15 @@ and consistent detail errors. Static fixtures keep unknown commerce values
 null and no longer synthesize default variants. See
 `docs/architecture/STOREFRONT_CONTRACTS.md`.
 
-**Not implemented yet:** dummy API, API repository, cart/search/account/order
-behavior, filters/sort, admin, or Zoho integration. S3-T10 Image Optimization
-and the original SEO-friendly URL strategy are deferred.
+**S4-T04:** `GET /api/categories` returns the stable ordered recursive category
+collection from `StaticCategoryRepository` through an application use case.
+The route is force-static and maps failures to the shared safe error envelope.
+The existing UI does not fetch this endpoint.
+
+**Not implemented yet:** product APIs, API repository/UI wiring,
+cart/search/account/order behavior, filters/sort, admin, or Zoho integration.
+S3-T10 Image Optimization and the original SEO-friendly URL strategy are
+deferred.
 
 ## Architecture
 

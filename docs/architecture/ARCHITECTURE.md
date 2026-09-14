@@ -35,9 +35,9 @@ Next.js UI                      Next.js UI (same)
                                        → Zoho adapter (Sprint 7)
 ```
 
-One Git repository (`shopping/`). `frontend/` is implemented. `backend/`
-contains documentation only; production implementation is scheduled for
-Sprint 6.
+One Git repository (`shopping/`). `frontend/` contains the storefront and the
+S4-T04 read-only dummy category route. `backend/` contains documentation only;
+production implementation is scheduled for Sprint 6.
 
 ---
 
@@ -114,7 +114,19 @@ Next.js (Server Components for catalog)
         → Static product/category data + SEO image paths from DESIGN_ASSETS.md
 ```
 
-No API server, FastAPI, PostgreSQL, Zoho, auth, or admin implementation exists.
+No production API, FastAPI, PostgreSQL, Zoho, auth, or admin implementation
+exists.
+
+S4-T04 additionally exposes a separate development path without changing UI
+data access:
+
+```text
+GET /api/categories
+  → getCategoryCollection
+    → CategoryRepository
+      → StaticCategoryRepository
+        → approved static category records
+```
 
 ---
 
@@ -151,8 +163,9 @@ provider-independent error contracts. See `STOREFRONT_CONTRACTS.md`.
 ## 9. Backend/API roadmap (summary)
 
 - Sprint 4 defines stable contracts and dummy APIs. The S4-T03 contracts are
-  transport-neutral; the dummy runtime and endpoint/status mapping remain
-  implementation decisions for the scheduled dummy API tasks.
+  transport-neutral. S4-T04 selected existing Next.js route handlers for the
+  development API and implemented `GET /api/categories`; production remains
+  independent.
 - Sprint 6 implements the production backend. Python + FastAPI + PostgreSQL and
   modular-monolith shape remain accepted (ADR 0003) unless superseded.
 - Sprint 7 implements Zoho adapters. Vendor DTOs are infrastructure-only
@@ -284,7 +297,7 @@ shopping/
 
 - Domain, trailing slash, locales
 - Exact Tailwind breakpoint px and CWV budgets
-- Dummy API runtime, endpoint/status-code mapping, and default product page size
+- Remaining product endpoint/query mapping and default product page size
 - ORM and migration tool (Sprint 6)
 - Admin UI host and schedule
 - Auth provider and scope (Sprint 8)

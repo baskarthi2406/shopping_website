@@ -21,4 +21,8 @@ pagination, and error envelopes. Category lists are ordered recursive trees;
 product lists contain `ProductSummary` plus minimal page pagination; details
 contain full products. Dummy/Zoho DTOs must not be added here.
 
+**S4-T04:** `getCategoryCollection` obtains categories through
+`CategoryRepository`, selects ordered roots, and returns the S4-T03 collection
+envelope. Repository failures propagate to the HTTP adapter for safe mapping.
+
 Full semantics: `docs/architecture/STOREFRONT_CONTRACTS.md`.

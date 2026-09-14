@@ -121,6 +121,29 @@ must be positive integers; `total` is a non-negative integer. Cursor
 pagination, sorting, filters, transport status codes, and default page size are
 deferred until a demonstrated requirement or the implementing dummy API task.
 
+## Dummy category API implementation
+
+S4-T04 implements `GET /api/categories` as a Next.js App Router route:
+
+- no request body, query parameters, credentials, or authentication
+- `200` with `{ data: Category[] }` for successful retrieval
+- ordered root categories with all descendants recursively nested
+- `500` with the stable `temporarily_unavailable` error when category loading
+  fails unexpectedly
+- shared transport mapping also maps stable `invalid_request` to `400` and
+  `not_found` to `404`; the collection endpoint currently produces neither
+  because it accepts no input and performs no detail lookup
+
+The route is force-static and deterministic. It uses
+`getCategoryCollection` → `CategoryRepository` → the existing
+`StaticCategoryRepository` → approved category records. The handler never
+imports fixture records. Existing storefront pages still use their current
+static composition directly; API repository/UI integration remains S4-T09.
+
+This is dummy development data, not a Zoho representation. A future repository
+may replace the static implementation without changing the application result
+or public response contract.
+
 ## IDs and SEO slugs
 
 IDs identify entities and relationships inside application contracts. Slugs
