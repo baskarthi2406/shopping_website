@@ -5,8 +5,9 @@ import { resolveSiteOrigin, toCanonicalUrl } from "@/config/site";
 /**
  * Indexable storefront sitemap. URLs come from the dummy API backing
  * composition via application/seo; origin comes from config/site.ts.
- * Storefront pages use the HTTP catalog client; sitemap stays on the same
- * source the dummy API uses so build-time URLs stay aligned.
+ * Storefront pages and layout navigation use the HTTP catalog client; sitemap
+ * stays on the same source the dummy API uses so build-time URLs stay aligned
+ * without a self-origin fetch.
  */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const origin = resolveSiteOrigin();

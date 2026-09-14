@@ -29,8 +29,9 @@ bind to JSON files, vendor DTOs, or `fetch` URLs.
   dummy implementations. Production/Zoho adapters arrive in later sprints.
 - S4-T09 binds storefront pages to HTTP repositories that consume the dummy
   API envelopes. Dummy route handlers keep the static backing composition so
-  the API cannot recurse into itself. Layout navigation remains on that backing
-  composition until S4-T11.
+  the API cannot recurse into itself. S4-T11 moved layout/footer navigation
+  onto the same HTTP category client; sitemap remains on the backing
+  composition for deterministic static generation.
 - Bypassing the interface from a page is an architecture violation.
 - Vendor DTOs are mapped inside infrastructure and do not become UI contracts
   (ADR 0005).

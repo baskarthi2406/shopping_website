@@ -80,7 +80,8 @@ static infrastructure records and tests. The generic disclosure label
 
 S4-T02 now supports `Infants → Baby Girl/Baby Boy → …` through a recursive
 navigation view model. No component depends on Zoho response objects or
-hardcoded customer taxonomy. S4-T11 remains the API-source switch.
+hardcoded customer taxonomy. S4-T11 loads navigation categories through the
+dummy category API (`catalog.listCategories()`).
 
 ## Dependency audit
 

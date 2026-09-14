@@ -1,10 +1,11 @@
 import type { Metadata } from "next";
+import { unstable_rethrow } from "next/navigation";
 import { JsonLd } from "@/app/json-ld";
 import { cormorant, sourceSans } from "@/app/fonts";
 import { toCatalogNavItems, toFooterNavViewModel } from "@/application/catalog";
 import { buildOrganizationStructuredData } from "@/application/seo/organization-structured-data";
 import { StorefrontShell } from "@/components/storefront/storefront-shell";
-import { catalogSource } from "@/config/catalog-source";
+import { catalog } from "@/config/catalog";
 import { organization } from "@/config/organization";
 import { getMetadataBase, resolveSiteOrigin, toCanonicalUrl } from "@/config/site";
 import "./globals.css";
@@ -16,9 +17,17 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const categories = await catalogSource.listCategories();
-  const navigation = toCatalogNavItems(categories);
-  const footerNav = toFooterNavViewModel(categories);
+  let navigation = toCatalogNavItems([]);
+  let footerNav = toFooterNavViewModel([]);
+
+  try {
+    const categories = await catalog.listCategories();
+    navigation = toCatalogNavItems(categories);
+    footerNav = toFooterNavViewModel(categories);
+  } catch (error) {
+    unstable_rethrow(error);
+  }
+
   const origin = resolveSiteOrigin();
   const organizationStructuredData = buildOrganizationStructuredData(
     organization,

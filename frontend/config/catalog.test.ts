@@ -1,6 +1,8 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
+import { toCatalogNavItems, toFooterNavViewModel } from "@/application/catalog";
 import { catalog } from "./catalog";
+import { catalogSource } from "./catalog-source";
 
 describe("storefront catalog composition", () => {
   it("loads homepage catalog data through the dummy API client", async () => {
@@ -54,9 +56,50 @@ describe("storefront catalog composition", () => {
     expect(source).toContain("HttpProductRepository");
     expect(source).toContain("HttpCategoryRepository");
     expect(source).toContain("createCatalogApiClient");
+    expect(source).toContain("dispatchCatalogApi");
+    expect(source).toContain("getCategoryTree: cache(");
     expect(source).not.toContain("StaticProductRepository");
     expect(source).not.toContain("StaticCategoryRepository");
     expect(source).not.toMatch(/product-records|category-records/);
     expect(source).not.toMatch(/zoho/i);
+  });
+
+  it("builds header and footer navigation from the dummy category API", async () => {
+    const [apiCategories, sourceCategories, collection] = await Promise.all([
+      catalog.listCategories(),
+      catalogSource.listCategories(),
+      catalog.getCategoryCollection(),
+    ]);
+    const navigation = toCatalogNavItems(apiCategories);
+    const footerNav = toFooterNavViewModel(apiCategories);
+
+    expect(navigation).toEqual(toCatalogNavItems(sourceCategories));
+    expect(footerNav).toEqual(toFooterNavViewModel(sourceCategories));
+    expect(navigation.map((item) => item.href)).toEqual(
+      collection.data
+        .filter(
+          (category) =>
+            category.visibility === "visible" && category.showInMenu,
+        )
+        .map((category) => `/c/${category.slug}`),
+    );
+    expect(navigation.some((item) => item.children.length > 0)).toBe(true);
+    expect(navigation.some((item) => item.children.length === 0)).toBe(true);
+    expect(
+      navigation.some((item) =>
+        item.children.some((child) => child.children.length > 0),
+      ),
+    ).toBe(true);
+    expect(
+      navigation.every((item) =>
+        item.href.startsWith("/c/") &&
+        item.children.every((child) => child.href.startsWith("/c/")),
+      ),
+    ).toBe(true);
+    expect(footerNav.shop.length).toBeGreaterThan(0);
+    expect(footerNav.collections.length).toBeGreaterThan(0);
+
+    const again = toCatalogNavItems(await catalog.listCategories());
+    expect(again).toEqual(navigation);
   });
 });

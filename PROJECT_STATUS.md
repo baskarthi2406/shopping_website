@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T10C completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T11 completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -42,10 +42,10 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-**S4-T11 — API-driven Navigation**
+**S4-T12 — Sprint Review**
 Status: **NOT_STARTED**
 
-Do not start S4-T11 automatically.
+Do not start S4-T12 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -92,7 +92,10 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   major-unit amount plus currency, compare-at is nullable, inventory null ≠ 0,
   and current fixtures keep commerce values unknown
 - Storefront pages consume dummy category/product APIs through HTTP
-  repositories (S4-T09); dummy routes/sitemap/nav keep the static backing store
+  repositories (S4-T09); dummy routes and sitemap keep the static backing store
+- Layout and footer catalog navigation consume the same dummy category API
+  through `catalog.listCategories()` (S4-T11); sitemap remains on
+  `catalogSource`
 - Loading, sanitized catalog errors, not-found, and empty collection states
   (S4-T10); null pricing/inventory/variants remain valid product data
 - Storefront footer polish (S4-T10A): brand, category-derived Shop/Collections,
@@ -161,15 +164,15 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T10A — Classic-Modern Storefront UI Polish
 - S4-T10B — Refine Mega Menu Boutique UI
 - S4-T10C — Final Mega Menu Visual Refinement
+- S4-T11 — API-driven Navigation
 
 ## In progress
 
-- None. Do not start S4-T11 automatically.
+- None. Do not start S4-T12 automatically.
 
 ## Pending
 
-- S4-T11 — API-driven Navigation (next)
-- S4-T12 — Sprint Review
+- S4-T12 — Sprint Review (next)
 - Sprint 5 — Commerce UI
 - Sprint 6 — Production Backend
 - Sprint 7 — Zoho POS Integration
@@ -180,7 +183,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- None for starting S4-T11 when explicitly requested.
+- None for starting S4-T12 when explicitly requested.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
   auth/rate limits, future product filters/search,
@@ -193,4 +196,4 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S4-T11 — API-driven Navigation**
+**S4-T12 — Sprint Review**

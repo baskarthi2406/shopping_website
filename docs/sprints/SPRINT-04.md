@@ -764,22 +764,65 @@ Mega-menu visual design is frozen.
 ### Definition of Done
 
 Final mega-menu visual refinement completed and mega-menu visual design frozen.
-S4-T11 is next and remains **NOT_STARTED**.
+S4-T11 later moved navigation onto the category API boundary. S4-T12 remains
+**NOT_STARTED**.
 
 ---
 
 ## S4-T11 — API-driven Navigation
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
-Render the approved hierarchy from API/application navigation contracts.
+Move remaining catalog-derived storefront navigation from the static catalog
+composition onto the existing dummy category API/application boundary, without
+changing the frozen S4-T10C visual design.
+
+### Implementation scope (as completed)
+
+- Layout loads categories via `catalog.listCategories()` (HTTP category
+  repository → in-process `GET /api/categories` dispatch → existing handler →
+  `catalogSource` → `StaticCategoryRepository` → fixtures)
+- Header mega-menu and footer Shop/Collections still use
+  `toCatalogNavItems` / `toFooterNavViewModel`; presentation markup and CSS
+  were not changed
+- Category tree reads are request-memoized in `config/catalog.ts` so header,
+  footer, and pages share one category collection
+- Catalog load failures do not invent fallback categories (empty nav/footer;
+  existing sanitized unavailability copy remains on pages)
+- Sitemap remains on `catalogSource` for deterministic static generation
+  without a self-origin fetch; URL set unchanged
+- No new endpoints, query parameters, category models, or Zoho types
 
 ### Guardrails
 
-Customer category names and nesting come from data. Search, account, cart, and
-Track Your Order behavior remain separate tasks unless explicitly included.
+No visual redesign. No API contract change. No taxonomy change. No Sprint 5
+commerce work.
+
+### Tests
+
+- Layout/footer use `@/config/catalog`, not `catalogSource` or fixtures
+- Presentation does not import `StaticCategoryRepository` or Zoho fields
+- HTTP navigation view models match the backing catalog source (roots, nested
+  children, leaves, visibility/showInMenu, deterministic order, `/c/{slug}`)
+- Existing sitemap URL-set, API, accessibility, and SEO tests kept
+
+### Validation
+
+- `npm test`: 54 files, 254 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual (`next dev`): `/`, `/c/baby-essentials`, `/c/infants`,
+  `/p/pink-white-pleated-baby-dress`, `/sitemap.xml`, `/robots.txt` 200
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Navigation now obtains catalog-derived category data through the API/application
+boundary. Sitemap retains server-side `catalogSource` usage. S4-T12 is next and
+remains **NOT_STARTED**.
 
 ---
 

@@ -43,7 +43,7 @@ describe("storefront data boundary", () => {
     }
   });
 
-  it("keeps storefront pages on the catalog application boundary", () => {
+  it("keeps storefront pages and layout on the catalog application boundary", () => {
     const home = readFileSync(new URL("./page.tsx", import.meta.url), "utf8");
     const category = readFileSync(
       new URL("./c/[slug]/page.tsx", import.meta.url),
@@ -53,12 +53,18 @@ describe("storefront data boundary", () => {
       new URL("./p/[slug]/page.tsx", import.meta.url),
       "utf8",
     );
+    const layout = readFileSync(new URL("./layout.tsx", import.meta.url), "utf8");
 
     expect(home).toContain('from "@/config/catalog"');
     expect(home).not.toMatch(/["']use client["']/);
     expect(category).toContain('from "@/config/catalog"');
     expect(product).toContain('from "@/config/catalog"');
     expect(product).toContain("catalog.getProductPage");
+    expect(layout).toContain('from "@/config/catalog"');
+    expect(layout).toContain("catalog.listCategories");
+    expect(layout).not.toContain("catalog-source");
+    expect(layout).not.toMatch(/["']use client["']/);
+    expect(layout).not.toMatch(/\bfetch\s*\(/);
   });
 
   it("keeps dummy API routes on the backing catalog source", () => {
@@ -79,5 +85,29 @@ describe("storefront data boundary", () => {
       expect(source).toContain("@/config/catalog-source");
       expect(source).not.toMatch(/from ["']@\/config\/catalog["']/);
     }
+  });
+
+  it("keeps presentation off catalogSource while sitemap stays on the backing store", () => {
+    const layout = readFileSync(new URL("./layout.tsx", import.meta.url), "utf8");
+    const navigation = readFileSync(
+      new URL("../components/storefront/catalog-navigation.tsx", import.meta.url),
+      "utf8",
+    );
+    const footer = readFileSync(
+      new URL("../components/storefront/storefront-footer.tsx", import.meta.url),
+      "utf8",
+    );
+    const sitemap = readFileSync(new URL("./sitemap.ts", import.meta.url), "utf8");
+
+    for (const source of [layout, navigation, footer]) {
+      expect(source).not.toContain("catalog-source");
+      expect(source).not.toContain("StaticCategoryRepository");
+      expect(source).not.toMatch(/product-records|category-records/);
+      expect(source).not.toMatch(/zoho|item_id|stock_on_hand/i);
+    }
+
+    expect(sitemap).toContain("@/config/catalog-source");
+    expect(sitemap).not.toMatch(/product-records|category-records/);
+    expect(sitemap).not.toContain("StaticCategoryRepository");
   });
 });

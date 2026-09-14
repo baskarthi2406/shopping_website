@@ -8,13 +8,14 @@ HTTP). Holds non-secret public settings such as the canonical site origin.
 `create-catalog.ts` is the shared use-case wiring helper.
 
 `catalog-source.ts` is the dummy API backing composition (`Static*Repository`).
-Route handlers, `app/sitemap.ts`, and layout navigation call it so the dummy
-API cannot recurse through the storefront HTTP client. S4-T11 will move
-navigation onto `GET /api/categories`.
+Route handlers and `app/sitemap.ts` call it so the dummy API cannot recurse
+through the storefront HTTP client.
 
 `catalog.ts` is the storefront composition root (`Http*Repository` + catalog
-API client). Pages call `catalog.*` use cases and must not import
-`infrastructure/catalog/data`.
+API client). Pages, layout navigation, and footer category columns call
+`catalog.*` use cases and must not import `infrastructure/catalog/data`.
+Category tree reads are request-memoized so header, footer, and pages share
+one `GET /api/categories`.
 
 A future production or Zoho adapter replaces the dummy dispatch/backing store
 in this folder only (ADR 0004/0005).

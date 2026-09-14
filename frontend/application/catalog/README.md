@@ -14,6 +14,10 @@ use `config/catalog-source.ts` (static repositories).
 Empty collections are successful `[]` results, not errors. Null pricing,
 inventory, and empty variants stay valid product data.
 
+**S4-T11:** Layout and footer navigation call `catalog.listCategories()` and
+the existing nav/footer view models. Presentation still receives only
+`label`/`href`/`children`. Sitemap remains on `catalog-source.ts`.
+
 **S4-T01 audit:** retain all ports/use cases. They are the clean swap boundary
 for static, dummy API, production, and Zoho-backed repositories.
 

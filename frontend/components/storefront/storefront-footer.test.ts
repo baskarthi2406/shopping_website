@@ -44,7 +44,8 @@ describe("storefront footer", () => {
     }
 
     expect(layoutSource).toContain("toFooterNavViewModel");
-    expect(layoutSource).toContain("@/config/catalog-source");
+    expect(layoutSource).toContain("@/config/catalog");
+    expect(layoutSource).not.toContain("catalog-source");
     expect(shellSource).toContain("<StorefrontFooter");
   });
 

@@ -289,8 +289,9 @@ Navy/tan dresses: product image exists; **category TBD** — do not infer Kids/T
 
 ## 8. Repository interfaces (as implemented, S1-T05)
 
-Current: Application → interface → dummy HTTP repositories (storefront) or
-`Static*Repository` (dummy API backing store / sitemap / layout navigation).
+Current: Application → interface → dummy HTTP repositories (storefront pages,
+layout navigation, and footer) or `Static*Repository` (dummy API backing store
+and sitemap).
 
 Planned: same application semantics → production/Zoho-backed repositories
 (Sprints 6–7). Composition remains in `config/`; pages never choose.
@@ -343,12 +344,13 @@ Belong here (not in React):
 `CatalogNavigation` / `Breadcrumbs` receive props only. S4-T02 maps visible,
 menu-enabled root categories and recursive children to view models. The client
 navigation component renders those props for mobile and tablet/desktop; it
-contains no customer category names. S4-T11 will replace the static repository
-source with API-driven navigation after S4-T03–S4-T09.
+contains no customer category names. S4-T11 loads those categories through
+`catalog.listCategories()` (HTTP category repository → `GET /api/categories`).
 
 Pages call `config/catalog.ts`, not fixtures. Storefront product/category reads
-use HTTP repositories against the dummy APIs. Layout navigation and sitemap
-still bind to `catalogSource` until S4-T11. View models map domain →
+and layout/footer navigation use HTTP repositories against the dummy APIs.
+Sitemap stays on `catalogSource` so build-time URL generation uses the dummy
+API backing store without a self-origin fetch. View models map domain →
 presentation props (no price/inventory).
 
 Test with in-memory fake repositories (runner: S1-T06). No JSX.
@@ -566,10 +568,11 @@ Future routes (`cart`, `checkout`) stay under `app/` when those sprints arrive.
 ## 19. Static → Dummy API → Production/Zoho
 
 UI + application + domain + interfaces stay.
-S4-T09 storefront pages use dummy HTTP repositories. Dummy route handlers,
-sitemap, and layout navigation still bind `Static*Repository` through
-`catalogSource`. Production and Zoho-backed adapters replace that backing store
-later. No page rewrite. ADR 0004/0005.
+S4-T09 storefront pages use dummy HTTP repositories. S4-T11 moved layout and
+footer catalog navigation onto the same HTTP category boundary. Dummy route
+handlers and sitemap still bind `Static*Repository` through `catalogSource`.
+Production and Zoho-backed adapters replace that backing store later. No page
+rewrite. ADR 0004/0005.
 
 ---
 
@@ -590,5 +593,5 @@ later. No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T10 are complete.
-Next: **S4-T11** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T11 are complete.
+Next: **S4-T12** — do not start automatically.

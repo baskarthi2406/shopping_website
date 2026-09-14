@@ -175,8 +175,9 @@ The route is force-static and deterministic. It uses
 `getCategoryCollection` → `CategoryRepository` → the existing
 `StaticCategoryRepository` → approved category records. The handler never
 imports fixture records. Storefront homepage and category pages read this
-endpoint through the catalog API client (S4-T09). Layout navigation still uses
-`catalogSource` until S4-T11.
+endpoint through the catalog API client (S4-T09). Layout and footer navigation
+read the same endpoint through `catalog.listCategories()` (S4-T11). Sitemap
+remains on `catalogSource` for deterministic static generation.
 
 This is dummy development data, not a Zoho representation. A future repository
 may replace the static implementation without changing the application result
@@ -303,5 +304,7 @@ S4-T09 connected storefront pages to those dummy APIs through HTTP
 repositories and a provider-neutral API client. S4-T10 added route loading
 skeletons, sanitized catalog errors, not-found for unknown slugs, and explicit
 empty collections. Null pricing, inventory, and empty variants remain valid
-product data, not empty or error states. S4-T11 owns API-driven navigation.
-Actual Zoho DTOs, authentication, and mapping belong to Sprint 7.
+product data, not empty or error states. S4-T11 moved layout and footer
+catalog navigation onto that same HTTP category boundary. Sitemap remains on
+the dummy API backing composition. Actual Zoho DTOs, authentication, and
+mapping belong to Sprint 7.
