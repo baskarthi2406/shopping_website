@@ -499,17 +499,58 @@ S4-T09 is next and remains **NOT_STARTED**.
 
 ## S4-T09 — Connect UI to Dummy API
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
 Add repository adapters/composition wiring so current pages consume the dummy
 API without changing presentation contracts.
 
+### Scope
+
+- Split composition: `catalogSource` backs dummy route handlers, sitemap, and
+  layout navigation; `catalog` is the storefront HTTP composition.
+- Added a provider-neutral catalog API client that understands collection,
+  pagination, and detail envelopes and sanitizes non-2xx failures.
+- `HttpCategoryRepository` and `HttpProductRepository` implement the existing
+  ports against `GET /api/categories`, `GET /api/products`, and
+  `GET /api/products/[slug]`.
+- Homepage, category pages, and PDPs keep calling `catalog.*` use cases as
+  Server Components. No UI redesign, commerce UI, filters, variant selectors,
+  or invented prices/stock.
+- Layout navigation remains on `catalogSource` until S4-T11.
+- Fixtures were not deleted; they remain the dummy API backing store.
+
 ### Guardrails
 
-Keep catalog HTML server-rendered and SEO behavior stable. Retain a controlled
-static fallback until the migration is verified.
+Catalog HTML stays server-rendered. Dedicated loading/error/empty UX is S4-T10.
+API-driven navigation is S4-T11.
+
+### Tests
+
+- Homepage/category/PDP consume `config/catalog`, not fixtures
+- Dummy routes bind `catalogSource` to prevent recursion
+- Unknown product remains a missing page result
+- API failures do not leak internal details
+- Existing SEO wiring and API contract tests remain valid
+- Presentation-layer import boundary against fixtures, static product/category
+  repositories, and Zoho field names
+
+### Validation
+
+- `npm test`: 49 files, 229 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual (`next start`): homepage/category/PDP 200; unknown product 404 without internals;
+  dummy APIs 200; sitemap/robots 200; titles/canonicals remain; Product and
+  Organization JSON-LD remain; no invented price/SKU/stock/variant UI
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Storefront pages consume the dummy APIs through the application/API client.
+S4-T10 is next and remains **NOT_STARTED**.
 
 ---
 

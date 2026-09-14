@@ -25,7 +25,9 @@ S4-T06 reuses the same repository `getBySlug` path for
 `GET /api/products/[slug]`. Detail envelope construction stays in the
 application layer.
 
-Planned evolution: add dummy HTTP repositories in Sprint 4, production
-repositories in Sprint 6, and Zoho adapters in Sprint 7. Bind implementations
-in `config/catalog.ts` (ADR 0004/0005). Keep raw API/vendor DTOs in
+Planned evolution: S4-T09 added `HttpProductRepository` and
+`HttpCategoryRepository` plus a provider-neutral catalog API client. Dummy
+route handlers still use the static repositories through `catalogSource`.
+Production repositories arrive in Sprint 6 and Zoho adapters in Sprint 7.
+Bind implementations in `config/` (ADR 0004/0005). Keep raw API/vendor DTOs in
 infrastructure and do not add FastAPI here.

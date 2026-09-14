@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T08 completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T09 completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -42,10 +42,10 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-**S4-T09 — Connect UI to Dummy API**
+**S4-T10 — Loading/Error/Empty States**
 Status: **NOT_STARTED**
 
-Do not start S4-T09 automatically.
+Do not start S4-T10 automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -81,8 +81,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - Stable provider-independent catalog domain/application contracts (S4-T03);
   recursive categories, product summaries/details, generic variants, nullable
   commerce data, pagination, and error envelopes
-- Force-static dummy category API at `GET /api/categories` (S4-T04); existing
-  storefront pages remain bound to static repositories until S4-T09
+- Force-static dummy category API at `GET /api/categories` (S4-T04)
 - Paginated dummy product-summary API at `GET /api/products` (S4-T05), with
   deterministic page/pageSize behavior and safe errors
 - Dummy product-detail API at `GET /api/products/[slug]` (S4-T06); lookup is by
@@ -92,6 +91,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - Provider-independent pricing/inventory invariants (S4-T08); money remains a
   major-unit amount plus currency, compare-at is nullable, inventory null ≠ 0,
   and current fixtures keep commerce values unknown
+- Storefront pages consume dummy category/product APIs through HTTP
+  repositories (S4-T09); dummy routes/sitemap/nav keep the static backing store
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
@@ -143,15 +144,16 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T06 — Dummy Product Detail API
 - S4-T07 — Variant/Size/Color Model
 - S4-T08 — Pricing/Inventory Model
+- S4-T09 — Connect UI to Dummy API
 
 ## In progress
 
-- None. Do not start S4-T09 automatically.
+- None. Do not start S4-T10 automatically.
 
 ## Pending
 
-- S4-T09 — Connect UI to Dummy API (next)
-- S4-T10–S4-T12 — loading/error/empty states, API-driven navigation, and review
+- S4-T10 — Loading/Error/Empty States (next)
+- S4-T11–S4-T12 — API-driven navigation and sprint review
 - Sprint 5 — Commerce UI
 - Sprint 6 — Production Backend
 - Sprint 7 — Zoho POS Integration
@@ -162,7 +164,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- None for starting S4-T09 when explicitly requested.
+- None for starting S4-T10 when explicitly requested.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
   auth/rate limits, future product filters/search,
@@ -175,4 +177,4 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S4-T09 — Connect UI to Dummy API**
+**S4-T10 — Loading/Error/Empty States**

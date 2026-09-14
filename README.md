@@ -149,14 +149,14 @@ Then implement **only** the current task.
 | Phase | Phase 1 — Customer Storefront + Dummy API Foundation |
 | Overall status | SPRINT_4_IN_PROGRESS |
 | Current sprint | Sprint 4 — Customer Storefront + Dummy API Foundation (**IN_PROGRESS**) |
-| Last completed | S4-T08 — Pricing/Inventory Model |
-| Current task | S4-T09 — Connect UI to Dummy API (**NOT_STARTED**) |
+| Last completed | S4-T09 — Connect UI to Dummy API |
+| Current task | S4-T10 — Loading/Error/Empty States (**NOT_STARTED**) |
 
-Do **not** start S4-T09 automatically. S3-T10 Image Optimization and the
+Do **not** start S4-T10 automatically. S3-T10 Image Optimization and the
 original SEO URL strategy are deferred.
 
-S4-T08 finalized provider-independent pricing and inventory invariants without
-inventing catalog prices or stock. Approved fixtures still have null commerce
-fields and empty variants. Dummy catalog APIs remain category/product/detail
-only; UI/API integration, production backend, and Zoho integration are not
-implemented.
+S4-T09 connected storefront homepage, category, and product pages to the dummy
+category/product APIs through a provider-neutral client. Dummy routes, sitemap,
+and header navigation still use the static backing composition. Approved
+fixtures remain unknown for price/SKU/stock. Production backend and Zoho
+integration are not implemented.

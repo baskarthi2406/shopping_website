@@ -1,14 +1,14 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import sitemap from "./sitemap";
-import { catalog } from "@/config/catalog";
+import { catalogSource } from "@/config/catalog-source";
 import { resolveSiteOrigin, toCanonicalUrl } from "@/config/site";
 
 describe("sitemap", () => {
   it("uses catalog composition and site origin config, not fixtures", () => {
     const source = readFileSync(new URL("./sitemap.ts", import.meta.url), "utf8");
 
-    expect(source).toContain("@/config/catalog");
+    expect(source).toContain("@/config/catalog-source");
     expect(source).toContain("@/config/site");
     expect(source).not.toMatch(/product-records|category-records/);
     expect(source).not.toMatch(/baby-essentials|infants|teens|women/);
@@ -19,8 +19,8 @@ describe("sitemap", () => {
     const origin = resolveSiteOrigin();
     const [entries, categories, products] = await Promise.all([
       sitemap(),
-      catalog.listCategories(),
-      catalog.listProducts(),
+      catalogSource.listCategories(),
+      catalogSource.listProducts(),
     ]);
     const urls = entries.map((entry) => entry.url);
 

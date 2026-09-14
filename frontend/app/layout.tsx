@@ -3,7 +3,7 @@ import { JsonLd } from "@/app/json-ld";
 import { toCatalogNavItems } from "@/application/catalog";
 import { buildOrganizationStructuredData } from "@/application/seo/organization-structured-data";
 import { StorefrontShell } from "@/components/storefront/storefront-shell";
-import { catalog } from "@/config/catalog";
+import { catalogSource } from "@/config/catalog-source";
 import { organization } from "@/config/organization";
 import { getMetadataBase, resolveSiteOrigin, toCanonicalUrl } from "@/config/site";
 import "./globals.css";
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const categories = await catalog.listCategories();
+  const categories = await catalogSource.listCategories();
   const navigation = toCatalogNavItems(categories);
   const origin = resolveSiteOrigin();
   const organizationStructuredData = buildOrganizationStructuredData(

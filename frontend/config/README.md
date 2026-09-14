@@ -5,13 +5,19 @@ HTTP). Holds non-secret public settings such as the canonical site origin.
 
 **Must not contain:** secrets, business rules, catalog fixture rows.
 
-`catalog.ts` is the Phase 1 composition root (`Static*Repository`). Pages,
-`app/sitemap.ts`, and the S4-T04–S4-T06 category/product API routes call
-`catalog.*` use-case wrappers. They must not import
+`create-catalog.ts` is the shared use-case wiring helper.
+
+`catalog-source.ts` is the dummy API backing composition (`Static*Repository`).
+Route handlers, `app/sitemap.ts`, and layout navigation call it so the dummy
+API cannot recurse through the storefront HTTP client. S4-T11 will move
+navigation onto `GET /api/categories`.
+
+`catalog.ts` is the storefront composition root (`Http*Repository` + catalog
+API client). Pages call `catalog.*` use cases and must not import
 `infrastructure/catalog/data`.
 
-Future tasks swap implementations in this file only (ADR 0004/0005). The
-storefront still has no HTTP repository; S4-T09 owns that integration.
+A future production or Zoho adapter replaces the dummy dispatch/backing store
+in this folder only (ADR 0004/0005).
 
 `site.ts` is the single source of truth for `NEXT_PUBLIC_SITE_URL` (canonical origin / `metadataBase` / sitemap locs / robots sitemap URL / Organization `url` and logo). The production domain is **TBD** and is not hardcoded. Copy `.env.example` to `.env.local` when you need a local override. Hosted production (`VERCEL_ENV=production` or `REQUIRE_SITE_URL=true`) must set a non-localhost origin.
 

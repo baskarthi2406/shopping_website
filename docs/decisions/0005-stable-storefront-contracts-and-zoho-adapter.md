@@ -69,6 +69,9 @@ later sprints.
   introduced; no duplicate transport model is created before a transport exists.
 - S4-T04–S4-T06 may add dummy API implementations, but cannot leak raw transport
   records into UI.
+- S4-T09 connected storefront pages to those dummy APIs through HTTP
+  repositories and a provider-neutral client. Pages still consume application
+  results, never raw route JSON or Zoho DTOs.
 - S7 must verify actual Zoho documentation before implementing mappings; fields
   not confirmed by Zoho remain TBD.
 - Additional mapping code is intentional. It protects the storefront from

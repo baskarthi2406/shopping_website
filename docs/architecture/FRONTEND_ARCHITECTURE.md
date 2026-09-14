@@ -1,8 +1,9 @@
 # Frontend Architecture — Layer Boundaries
 
-**Task:** S1-T02 (layer contract). **Implemented through S4-T07:** App Router
-at `frontend/app/` (no `src/`); static catalog behind application-owned
-repository interfaces; S3-T01–S3-T09 storefront/SEO complete; S3-T10 deferred.
+**Task:** S1-T02 (layer contract). **Implemented through S4-T09:** App Router
+at `frontend/app/` (no `src/`); storefront catalog pages consume dummy APIs
+through HTTP repositories; dummy routes keep static backing repositories;
+S3-T01–S3-T09 storefront/SEO complete; S3-T10 deferred.
 The S4-T01 audit found no backend/API implementation or obsolete backend code.
 See `BACKEND_API_AUDIT.md` and ADR 0005.
 
@@ -11,8 +12,9 @@ This file is the contract for where frontend code belongs. It refines S1-T01. Co
 **Product:** Mini Mystiq  
 **UI:** Design Option 1 only (`DESIGN_OPTION_1.md`, ADR 0001)  
 **Stack:** Next.js App Router, React, TypeScript, Tailwind (ADR 0002)  
-**Data:** Repository interfaces; static now, dummy HTTP then production/Zoho
-adapters later (ADR 0004/0005)
+**Data:** Repository interfaces; storefront pages use dummy API HTTP
+repositories; dummy routes and sitemap use static backing repositories
+(ADR 0004/0005)
 
 ---
 
@@ -287,12 +289,11 @@ Navy/tan dresses: product image exists; **category TBD** — do not infer Kids/T
 
 ## 8. Repository interfaces (as implemented, S1-T05)
 
-Current: Application → interface → `Static*Repository` → static records under
-`infrastructure/catalog/data/`.
+Current: Application → interface → dummy HTTP repositories (storefront) or
+`Static*Repository` (dummy API backing store / sitemap / layout navigation).
 
-Planned: same application semantics → dummy HTTP repository (Sprint 4) →
-production/Zoho-backed repositories (Sprints 6–7). Composition remains
-`config/catalog.ts`; no API repository exists yet.
+Planned: same application semantics → production/Zoho-backed repositories
+(Sprints 6–7). Composition remains in `config/`; pages never choose.
 
 Methods:
 
@@ -345,7 +346,10 @@ navigation component renders those props for mobile and tablet/desktop; it
 contains no customer category names. S4-T11 will replace the static repository
 source with API-driven navigation after S4-T03–S4-T09.
 
-Pages call `config/catalog.ts`, not fixtures. View models map domain → presentation props (no price/inventory).
+Pages call `config/catalog.ts`, not fixtures. Storefront product/category reads
+use HTTP repositories against the dummy APIs. Layout navigation and sitemap
+still bind to `catalogSource` until S4-T11. View models map domain →
+presentation props (no price/inventory).
 
 Test with in-memory fake repositories (runner: S1-T06). No JSX.
 
@@ -558,9 +562,10 @@ Future routes (`cart`, `checkout`) stay under `app/` when those sprints arrive.
 ## 19. Static → Dummy API → Production/Zoho
 
 UI + application + domain + interfaces stay.
-`Static*Repository` implementations are joined/replaced by dummy HTTP,
-production, and Zoho-backed adapters in infrastructure + config.
-No page rewrite. ADR 0004/0005.
+S4-T09 storefront pages use dummy HTTP repositories. Dummy route handlers,
+sitemap, and layout navigation still bind `Static*Repository` through
+`catalogSource`. Production and Zoho-backed adapters replace that backing store
+later. No page rewrite. ADR 0004/0005.
 
 ---
 
@@ -581,5 +586,5 @@ No page rewrite. ADR 0004/0005.
 No ADR for S1-T08: the review confirmed the S1-T01/S1-T02 contract; it does not change it.
 
 There is **no S1-T09**. There is **no S2-T08**. Sprint 2 is complete.
-S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T08 are complete.
-Next: **S4-T09** — do not start automatically.
+S3-T01–S3-T09 are complete; S3-T10 is deferred. S4-T01–S4-T09 are complete.
+Next: **S4-T10** — do not start automatically.

@@ -27,6 +27,10 @@ bind to JSON files, vendor DTOs, or `fetch` URLs.
 - S1-T05 introduces interfaces + static impl + tests.
 - S4-T03 defines the API/domain contract; S4-T04–S4-T09 introduce and connect
   dummy implementations. Production/Zoho adapters arrive in later sprints.
+- S4-T09 binds storefront pages to HTTP repositories that consume the dummy
+  API envelopes. Dummy route handlers keep the static backing composition so
+  the API cannot recurse into itself. Layout navigation remains on that backing
+  composition until S4-T11.
 - Bypassing the interface from a page is an architecture violation.
 - Vendor DTOs are mapped inside infrastructure and do not become UI contracts
   (ADR 0005).

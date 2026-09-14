@@ -160,8 +160,9 @@ Next.js **never** opens a DB connection.
 S4-T03 defines recursive category, product summary/detail, generic variant,
 nullable pricing/inventory/SKU/UOM, minimal product pagination, and
 provider-independent error contracts. S4-T08 finalized money and inventory
-invariants without populating catalog commerce values. See
-`STOREFRONT_CONTRACTS.md`.
+invariants without populating catalog commerce values. S4-T09 connected
+storefront pages to the dummy category/product APIs through a provider-neutral
+client. See `STOREFRONT_CONTRACTS.md`.
 
 ---
 
@@ -170,7 +171,7 @@ invariants without populating catalog commerce values. See
 - Next.js App Router, React, TypeScript, Tailwind (ADR 0002)
 - Server Components for catalog/SEO pages; Client Components for cart, search box, wishlist chrome, mobile nav
 - Mobile-first; Design Option 1
-- **Layer contract (S1-T02):** `FRONTEND_ARCHITECTURE.md` — pages → presentation → application → domain → repository interfaces; infrastructure implements repositories. No React → JSON/API.
+- **Layer contract (S1-T02):** `FRONTEND_ARCHITECTURE.md` — pages → presentation → application → domain → repository interfaces; infrastructure implements repositories. Storefront pages use dummy API HTTP repositories; they must not import fixtures.
 
 ---
 

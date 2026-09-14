@@ -1,11 +1,11 @@
-import { catalog } from "@/config/catalog";
+import { catalogSource } from "@/config/catalog-source";
 import { createGetProductDetailHandler } from "./get-product-detail-handler";
 
 /** Slug-specific responses are dynamic but deterministic over static data. */
 export const dynamic = "force-dynamic";
 
 const getProduct = createGetProductDetailHandler((slug) =>
-  catalog.getProductDetail(slug),
+  catalogSource.getProductDetail(slug),
 );
 
 type ProductDetailRouteContext = {

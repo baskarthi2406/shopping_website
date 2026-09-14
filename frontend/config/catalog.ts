@@ -1,58 +1,22 @@
-import {
-  getCategoryCollection,
-  getCategoryBySlug,
-  getCategoryPage,
-  getHomePage,
-  getProductById,
-  getProductBySlug,
-  getProductCollection,
-  getProductDetail,
-  getProductPage,
-  listCategories,
-  listFeaturedProducts,
-  listProducts,
-  listProductsByCategory,
-  type CategoryRepository,
-  type ProductRepository,
-  type ProductCollectionQuery,
-  type UomRepository,
-} from "@/application/catalog";
-import { listIndexableUrls } from "@/application/seo/list-indexable-urls";
-import { StaticCategoryRepository } from "@/infrastructure/catalog/static-category-repository";
-import { StaticProductRepository } from "@/infrastructure/catalog/static-product-repository";
+import { HttpCategoryRepository } from "@/infrastructure/catalog/http-category-repository";
+import { HttpProductRepository } from "@/infrastructure/catalog/http-product-repository";
 import { StaticUomRepository } from "@/infrastructure/catalog/static-uom-repository";
+import { createCatalogApiClient } from "@/infrastructure/catalog/catalog-api-client";
+import { dispatchCatalogApi } from "./catalog-api-dispatch";
+import { createCatalog } from "./create-catalog";
 
-const productRepository: ProductRepository = new StaticProductRepository();
-const categoryRepository: CategoryRepository = new StaticCategoryRepository();
-const uomRepository: UomRepository = new StaticUomRepository();
+const catalogApi = createCatalogApiClient(dispatchCatalogApi);
+const productRepository = new HttpProductRepository(catalogApi);
+const categoryRepository = new HttpCategoryRepository(catalogApi);
+const uomRepository = new StaticUomRepository();
 
 /**
- * Composition root for catalog data.
- * Pages and later UI call these functions. They must not import static records.
- * Phase 2 swaps the repository implementations here only (ADR 0004).
+ * Storefront composition root. Pages call these use cases and never choose a
+ * repository or import fixtures. Product/category reads go through the dummy
+ * API client (ADR 0004). UOM has no dummy endpoint yet, so it stays static.
  */
-export const catalog = {
-  getProductById: (id: string) => getProductById(productRepository, id),
-  getProductBySlug: (slug: string) => getProductBySlug(productRepository, slug),
-  getProductCollection: (query: ProductCollectionQuery) =>
-    getProductCollection(productRepository, query),
-  getProductDetail: (slug: string) =>
-    getProductDetail(productRepository, slug),
-  getProductPage: (slug: string) =>
-    getProductPage(productRepository, categoryRepository, slug),
-  listProducts: () => listProducts(productRepository),
-  listProductsByCategory: (categorySlug: string) =>
-    listProductsByCategory(productRepository, categorySlug),
-  listFeaturedProducts: () => listFeaturedProducts(productRepository),
-  getCategoryBySlug: (slug: string) =>
-    getCategoryBySlug(categoryRepository, slug),
-  getCategoryCollection: () => getCategoryCollection(categoryRepository),
-  getCategoryPage: (slug: string) =>
-    getCategoryPage(categoryRepository, productRepository, slug),
-  getHomePage: () => getHomePage(categoryRepository, productRepository),
-  listCategories: () => listCategories(categoryRepository),
-  listIndexableUrls: () =>
-    listIndexableUrls(categoryRepository, productRepository),
-  listUoms: () => uomRepository.list(),
-  getUomByCode: (code: string) => uomRepository.getByCode(code),
-};
+export const catalog = createCatalog(
+  productRepository,
+  categoryRepository,
+  uomRepository,
+);

@@ -9,17 +9,19 @@
 Mini Mystiq owns the contract consumed by storefront application code:
 
 ```text
-Static record / dummy payload / future Zoho DTO
-  → infrastructure adapter and mapper
-  → Mini Mystiq domain model
-  → application result or view model
-  → storefront
+Storefront UI (Server Components)
+  → config/catalog.ts (HTTP repositories + catalog API client)
+    → dummy API handlers / public envelopes
+      → config/catalog-source.ts (static repositories)
+        → approved fixtures
+  → application view models
+    → pages
 ```
 
 Provider field names, identifiers, nullability, and errors stop at the
-infrastructure boundary. A future Zoho adapter may map concepts such as
-`item_id`, `rate`, `stock_on_hand`, or item-group attributes, but those names
-must not enter domain, application, or UI types.
+infrastructure boundary. A future production or Zoho adapter may replace the
+dummy API backing store without changing pages. Names such as `item_id`,
+`rate`, or `stock_on_hand` must not enter domain, application, or UI types.
 
 ## Category
 
@@ -172,8 +174,9 @@ S4-T04 implements `GET /api/categories` as a Next.js App Router route:
 The route is force-static and deterministic. It uses
 `getCategoryCollection` → `CategoryRepository` → the existing
 `StaticCategoryRepository` → approved category records. The handler never
-imports fixture records. Existing storefront pages still use their current
-static composition directly; API repository/UI integration remains S4-T09.
+imports fixture records. Storefront homepage and category pages read this
+endpoint through the catalog API client (S4-T09). Layout navigation still uses
+`catalogSource` until S4-T11.
 
 This is dummy development data, not a Zoho representation. A future repository
 may replace the static implementation without changing the application result
@@ -208,8 +211,9 @@ GET /api/products
 
 The route does not access fixtures and never returns product `variants`.
 Category relationships remain `categoryIds`; the category tree is not
-duplicated. Filtering, search, sorting, and UI/API integration are
-intentionally deferred.
+duplicated. Filtering, search, and sorting remain unsupported. Storefront
+homepage and category listings consume this collection through the catalog API
+client and must not add query parameters the endpoint rejects.
 
 ## Dummy product detail implementation
 
@@ -238,9 +242,9 @@ GET /api/products/{slug}
 The response is the full product, including empty `variants` where no confirmed
 option data exists. Unknown SKU, UOM, pricing, and inventory remain null.
 Category relationships remain `categoryIds`. The storefront PDP at `/p/{slug}`
-does not fetch this endpoint; UI/API integration remains S4-T09. S4-T08
-finalized pricing/inventory invariants without populating fixture commerce
-values.
+loads this detail envelope through the catalog API client (S4-T09). The page
+does not display price, SKU, stock, or variant selectors while those values
+remain unknown.
 
 ## IDs and SEO slugs
 
@@ -295,6 +299,7 @@ S4-T04–S4-T06 implemented dummy category/product collection and detail
 responses. S4-T07 confirmed the generic variant attribute model without
 populating fixture option values. S4-T08 finalized pricing and inventory
 invariants without inventing catalog prices, stock, SKU, or availability.
-S4-T09 will introduce the repository swap; S4-T10 owns rendered
-loading/error/empty states. Actual Zoho DTOs, authentication, and mapping
-belong to Sprint 7.
+S4-T09 connected storefront pages to those dummy APIs through HTTP
+repositories and a provider-neutral API client. S4-T10 owns rendered
+loading/error/empty states; S4-T11 owns API-driven navigation. Actual Zoho
+DTOs, authentication, and mapping belong to Sprint 7.

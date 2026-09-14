@@ -133,7 +133,7 @@ deferred.
 | S4-T06 | Dummy Product Detail API | **COMPLETED** |
 | S4-T07 | Variant/Size/Color Model | **COMPLETED** |
 | S4-T08 | Pricing/Inventory Model | **COMPLETED** |
-| S4-T09 | Connect UI to Dummy API | **NOT_STARTED** |
+| S4-T09 | Connect UI to Dummy API | **COMPLETED** |
 | S4-T10 | Loading/Error/Empty States | **NOT_STARTED** |
 | S4-T11 | API-driven Navigation | **NOT_STARTED** |
 | S4-T12 | Sprint Review | **NOT_STARTED** |
