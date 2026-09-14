@@ -5,6 +5,7 @@ import {
   getHomePage,
   getProductById,
   getProductBySlug,
+  getProductCollection,
   getProductPage,
   listCategories,
   listFeaturedProducts,
@@ -12,6 +13,7 @@ import {
   listProductsByCategory,
   type CategoryRepository,
   type ProductRepository,
+  type ProductCollectionQuery,
   type UomRepository,
 } from "@/application/catalog";
 import { listIndexableUrls } from "@/application/seo/list-indexable-urls";
@@ -31,6 +33,8 @@ const uomRepository: UomRepository = new StaticUomRepository();
 export const catalog = {
   getProductById: (id: string) => getProductById(productRepository, id),
   getProductBySlug: (slug: string) => getProductBySlug(productRepository, slug),
+  getProductCollection: (query: ProductCollectionQuery) =>
+    getProductCollection(productRepository, query),
   getProductPage: (slug: string) =>
     getProductPage(productRepository, categoryRepository, slug),
   listProducts: () => listProducts(productRepository),

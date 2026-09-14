@@ -83,8 +83,9 @@ Routers do not contain business rules and do not import ORM models.
 The Mini Mystiq-owned API contract was defined before implementation in S4-T03.
 Version/prefix are TBD; `/api/v1/` is only a prior proposal.
 
-The dummy category endpoint is `GET /api/categories` in Next.js. It does not
-imply that the production FastAPI URL prefix or deployment topology is fixed.
+The implemented dummy endpoints are `GET /api/categories` and paginated
+`GET /api/products` in Next.js. They do not imply that the production FastAPI
+URL prefix or deployment topology is fixed.
 
 Frontend `Http*Repository` implementations consume this API from the storefront.
 Pages/components do not consume transport DTOs directly.

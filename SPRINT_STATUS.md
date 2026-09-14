@@ -129,7 +129,7 @@ deferred.
 | S4-T02 | Customer Navigation & Hierarchical Category UI | **COMPLETED** |
 | S4-T03 | API/Domain Contracts | **COMPLETED** |
 | S4-T04 | Dummy Category API | **COMPLETED** |
-| S4-T05 | Dummy Product API | **NOT_STARTED** |
+| S4-T05 | Dummy Product API | **COMPLETED** |
 | S4-T06 | Dummy Product Detail API | **NOT_STARTED** |
 | S4-T07 | Variant/Size/Color Model | **NOT_STARTED** |
 | S4-T08 | Pricing/Inventory Model | **NOT_STARTED** |

@@ -144,6 +144,38 @@ This is dummy development data, not a Zoho representation. A future repository
 may replace the static implementation without changing the application result
 or public response contract.
 
+## Dummy product collection implementation
+
+S4-T05 implements `GET /api/products` as a query-aware Next.js App Router
+route:
+
+- supported query parameters: positive integer `page` and `pageSize`
+- defaults: `page=1`, `pageSize=12`
+- success:
+  `{ data: ProductSummary[], pagination: { page, pageSize, total, hasNext } }`
+- a page beyond the catalog returns successful empty `data` with the requested
+  page metadata and `hasNext: false`
+- malformed, duplicate, unsafe-integer, or unsupported query parameters return
+  `400` with `invalid_request`
+- unexpected product loading failures return sanitized `500` with
+  `temporarily_unavailable`
+
+The route is dynamic because output varies by query, but ordering and results
+are deterministic. `getProductCollection` owns slicing and summary mapping:
+
+```text
+GET /api/products
+  → getProductCollection
+    → ProductRepository
+      → StaticProductRepository
+        → approved 12-product records
+```
+
+The route does not access fixtures and never returns product `variants`.
+Category relationships remain `categoryIds`; the category tree is not
+duplicated. Filtering, search, sorting, product detail, and UI/API integration
+are intentionally deferred.
+
 ## IDs and SEO slugs
 
 IDs identify entities and relationships inside application contracts. Slugs

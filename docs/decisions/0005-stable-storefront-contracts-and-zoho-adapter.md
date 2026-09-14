@@ -49,8 +49,8 @@ later sprints.
   remain `/c/{slug}` and `/p/{slug}` and never expose Zoho item IDs by default.
 - The response contract is transport-neutral. S4-T04 selected the existing
   Next.js App Router for development dummy endpoints, beginning with
-  `GET /api/categories`; this does not change the planned FastAPI production
-  boundary.
+  `GET /api/categories`; S4-T05 added paginated `GET /api/products`. This does
+  not change the planned FastAPI production boundary.
 - The planned FastAPI modular-monolith direction (ADR 0003) remains accepted for
   the production backend unless a later ADR changes it. Its schedule moves to
   Sprint 6.

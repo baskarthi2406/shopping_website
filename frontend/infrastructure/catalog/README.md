@@ -17,6 +17,10 @@ S4-T04 reuses `StaticCategoryRepository` as the dummy category data source for
 `GET /api/categories`. This avoids a duplicate repository or taxonomy while
 the existing UI remains bound to the same static implementation.
 
+S4-T05 similarly reuses `StaticProductRepository` and the 12 approved product
+records for `GET /api/products`. Pagination and summary mapping remain in the
+application layer; infrastructure does not create API response envelopes.
+
 Planned evolution: add dummy HTTP repositories in Sprint 4, production
 repositories in Sprint 6, and Zoho adapters in Sprint 7. Bind implementations
 in `config/catalog.ts` (ADR 0004/0005). Keep raw API/vendor DTOs in

@@ -29,6 +29,15 @@ describe("StaticProductRepository", () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
+  it("returns deterministic product order", async () => {
+    const first = await products.list();
+    const second = await products.list();
+
+    expect(second.map((product) => product.slug)).toEqual(
+      first.map((product) => product.slug),
+    );
+  });
+
   it("only assigns category ids that exist", async () => {
     const categoryIds = new Set(
       (await new StaticCategoryRepository().list()).map((item) => item.id),

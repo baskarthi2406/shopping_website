@@ -99,9 +99,14 @@ collection from `StaticCategoryRepository` through an application use case.
 The route is force-static and maps failures to the shared safe error envelope.
 The existing UI does not fetch this endpoint.
 
-**Not implemented yet:** product APIs, API repository/UI wiring,
+**S4-T05:** `GET /api/products` returns paginated product summaries from the 12
+approved records. Supported queries are positive integer `page` and `pageSize`;
+defaults are 1 and 12. Invalid/unsupported queries return the shared 400 error,
+and repository failures return a sanitized 500. No filters are implemented.
+
+**Not implemented yet:** product detail API, API repository/UI wiring,
 cart/search/account/order behavior, filters/sort, admin, or Zoho integration.
-S3-T10 Image Optimization and the original SEO-friendly URL strategy are
+S3-T10 Image Optimization and the original SEO-friendly URL strategy remain
 deferred.
 
 ## Architecture

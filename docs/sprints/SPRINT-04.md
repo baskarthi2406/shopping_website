@@ -274,16 +274,60 @@ data access. S4-T05 is next and remains **NOT_STARTED**.
 
 ## S4-T05 — Dummy Product API
 
-**Status:** NOT_STARTED
+**Status:** COMPLETED
 
 ### Objective
 
 Implement list/query product responses using the S4-T03 contract and approved
 catalog data.
 
+### Scope
+
+- Added `GET /api/products` using the existing Next.js dummy API convention.
+- Reused the 12 approved records and `StaticProductRepository`; no duplicate
+  product model, repository, or fixture source was created.
+- Added `getProductCollection` for deterministic slicing and
+  `Product` → `ProductSummary` mapping.
+- Implemented one-based `page`/`pageSize` pagination with defaults 1/12.
+- Kept existing storefront pages on their current static composition.
+
 ### Guardrails
 
 Do not invent products, categories, prices, SKU, inventory, or status values.
+
+### Request and HTTP behavior
+
+- Supported query parameters: positive safe integers `page`, `pageSize`
+- `200`: product summaries plus stable pagination, including empty pages
+- `400`: malformed, duplicate, unsafe, or unsupported query parameters
+- `500`: unexpected repository failure as sanitized `temporarily_unavailable`
+- No filtering, search, sorting, product detail, auth, database, or Zoho
+
+Responses vary by query, so the route is dynamic; fixture order and results are
+deterministic.
+
+### Tests
+
+- Repository count/order, category relationships, and nullable fields
+- Application summary mapping, pagination, empty pages, invalid input, and
+  repository failure propagation
+- Route defaults, later/terminal/beyond pages, malformed queries, safe 500,
+  contract shape, determinism, and no internal/Zoho leakage
+
+### Validation
+
+- `npm test`: 39 files, 171 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual API: default returned 12/12; page 2 size 5 returned 5 with `hasNext`;
+  page 4 returned empty; invalid page returned HTTP 400
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+The dummy product collection satisfies the S4-T03 summary/pagination contract
+without changing UI data access. S4-T06 is next and remains **NOT_STARTED**.
 
 ---
 

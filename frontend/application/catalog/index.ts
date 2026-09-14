@@ -47,6 +47,12 @@ export {
 export { getProductById } from "./get-product-by-id";
 export { getProductBySlug } from "./get-product-by-slug";
 export {
+  DEFAULT_PRODUCT_PAGE,
+  DEFAULT_PRODUCT_PAGE_SIZE,
+  getProductCollection,
+  type ProductCollectionQuery,
+} from "./get-product-collection";
+export {
   getProductPage,
   type ProductPageData,
 } from "./get-product-page";

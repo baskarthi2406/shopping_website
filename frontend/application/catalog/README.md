@@ -25,4 +25,8 @@ contain full products. Dummy/Zoho DTOs must not be added here.
 `CategoryRepository`, selects ordered roots, and returns the S4-T03 collection
 envelope. Repository failures propagate to the HTTP adapter for safe mapping.
 
+**S4-T05:** `getProductCollection` obtains the stable repository order, applies
+one-based page slicing, maps only `ProductSummary`, and returns the S4-T03
+pagination envelope. Default page/page size are 1/12 at the API boundary.
+
 Full semantics: `docs/architecture/STOREFRONT_CONTRACTS.md`.
