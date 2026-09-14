@@ -55,10 +55,23 @@ describe("catalog navigation presentation contract", () => {
   });
 
   it("refines mega-menu panels without hardcoding taxonomy", () => {
-    expect(navigationSource).toContain("absolute inset-x-0 top-full");
+    const tokens = readFileSync(
+      path.join(import.meta.dirname, "../../app/globals.css"),
+      "utf8",
+    );
+
+    expect(navigationSource).toContain("mm-mega-panel");
+    expect(navigationSource).toContain("Shop by category");
     expect(navigationSource).toContain("Explore the collection");
     expect(navigationSource).toContain("View all {item.label}");
     expect(navigationSource).toContain("lg:grid-cols-3");
-    expect(navigationSource).toContain("duration-[var(--mm-duration)]");
+    expect(navigationSource).toContain("mm-mega-link");
+    expect(navigationSource).toContain("mm-mega-view-all");
+    expect(navigationSource).toContain("md:hidden");
+    expect(tokens).toContain(".mm-mega-panel");
+    expect(tokens).toContain("inset-inline: 0");
+    expect(tokens).toContain(".mm-mega-link:focus-visible");
+    expect(tokens).toContain(".mm-mega-view-all:focus-visible");
+    expect(tokens).toContain("prefers-reduced-motion");
   });
 });

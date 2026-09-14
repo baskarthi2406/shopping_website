@@ -9,10 +9,10 @@ requests S4-T11.
 
 | Field | Value |
 |-------|--------|
-| Task ID | S4-T10A |
-| Task | Classic-Modern Storefront UI Polish |
+| Task ID | S4-T10B |
+| Task | Refine Mega Menu Boutique UI |
 | Status | **COMPLETED** |
-| Scope | Classic-modern storefront UI polish completed without architectural/API changes. |
+| Scope | Final mega-menu visual refinement completed. |
 
 ---
 
@@ -43,7 +43,7 @@ See `docs/sprints/SPRINT-04.md` → S4-T11.
 
 ## Dependencies
 
-S4-T10A.
+S4-T10B.
 
 ## Requirements
 

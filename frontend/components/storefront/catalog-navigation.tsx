@@ -96,7 +96,7 @@ function DesktopMenuItems({
     <ul
       className={
         depth === 0
-          ? "grid gap-x-8 gap-y-3 sm:grid-cols-2 lg:grid-cols-3"
+          ? "grid w-full grid-cols-1 gap-x-8 gap-y-1 sm:grid-cols-2 lg:grid-cols-3"
           : "mt-1 space-y-0.5"
       }
     >
@@ -105,11 +105,14 @@ function DesktopMenuItems({
           <MenuLink
             item={item}
             className={
-              depth === 0
-                ? "inline-flex min-h-[var(--mm-tap-min)] items-center rounded-sm px-1.5 font-medium text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary"
-                : "inline-flex min-h-9 items-center rounded-sm px-1.5 text-small text-foreground-secondary transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary"
+              depth === 0 ? "mm-mega-link" : "mm-mega-link mm-mega-nested"
             }
-          />
+          >
+            <span>{item.label}</span>
+            <span aria-hidden="true" className="mm-mega-link-arrow">
+              →
+            </span>
+          </MenuLink>
           {item.children.length > 0 ? (
             <DesktopMenuItems items={item.children} depth={depth + 1} />
           ) : null}
@@ -184,28 +187,30 @@ export function DesktopCatalogNavigation({
                 onKeyDown={handleMenuKeyDown}
                 onToggle={handleDesktopToggle}
               >
-                <summary className="flex min-h-13 cursor-pointer list-none items-center gap-1.5 rounded-md px-2 text-small font-semibold text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary group-open:bg-surface-muted group-open:text-primary lg:px-3 [&::-webkit-details-marker]:hidden">
+                <summary className="flex min-h-13 cursor-pointer list-none items-center gap-1.5 rounded-md px-2 text-small font-semibold text-foreground transition-colors duration-[var(--mm-duration)] hover:bg-surface-muted hover:text-primary group-open:rounded-t-md group-open:bg-surface-accent group-open:text-primary lg:px-3 [&::-webkit-details-marker]:hidden">
                   <span>{item.label}</span>
                   <span aria-hidden="true" className="text-caption">
                     ▾
                   </span>
                 </summary>
-                <div className="absolute inset-x-0 top-full z-40 rounded-b-lg border-x border-b border-border bg-background p-5 shadow-sm lg:p-6">
-                  <div className="mb-4 flex flex-wrap items-end justify-between gap-3 border-b border-border pb-3">
+                <div className="mm-mega-panel">
+                  <div className="mb-5 flex flex-wrap items-end justify-between gap-3 border-b border-border pb-4">
                     <div>
-                      <p className="font-display text-h3 font-semibold text-foreground">
+                      <p className="text-caption font-semibold tracking-[0.14em] text-foreground-muted uppercase">
+                        Shop by category
+                      </p>
+                      <p className="mt-1 font-display text-h3 font-semibold text-foreground">
                         {item.label}
                       </p>
                       <p className="mt-1 text-caption text-foreground-muted">
                         Explore the collection
                       </p>
                     </div>
-                    <MenuLink
-                      item={item}
-                      className="inline-flex min-h-[var(--mm-tap-min)] items-center gap-1 font-medium text-primary transition-colors duration-[var(--mm-duration)] hover:text-primary-hover"
-                    >
+                    <MenuLink item={item} className="mm-mega-view-all">
                       View all {item.label}
-                      <span aria-hidden="true">→</span>
+                      <span aria-hidden="true" className="mm-mega-view-all-arrow">
+                        →
+                      </span>
                     </MenuLink>
                   </div>
                   <DesktopMenuItems items={item.children} />

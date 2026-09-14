@@ -201,6 +201,93 @@
   .group:hover .mm-hover-zoom {
     transform: scale(1.03);
   }
+
+  .mm-mega-panel {
+    position: absolute;
+    inset-inline: 0;
+    top: 100%;
+    z-index: 40;
+    border: 1px solid var(--mm-color-border);
+    border-top: 2px solid var(--mm-color-primary);
+    border-bottom-left-radius: var(--radius-lg);
+    border-bottom-right-radius: var(--radius-lg);
+    background-color: var(--mm-color-surface-muted);
+    padding: 1.25rem 1.5rem 1.5rem;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .mm-mega-link {
+    display: flex;
+    min-height: var(--mm-tap-min);
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    border-radius: var(--radius-sm);
+    padding-inline: 0.5rem;
+    font-weight: 500;
+    color: var(--mm-color-foreground);
+    transition:
+      background-color var(--mm-duration) var(--ease-out),
+      color var(--mm-duration) var(--ease-out);
+  }
+
+  .mm-mega-link:hover,
+  .mm-mega-link:focus-visible {
+    background-color: var(--mm-color-surface-accent);
+    color: var(--mm-color-primary);
+  }
+
+  .mm-mega-link-arrow {
+    flex: none;
+    opacity: 0;
+    transform: translateX(-0.2rem);
+    transition:
+      opacity var(--mm-duration) var(--ease-out),
+      transform var(--mm-duration) var(--ease-out);
+  }
+
+  .mm-mega-link:hover .mm-mega-link-arrow,
+  .mm-mega-link:focus-visible .mm-mega-link-arrow {
+    opacity: 1;
+    transform: translateX(0);
+  }
+
+  .mm-mega-nested {
+    font-size: var(--mm-font-small);
+    font-weight: 400;
+    color: var(--mm-color-foreground-secondary);
+    min-height: 2.25rem;
+  }
+
+  .mm-mega-view-all {
+    display: inline-flex;
+    min-height: var(--mm-tap-min);
+    align-items: center;
+    gap: 0.35rem;
+    font-weight: 500;
+    color: var(--mm-color-primary);
+    text-underline-offset: 0.22em;
+    transition:
+      color var(--mm-duration) var(--ease-out),
+      text-decoration-color var(--mm-duration) var(--ease-out);
+  }
+
+  .mm-mega-view-all:hover,
+  .mm-mega-view-all:focus-visible {
+    color: var(--mm-color-primary-hover);
+    text-decoration: underline;
+  }
+
+  .mm-mega-view-all-arrow {
+    display: inline-block;
+    transition: transform var(--mm-duration) var(--ease-out);
+  }
+
+  .mm-mega-view-all:hover .mm-mega-view-all-arrow,
+  .mm-mega-view-all:focus-visible .mm-mega-view-all-arrow {
+    transform: translateX(0.2rem);
+  }
 }
 
 @layer utilities {
@@ -239,7 +326,13 @@
 
   .skip-link,
   .mm-hover-zoom,
-  .group:hover .mm-hover-zoom {
+  .group:hover .mm-hover-zoom,
+  .mm-mega-link-arrow,
+  .mm-mega-link:hover .mm-mega-link-arrow,
+  .mm-mega-link:focus-visible .mm-mega-link-arrow,
+  .mm-mega-view-all-arrow,
+  .mm-mega-view-all:hover .mm-mega-view-all-arrow,
+  .mm-mega-view-all:focus-visible .mm-mega-view-all-arrow {
     transform: none !important;
   }
 }

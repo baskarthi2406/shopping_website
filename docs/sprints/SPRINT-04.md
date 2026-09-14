@@ -7,7 +7,7 @@
 | Objective | Align customer navigation and define a vendor-isolated dummy catalog API without regressing the storefront |
 | Status | IN_PROGRESS |
 | Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
-| Task IDs | S4-T01 … S4-T12 (including S4-T10A) |
+| Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B) |
 
 The dummy API is a development adapter, not Zoho integration or a production
 backend. Follow ADR 0005. Raw dummy/Zoho-shaped DTOs must not reach pages or
@@ -658,7 +658,54 @@ social, legal pages, prices, or trust badges. Header IA unchanged.
 
 ### Definition of Done
 
-Classic-modern storefront UI polish completed. S4-T11 is next and remains
+Classic-modern storefront UI polish completed. S4-T10B later refined the
+mega-menu presentation. S4-T11 is next and remains **NOT_STARTED**.
+
+---
+
+## S4-T10B — Refine Mega Menu Boutique UI
+
+**Status:** COMPLETED
+
+### Objective
+
+Final focused visual refinement of the existing desktop mega-menu toward a
+modern boutique clothing-store panel, without changing navigation architecture.
+
+### Implementation scope (as completed)
+
+- Kept data-driven heading, Explore the collection, View all, 3-column children,
+  keyboard/Escape/sibling-close behavior
+- Added a generic “Shop by category” eyebrow; category title remains the heading
+- Stronger brand-green View all action with hover/focus underline and arrow cue
+- Child rows: warm/green hover and focus-visible surface, arrow on hover/focus
+- Cream panel, thin primary top accent, soft shadow, rounded lower corners
+- Open top-level summary uses a warm accent surface and primary text
+- Mobile disclosure unchanged (not converted to a desktop mega-menu)
+
+### Guardrails
+
+No API, domain, fixture, header IA, footer, or catalog data changes.
+
+### Tests
+
+- Mega-menu panel/link/view-all classes, focus-visible, reduced-motion
+- Existing navigation, Escape, no hardcoded taxonomy, no fake tool routes
+
+### Validation
+
+- `npm test`: 54 files, 252 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual (`next dev`): `/`, `/c/baby-essentials`, `/c/infants`,
+  `/p/pink-white-pleated-baby-dress` 200; View all for Baby Essentials/Infants/
+  Women present; static chunks 200 (no 500)
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Final mega-menu visual refinement completed. S4-T11 is next and remains
 **NOT_STARTED**.
 
 ---
