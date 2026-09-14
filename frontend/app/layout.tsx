@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { JsonLd } from "@/app/json-ld";
-import { toCatalogNavItems } from "@/application/catalog";
+import { toCatalogNavItems, toFooterNavViewModel } from "@/application/catalog";
 import { buildOrganizationStructuredData } from "@/application/seo/organization-structured-data";
 import { StorefrontShell } from "@/components/storefront/storefront-shell";
 import { catalogSource } from "@/config/catalog-source";
@@ -17,6 +17,7 @@ export const metadata: Metadata = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const categories = await catalogSource.listCategories();
   const navigation = toCatalogNavItems(categories);
+  const footerNav = toFooterNavViewModel(categories);
   const origin = resolveSiteOrigin();
   const organizationStructuredData = buildOrganizationStructuredData(
     organization,
@@ -29,7 +30,13 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
         {organizationStructuredData ? (
           <JsonLd data={organizationStructuredData} />
         ) : null}
-        <StorefrontShell navigation={navigation}>{children}</StorefrontShell>
+        <StorefrontShell
+          navigation={navigation}
+          footerNav={footerNav}
+          contact={organization}
+        >
+          {children}
+        </StorefrontShell>
       </body>
     </html>
   );

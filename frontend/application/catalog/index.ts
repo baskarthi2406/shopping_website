@@ -25,7 +25,10 @@ export {
 export type { BreadcrumbItemViewModel } from "./breadcrumb-view-model";
 export {
   toCatalogNavItems,
+  toFooterNavViewModel,
   type CatalogNavItemViewModel,
+  type FooterNavLinkViewModel,
+  type FooterNavViewModel,
 } from "./catalog-nav-view-model";
 export {
   toCategoryPageViewModel,

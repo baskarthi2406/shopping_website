@@ -19,6 +19,8 @@ describe("layout Organization JSON-LD wiring", () => {
     expect(layout).toContain("toCanonicalUrl");
     expect(layout).toContain("@/config/organization");
     expect(layout).toContain("@/config/catalog-source");
+    expect(layout).toContain("toFooterNavViewModel");
+    expect(layout).toContain("contact={organization}");
     expect(layout).not.toMatch(/product-records|category-records/);
     expect(productPage).not.toContain("buildOrganizationStructuredData");
     expect(categoryPage).not.toContain("buildOrganizationStructuredData");

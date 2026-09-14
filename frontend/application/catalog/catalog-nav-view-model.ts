@@ -29,3 +29,40 @@ export function toCatalogNavItems(
     )
     .map(toCatalogNavItem);
 }
+
+export type FooterNavLinkViewModel = {
+  readonly label: string;
+  readonly href: string;
+};
+
+export type FooterNavViewModel = {
+  readonly shop: readonly FooterNavLinkViewModel[];
+  readonly collections: readonly FooterNavLinkViewModel[];
+};
+
+function toFooterLink(category: Category): FooterNavLinkViewModel {
+  return {
+    label: category.name,
+    href: `/c/${category.slug}`,
+  };
+}
+
+/**
+ * Footer shop vs collection columns from existing category data.
+ * Shop matches homepage tiles (visible top-level categories with imagery).
+ * Collections are the remaining visible top-level menu categories.
+ */
+export function toFooterNavViewModel(
+  categories: readonly Category[],
+): FooterNavViewModel {
+  const roots = categories.filter(
+    (category) => category.parentId === null && isMenuCategory(category),
+  );
+
+  return {
+    shop: roots.filter((category) => category.image !== null).map(toFooterLink),
+    collections: roots
+      .filter((category) => category.image === null)
+      .map(toFooterLink),
+  };
+}

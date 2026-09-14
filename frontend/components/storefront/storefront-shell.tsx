@@ -8,16 +8,33 @@ import {
   StoreToolPlaceholders,
   type CatalogNavItem,
 } from "@/components/storefront/catalog-navigation";
+import {
+  StorefrontFooter,
+  type FooterContact,
+  type FooterNavLink,
+} from "@/components/storefront/storefront-footer";
 import { Container } from "@/components/ui/container";
 
 type StorefrontShellProps = {
   children: ReactNode;
   navigation?: readonly CatalogNavItem[];
+  footerNav?: {
+    shop: readonly FooterNavLink[];
+    collections: readonly FooterNavLink[];
+  };
+  contact: FooterContact;
 };
+
+const EMPTY_FOOTER_NAV = {
+  shop: [],
+  collections: [],
+} as const;
 
 export function StorefrontShell({
   children,
   navigation = [],
+  footerNav = EMPTY_FOOTER_NAV,
+  contact,
 }: StorefrontShellProps) {
   return (
     <>
@@ -54,37 +71,11 @@ export function StorefrontShell({
         <main id="main-content" className="flex-1">
           {children}
         </main>
-        <footer className="border-t border-border bg-surface">
-          <Container className="flex flex-col gap-4 py-6 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <p className="text-small font-semibold text-foreground">
-                Mini Mystiq
-              </p>
-              <p className="mt-1 text-caption text-foreground-muted">
-                Baby Clothes & Toys
-              </p>
-              <p className="mt-1 text-caption text-foreground-muted">
-                Delivering Style & Tech
-              </p>
-            </div>
-            {navigation.length > 0 ? (
-              <nav aria-label="Footer categories">
-                <ul className="grid grid-cols-2 gap-x-4 sm:flex sm:flex-col sm:items-end">
-                  {navigation.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        className="inline-flex min-h-[var(--mm-tap-min)] items-center text-small text-foreground-secondary hover:text-primary"
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            ) : null}
-          </Container>
-        </footer>
+        <StorefrontFooter
+          shop={footerNav.shop}
+          collections={footerNav.collections}
+          contact={contact}
+        />
       </div>
     </>
   );

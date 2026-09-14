@@ -7,7 +7,7 @@
 | Objective | Align customer navigation and define a vendor-isolated dummy catalog API without regressing the storefront |
 | Status | IN_PROGRESS |
 | Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
-| Task IDs | S4-T01 … S4-T12 |
+| Task IDs | S4-T01 … S4-T12 (including S4-T10A) |
 
 The dummy API is a development adapter, not Zoho integration or a production
 backend. Follow ADR 0005. Raw dummy/Zoho-shaped DTOs must not reach pages or
@@ -602,7 +602,56 @@ variant/price/stock UI, or invented fallback catalog.
 ### Definition of Done
 
 Loading, error, not-found, and empty states are in place without a storefront
-redesign. S4-T11 is next and remains **NOT_STARTED**.
+redesign.
+
+---
+
+## S4-T10A — Storefront Footer and UI Polish
+
+**Status:** COMPLETED
+
+### Objective
+
+Perform a focused customer-facing UI polish pass, primarily the footer and
+small visual details, without changing architecture or catalog data.
+
+### Implementation scope (as completed)
+
+- Structured footer: brand, Shop, Collections, Contact, service claims, copyright
+- Shop/Collections columns derived from existing category data (image-backed
+  top-level menu categories vs remaining top-level menu categories)
+- Contact uses verified organization name, address, and a `tel:` phone link
+- Service strip reuses announcement claims only
+- No Customer Care/policy/account links (those routes do not exist)
+- Header/navigation, homepage, category, and PDP presentation left unchanged
+- Footer data still comes from `catalogSource` (S4-T11 remains next)
+
+### Guardrails
+
+No domain, API, repository, fixture, SEO, or Zoho changes. No invented email,
+social, legal pages, or commerce values.
+
+### Tests
+
+- Footer nav view-model split and filtering
+- Footer renders category links from props, verified `tel:` href, existing
+  claims, semantic structure, no fake routes
+
+### Validation
+
+- `npm test`: 53 files, 248 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- Manual (`next dev`): homepage, category, and PDP footers include Shop,
+  Collections, contact address, `tel:09025799377`, and copyright; header
+  unchanged; robots/sitemap unchanged
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Focused storefront footer/UI polish completed without architectural/API
+changes. S4-T11 is next and remains **NOT_STARTED**.
 
 ---
 

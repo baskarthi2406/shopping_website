@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T10 completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T10A completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -95,6 +95,9 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   repositories (S4-T09); dummy routes/sitemap/nav keep the static backing store
 - Loading, sanitized catalog errors, not-found, and empty collection states
   (S4-T10); null pricing/inventory/variants remain valid product data
+- Storefront footer polish (S4-T10A): brand, category-derived Shop/Collections,
+  verified contact/`tel:` link, existing service claims, and copyright; header
+  and catalog architecture unchanged
 - Listing filter/sort deferred (S2-T05; `docs/requirements/CATALOG_FILTER_SORT.md`)
 - Option 1 homepage (S3-T01)
 - Dynamic metadata for `/`, `/c/[slug]`, `/p/[slug]` (S3-T02)
@@ -148,6 +151,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T08 — Pricing/Inventory Model
 - S4-T09 — Connect UI to Dummy API
 - S4-T10 — Loading/Error/Empty States
+- S4-T10A — Storefront Footer and UI Polish
 
 ## In progress
 

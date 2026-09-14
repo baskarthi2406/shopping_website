@@ -13,5 +13,6 @@ S4-T02 evolves `CatalogNavigation` to recursively render supplied child items:
 mobile Menu disclosure, tablet/desktop category bar, and hierarchy dropdowns.
 Components still contain no customer category names or repository imports.
 
-Search, Account, Cart, and Track Your Order are disabled visual entry points in
-S4-T02. Their behavior, plus wishlist, belongs to later tasks.
+**S4-T10A:** `StorefrontFooter` — brand, category-derived Shop/Collections
+columns, verified contact, existing service claims, and copyright. No fake
+policy/account routes. Header/navigation presentation is unchanged.

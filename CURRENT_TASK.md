@@ -9,10 +9,10 @@ requests S4-T11.
 
 | Field | Value |
 |-------|--------|
-| Task ID | S4-T10 |
-| Task | Loading/Error/Empty States |
+| Task ID | S4-T10A |
+| Task | Storefront Footer and UI Polish |
 | Status | **COMPLETED** |
-| Scope | Route loading skeletons, sanitized catalog errors with retry, 404 for unknown slugs, explicit empty collections. Homepage static sections remain on catalog failure. Null commerce data is not an empty/error state. |
+| Scope | Focused storefront footer/UI polish completed without architectural/API changes. |
 
 ---
 
@@ -43,7 +43,7 @@ See `docs/sprints/SPRINT-04.md` → S4-T11.
 
 ## Dependencies
 
-S4-T10.
+S4-T10A.
 
 ## Requirements
 
