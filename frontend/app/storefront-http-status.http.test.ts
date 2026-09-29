@@ -123,6 +123,7 @@ describe.each(Object.entries(USER_AGENTS))(
       expect(panel).toContain('href="tel:09025799377"');
       expect(panel).not.toMatch(/₹|\d[\d,]*\.\d{2}|<button|add to cart|in stock/i);
       expect(body).not.toContain('"offers"');
+      expect(body).not.toMatch(/<fieldset|type="radio"/);
     });
 
     it.each(MISSING_PATHS)(

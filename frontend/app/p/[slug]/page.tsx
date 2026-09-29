@@ -4,8 +4,8 @@ import { notFound } from "next/navigation";
 import { JsonLd } from "@/app/json-ld";
 import { toNextMetadata, toNextNotFoundMetadata } from "@/app/to-next-metadata";
 import {
-  toProductCommerceViewModel,
   toProductPageViewModel,
+  toProductPurchaseOptionsViewModel,
 } from "@/application/catalog";
 import { buildBreadcrumbStructuredData } from "@/application/seo/breadcrumb-structured-data";
 import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
@@ -46,7 +46,10 @@ export default async function ProductPage({ params }: ProductPageProps) {
   }
 
   const view = toProductPageViewModel(data.product, data.categories);
-  const commerce = toProductCommerceViewModel(data.product, { priceDisplay });
+  const { commerce, selector, commerceByVariant } = toProductPurchaseOptionsViewModel(
+    data.product,
+    { priceDisplay },
+  );
   const origin = resolveSiteOrigin();
   const toAbsoluteUrl = (path: string) => toCanonicalUrl(origin, path);
   const productStructuredData = buildProductStructuredData(view, toAbsoluteUrl);
@@ -65,6 +68,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
         <ProductDetail
           product={view}
           commerce={{ commerce, telephone: organization.telephone }}
+          variantOptions={selector ? { selector, commerceByVariant } : null}
         />
       </Container>
     </>

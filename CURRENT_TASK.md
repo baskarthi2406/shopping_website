@@ -8,10 +8,10 @@ No task is approved. Do not start any task until a human explicitly requests it.
 
 | Field | Value |
 |-------|--------|
-| Task ID | S5-T03 |
-| Task | PDP Price & Availability Panel |
+| Task ID | S5-T04 |
+| Task | Variant Attribute Selector |
 | Status | **COMPLETED** |
-| Scope | Server-rendered PDP panel driven by `evaluatePurchasability`: “Price not available” / availability messages and a `tel:` link to the verified store phone. No price renders until `config/commerce.ts` `priceDisplay` is approved (Q9). No purchase controls, cart, JSON-LD, or fixture changes. Details: `docs/sprints/SPRINT-05.md` → S5-T03. |
+| Scope | Native radio variant selector on the PDP, rendered only for real, selectable variants; switches server-precomputed per-variant commerce from `evaluatePurchasability`. No auto-selection, parent price/stock fallback, cart, storage, or fixture changes. Details: `docs/sprints/SPRINT-05.md` → S5-T04. |
 
 ---
 
@@ -28,8 +28,10 @@ S3-T10 Image Optimization and the original “SEO-Friendly URL Strategy” remai
 
 ## Next task after approval (do not start)
 
-**S5-T04 — Variant Attribute Selector** (Track A). Track B (S5-T05–S5-T07)
-exists only if Q1 is approved.
+Track A is complete. Business question Q1 (local cart) decides the next step:
+
+- Q1 approved: **S5-T05 — Local Cart Model & Persistence Boundary** (Track B).
+- Q1 deferred: **S5-T08 — Sprint 5 Review** of Track A.
 
 Do not start Sprint 5 implementation, the production backend, or Zoho
 integration automatically.

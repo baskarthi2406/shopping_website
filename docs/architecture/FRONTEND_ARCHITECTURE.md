@@ -513,7 +513,7 @@ frontend/
     c/[slug]/layout.tsx          # S4-F01 category existence check (HTTP 404)
     c/[slug]/page.tsx            # S2-T01 category listing; S3-T07 BreadcrumbList
     p/[slug]/layout.tsx          # S4-F01 product existence check (HTTP 404)
-    p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD; S3-T07 BreadcrumbList; S5-T03 price/availability panel
+    p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD; S3-T07 BreadcrumbList; S5-T03 price/availability panel; S5-T04 variant selector
     globals.css
   public/
     mini-mystiq-logo.png
@@ -566,6 +566,12 @@ frontend/
 { priceDisplay })` (`config/commerce.ts`) and passes the result plus
 `organization.telephone` to `ProductCommercePanel`. Eligibility comes only from
 `evaluatePurchasability`. Product JSON-LD is unchanged (no `offers`).
+
+**S5-T04:** the PDP now calls `toProductPurchaseOptionsViewModel`. For products
+with real, selectable variants it renders the client `ProductPurchaseOptions`
+(native radio groups) that switches between precomputed per-variant commerce
+view models. Products without variants keep the server-only panel. Catalog
+content remains server-rendered.
 
 Future routes (`cart`, `checkout`) stay under `app/` when those sprints arrive.
 

@@ -42,7 +42,22 @@ export {
   NOT_CURRENTLY_AVAILABLE_MESSAGE,
   OUT_OF_STOCK_MESSAGE,
   PRICE_NOT_AVAILABLE_MESSAGE,
+  VARIANT_COMBINATION_UNAVAILABLE_MESSAGE,
+  VARIANT_SELECTION_PROMPT,
 } from "./catalog-messages";
+export {
+  toProductPurchaseOptionsViewModel,
+  toVariantSelectorViewModel,
+  type ProductPurchaseOptionsViewModel,
+} from "./product-variant-selector";
+export {
+  resolveVariantSelection,
+  type VariantChoiceViewModel,
+  type VariantOptionGroupViewModel,
+  type VariantSelection,
+  type VariantSelectionResult,
+  type VariantSelectorViewModel,
+} from "./variant-selection";
 export {
   toProductCommerceViewModel,
   type AvailabilityState,

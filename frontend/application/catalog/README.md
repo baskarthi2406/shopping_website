@@ -60,4 +60,12 @@ available”; unknown status/inventory or unresolved variant → “Availability
 confirmed”; confirmed stock shows no message (“In stock” is undecided, Q6).
 Copy constants live in `catalog-messages.ts`.
 
+**S5-T04:** `toVariantSelectorViewModel` derives option groups from real
+variant attributes and returns `null` for no or unusable variants (blank or
+duplicate ids/names/values, inconsistent attribute names, duplicate
+combinations). `resolveVariantSelection` (`variant-selection.ts`, client-safe)
+maps explicit choices to a variant id and never auto-selects.
+`toProductPurchaseOptionsViewModel` precomputes the no-selection and
+per-variant commerce view models for the PDP.
+
 Full semantics: `docs/architecture/STOREFRONT_CONTRACTS.md`.

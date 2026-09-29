@@ -36,9 +36,10 @@ or payments unless the current task explicitly schedules them.
 Status: **COMPLETED** (S4-T01–S4-T12 and fix S4-F01; review in
 `docs/sprints/SPRINT-04.md` → S4-T12)
 
-**Sprint 5 — Commerce UI** is **IN_PROGRESS**: S5-T01 planning, S5-T02
-Purchasability Rules, and S5-T03 PDP Price & Availability Panel are completed.
-S5-T04 onward await explicit approval (`docs/sprints/SPRINT-05.md`).
+**Sprint 5 — Commerce UI** is **IN_PROGRESS**: S5-T01 planning and Track A
+(S5-T02 Purchasability Rules, S5-T03 PDP Price & Availability Panel, S5-T04
+Variant Selector) are completed. S5-T05 onward await explicit approval
+(`docs/sprints/SPRINT-05.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -47,9 +48,8 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S5-T03 PDP Price & Availability Panel is **COMPLETED**. No further task
-is approved; do not start S5-T04, Zoho integration, or any other task
-automatically.
+None. S5-T04 Variant Selector is **COMPLETED**. No further task is approved;
+do not start S5-T05, Zoho integration, or any other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -62,7 +62,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_5_IN_PROGRESS** (S5-T01–S5-T03 completed; next task awaits approval)
+**SPRINT_5_IN_PROGRESS** (S5-T01–S5-T04 completed; next task awaits approval)
 
 ---
 
@@ -112,6 +112,10 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   verified store phone. Prices render only when `config/commerce.ts`
   `priceDisplay` is approved (currently `null`, Q9). No purchase controls; no
   JSON-LD `offers`
+- PDP variant selector (S5-T04): native radio groups rendered only for real,
+  selectable variants; switches precomputed per-variant commerce; no
+  auto-selection or parent price/stock fallback. No current product has
+  variants, so no selector renders today
 - Loading, sanitized catalog errors, not-found, and empty collection states
   (S4-T10); null pricing/inventory/variants remain valid product data
 - Storefront footer polish (S4-T10A): brand, category-derived Shop/Collections,
@@ -186,13 +190,14 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S5-T01 — Sprint 5 Planning & Specification
 - S5-T02 — Purchasability Rules
 - S5-T03 — PDP Price & Availability Panel
+- S5-T04 — Variant Attribute Selector
 
 ## In progress
 
 - None.
 
 ## Pending
-- Sprint 5 — Commerce UI: proposed S5-T04–S5-T08, each requiring explicit
+- Sprint 5 — Commerce UI: proposed S5-T05–S5-T08, each requiring explicit
   approval; open business questions in `docs/sprints/SPRINT-05.md`
 - Sprint 6 — Production Backend
 - Sprint 7 — Zoho POS Integration
@@ -223,5 +228,6 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S5-T04 — Variant Attribute Selector** if approved (see
-`docs/sprints/SPRINT-05.md`). Requires explicit human approval.
+Decision on Q1 (local cart). If approved: **S5-T05 — Local Cart Model &
+Persistence Boundary**; if deferred: **S5-T08 — Sprint 5 Review** of Track A
+(see `docs/sprints/SPRINT-05.md`). Requires explicit human approval.

@@ -5,12 +5,13 @@
 | Sprint ID | S5 |
 | Phase | Phase 1 — Customer Storefront |
 | Objective | Add commerce-ready storefront behavior on the existing nullable catalog without implying orders, payment, stock reservation, or fulfillment |
-| Status | **IN_PROGRESS** — S5-T02 and S5-T03 completed on explicit request; S5-T04 onward still await approval |
+| Status | **IN_PROGRESS** — S5-T02–S5-T04 completed on explicit request; S5-T05 onward still await approval |
 | Dependencies | Sprint 4 completed (S4-T12, commit `c4d47f757ee98f8bb1fa4d13e1089d0b801c3653`) |
 | Task IDs | S5-T01 (planning, completed) · proposed S5-T02 … S5-T08 |
 
-**Only explicitly requested tasks are authorized.** S5-T02 and S5-T03 were
-approved by explicit human requests on 2026-09-29 and are completed. No other Sprint 5 task
+**Only explicitly requested tasks are authorized.** S5-T02, S5-T03, and S5-T04
+were approved by explicit human requests on 2026-09-29 and are completed.
+Track A is complete. No other Sprint 5 task
 is authorized until a human approves it. Approval must be recorded in this
 file, `SPRINT_STATUS.md`, and `CURRENT_TASK.md` before any task becomes
 `IN_PROGRESS`.
@@ -374,55 +375,109 @@ and a clear, non-misleading state when it does not.
 
 ### S5-T04 — Variant Attribute Selector (Track A)
 
-**Status:** PROPOSED — awaiting approval
+**Status:** COMPLETED (approved by explicit request, 2026-09-29)
 
 **Objective:** Data-driven variant selection for products that have real
 variants, without inventing options.
 
-**Scope:**
+**Implementation (as completed):**
 
-- Derive option groups (attribute name → distinct values, in data order) from
-  `product.variants` in the application layer.
-- Small client component on the PDP (radio groups, no new packages) that holds
-  selection in local state and shows purchasability messages from S5-T02 for
-  the resolved variant. It updates the S5-T03 panel for the selected variant.
-- Rendered **only** when `variants.length > 0`. Current products render nothing
-  new.
+- **`application/catalog/product-variant-selector.ts`**
+  - `toVariantSelectorViewModel(product)` builds option groups (normalized
+    attribute name → label + distinct values in data order) and one choice per
+    variant.
+  - It returns `null` (no selector) when there are no variants, or when any
+    variant has a blank or duplicate id, no attributes, a blank name or value,
+    a duplicate attribute name, attribute names that differ from other
+    variants, or a duplicate value combination. Nothing is fabricated.
+  - `toProductPurchaseOptionsViewModel(product, { priceDisplay })` returns the
+    no-selection commerce state, the selector, and `commerceByVariant`: one
+    S5-T03 commerce view model per real variant id, each from
+    `evaluatePurchasability` with that `variantId`.
+- **`application/catalog/variant-selection.ts`:** pure
+  `resolveVariantSelection(selector, selection)` →
+  - `matched` (real variant id)
+  - `incomplete` (“Select {missing option names}”)
+  - `unmatched` (“This combination is not available”)
 
-**Exclusions:** no fixture variants, no add-to-cart, no URL/query-state
-persistence (SEO impact TBD), no swatch images, no mega-menu changes.
+  It never auto-selects, even a single variant. It is kept free of pricing and
+  inventory code so the client bundle stays small.
+- Copy constants added to `catalog-messages.ts`.
+- **`components/storefront/product-purchase-options.tsx`** (client component):
+  - one native `fieldset`/`legend` radio group per option; the visible pill is
+    the label for a visually hidden radio
+  - selected (`peer-checked`) and keyboard-focus (`peer-focus-visible`)
+    styles; tap-target sizing; wrapping row with no overflow
+  - `aria-live="polite"` on the selection prompt and on the commerce panel
+  - It holds selection in `useState` only and swaps between precomputed view
+    models. No purchasability logic, formatting, storage, or fetch.
+- `ProductDetail` renders `ProductPurchaseOptions` only when `variantOptions`
+  is supplied; otherwise it renders the unchanged S5-T03 panel. `/p/[slug]`
+  passes `variantOptions` only when a selector exists.
+- Current products have no variants, so their PDP HTML is unchanged (no
+  selector, no client component).
 
-**Dependencies:** S5-T02, S5-T03.
+**Behavior:**
 
-**Affected:** `/p/[slug]`; new `components/storefront/variant-selector.tsx`,
-application option-group helper, PDP view model.
+- With no selection, or an incomplete or unmatched selection, purchase is
+  blocked. The panel shows “Price not available” and “Availability not
+  confirmed” (parent price and stock never shown for variant products).
+- A matched variant shows its own price, compare-at, and availability (Q8: no
+  parent fallback). Inactive variants show “Not currently available”;
+  out-of-stock variants show “Out of stock”.
 
-**Acceptance criteria:**
+**Deviation from the proposed acceptance text:** options are not disabled.
+Inactive or out-of-stock variants and non-existent combinations stay
+selectable and are announced as unavailable, so customers can see why. No
+purchase control exists in any state.
 
-- The selector is absent for all current products (server HTML unchanged apart
-  from S5-T03).
-- With fake variants: groups and values come from data; invalid, incomplete,
-  and inactive combinations are announced and disabled correctly; the panel
-  shows the variant's own price or the “not available” state (Q8 default).
-- Catalog content remains server-rendered; client JavaScript is limited to the
-  selector.
+**Tests:**
 
-**Automated tests:** option-group derivation and selection-resolution unit
-tests; component contract test (radio semantics, labels, no hardcoded
-size/color names); boundary test.
+- `product-variant-selector.test.ts`:
+  - no variants (including today's catalog shape); group derivation
+  - eight unusable-variant cases; incomplete, invalid, and single-variant
+    selections (no auto-select)
+  - matched and unmatched selections; per-variant commerce differs (switching)
+  - no parent price fallback; no parent inventory fallback
+  - inactive and out-of-stock variants unavailable; unusable variants stay
+    blocked
+- `product-purchase-options.test.ts` (static render with `react-dom/server`):
+  - fieldsets, legends, and label/`for` pairs; one radio `name` per group
+    (arrow-key navigation)
+  - no initial selection; prompt and blocked panel; contact link intact
+  - two polite live regions; selected/focus classes; client-only boundary
+  - PDP wiring
+- `product-commerce-panel.test.ts` wiring assertion updated for the new page
+  call.
+- `storefront-http-status.http.test.ts`: the real PDP has no `fieldset` or
+  radio, and the S5-T03 checks still pass.
 
-**Manual validation:** keyboard-only selection with a local fake-product
-build (not committed as a fixture); current PDPs unchanged.
+**Validation:**
 
-**Accessibility/responsive:** `fieldset`/`legend` per attribute, arrow-key radio
-behavior, `aria-live="polite"` status, visible focus, wraps on mobile.
+- `npm test`: 59 files, 335 tests passed (two focused-test assertions were
+  first corrected for attribute order and the `peer-checked` class name; no
+  component change)
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- `npm run test:http`: 18 tests passed
+- Non-blocking npm warning: unknown env config `devdir`
 
-**Documentation:** this file, status files, component README.
+**Limitations:**
 
-**Definition of done:** selector ready for real variant data; `npm run build`
-and `npm run test:http` pass.
+- No DOM test runner is configured, so live click and keyboard switching is
+  verified through the pure resolver and per-variant view models plus native
+  radio semantics, not an in-browser interaction test.
+- No catalog product has variants, so manual browser validation of the
+  selector was not possible without committing fake data (not done).
+- Selection is not reflected in the URL (SEO impact TBD).
+- Variants with unusable or inconsistent attributes get no selector and stay
+  blocked.
+- Option labels and values are shown as supplied; no size or colour
+  vocabulary exists.
 
-**Git/stop:** branch `s5-t04-variant-selector`; commit
+**Git/stop:** committed on the checked-out branch `s5-t01-sprint-5-planning`
+(the request prohibited switching branches). Commit
 `feat(s5): add variant selector`; STOP.
 
 ---

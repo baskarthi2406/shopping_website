@@ -15,6 +15,12 @@ telephone. It shows a price or “Price not available”, an optional availabili
 message, and a `tel:` “Call …” link. It has no purchase controls, cart, stock
 counts, or business logic.
 
+**S5-T04:** `ProductPurchaseOptions` (client) renders one native radio
+`fieldset` per variant option and swaps between server-precomputed commerce
+view models via `resolveVariantSelection`. `ProductDetail` uses it only when
+`variantOptions` is supplied (real, selectable variants); otherwise it renders
+the plain panel. No auto-selection, purchasability logic, storage, or fetch.
+
 **S2-T04:** `Breadcrumbs` and `CatalogNavigation` — presentation props only.
 S4-T02 evolves `CatalogNavigation` to recursively render supplied child items:
 mobile Menu disclosure, tablet/desktop category bar, and hierarchy dropdowns.

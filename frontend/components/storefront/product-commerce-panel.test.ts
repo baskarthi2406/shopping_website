@@ -76,7 +76,7 @@ describe("ProductCommercePanel", () => {
 
   it("is wired into the PDP without changing product structured data", () => {
     const page = readFileSync(new URL("../../app/p/[slug]/page.tsx", import.meta.url), "utf8");
-    expect(page).toContain("toProductCommerceViewModel(data.product, { priceDisplay })");
+    expect(page).toMatch(/toProductPurchaseOptionsViewModel\(\s*data\.product,\s*\{ priceDisplay \},?\s*\)/);
     expect(page).toContain("telephone: organization.telephone");
     expect(page).toContain("buildProductStructuredData(view, toAbsoluteUrl)");
     const detail = readFileSync(new URL("./product-detail.tsx", import.meta.url), "utf8");
