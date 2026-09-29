@@ -51,4 +51,13 @@ inventory (no parent inheritance). SKU/UOM never block. User-facing copy is
 not defined here (Sprint 5 Q4). Codes and rules:
 `docs/sprints/SPRINT-05.md` → S5-T02.
 
+**S5-T03:** `toProductCommerceViewModel(product, { priceDisplay, variantId? })`
+maps `evaluatePurchasability` (quantity 1) to PDP strings. A price is formatted
+only when it is verified and its currency is listed in `priceDisplay`
+(`config/commerce.ts`, currently `null`, so no price renders). Availability:
+explicit `out_of_stock` → “Out of stock”; inactive → “Not currently
+available”; unknown status/inventory or unresolved variant → “Availability not
+confirmed”; confirmed stock shows no message (“In stock” is undecided, Q6).
+Copy constants live in `catalog-messages.ts`.
+
 Full semantics: `docs/architecture/STOREFRONT_CONTRACTS.md`.

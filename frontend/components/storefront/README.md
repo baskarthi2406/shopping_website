@@ -8,6 +8,13 @@ Storefront composites. Receive view-model props. Do not import repositories or f
 
 **S2-T03:** `ProductDetail` — presentation only (name, description, images, breadcrumb, category links). No cart, price, or variant selectors.
 
+**S5-T03:** `ProductCommercePanel` (rendered by `ProductDetail` via the optional
+`commerce` prop) is a server-rendered price/availability panel. It receives
+formatted strings from `toProductCommerceViewModel` and the verified store
+telephone. It shows a price or “Price not available”, an optional availability
+message, and a `tel:` “Call …” link. It has no purchase controls, cart, stock
+counts, or business logic.
+
 **S2-T04:** `Breadcrumbs` and `CatalogNavigation` — presentation props only.
 S4-T02 evolves `CatalogNavigation` to recursively render supplied child items:
 mobile Menu disclosure, tablet/desktop category bar, and hierarchy dropdowns.

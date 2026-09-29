@@ -36,7 +36,20 @@ export {
   type CategoryPageViewModel,
   type ProductCardViewModel,
 } from "./category-page-view-model";
-export { CATALOG_UNAVAILABLE_MESSAGE } from "./catalog-messages";
+export {
+  AVAILABILITY_NOT_CONFIRMED_MESSAGE,
+  CATALOG_UNAVAILABLE_MESSAGE,
+  NOT_CURRENTLY_AVAILABLE_MESSAGE,
+  OUT_OF_STOCK_MESSAGE,
+  PRICE_NOT_AVAILABLE_MESSAGE,
+} from "./catalog-messages";
+export {
+  toProductCommerceViewModel,
+  type AvailabilityState,
+  type PriceDisplayConfig,
+  type ProductCommerceOptions,
+  type ProductCommerceViewModel,
+} from "./product-commerce-view-model";
 export { getCategoryCollection } from "./get-category-collection";
 export { getCategoryBySlug } from "./get-category-by-slug";
 export { getHomePage, type HomePageData } from "./get-home-page";

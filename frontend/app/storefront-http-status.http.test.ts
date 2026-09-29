@@ -108,6 +108,23 @@ describe.each(Object.entries(USER_AGENTS))(
       expect(body).not.toMatch(/<meta name="robots" content="noindex/);
     });
 
+    it("renders the PDP price panel without inventing commerce data", async () => {
+      const { status, body } = await request(
+        "/p/pink-white-pleated-baby-dress",
+        userAgent,
+      );
+
+      const panel =
+        body.match(/<section aria-labelledby="product-commerce-heading"[\s\S]*?<\/section>/)?.[0] ?? "";
+
+      expect(status).toBe(200);
+      expect(panel).toContain("Price not available");
+      expect(panel).toContain("Availability not confirmed");
+      expect(panel).toContain('href="tel:09025799377"');
+      expect(panel).not.toMatch(/₹|\d[\d,]*\.\d{2}|<button|add to cart|in stock/i);
+      expect(body).not.toContain('"offers"');
+    });
+
     it.each(MISSING_PATHS)(
       "returns 404 with the not-found page for missing %s",
       async (pathname) => {

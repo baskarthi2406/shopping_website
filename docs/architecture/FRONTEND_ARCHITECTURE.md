@@ -513,7 +513,7 @@ frontend/
     c/[slug]/layout.tsx          # S4-F01 category existence check (HTTP 404)
     c/[slug]/page.tsx            # S2-T01 category listing; S3-T07 BreadcrumbList
     p/[slug]/layout.tsx          # S4-F01 product existence check (HTTP 404)
-    p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD; S3-T07 BreadcrumbList
+    p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD; S3-T07 BreadcrumbList; S5-T03 price/availability panel
     globals.css
   public/
     mini-mystiq-logo.png
@@ -561,6 +561,11 @@ frontend/
 **S2-T01:** `/c/[slug]` is a Server Component. The page calls `catalog.getCategoryPage(slug)` (composition root). It must not import fixtures or `Static*Repository`. Unknown slug → `notFound()`. BreadcrumbList JSON-LD is S3-T07.
 
 **S2-T03:** `/p/[slug]` is a Server Component. The page calls `catalog.getProductPage(slug)`. Unknown slug → `notFound()`. Product JSON-LD is S3-T06. BreadcrumbList JSON-LD is S3-T07.
+
+**S5-T03:** the PDP also calls `toProductCommerceViewModel(product,
+{ priceDisplay })` (`config/commerce.ts`) and passes the result plus
+`organization.telephone` to `ProductCommercePanel`. Eligibility comes only from
+`evaluatePurchasability`. Product JSON-LD is unchanged (no `offers`).
 
 Future routes (`cart`, `checkout`) stay under `app/` when those sprints arrive.
 

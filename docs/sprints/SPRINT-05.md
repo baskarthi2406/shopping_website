@@ -5,12 +5,12 @@
 | Sprint ID | S5 |
 | Phase | Phase 1 — Customer Storefront |
 | Objective | Add commerce-ready storefront behavior on the existing nullable catalog without implying orders, payment, stock reservation, or fulfillment |
-| Status | **IN_PROGRESS** — S5-T02 completed on explicit request; S5-T03 onward still await approval |
+| Status | **IN_PROGRESS** — S5-T02 and S5-T03 completed on explicit request; S5-T04 onward still await approval |
 | Dependencies | Sprint 4 completed (S4-T12, commit `c4d47f757ee98f8bb1fa4d13e1089d0b801c3653`) |
 | Task IDs | S5-T01 (planning, completed) · proposed S5-T02 … S5-T08 |
 
-**Only explicitly requested tasks are authorized.** S5-T02 was approved by an
-explicit human request on 2026-09-29 and is completed. No other Sprint 5 task
+**Only explicitly requested tasks are authorized.** S5-T02 and S5-T03 were
+approved by explicit human requests on 2026-09-29 and are completed. No other Sprint 5 task
 is authorized until a human approves it. Approval must be recorded in this
 file, `SPRINT_STATUS.md`, and `CURRENT_TASK.md` before any task becomes
 `IN_PROGRESS`.
@@ -271,60 +271,103 @@ The request prohibited switching branches, so no separate
 
 ### S5-T03 — PDP Price & Availability Panel (Track A)
 
-**Status:** PROPOSED — awaiting approval
+**Status:** COMPLETED (approved by explicit request, 2026-09-29)
 
 **Objective:** Show real price and availability on the PDP when data exists,
 and a clear, non-misleading state when it does not.
 
-**Scope:**
+**Decisions from the S5-T03 request:**
 
-- Extend the PDP view model (`get-product-page.ts`) with a presentation-ready
-  commerce block derived from S5-T02 (formatted price, compare-at, availability
-  message, contact fallback).
-- Server-rendered panel in `product-detail.tsx`. Price is formatted from
-  `Money` with `Intl.NumberFormat` using the approved locale (Q9); compare-at
-  is shown only when present and higher. Availability shows “Out of stock” for
-  `out_of_stock` and no quantities.
-- No price means the section 4 rule 3 message plus the existing verified phone
-  link, with no button.
+- Q4 is partly resolved: missing-price copy “Price not available”, with the
+  verified store phone `090257 99377` (`config/organization.ts`) as the
+  contact option.
+- Q9 is conditional: `en-IN`/INR may be used only when verified business
+  configuration supports it. No such configuration exists, so `priceDisplay`
+  in `config/commerce.ts` is `null` and **no price renders** until a human
+  sets it. The currency is never inferred from the store location.
 
-**Exclusions:** no add-to-cart button, no variant selector, no listing-card
-prices (Q10), no JSON-LD `offers`, no stock counts, no mega-menu or layout
-redesign.
+**Implementation (as completed):**
 
-**Dependencies:** S5-T02.
+- `application/catalog/product-commerce-view-model.ts`:
+  `toProductCommerceViewModel(product, { priceDisplay, variantId? })`. It
+  calls `evaluatePurchasability` (quantity 1) and adds formatting and copy only.
+  - **Price** is formatted with `Intl.NumberFormat(locale, { style: "currency" })`
+    only when the S5-T02 rule reports no price, currency, or variant blocker
+    and the currency is listed in `priceDisplay`. Otherwise it shows “Price not
+    available”. The price comes from the product (no variants) or the selected
+    variant, never the parent.
+  - **Compare-at** is shown only when it is higher and in the same currency.
+  - **Availability:** explicit `out_of_stock` → “Out of stock”; inactive
+    product/variant → “Not currently available”; unknown status, unknown or
+    insufficient inventory, or an unresolved variant → “Availability not
+    confirmed”; purchasable → no message (“In stock” undecided, Q6).
+- Copy constants added to `application/catalog/catalog-messages.ts`.
+- `config/commerce.ts` exports `priceDisplay: null`.
+- `components/storefront/product-commerce-panel.tsx`: server-rendered
+  section labelled “Price and availability” (screen-reader heading), price or
+  message, availability line, and a `tel:` link “Call 090257 99377” sized to
+  the tap-target token. No buttons, forms, cart, stock counts, or logic.
+- `ProductDetail` accepts an optional `commerce` prop and renders the panel
+  under the description; `/p/[slug]` wires it. Metadata, canonical,
+  Product/BreadcrumbList JSON-LD, sitemap, mega-menu, and fixtures are
+  unchanged.
 
-**Affected:** `/p/[slug]`; `application/catalog/get-product-page.ts`,
-`components/storefront/product-detail.tsx`, their tests.
+**Tests:**
 
-**Acceptance criteria:**
+- `product-commerce-view-model.test.ts` (synthetic data and synthetic `en-IN`/INR
+  test config):
+  - today's catalog shape; missing, zero, and negative prices; verified price
+    formatting; compare-at rules
+  - missing, invalid, and unapproved currency; no config means no price
+  - unknown inventory; explicit out of stock; inactive product
+  - variant price without parent inheritance; delegation to
+    `evaluatePurchasability` (no stock-field reads)
+- `product-commerce-panel.test.ts` renders the panel with
+  `react-dom/server` `renderToStaticMarkup` (no new packages) and checks:
+  - missing-price state without amounts or purchase controls
+  - `tel:09025799377` link with accessible name “Call 090257 99377”
+  - section labelling and screen-reader price context
+  - no unavailable message when purchasable; out-of-stock message
+  - mobile-first classes, server component
+  - PDP wiring without structured-data changes
+- `storefront-http-status.http.test.ts` checks the real
+  `/p/pink-white-pleated-baby-dress` (browser and Googlebot). The panel shows
+  “Price not available”, “Availability not confirmed”, and the `tel:` link,
+  with no amount, button, or “in stock” inside it, and no `"offers"` in the
+  page. The site-wide announcement “Free Shipping on Orders above ₹999” is an
+  existing service claim outside the panel.
 
-- All current PDPs render the “price not available” state and no `0`, “free”,
-  or stock text.
-- Fake priced products render the formatted price; compare-at appears only when
-  higher; `out_of_stock` fakes show “Out of stock”.
-- PDP title, canonical, and Product/BreadcrumbList JSON-LD are byte-for-byte
-  unchanged for current products.
-- The component receives view-model props only (no domain `Money` formatting in
-  the component).
+**Validation:**
 
-**Automated tests:** view-model unit tests for all states; presentation
-contract test (no invented values, no JSON-LD change); existing PDP and SEO
-tests pass.
+- `npm test`: 57 files, 308 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- `npm run test:http`: 18 tests passed. The first run failed 2 of 18 because
+  the new assertion searched the whole page for `₹` and matched the existing
+  announcement bar; it was scoped to the panel, with no product-code change.
+- Manual (dev server, `/p/pink-white-pleated-baby-dress`):
+  - desktop ≈1024 px: panel beside the image in the boutique card style
+  - mobile 390 px: panel stacked under the image, no horizontal scroll
+    (`scrollWidth` = `clientWidth`), phone link 44 px tall
+  - accessibility tree: region “Price and availability” and link
+    “Call 090257 99377”
+  - The 500/820/1440 px widths from the plan were not each re-measured
+- Existing dev-server console message (seen on `/` before this task, not
+  introduced here): “Router action dispatched before initialization”
+- Non-blocking npm warning: unknown env config `devdir`
 
-**Manual validation:** `next start`; all current PDPs at 500/820/1440 px; copy
-review.
+**Limitations and open decisions:**
 
-**Accessibility/responsive:** price and messages in readable text (not image
-or colour only); contact link meets tap target; no layout shift in the hero
-image area.
+- No price can display until `priceDisplay` is approved (Q9); today's
+  catalog has no prices anyway.
+- “In stock” is not shown (Q6); the remaining copy review for Q4 is open.
+- Products with variants show “Price not available” until a variant is
+  selected (S5-T04 passes `variantId`).
+- Listing cards unchanged (Q10).
 
-**Documentation:** this file, status files, `FRONTEND_ARCHITECTURE.md` PDP row.
-
-**Definition of done:** panel live; route output verified by `npm run build`
-and `npm run test:http` (PDP 200, missing PDP 404 unchanged).
-
-**Git/stop:** branch `s5-t03-pdp-price-availability`; commit
+**Git/stop:** committed on the checked-out branch `s5-t01-sprint-5-planning`
+(the request prohibited switching branches). Commit
 `feat(s5): add pdp price and availability`; STOP.
 
 ---
@@ -621,12 +664,12 @@ manually.
 | Q1 | Build the local cart (Track B) now, knowing no current product has a price, or wait for real pricing data? | Track B **DEFERRED** |
 | Q2 | Is a device-local guest cart (`localStorage`, no account) acceptable? | Not built |
 | Q3 | Can a product with a price but **unknown** inventory be added to the local cart? | **Resolved (S5-T02):** blocked |
-| Q4 | Approved copy for “price not available”, “checkout not available”, and the cart device-only notice? Keep the phone contact as the call to action? | Working copy in this plan, subject to review |
+| Q4 | Approved copy for “price not available”, “checkout not available”, and the cart device-only notice? Keep the phone contact as the call to action? | **Partly resolved (S5-T03):** “Price not available” + phone `090257 99377`. Availability wording, checkout, and cart copy still open |
 | Q5 | Maximum quantity per line when stock is unknown or large? | `availableToSell` when known; otherwise add-to-cart blocked by Q3 |
 | Q6 | May the storefront show “In stock” (status only, no numbers)? | Show only “Out of stock” |
 | Q7 | Is search in scope for Sprint 5? If yes: behavior, fields searched, and results page indexing | Deferred |
 | Q8 | For variants without their own price, may product-level pricing apply? | **Resolved (S5-T02):** no fallback |
-| Q9 | Display locale and currency formatting (for example `en-IN` / INR)? | Required before S5-T03 shows any price; no price data exists yet |
+| Q9 | Display locale and currency formatting (for example `en-IN` / INR)? | **Open:** `en-IN`/INR only with verified business configuration; `config/commerce.ts` `priceDisplay` is `null`, so no price renders |
 | Q10 | Should listing cards show prices / add-to-cart when data exists? | No |
 | Q11 | Integrate Sprint 3–4 branches into `main` (and push) before Sprint 5 implementation? | Stack on `s4-t12-sprint-review`; no merge or push |
 

@@ -1,6 +1,10 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
+import {
+  ProductCommercePanel,
+  type ProductCommercePanelProps,
+} from "@/components/storefront/product-commerce-panel";
 
 export type ProductDetailProps = {
   product: {
@@ -10,9 +14,10 @@ export type ProductDetailProps = {
     categories: readonly { name: string; href: string }[];
     breadcrumb: readonly { label: string; href: string | null }[];
   };
+  commerce?: ProductCommercePanelProps;
 };
 
-export function ProductDetail({ product }: ProductDetailProps) {
+export function ProductDetail({ product, commerce }: ProductDetailProps) {
   const primaryImage = product.images[0] ?? null;
   const additionalImages = product.images.slice(1);
 
@@ -63,6 +68,7 @@ export function ProductDetail({ product }: ProductDetailProps) {
               {product.description}
             </p>
           ) : null}
+          {commerce ? <ProductCommercePanel {...commerce} /> : null}
           {product.categories.length > 0 ? (
             <p className="mt-6 text-small text-foreground-secondary">
               {product.categories.map((category, index) => (
