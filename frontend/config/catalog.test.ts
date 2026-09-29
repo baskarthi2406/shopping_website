@@ -58,6 +58,7 @@ describe("storefront catalog composition", () => {
     expect(source).toContain("createCatalogApiClient");
     expect(source).toContain("dispatchCatalogApi");
     expect(source).toContain("getCategoryTree: cache(");
+    expect(source).toContain("getProductBySlug: cache(");
     expect(source).not.toContain("StaticProductRepository");
     expect(source).not.toContain("StaticCategoryRepository");
     expect(source).not.toMatch(/product-records|category-records/);

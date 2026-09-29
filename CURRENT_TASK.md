@@ -1,6 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Do not start it until a human explicitly
+Only this task may be implemented. Resume it only when a human explicitly
 requests S4-T12.
 
 ---
@@ -9,10 +9,10 @@ requests S4-T12.
 
 | Field | Value |
 |-------|--------|
-| Task ID | S4-T11 |
-| Task | API-driven Navigation |
+| Task ID | S4-F01 |
+| Task | Production Soft-404 Correction |
 | Status | **COMPLETED** |
-| Scope | Navigation now obtains catalog-derived category data through the API/application boundary. |
+| Scope | Unknown `/c/{slug}` and `/p/{slug}` return HTTP 404 in production for browser and Googlebot user agents; verified by `npm run test:http`. |
 
 ---
 
@@ -26,9 +26,9 @@ Sprint Review
 
 ## Status
 
-**NOT_STARTED**
-
-Do **not** implement S4-T12 automatically.
+**IN_PROGRESS** — paused so S4-F01 could fix a defect found during the review.
+Review findings are not yet recorded in the repository. Do **not** resume
+automatically.
 
 S3-T10 Image Optimization and the original “SEO-Friendly URL Strategy” remain
 **DEFERRED**. Do not start either automatically.
@@ -43,7 +43,7 @@ See `docs/sprints/SPRINT-04.md` → S4-T12.
 
 ## Dependencies
 
-S4-T11.
+S4-T11, S4-F01.
 
 ## Requirements
 
@@ -55,7 +55,8 @@ See `docs/sprints/SPRINT-04.md` → S4-T12.
 
 ## Tests
 
-See `docs/sprints/SPRINT-04.md` → S4-T12.
+See `docs/sprints/SPRINT-04.md` → S4-T12. Include `npm run build` followed by
+`npm run test:http`.
 
 ## Definition of Done
 
@@ -63,4 +64,4 @@ See `docs/sprints/SPRINT-04.md` → S4-T12.
 
 ## Next task after S4-T12 (do not start)
 
-Do not start Sprint 5 automatically.
+Do not start Sprint 5 or Zoho integration automatically.

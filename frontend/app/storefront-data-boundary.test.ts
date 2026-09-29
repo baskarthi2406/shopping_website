@@ -44,7 +44,10 @@ describe("storefront data boundary", () => {
   });
 
   it("keeps storefront pages and layout on the catalog application boundary", () => {
-    const home = readFileSync(new URL("./page.tsx", import.meta.url), "utf8");
+    const home = readFileSync(
+      new URL("./(home)/page.tsx", import.meta.url),
+      "utf8",
+    );
     const category = readFileSync(
       new URL("./c/[slug]/page.tsx", import.meta.url),
       "utf8",

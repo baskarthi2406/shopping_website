@@ -90,6 +90,8 @@ Metadata helpers live in `application/seo/`. Sitemap URL listing is `listIndexab
 - No secrets in Git.
 - No extra dependencies without a task need.
 - Unit tests: Vitest (`npm test`). Colocate `*.test.ts`. Application tests use repository fakes, not static fixtures. Domain tests stay framework-free. Component/E2E tests are later tasks.
+- Production HTTP status checks: `npm run build && npm run test:http` (`*.http.test.ts`, S4-F01). Route status codes must be verified against a production build, not by source text or rendered `noindex` alone.
+- Route existence checks for `/c/{slug}` and `/p/{slug}` live in the segment `layout.tsx`, above the segment `loading.tsx`. Do not add a `loading.tsx` or `Suspense` boundary above those layouts (the homepage skeleton is scoped to `app/(home)/`); once streaming starts, `notFound()` can no longer return HTTP 404.
 - Visual tokens: Option 1 via `frontend/app/globals.css`. Use semantic utilities (`bg-primary`, `text-foreground`), not raw hex. Breakpoints and hex are implementation defaults until a brand guide says otherwise.
 
 ## Definition of Done

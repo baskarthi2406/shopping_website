@@ -399,9 +399,9 @@ S4-T10 storefront states:
 
 | Situation | Flow |
 |-----------|------|
-| Loading a catalog route | Route `loading.tsx` skeleton using existing surface tokens |
+| Loading a catalog route | Route `loading.tsx` skeleton using existing surface tokens (homepage skeleton scoped to `app/(home)/`) |
 | Empty product/category collection | Successful `[]` → explicit empty copy (`role="status"`) |
-| Unknown category or product slug | Application `null` → page `notFound()` → `not-found.tsx` |
+| Unknown category or product slug | Segment `layout.tsx` resolves the slug via `catalog.getCategoryBySlug` / `catalog.getProductBySlug` before the page loading boundary → `notFound()` → `not-found.tsx` with HTTP 404 (S4-F01) |
 | Catalog API/application failure | Sanitized “Catalog is temporarily unavailable” via `error.tsx`, or homepage static sections plus that message |
 | Unexpected throw | `error.tsx` (no stack, digest, repository, or provider details) |
 | Null pricing/inventory/empty variants | Valid product data, not empty/error |
@@ -409,6 +409,15 @@ S4-T10 storefront states:
 Homepage hero, promo, intro, and trust remain when catalog reads fail. Do not invent fallback products or categories. Null commerce fields are not empty states.
 
 Retry uses the error-boundary `reset` or a same-page reload. Do not leak internals.
+
+**Status codes (S4-F01):** a streamed response is committed as HTTP 200 as soon
+as a Suspense/`loading.tsx` fallback renders. Existence checks therefore run in
+`c/[slug]/layout.tsx` and `p/[slug]/layout.tsx`, which sit above those
+segments' `loading.tsx` and below no other loading boundary. The homepage
+skeleton lives in `app/(home)/loading.tsx` so it does not wrap catalog routes.
+Category tree and product detail reads are request-memoized in
+`config/catalog.ts`, so the layout check and page share one lookup. A catalog
+failure in these layouts is handled by the root `error.tsx` (same sanitized UI).
 
 ---
 
@@ -494,13 +503,16 @@ These choices follow this contract. They are **not** an ADR.
 frontend/
   app/                           # routing (S1-T03); README boundary (S1-T04)
     layout.tsx                   # S3-T08 Organization JSON-LD (once)
-    page.tsx                     # S3-T01 Option 1 homepage; S3-T02 metadata
+    (home)/page.tsx              # S3-T01 Option 1 homepage; S3-T02 metadata
+    (home)/loading.tsx           # S4-T10 homepage skeleton (scoped to / by S4-F01)
     sitemap.ts                   # S3-T04 /sitemap.xml from catalog + site origin
     robots.ts                    # S3-T05 /robots.txt allow + sitemap reference
     to-next-metadata.ts          # S3-T02 Next.js Metadata adapter
     json-ld.tsx                  # S3-T06–S3-T08 JSON-LD script renderer
     not-found.tsx                # S2-T01
+    c/[slug]/layout.tsx          # S4-F01 category existence check (HTTP 404)
     c/[slug]/page.tsx            # S2-T01 category listing; S3-T07 BreadcrumbList
+    p/[slug]/layout.tsx          # S4-F01 product existence check (HTTP 404)
     p/[slug]/page.tsx            # S2-T03 product detail; S3-T06 Product JSON-LD; S3-T07 BreadcrumbList
     globals.css
   public/

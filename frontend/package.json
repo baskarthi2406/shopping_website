@@ -9,6 +9,7 @@
     "lint": "eslint",
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
+    "test:http": "vitest run --config vitest.http.config.mts",
     "test:watch": "vitest"
   },
   "dependencies": {

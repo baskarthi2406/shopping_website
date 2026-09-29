@@ -33,7 +33,7 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T11 completed)
+Status: **IN_PROGRESS** (S4-T01–S4-T11 and fix S4-F01 completed)
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -43,9 +43,9 @@ Optimization intentionally deferred.
 ## Current Task
 
 **S4-T12 — Sprint Review**
-Status: **NOT_STARTED**
+Status: **IN_PROGRESS** (paused for S4-F01)
 
-Do not start S4-T12 automatically.
+Resume S4-T12 only on explicit request.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -96,6 +96,10 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - Layout and footer catalog navigation consume the same dummy category API
   through `catalog.listCategories()` (S4-T11); sitemap remains on
   `catalogSource`
+- Unknown `/c/{slug}` and `/p/{slug}` return HTTP 404 in production (S4-F01):
+  segment layouts resolve slugs before loading boundaries; verified with
+  `npm run build && npm run test:http`
+- Technical-debt register: `docs/project/TECHNICAL_DEBT.md`
 - Loading, sanitized catalog errors, not-found, and empty collection states
   (S4-T10); null pricing/inventory/variants remain valid product data
 - Storefront footer polish (S4-T10A): brand, category-derived Shop/Collections,
@@ -165,14 +169,13 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T10B — Refine Mega Menu Boutique UI
 - S4-T10C — Final Mega Menu Visual Refinement
 - S4-T11 — API-driven Navigation
+- S4-F01 — Production Soft-404 Correction
 
 ## In progress
 
-- None. Do not start S4-T12 automatically.
+- S4-T12 — Sprint Review (paused for S4-F01; resume only on request)
 
 ## Pending
-
-- S4-T12 — Sprint Review (next)
 - Sprint 5 — Commerce UI
 - Sprint 6 — Production Backend
 - Sprint 7 — Zoho POS Integration
@@ -183,7 +186,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- None for starting S4-T12 when explicitly requested.
+- None for resuming S4-T12 when explicitly requested. Open technical debt:
+  `docs/project/TECHNICAL_DEBT.md`.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
   auth/rate limits, future product filters/search,

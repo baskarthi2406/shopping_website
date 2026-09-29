@@ -188,6 +188,18 @@ npm test
 npm run test:watch
 ```
 
+**Production HTTP status checks (S4-F01):** `*.http.test.ts` files are
+excluded from `npm test`. They start `next start` against the existing `.next`
+production build on a free local port and assert real response status codes
+(existing `/`, `/c/{slug}`, `/p/{slug}` → 200; missing category/product → 404
+with the not-found page and `noindex`) for a browser and a Googlebot user
+agent. Config: `vitest.http.config.mts`.
+
+```bash
+npm run build
+npm run test:http
+```
+
 Component and E2E testing remain later tasks. No coverage thresholds.
 
 ## SEO

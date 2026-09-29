@@ -7,7 +7,7 @@
 | Objective | Align customer navigation and define a vendor-isolated dummy catalog API without regressing the storefront |
 | Status | IN_PROGRESS |
 | Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
-| Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B, S4-T10C) |
+| Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B, S4-T10C) and fix S4-F01 |
 
 The dummy API is a development adapter, not Zoho integration or a production
 backend. Follow ADR 0005. Raw dummy/Zoho-shaped DTOs must not reach pages or
@@ -826,9 +826,82 @@ remains **NOT_STARTED**.
 
 ---
 
+## S4-F01 — Production Soft-404 Correction
+
+**Status:** COMPLETED
+
+### Objective
+
+Fix the verified production defect (found during S4-T12) where unknown
+category and product URLs returned HTTP 200 instead of 404. Register:
+`docs/project/TECHNICAL_DEBT.md` TD-001.
+
+### Root cause
+
+S4-T10 added `app/loading.tsx` at the root segment plus `c/[slug]` and
+`p/[slug]` `loading.tsx`. Those Suspense fallbacks streamed before the pages
+called `notFound()`, so the response was committed as 200 (with an injected
+`noindex`). Next.js 16 documents that the status cannot change after
+streaming begins. The root boundary also wrapped every catalog route, so a
+segment-level check alone would not have been enough.
+
+### Implementation scope (as completed)
+
+- Moved the homepage and its skeleton into the `app/(home)/` route group so the
+  homepage loading boundary no longer wraps `/c/*` or `/p/*` (URL unchanged)
+- Added `app/c/[slug]/layout.tsx` and `app/p/[slug]/layout.tsx`: resolve the
+  slug through `catalog.getCategoryBySlug` / `catalog.getProductBySlug` and call
+  `notFound()` before the segment `loading.tsx` streams
+- Request-memoized product detail reads in `config/catalog.ts` (same pattern as
+  the category tree) so the layout check and page share one lookup
+- Category/product skeletons, not-found UI, metadata, canonicals, JSON-LD,
+  sitemap, robots, APIs, contracts, fixtures, and mega-menu unchanged
+
+### Guardrails
+
+No Zoho, contract, fixture, SEO-content, sitemap, or visual changes. No new
+packages.
+
+### Tests
+
+- New `app/storefront-http-status.http.test.ts` (`npm run test:http`, config
+  `vitest.http.config.mts`): starts `next start` on the production build and
+  asserts existing `/`, `/c/baby-essentials`, `/c/infants`,
+  `/c/infants-baby-girl-frock`, `/p/pink-white-pleated-baby-dress` → 200
+  without not-found title/`noindex`; `/c/does-not-exist`, `/p/does-not-exist`,
+  `/c/Bad_Slug` → 404 with not-found title, `noindex`, and no Product/
+  BreadcrumbList JSON-LD — for browser and Googlebot user agents
+- Against the original build: 4 of 14 failed (missing slugs returned 200)
+- Route-state contract test: no root `loading.tsx`; layouts resolve slugs via
+  `@/config/catalog` without client/Suspense/static-source imports
+- Existing homepage/data-boundary tests updated for the `(home)` path;
+  catalog composition test asserts memoized product detail reads
+
+### Validation
+
+- `npm test`: 54 files, 255 tests passed
+- `npm run test:http`: 16 tests passed (after build)
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed (after removing stale generated `.next/dev/types`;
+  TD-007)
+- Production smoke (`next start`, browser + Googlebot): existing homepage,
+  category, nested category, empty category, and PDPs 200; missing and
+  malformed `/c` and `/p` slugs 404 with not-found UI and `noindex`; APIs,
+  sitemap (67 URLs), robots 200; canonicals and Product/BreadcrumbList/
+  Organization JSON-LD unchanged; static assets 200
+- Non-blocking npm warning: unknown user config `devdir`
+
+### Definition of Done
+
+Unknown catalog slugs return HTTP 404 in production for all user agents.
+S4-T12 review resumes only on explicit request.
+
+---
+
 ## S4-T12 — Sprint Review
 
-**Status:** NOT_STARTED
+**Status:** IN_PROGRESS (paused for S4-F01; resume only on explicit request)
 
 ### Objective
 

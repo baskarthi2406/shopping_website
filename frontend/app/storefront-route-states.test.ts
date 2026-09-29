@@ -1,18 +1,21 @@
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { CATALOG_UNAVAILABLE_MESSAGE } from "@/application/catalog";
 
 describe("storefront route state boundaries", () => {
   const rootError = readFileSync(new URL("./error.tsx", import.meta.url), "utf8");
   const rootLoading = readFileSync(
-    new URL("./loading.tsx", import.meta.url),
+    new URL("./(home)/loading.tsx", import.meta.url),
     "utf8",
   );
   const notFound = readFileSync(
     new URL("./not-found.tsx", import.meta.url),
     "utf8",
   );
-  const home = readFileSync(new URL("./page.tsx", import.meta.url), "utf8");
+  const home = readFileSync(
+    new URL("./(home)/page.tsx", import.meta.url),
+    "utf8",
+  );
   const category = readFileSync(
     new URL("./c/[slug]/page.tsx", import.meta.url),
     "utf8",
@@ -54,6 +57,28 @@ describe("storefront route state boundaries", () => {
     expect(categoryLoading).toContain("CategoryCatalogLoading");
     expect(productLoading).toContain("ProductCatalogLoading");
     expect(rootLoading).not.toMatch(/StaticProductRepository|zoho/i);
+  });
+
+  it("resolves category and product slugs before any loading boundary streams", () => {
+    const categoryLayout = readFileSync(
+      new URL("./c/[slug]/layout.tsx", import.meta.url),
+      "utf8",
+    );
+    const productLayout = readFileSync(
+      new URL("./p/[slug]/layout.tsx", import.meta.url),
+      "utf8",
+    );
+
+    expect(existsSync(new URL("./loading.tsx", import.meta.url))).toBe(false);
+    expect(categoryLayout).toContain("catalog.getCategoryBySlug(slug)");
+    expect(categoryLayout).toContain("notFound()");
+    expect(productLayout).toContain("catalog.getProductBySlug(slug)");
+    expect(productLayout).toContain("notFound()");
+    for (const layout of [categoryLayout, productLayout]) {
+      expect(layout).toContain('from "@/config/catalog"');
+      expect(layout).not.toMatch(/["']use client["']|Suspense/);
+      expect(layout).not.toMatch(/catalog-source|category-records|product-records/);
+    }
   });
 
   it("keeps unknown category and product slugs on not-found, not catalog errors", () => {

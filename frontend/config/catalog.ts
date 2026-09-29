@@ -13,7 +13,7 @@ const catalogApi = createCatalogApiClient(dispatchCatalogApi);
 const storefrontCatalogApi: CatalogApiClient = {
   getCategoryTree: cache(() => catalogApi.getCategoryTree()),
   getProductCollection: (query) => catalogApi.getProductCollection(query),
-  getProductBySlug: (slug) => catalogApi.getProductBySlug(slug),
+  getProductBySlug: cache((slug: string) => catalogApi.getProductBySlug(slug)),
 };
 const productRepository = new HttpProductRepository(storefrontCatalogApi);
 const categoryRepository = new HttpCategoryRepository(storefrontCatalogApi);
@@ -22,8 +22,9 @@ const uomRepository = new StaticUomRepository();
 /**
  * Storefront composition root. Pages and layout navigation call these use
  * cases and never choose a repository or import fixtures. Product/category
- * reads go through the dummy API client (ADR 0004). Category tree reads are
- * request-memoized so header, footer, and pages share one GET /api/categories.
+ * reads go through the dummy API client (ADR 0004). Category tree and product
+ * detail reads are request-memoized so header, footer, route existence checks,
+ * and pages share one GET /api/categories and one product detail request.
  * UOM has no dummy endpoint yet, so it stays static.
  */
 export const catalog = createCatalog(
