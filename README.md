@@ -12,7 +12,7 @@ Tagline: **Delivering Style & Tech**
 
 ## Project purpose
 
-Build a production-quality store that customers can find via search engines and browse by category and product, then (in later phases) purchase through a real backend, payments, and operations tooling.
+Build a production-quality store that customers can find via search engines and browse by category and product, then (in later phases) purchase through real server-side commerce, payments, and operations tooling.
 
 ## Business goal
 
@@ -31,11 +31,11 @@ Brand name, legal entity, domain, pricing, catalog taxonomy, and vendors are **T
 - TypeScript
 - Tailwind CSS
 
-**Planned production backend (Sprint 6)**
+**Server-side (Sprint 6 onward)**
 
-- Python
-- FastAPI
-- PostgreSQL
+- The same Next.js application (Server Components, server-only modules, Route
+  Handlers). No separate backend service (ADR 0006).
+- No database selected (ADR 0008).
 
 ---
 
@@ -47,8 +47,8 @@ SOLID and clean architecture:
 - Repository abstractions
 - Current: static/mock repositories
 - Sprint 4: dummy APIs behind the same application-owned contracts
-- Sprint 6: production backend behind the same interfaces
-- Sprint 7: Zoho POS adapter isolated from the storefront
+- Sprint 6: Next.js server-side foundations behind the same interfaces
+- Sprint 7: server-only Zoho POS adapter isolated from the storefront
 
 The storefront must not need a major rewrite when mock data is replaced by the API.
 
@@ -68,7 +68,7 @@ See `docs/architecture/ARCHITECTURE.md` and `docs/requirements/MOBILE_REQUIREMEN
 |-------|------|---------|
 | Bootstrap | Project control | S0 |
 | 1 | Storefront + dummy API + commerce UI | S1–S5 |
-| 2 | Production backend + Zoho + operations | S6–S8 |
+| 2 | Next.js server-side foundation + Zoho + operations | S6–S8 |
 | 3 | Commerce | S9 |
 | 4 | Digital marketing | S10 |
 | 5 | Production | S11 |
@@ -94,7 +94,7 @@ shopping/
 │   └── decisions/
 ├── .cursor/rules/
 ├── frontend/          # Phase 1 Next.js storefront (initialized S1-T03)
-└── backend/           # Production backend docs only (implementation Sprint 6)
+└── backend/           # Retired placeholder README (no separate backend; ADR 0006)
 ```
 
 Do not create a nested `baby-store/` directory.
@@ -136,7 +136,7 @@ Then implement **only** the current task.
 - Open this repository in Cursor.
 - Follow `.cursor/rules/` and `PROJECT_DEVELOPMENT_RULES.md`.
 - Implement the task in `CURRENT_TASK.md` only.
-- Do not scaffold Next.js or FastAPI unless that task explicitly requires it.
+- Do not scaffold new frameworks or services unless that task explicitly requires it (no separate backend; ADR 0006).
 
 ---
 
@@ -148,12 +148,13 @@ Then implement **only** the current task.
 |-------|--------|
 | Phase | Phase 1 — Customer Storefront + Dummy API Foundation (Phase 2 / Sprint 6 planned, not started) |
 | Overall status | SPRINT_6_PLANNED_AWAITING_APPROVAL |
-| Current sprint | Sprint 6 — Production Backend Foundation (**PLANNED — AWAITING APPROVAL**) |
-| Last completed | S6-T01 — Sprint 6 Planning |
-| Current task | None; next proposed S6-T02 — Backend Architecture Decisions (**NOT_STARTED**) |
+| Current sprint | Sprint 6 — Next.js Server-side Foundation (**PLANNED — AWAITING APPROVAL**, revised in S6-T02) |
+| Last completed | S6-T02 — Revise Sprint 6 for a Next.js-only architecture |
+| Current task | None; next proposed S6-T11 — Server-only Boundary and Secret Isolation (**NOT_STARTED**) |
 
 Sprint 4 is complete. Sprint 5 is complete for Track A (purchasability rules,
 PDP price/availability panel, variant selector); the local cart (Track B) is
-deferred. No price renders until locale/currency is approved. Do **not** start
-S6-T02 automatically. S3-T10 Image Optimization and the original SEO URL
+deferred. No price renders until locale/currency is approved. ADR 0006 keeps
+UI and server-side code in one Next.js application (no FastAPI backend); no
+database is selected. Do **not** start S6-T11 automatically. S3-T10 Image Optimization and the original SEO URL
 strategy are deferred.

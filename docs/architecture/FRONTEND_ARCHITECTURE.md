@@ -264,7 +264,7 @@ Track Your Order as disabled entry points only; no behavior/routes exist.
 | Model | Role |
 |-------|------|
 | **Domain** | `Product`, `ProductSummary`, `Category`, `ProductVariant`, `Pricing`, `Inventory`, `Uom`, `Cart`, `CartItem` — framework-free |
-| **Raw / DTO** | Static fixture shape or FastAPI JSON — infrastructure only |
+| **Raw / DTO** | Static fixture shape or provider (Zoho) JSON — infrastructure only |
 | **Application response** | Provider-independent collection/detail/pagination/error envelopes |
 | **View model / UI props** | What components receive (display price formatting TBD, image `src` + `alt`, href) |
 

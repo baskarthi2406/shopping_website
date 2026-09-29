@@ -25,11 +25,12 @@ This file is the live index of project state. A new AI session must read it afte
 
 **Phase 1 — Customer Storefront + Dummy API Foundation**
 
-Do **not** implement the production backend, Zoho integration, auth, checkout,
-or payments unless the current task explicitly schedules them.
+Do **not** implement provider integrations, persistence, Zoho integration,
+auth, checkout, or payments unless the current task explicitly schedules them.
 
-Phase 2 (Sprint 6 — Production Backend Foundation) is **planned and awaiting
-approval**; no Phase 2 implementation has started.
+Phase 2 (Sprint 6 — Next.js Server-side Foundation) is **planned and awaiting
+approval**; no Phase 2 implementation has started. ADR 0006 keeps UI and
+server-side functionality in one Next.js application (no separate backend).
 
 ---
 
@@ -45,9 +46,10 @@ Variant Selector), and the S5-T08 review are completed. Track B (S5-T05–S5-T07
 local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
 approval (`docs/sprints/SPRINT-05.md` → S5-T08).
 
-**Sprint 6 — Production Backend Foundation** is **PLANNED — AWAITING
-APPROVAL**: S6-T01 planning completed; S6-T02–S6-T10 proposed with approval
-gates G0–G4 (`docs/sprints/SPRINT-06.md`).
+**Sprint 6 — Next.js Server-side Foundation** is **PLANNED — AWAITING
+APPROVAL**: S6-T01 planning and the S6-T02 Next.js-only revision are
+completed; S6-T03–S6-T10 (FastAPI/PostgreSQL) are withdrawn; S6-T11–S6-T16
+are proposed with gates G0, G1, G2, GZ (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -56,9 +58,9 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S6-T01 Sprint 6 Planning is **COMPLETED**. No further task is
-approved; do not start S6-T02, Python code, package installs, Zoho
-integration, or any other task automatically.
+None. S6-T02 (Next.js-only architecture revision) is **COMPLETED**. No
+further task is approved; do not start S6-T11, package installs, persistence,
+Zoho integration, or any other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-06.md`.
 
@@ -71,7 +73,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_6_PLANNED_AWAITING_APPROVAL** (Sprint 5 completed for Track A; S6-T01 planning completed; next task S6-T02 awaits gate G0)
+**SPRINT_6_PLANNED_AWAITING_APPROVAL** (Sprint 5 completed for Track A; S6-T01 and S6-T02 completed; next task S6-T11 awaits gate G0)
 
 ---
 
@@ -152,11 +154,12 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 ### API/backend roadmap
 
 - Sprint 4: stable Mini Mystiq API/domain contracts and dummy catalog APIs
-- Sprint 6: production backend (planned FastAPI modular monolith + PostgreSQL;
-  ADR 0003)
-- Sprint 7: Zoho POS adapter behind repository interfaces (ADR 0005)
+- Sprint 6: Next.js server-side foundations (ADR 0006 supersedes the FastAPI
+  + PostgreSQL plan of ADR 0003; no database selected, ADR 0008)
+- Sprint 7: server-only Zoho POS adapter behind repository interfaces
+  (ADR 0005, ADR 0009)
 - Read-only dummy category, product collection, and product detail routes
-  implemented in Next.js; no production backend implementation exists
+  implemented in Next.js; no provider integration exists
 
 ---
 
@@ -201,7 +204,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S5-T03 — PDP Price & Availability Panel
 - S5-T04 — Variant Attribute Selector
 - S5-T08 — Sprint 5 Review (**Sprint 5 COMPLETED, Track A**)
-- S6-T01 — Sprint 6 Planning
+- S6-T01 — Sprint 6 Planning (task sequence later withdrawn)
+- S6-T02 — Revise Sprint 6 for a Next.js-only Architecture
 
 ## In progress
 
@@ -210,8 +214,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 ## Pending
 - Sprint 5 Track B — S5-T05–S5-T07 (local cart) **DEFERRED**, pending renewed
   Q1/Q2 approval; open business questions in `docs/sprints/SPRINT-05.md`
-- Sprint 6 — Production Backend Foundation: proposed S6-T02–S6-T10, each
-  requiring explicit approval (gates G0–G4 in `docs/sprints/SPRINT-06.md`)
+- Sprint 6 — Next.js Server-side Foundation: proposed S6-T11–S6-T16, each
+  requiring explicit approval (gates in `docs/sprints/SPRINT-06.md` §6)
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
 - S3-T10 — Image Optimization (**DEFERRED**)
@@ -227,14 +231,11 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   shipping, COD, returns, 24/7 support) need business confirmation.
 - Zoho POS data access **not verified**: no authorized API access, docs, or
   sample responses reviewed. Required before Sprint 7 planning; readiness
-  checklist in `docs/sprints/SPRINT-06.md` §9.
-- Data ownership is undecided: `BACKEND_ARCHITECTURE.md` calls PostgreSQL the
-  catalog/inventory system of record while Sprint 7 plans Zoho as the
-  product/price/stock source (Sprint 6 decision D1, ADR 0006 in S6-T02).
-- Backend toolchain (ORM, migrations, Python version, test DB), production API
-  prefix/topology, and CI vendor are undecided (Sprint 6 D2, D3, D11).
-  `TECH_STACK.md` and the development rules still defer some of these to
-  “Sprint 5”; S6-T02 is planned to correct that.
+  checklist in `docs/sprints/SPRINT-06.md` §7.
+- Field-level data ownership is undecided (ADR 0007, Proposed). Persistence is
+  not selected (ADR 0008, Proposed). Provider access policy is proposed
+  (ADR 0009). Hosting/runtime model, public exposure of `/api/*` in
+  production, and CI vendor are undecided (`SPRINT-06.md` §8).
 - Reference-storefront (`minimystiq.zakyastore.in`) inspection **not
   completed**; no observations recorded.
 - Local `main` is still at the initial commit; Sprint 3–5 work is on unmerged,
@@ -251,7 +252,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S6-T02 — Backend Architecture Decisions (ADRs 0006–0008)**, after gate G0
-(Sprint 6 plan approved; decision on merging Sprints 3–5 into `main`).
+**S6-T11 — Server-only Boundary and Secret Isolation**, after gate G0
+(revised Sprint 6 plan approved; decision on merging Sprints 3–5 into `main`).
 Sprint 5 Track B remains deferred pending Q1/Q2. Requires explicit human
 approval.

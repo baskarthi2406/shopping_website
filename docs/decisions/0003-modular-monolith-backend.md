@@ -1,6 +1,7 @@
 # ADR 0003 — Modular monolith backend
 
-- **Status:** Accepted
+- **Status:** Superseded by ADR 0006 (2026-09-29, S6-T02). No FastAPI service
+  or PostgreSQL database will be built under this ADR; it is kept for history.
 - **Date:** 2026-08-11
 
 Schedule revised by S4-T01: production backend work now starts in Sprint 6.

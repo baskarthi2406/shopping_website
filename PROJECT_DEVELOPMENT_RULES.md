@@ -113,7 +113,7 @@ Every task specification must include:
 - A sprint is not started until its first task is the current task.
 - Do not pull work from a later sprint into the current sprint.
 - Phase 1 may implement the explicitly scheduled dummy API behind stable
-  contracts. It must not implement the production backend, PostgreSQL, Zoho,
+  contracts. It must not implement provider integrations, databases, Zoho,
   admin backends, payments, or marketing platforms.
 - Phase 2 must not implement Phase 3+ commerce integrations unless the current task says so.
 - Update `SPRINT_STATUS.md` when a task or sprint status changes.
@@ -154,15 +154,15 @@ Intended layers:
 - **Application** — use cases / services
 - **Infrastructure** — static/dummy/vendor repositories, HTTP, CMS, database,
   filesystem
-- **Interface / API** — Next.js pages/routes and scheduled dummy API;
-  production FastAPI endpoints later
+- **Interface / API** — Next.js pages and Route Handlers (dummy API today;
+  all server-side endpoints stay in Next.js per ADR 0006)
 
 Rules:
 
 - UI talks to application services or use cases, not to data stores.
 - Repositories are abstractions. Current development may use static/mock data
-  and an explicitly scheduled dummy API. Production may use FastAPI/PostgreSQL
-  and Zoho adapters.
+  and an explicitly scheduled dummy API. Production may use server-only Zoho
+  adapters and, only if ADR 0008 approves one, a persistent store.
 - Replacing a static repository with an API repository must not require a storefront rewrite.
 - Do not bypass layers “for convenience”.
 - Do not redesign architecture without an ADR.
@@ -173,7 +173,7 @@ Rules:
 
 | Layer | May depend on | Must not depend on |
 |-------|----------------|--------------------|
-| Domain | nothing (stdlib/types only) | Next.js, FastAPI, DB, Tailwind, fetch |
+| Domain | nothing (stdlib/types only) | Next.js, DB, Tailwind, fetch, provider SDKs |
 | Application | Domain | UI, ORM, route handlers |
 | Infrastructure | Domain, Application interfaces | UI components |
 | UI / HTTP adapters | Application | SQL, ORM, other UI frameworks’ internals |
@@ -200,9 +200,8 @@ Next.js UI → Application → Repository interface → API client
 - Use Next.js App Router unless an ADR changes this.
 - Prefer Server Components for crawlable catalog/content pages.
 - Use Client Components only for interactive islands (cart controls, forms).
-- Do not fetch from any API until the current Sprint 4 task explicitly requires
-  the dummy repository/adapter. Production FastAPI and Zoho wait for their
-  scheduled sprints.
+- Do not call any external API unless the current task explicitly requires it.
+  Zoho waits for its scheduled sprint and verified access (ADR 0009).
 - Keep page files thin: compose domain/application modules; do not embed catalog rules in `page.tsx`.
 - Semantic HTML is required.
 - Storefront UI is mobile-first (Mobile → Tablet → Desktop). See Section 14.
@@ -303,24 +302,32 @@ Details: `docs/requirements/MOBILE_REQUIREMENTS.md`.
 
 ---
 
-## 15. Production Backend Rules (Sprint 6+)
+## 15. Server-side Rules (Next.js, Sprint 6+)
 
-- Backend lives in `backend/`.
-- Planned shape is a **modular monolith** (ADR 0003), not microservices.
-- Do **not** implement FastAPI or PostgreSQL during dummy API tasks.
-- FastAPI handles HTTP only: validation, authn/authz hooks, status codes.
-- Business rules belong in application/domain modules, not in route functions.
-- Use a documented error model and API versioning strategy (details TBD until Sprint 5).
-- Do not let FastAPI routers import SQL/ORM models directly if a repository layer exists.
+- There is **no separate backend service** (ADR 0006, superseding ADR 0003).
+  Server-side code lives in `frontend/`; `backend/` holds a placeholder README
+  only.
+- Route Handlers and pages handle HTTP/composition only: validation, status
+  codes, future auth hooks. Business rules belong in application/domain
+  modules.
+- Modules that read secrets or call external services import `server-only`.
+  Secrets never use the `NEXT_PUBLIC_` prefix. Client Components never import
+  `config/`, `infrastructure/`, or provider code.
+- Errors use the S4 provider-independent error envelope
+  (`STOREFRONT_CONTRACTS.md`). No URL version prefix unless an external
+  consumer is approved (ADR 0006).
+- No page render or public Route Handler may call a provider per request;
+  provider access follows ADR 0009.
 
 ---
 
-## 16. PostgreSQL Rules (Sprint 6+)
+## 16. Persistence Rules
 
-- PostgreSQL is the planned production-backend system of record unless a later
-  ADR changes it.
-- Schema changes go through migrations (tool TBD in Sprint 5).
-- Do not access the database from Next.js in Phase 2; go through the API.
+- No persistent store is selected (ADR 0008). Do not add a database, ORM,
+  migration tool, or KV store without an accepted ADR 0008 amendment.
+- If a store is approved: access it only from server-only infrastructure behind
+  a repository; schema changes go through migrations; browser code never
+  accesses it.
 - Do not invent schema for undecided business fields; mark them TBD.
 
 ---
@@ -331,7 +338,7 @@ Details: `docs/requirements/MOBILE_REQUIREMENTS.md`.
 - Documentation-only tasks do not require runtime tests; they require a file/consistency review.
 - Prefer tests at application and domain boundaries over UI snapshot noise.
 - Phase 1: unit tests for domain/application and repository mocks; add component tests when UI exists.
-- Phase 2: API tests and repository tests against a documented strategy (tooling TBD in Sprint 5).
+- Phase 2: Vitest unit tests, Route Handler tests, `npm run test:http`, contract conformance tests, and server-only isolation tests; provider adapters use fakes or redacted recordings, never real provider calls in automated tests.
 - Do not merge a task that fails its stated acceptance tests.
 
 ---
@@ -390,9 +397,8 @@ Examples:
 ## 21. Dependency Rules
 
 - Do not add a dependency unless the current task requires it.
-- Prefer the existing stack: Next.js, React, TypeScript, Tailwind; Python,
-  FastAPI, PostgreSQL for the planned production backend. Dummy API runtime is
-  selected only by its scheduled implementation task; S4-T03 contracts remain
+- Prefer the existing stack: Next.js, React, TypeScript, Tailwind, Vitest. No
+  separate backend runtime (ADR 0006). S4-T03 contracts remain
   transport-neutral.
 - New libraries need a short justification in the task notes or an ADR if they affect architecture.
 - Do not install packages during documentation-only tasks.
@@ -463,7 +469,7 @@ After a task is completed:
 | Phase | Allowed | Not allowed |
 |-------|---------|-------------|
 | Storefront + dummy API (S1–S5) | Next.js storefront, static/mock repositories, explicitly scheduled dummy API | Production DB/backend, Zoho, admin implementation, payments |
-| Production + integration (S6–S8) | FastAPI/PostgreSQL as approved, Zoho adapter, explicitly scheduled operations | Payment/email/shipping providers unless explicitly approved |
+| Production + integration (S6–S8) | Next.js server-side foundations, server-only Zoho adapter after verified access, persistence only per ADR 0008, explicitly scheduled operations | Separate backend services; payment/email/shipping providers unless explicitly approved |
 | Phase 3 | Payment, email, messaging, shipping | Production cutover |
 | Phase 4 | Segmentation, campaigns, analytics | Unrelated storefront rewrites |
 | Phase 5 | Production readiness and deployment | New major product features |

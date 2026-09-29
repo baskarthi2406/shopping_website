@@ -1,127 +1,90 @@
-# Backend Architecture
+# Server-side Architecture (Next.js)
 
-Production backend. **Not started.** Scheduled for Sprint 6. Sprint 4 dummy API
-work must not be mistaken for this production backend.
-
----
-
-## Stack (decided)
-
-| Item | Choice |
-|------|--------|
-| Language | Python |
-| HTTP | FastAPI |
-| Database | PostgreSQL |
-| Shape | **Modular monolith** (ADR 0003) |
-
-ORM and migrations: **TBD** in Sprint 6. S4-T03 defined transport-neutral
-storefront domain and response contracts. S4-T04 selected Next.js route
-handlers for the development dummy API only. Production versioning, endpoint
-paths, and transport status-code mapping remain future decisions.
-
-ADR 0005 requires raw dummy and Zoho DTOs to remain behind infrastructure
-mappers.
+**Status:** Revised in S6-T02. ADR 0006 supersedes the earlier FastAPI +
+PostgreSQL plan (ADR 0003). There is **no separate backend service**. This file
+keeps its historical name so existing links still resolve.
 
 ---
 
-## Modular monolith (not microservices)
+## Decisions
 
-One FastAPI process. One PostgreSQL database. Multiple **modules** with clear domain boundaries:
-
-```
-backend/
-  app/
-    api/                      # HTTP only: /api/v1/...
-      catalog/
-      inventory/
-      ordering/
-      identity/
-    modules/
-      catalog/
-        domain/
-        application/
-        infrastructure/       # SQL repositories
-      inventory/
-      ordering/
-      identity/
-      audit/
-    shared/                   # config, errors, auth dependencies
-```
-
-Modules may call each other only through **application** APIs, not by importing another module’s SQL models.
-
-This allows a later split into services **without** designing microservices now.
+| Item | Choice | Source |
+|------|--------|--------|
+| Application | One Next.js application in `frontend/` owns UI and server-side functionality | ADR 0006 (Accepted) |
+| Server mechanisms | Server Components, server-only modules, Route Handlers; Server Functions only for approved mutations | ADR 0006 |
+| Runtime | Default Node.js runtime; Edge needs a new decision | ADR 0006 |
+| Catalog contract | `STOREFRONT_CONTRACTS.md` (S4) | ADR 0005 |
+| Persistence | None in Sprint 6; any store needs evidence (PostgreSQL not selected) | ADR 0008 (Proposed) |
+| Field ownership and provenance | Per-field owners open; four provenance states proposed | ADR 0007 (Proposed) |
+| Provider (Zoho) access | Server-only, budgeted, cached, bounded retries | ADR 0009 (Proposed) |
+| Hosting, runtime model, CI | **TBD** | Sprint 11 / open decisions |
 
 ---
 
 ## Request flow
 
+```text
+Browser
+  → Next.js page (Server Component)         Route Handler (app/api/…)
+      → application use case                    → application use case
+        → repository port                         → repository port
+          → implementation chosen in config/        → backing implementation
+             (today: HTTP repository → in-process dummy dispatch
+              → dummy Route Handlers → static repositories)
+             (future: provider-backed implementation reading a cache or
+              snapshot; never a per-request provider call)
 ```
-FastAPI router (validate, status codes, auth dependency)
-  → Application use case
-    → Domain
-    → Repository interface
-      → PostgreSQL implementation
-```
 
-Routers do not contain business rules and do not import ORM models.
+- Route Handlers and pages are thin: validation, status codes, composition.
+- Business rules stay in `domain/` and `application/`.
+- Provider DTOs stay in `infrastructure/` behind mappers (ADR 0005).
+- Browser code never receives credentials and never calls provider endpoints.
 
 ---
 
-## PostgreSQL boundary
+## Server-only boundary
 
-- System of record for catalog, UOM, inventory, carts, orders, customers, users, audit (as those sprints land)
-- Schema via migrations (tool TBD in Sprint 6 planning)
-- **Only** backend infrastructure talks to Postgres
-- Next.js never uses a DB driver
-- Undecided columns stay TBD — do not invent catalog fields
-
----
-
-## API boundary
-
-The Mini Mystiq-owned API contract was defined before implementation in S4-T03.
-Version/prefix are TBD; `/api/v1/` is only a prior proposal.
-
-The implemented dummy endpoints are `GET /api/categories`, paginated
-`GET /api/products`, and `GET /api/products/{slug}` in Next.js. They do not
-imply that the production FastAPI URL prefix or deployment topology is fixed.
-
-Frontend `Http*Repository` implementations consume this API from the storefront.
-Pages/components do not consume transport DTOs directly.
-
-CORS, rate limits, auth: TBD Sprint 6/8.
-
-## Dummy and Zoho adapters
-
-- S4-T04–S4-T06: dummy catalog APIs implementing the stable S4-T03 contract.
-- S7: Zoho POS transport DTOs, mappings, and repository adapters.
-- Dummy payloads may resemble verified Zoho responses inside infrastructure,
-  but Zoho field names/nullability/identifiers do not become UI contracts.
-- No real Zoho calls in CI.
+- Modules that read secrets or call external services start with
+  `import "server-only"`. Next.js 16.3 resolves this import natively; Vitest
+  resolution is decided in the implementing task (no dependency is added
+  during planning).
+- Secret environment variables never use `NEXT_PUBLIC_`. The only public
+  variable today is `NEXT_PUBLIC_SITE_URL` (not a secret).
+- `"use client"` modules must not import `config/`, `infrastructure/`, or
+  provider code. They receive precomputed view models (as the S5-T04 variant
+  selector does).
 
 ---
 
-## Admin
+## Current state (verified in S6-T02)
 
-- Same application/domain modules as the public API where practical
-- Admin UI host and schedule TBD
-- Desktop-priority, responsive, `noindex`, auth + RBAC (Sprint 8)
-- Planned modules: `docs/requirements/ADMIN_REQUIREMENTS.md`
+- Dummy API: `GET /api/categories`, `GET /api/products`,
+  `GET /api/products/{slug}` as Route Handlers over static repositories.
+- The storefront uses an in-process dispatch (`config/catalog-api-dispatch.ts`);
+  it makes no network calls.
+- No secrets, provider code, database, or persistent writes exist.
+- The API client has no timeout/retry policy (TD-008); acceptable while
+  dispatch is in-process.
 
 ---
 
 ## Testing
 
-- Use-case tests with fake repositories
-- API tests for routes and error shape
-- Repository tests against a documented DB strategy (Sprint 5)
+- Domain and application: Vitest unit tests with fakes.
+- Route Handlers: handler tests plus `npm run test:http` against
+  `next start` (manual; TD-006).
+- Provider adapters (Sprint 7): mapper and contract tests with fakes or
+  redacted recordings; never real provider calls in automated tests.
+- Secret isolation: import-boundary tests and a build-output check (planned in
+  Sprint 6).
 
 ---
 
 ## Security
 
-- Secrets in env, never Git
-- Authn/authz at the API edge
-- Audit log for admin mutations (Sprint 8)
-- No password/PII in logs
+- Secrets only in host environment variables; never in Git.
+- Validate all external input at Route Handler boundaries and all provider
+  responses in adapters.
+- No personal data in logs. Customer data handling is TBD (Sprint 8).
+- Auth, admin, and RBAC are future Next.js work requiring their own ADRs
+  (Sprint 8).

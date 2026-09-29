@@ -1,6 +1,7 @@
 # Target Architecture
 
-**Status:** Accepted for S1-T01; revised through S4-T03 and ADR 0005.
+**Status:** Accepted for S1-T01; revised through S4-T03, ADR 0005, and
+ADR 0006 (Next.js-only, S6-T02).
 Significant changes require an ADR.
 
 **Product:** Mini Mystiq — Baby Clothes & Toys  
@@ -16,7 +17,8 @@ Significant changes require an ADR.
 - SOLID, testable domain and application layers
 - Static repositories replaced by dummy/API/Zoho-backed repositories **without
   a storefront rewrite**
-- Backend: **modular monolith** (ADR 0003) — not microservices
+- One **Next.js application** owns UI and server-side functionality
+  (ADR 0006); no separate backend service
 - Vendor isolation: Zoho DTOs stay behind repository adapters (ADR 0005)
 - Approved assets only (`docs/project/DESIGN_ASSETS.md`); logo `mini-mystiq-logo.png`
 
@@ -30,32 +32,32 @@ Current                         Planned
 Next.js UI                      Next.js UI (same)
   → Application services         → Application services (same)
     → Repository interface         → Repository interface (same)
-      → Static repository            → Dummy API repository (Sprint 4)
-                                       → Production backend (Sprint 6)
-                                       → Zoho adapter (Sprint 7)
+      → Static repository            → Dummy API repository (Sprint 4, current)
+                                       → Server-side foundation (Sprint 6)
+                                       → Zoho adapter, server-only (Sprint 7)
 ```
 
-One Git repository (`shopping/`). `frontend/` contains the storefront and the
-S4-T04 read-only dummy category route. `backend/` contains documentation only;
-production implementation is scheduled for Sprint 6.
+One Git repository (`shopping/`). `frontend/` contains the storefront, the
+read-only dummy catalog Route Handlers, and all future server-side code.
+`backend/` is a retired documentation placeholder (ADR 0006).
 
 ---
 
 ## 3. Layers and dependency direction
 
 ```
-Interface (Next.js pages / FastAPI routers)
+Interface (Next.js pages / Route Handlers)
         ↓
 Application (use cases, repository interfaces)
         ↓
 Domain (entities, value objects, rules)
         ↑
-Infrastructure (static data, HTTP client, PostgreSQL)
+Infrastructure (static data, API client, future server-only provider adapters)
 ```
 
 | Layer | May depend on | Must not depend on |
 |-------|----------------|--------------------|
-| Domain | Nothing (language types only) | Next.js, React, Tailwind, FastAPI, SQL, fetch |
+| Domain | Nothing (language types only) | Next.js, React, Tailwind, SQL, fetch, provider SDKs |
 | Application | Domain | UI, ORM, route files |
 | Infrastructure | Domain + application interfaces | UI components |
 | Interface | Application | SQL, fixture JSON, other apps’ internals |
@@ -71,8 +73,8 @@ Logical domains (modules). Not services.
 | Domain | Current/planned storefront | Future production/integration |
 |--------|--------------------|-----------------|
 | Catalog (Product, Category, UOM) | Yes (static) | Yes |
-| Cart | Commerce UI planned Sprint 5 | Persistence/workflow TBD Sprint 6/8 |
-| Inventory | Provider-independent snapshot contract (S4-T03) | Production/Zoho integration S6–S7 |
+| Cart | Track B deferred (Sprint 5) | Persistence/workflow TBD (Sprint 8; ADR 0008) |
+| Inventory | Provider-independent snapshot contract (S4-T03) | Zoho integration Sprint 7 |
 | Ordering | No implementation | Sprint 8 |
 | Identity / Customer | Navigation expectation only | Sprint 8 scope TBD |
 | Admin / Audit | No implementation | Production/operations scope TBD |
@@ -94,8 +96,8 @@ CartRepository   (future; exact persistence contract TBD)
 |-------|-------------------------|
 | Current | `StaticProductRepository` / `StaticCategoryRepository` / `StaticUomRepository`; bound in `frontend/config/catalog.ts` |
 | Sprint 4 | Dummy API repositories implementing stable Mini Mystiq contracts |
-| Sprint 6 | Production API/backend repositories |
-| Sprint 7 | Zoho-backed adapters behind the same application semantics |
+| Sprint 6 | Server-only boundary, contract tests, provenance rules, outbound request policy (no provider) |
+| Sprint 7 | Zoho-backed server-only adapters behind the same application semantics |
 
 Composition selects the implementation. **Do not** branch inside page files.
 Raw dummy or Zoho DTOs do not cross infrastructure mappers (ADR 0005).
@@ -114,7 +116,7 @@ Next.js (Server Components for catalog)
         → Static product/category data + SEO image paths from DESIGN_ASSETS.md
 ```
 
-No production API, FastAPI, PostgreSQL, Zoho, auth, or admin implementation
+No provider integration, database, Zoho, auth, or admin implementation
 exists.
 
 S4-T04/S4-T05/S4-T06 additionally expose separate development paths without changing
@@ -145,17 +147,18 @@ GET /api/products/{slug}
 ## 7. Planned API and integration flow
 
 ```
-Next.js
+Next.js (single application, ADR 0006)
   → same application services
     → same repository interfaces
-      → HTTP repository
+      → implementation selected in config/
         → Mini Mystiq API contract
-          → dummy implementation (Sprint 4)
-          → production backend (Sprint 6)
-              → Zoho anti-corruption adapter (Sprint 7)
+          → dummy implementation (Sprint 4, default)
+          → server-only Zoho anti-corruption adapter (Sprint 7), reading a
+            cache/snapshot refreshed under a request budget (ADR 0009)
 ```
 
-Next.js **never** opens a DB connection.
+No database is selected (ADR 0008). If one is approved later, only server-only
+infrastructure may access it; browser code never does.
 
 S4-T03 defines recursive category, product summary/detail, generic variant,
 nullable pricing/inventory/SKU/UOM, minimal product pagination, and
@@ -182,10 +185,11 @@ collection states. See `STOREFRONT_CONTRACTS.md`.
   transport-neutral. S4-T04 selected existing Next.js route handlers for the
   development API and implemented `GET /api/categories`; production remains
   independent.
-- Sprint 6 implements the production backend. Python + FastAPI + PostgreSQL and
-  modular-monolith shape remain accepted (ADR 0003) unless superseded.
-- Sprint 7 implements Zoho adapters. Vendor DTOs are infrastructure-only
-  (ADR 0005).
+- ADR 0006 (S6-T02) supersedes ADR 0003: no FastAPI service; server-side
+  functionality stays in Next.js. Sprint 6 builds provider-independent server
+  foundations; persistence is undecided (ADR 0008).
+- Sprint 7 implements Zoho adapters as server-only Next.js modules. Vendor DTOs
+  are infrastructure-only (ADR 0005); access policy in ADR 0009.
 - Audit evidence: `BACKEND_API_AUDIT.md`.
 
 ---
@@ -239,7 +243,8 @@ Breakpoints / nav pattern / CWV numbers: **TBD** (Tailwind defaults when UI star
 | Static repositories | List/get/slug | Vitest (S1-T06) |
 | UI | Optional component tests | Later; not configured |
 | Dummy API | Contract/API tests with fakes | Sprint 4+ |
-| Production backend | API + repository tests | Sprint 6+ |
+| Server-only boundary | Import-boundary tests; build-output secret check | Sprint 6+ |
+| Catalog contract | Conformance tests reusable by any implementation | Sprint 6+ |
 | Zoho adapter | Mapper/contract tests; no real provider in CI | Sprint 7+ |
 
 Documentation-only tasks: review, no runtime tests. Frontend unit runner is Vitest.
@@ -250,9 +255,12 @@ Documentation-only tasks: review, no runtime tests. Frontend unit runner is Vite
 
 - No secrets in Git
 - Current: no customer auth; Account remains a navigation expectation only
-- Future: auth at API; RBAC on admin; frontend does not talk to persistence
+- Future: auth and RBAC in Next.js server code (Sprint 8 ADR); browser code
+  never talks to persistence or providers
+- Provider credentials only in server-only modules via non-`NEXT_PUBLIC_`
+  environment variables (ADR 0009)
 - Do not index cart, checkout, or admin
-- Validate input at FastAPI boundaries
+- Validate input at Route Handler boundaries and provider responses in adapters
 - PII rules TBD Sprint 8
 
 ---
@@ -261,7 +269,8 @@ Documentation-only tasks: review, no runtime tests. Frontend unit runner is Vite
 
 Frontend layer folders were created in **S1-T04**. Static catalog **S1-T05**,
 Vitest **S1-T06**, tokens/shell **S1-T07**. Dummy API work starts only when its
-Sprint 4 task is explicitly requested; production backend remains Sprint 6.
+Sprint 4 task is explicitly requested. Server-side code stays in `frontend/`
+(ADR 0006).
 
 As implemented, Next.js routes are `frontend/app/` (no `src/`). Domain, application, infrastructure, components, config, and lib sit beside `app/`. Details: `FRONTEND_ARCHITECTURE.md` §17.
 
@@ -277,20 +286,13 @@ shopping/
       cart/
       seo/
     infrastructure/
-      catalog/              # static now; dummy/http adapters later
+      catalog/              # static repos, API client, HTTP repositories
       cart/
+                            # future: zoho/ (server-only adapter, Sprint 7)
     components/             # presentational, mobile-first
-    config/
+    config/                 # composition root (server-only)
     lib/
-  backend/                  # docs only now; production backend Sprint 6
-    app/
-      api/                  # routers by module
-      modules/
-        catalog/
-        inventory/
-        ordering/
-        identity/
-      shared/
+  backend/                  # retired placeholder README only (ADR 0006)
   public/                   # current approved assets (SEO names)
   docs/
 ```
@@ -303,9 +305,13 @@ shopping/
 |----|----------|
 | 0001 | Design Option 1 homepage |
 | 0002 | App Router + Server Components for catalog |
-| 0003 | Modular monolith backend (not microservices) |
+| 0003 | Modular monolith backend — **superseded by 0006** |
 | 0004 | Repository interfaces; static → HTTP without UI rewrite |
 | 0005 | Stable storefront contracts; dummy/Zoho adapters isolated |
+| 0006 | Next.js-only application; no separate backend |
+| 0007 | Field ownership and provenance (Proposed) |
+| 0008 | Persistent storage — none in Sprint 6 (Proposed) |
+| 0009 | Server-side provider access policy (Proposed) |
 
 ---
 
@@ -314,7 +320,8 @@ shopping/
 - Domain, trailing slash, locales
 - Exact Tailwind breakpoint px and CWV budgets
 - Remaining product endpoint/query mapping and default product page size
-- ORM and migration tool (Sprint 6)
+- Whether any persistent store is needed, and which (ADR 0008)
+- Hosting provider and runtime model; whether `/api/*` stays public in production
 - Admin UI host and schedule
 - Auth provider and scope (Sprint 8)
 - Verified Zoho API shape/auth/rate limits/sync behavior (Sprint 7)

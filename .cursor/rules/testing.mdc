@@ -10,7 +10,7 @@ Every behavior-changing task must include the tests named in its sprint spec. Do
 Prefer tests at domain and application boundaries over brittle UI snapshots.
 
 - Phase 1: unit-test domain, use cases, and mock/static repositories. UI may depend on use cases, not JSON fixtures.
-- Phase 2: API tests and repository tests per Sprint 5 tooling.
+- Phase 2: Vitest unit and Route Handler tests, `test:http`, contract conformance, and server-only isolation tests. Provider adapters use fakes or redacted recordings; never call Zoho in automated tests.
 - Do not hit real payment/email providers in CI; use fakes.
 - Do not merge a task whose stated tests fail.
 - Do not skip tests to bypass architecture (e.g. testing a page that reads fixtures directly).

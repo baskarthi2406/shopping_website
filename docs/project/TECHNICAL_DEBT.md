@@ -95,7 +95,8 @@ add a location model before verified Zoho data exists.
 
 Public routes use Mini Mystiq slugs separate from provider IDs. A provider item
 list is not known to supply stable SEO slugs; slug generation, collision
-handling, and persistence need a production-backend (Sprint 6) decision.
+handling, and storage need a decision (ADR 0007 ownership, ADR 0008 P1). There
+is no separate backend (ADR 0006).
 
 ---
 
@@ -138,8 +139,9 @@ After a route file moves, `next build` type-checks generated
 
 The client has no timeout, retry, or HTTP caching/revalidation policy. That is
 safe today because the dummy API is dispatched in-process. Before any real
-network transport (production backend or Zoho-backed API), define timeouts,
-retry rules, and caching; failures must keep the existing sanitized error UI.
+network transport (Zoho-backed adapter), define timeouts, retry rules, and
+caching; failures must keep the existing sanitized error UI. Planned: S6-T14
+outbound request policy (ADR 0009).
 
 ---
 
