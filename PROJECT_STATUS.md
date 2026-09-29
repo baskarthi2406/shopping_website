@@ -47,9 +47,10 @@ local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
 approval (`docs/sprints/SPRINT-05.md` → S5-T08).
 
 **Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
-planning, the S6-T02 Next.js-only revision, and S6-T11 Server-only Boundary
-are completed; S6-T03–S6-T10 (FastAPI/PostgreSQL) are withdrawn; S6-T12–S6-T16
-are proposed with gates G1, G2, GZ (`docs/sprints/SPRINT-06.md`).
+planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
+S6-T12 Catalog Contract Conformance Suite are completed; S6-T03–S6-T10
+(FastAPI/PostgreSQL) are withdrawn; S6-T13–S6-T16 are proposed with gates G1,
+G2, GZ (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -58,9 +59,9 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S6-T11 (Server-only Boundary and Secret Isolation) is **COMPLETED**.
-No further task is approved; do not start S6-T12, package installs,
-persistence, Zoho integration, or any other task automatically.
+None. S6-T12 (Catalog Contract Conformance Suite) is **COMPLETED**. No
+further task is approved; do not start S6-T13, package installs, persistence,
+Zoho integration, or any other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-06.md`.
 
@@ -73,7 +74,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_6_IN_PROGRESS** (Sprint 5 completed for Track A; S6-T01, S6-T02, S6-T11 completed; next task S6-T12 awaits approval)
+**SPRINT_6_IN_PROGRESS** (Sprint 5 completed for Track A; S6-T01, S6-T02, S6-T11, S6-T12 completed; next task S6-T13 awaits gate G1 and approval)
 
 ---
 
@@ -207,6 +208,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S6-T01 — Sprint 6 Planning (task sequence later withdrawn)
 - S6-T02 — Revise Sprint 6 for a Next.js-only Architecture
 - S6-T11 — Server-only Boundary and Secret Isolation
+- S6-T12 — Catalog Contract Conformance Suite
 
 ## In progress
 
@@ -215,7 +217,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 ## Pending
 - Sprint 5 Track B — S5-T05–S5-T07 (local cart) **DEFERRED**, pending renewed
   Q1/Q2 approval; open business questions in `docs/sprints/SPRINT-05.md`
-- Sprint 6 — Next.js Server-side Foundation: proposed S6-T12–S6-T16, each
+- Sprint 6 — Next.js Server-side Foundation: proposed S6-T13–S6-T16, each
   requiring explicit approval (gates in `docs/sprints/SPRINT-06.md` §6)
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
@@ -253,6 +255,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S6-T12 — Catalog Contract Conformance Suite**. The decision on merging
-Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains deferred
-pending Q1/Q2. Requires explicit human approval.
+**S6-T13 — Field Provenance Rules**, after gate G1 (ADR 0007 provenance
+section accepted). S6-T14 needs gate G2; S6-T15 needs gate GZ. The decision on
+merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains
+deferred pending Q1/Q2. Requires explicit human approval.

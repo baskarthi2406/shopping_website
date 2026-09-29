@@ -5,9 +5,9 @@
 | Sprint ID | S6 |
 | Phase | Phase 2 — Server-side foundation (single Next.js application) |
 | Objective | Prepare provider-independent server-side foundations in the existing Next.js application (server-only isolation, catalog contract conformance, provenance rules, outbound request policy) without changing storefront behavior, SEO, or the dummy catalog API, and gate Zoho work on verified access |
-| Status | **IN PROGRESS** (S6-T01, S6-T02, S6-T11 completed; no further task is approved) |
+| Status | **IN PROGRESS** (S6-T01, S6-T02, S6-T11, S6-T12 completed; no further task is approved) |
 | Dependencies | Sprint 5 completed (Track A; S5-T08, commit `5525b68`) |
-| Task IDs | S6-T01, S6-T02, S6-T11 (completed) · S6-T03–S6-T10 **WITHDRAWN** · proposed S6-T12 … S6-T16 |
+| Task IDs | S6-T01, S6-T02, S6-T11, S6-T12 (completed) · S6-T03–S6-T10 **WITHDRAWN** · proposed S6-T13 … S6-T16 |
 
 **Only explicitly requested tasks are authorized.** Proposed tasks stay
 `PROPOSED` until a human approves them; approval is recorded here, in
@@ -274,7 +274,7 @@ the guard).
 
 ### S6-T12 — Catalog Contract Conformance Suite
 
-**Status:** PROPOSED — requires S6-T11
+**Status:** COMPLETED — approved explicitly by the user (S6-T12 only)
 
 **Objective:** One reusable test suite that defines “compatible with the S4
 catalog contract” for any `CatalogApiDispatch` implementation.
@@ -303,6 +303,49 @@ non-conforming fake dispatch.
 
 **Git/stop:** branch `s6-t12-catalog-contract-suite`; commit
 `test(s6): add catalog contract conformance suite`; STOP.
+
+**Result:**
+
+- `infrastructure/catalog/catalog-api-contract.ts`: 12 named checks and
+  `describeCatalogApiContract(label, getDispatch)` over the existing
+  `CatalogApiDispatch` seam (no catalog refactor). Checks cover category tree
+  shape and determinism, product defaults, pagination consistency across page
+  sizes, beyond-end, 13 invalid query forms, determinism, detail for every
+  listed slug matching its summary, 404 unknown slug, 7 invalid slug forms,
+  detail query rejection, and a non-empty precondition. Shapes are closed;
+  entities must pass `validateProduct`.
+- `config/catalog-api-dispatch.contract.test.ts`: runs the suite on the dummy
+  dispatch, plus dummy-specific tests: golden identity/order, all commerce
+  fields `null` with `variants: []`, `categoryIds` referential integrity,
+  sitemap ↔ API path equality, and the dispatch's JSON 404 for unknown paths.
+- `config/catalog-api-dispatch.golden.json`: normalized golden (category slug
+  paths, hidden/unlisted slugs, product id/slug/categoryIds); no names, copy,
+  prices, or stock. Regeneration: `UPDATE_CATALOG_GOLDEN=1`; verified that a
+  reordered category fails with a readable diff.
+- `infrastructure/catalog/catalog-api-contract.test.ts`: the suite passes on
+  an independent synthetic fake (synthetic price in `XTS`, the ISO test
+  currency, and arbitrary inventory, clearly not business data), and 19
+  broken variants (at least one per check) are each reported with the
+  expected message.
+- Verified contract and ambiguities documented in
+  `docs/architecture/STOREFRONT_CONTRACTS.md` → “Catalog API conformance
+  suite (S6-T12)”.
+- Checks: `npm test` 63 files / 392 tests; typecheck; lint; `npm run build`;
+  `npm run test:http` 18/18. No runtime, UI, route, SEO, contract, data, or
+  dependency change.
+
+**Deviations and limitations:**
+
+- Stayed on `s5-t01-sprint-5-planning` (branch switching prohibited).
+- Golden envelopes are normalized rather than full responses, to avoid
+  brittle copies of fixture content; full envelopes stay pinned by existing
+  handler tests.
+- Suite runs in-process through the dispatch seam, not over HTTP; `500`
+  mapping is left to handler tests.
+- Ambiguities (category query parameters ignored, no max `pageSize`,
+  leading zeros, detail error precedence, undefined list sort key,
+  referential integrity, hidden categories in sitemap, dispatch-only 404,
+  closed shapes) are recorded, not resolved.
 
 ---
 
@@ -432,7 +475,7 @@ the debt register (TD-008, TD-010).
 | GP | Any persistence task (none proposed) | ADR 0008 amended with evidence and accepted |
 
 ```text
-S6-T01 (done) → S6-T02 (done) → G0 → S6-T11 (done) → S6-T12 → G1 → S6-T13
+S6-T01 (done) → S6-T02 (done) → G0 → S6-T11 (done) → S6-T12 (done) → G1 → S6-T13
                                         └──────→ G2 → S6-T14
 GZ → S6-T15 (independent; may be deferred)
 all approved tasks → S6-T16

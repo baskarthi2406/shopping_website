@@ -219,6 +219,15 @@ npm run build
 npm run test:http
 ```
 
+**Catalog API contract suite (S6-T12):** `describeCatalogApiContract` in
+`infrastructure/catalog/catalog-api-contract.ts` checks any
+`CatalogApiDispatch` against the public catalog envelopes (runs in
+`npm test`). `config/catalog-api-dispatch.contract.test.ts` applies it to the
+dummy dispatch and compares `config/catalog-api-dispatch.golden.json`
+(regenerate only after an approved content change:
+`UPDATE_CATALOG_GOLDEN=1 npx vitest run config/catalog-api-dispatch.contract.test.ts`).
+Details and open ambiguities: `docs/architecture/STOREFRONT_CONTRACTS.md`.
+
 **Server-only boundary (S6-T11):**
 
 - `config/server-only-boundary.test.ts` (in `npm test`) walks the source import

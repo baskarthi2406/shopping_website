@@ -1,0 +1,135 @@
+{
+  "categoryTree": [
+    "baby-essentials",
+    "baby-essentials/baby-essentials-feeding",
+    "baby-essentials/baby-essentials-shampoo",
+    "baby-essentials/baby-essentials-soap",
+    "baby-essentials/baby-essentials-body-lotion",
+    "baby-essentials/baby-essentials-body-wash",
+    "baby-essentials/baby-essentials-cleansers",
+    "baby-essentials/baby-essentials-wet-wipes",
+    "baby-essentials/baby-essentials-mattress",
+    "baby-essentials/baby-essentials-baby-booties",
+    "baby-essentials/baby-essentials-grooming",
+    "baby-essentials/baby-essentials-bottles-zippers",
+    "baby-essentials/baby-essentials-bed-protector-mat",
+    "infants",
+    "infants/infants-baby-girl",
+    "infants/infants-baby-girl/infants-baby-girl-frock",
+    "infants/infants-baby-girl/infants-baby-girl-pant-top",
+    "infants/infants-baby-girl/infants-baby-girl-co-ord-set",
+    "infants/infants-baby-girl/infants-baby-girl-t-shirts",
+    "infants/infants-baby-girl/infants-baby-girl-skirt-top",
+    "infants/infants-baby-girl/infants-baby-girl-party-wear",
+    "infants/infants-baby-girl/infants-baby-girl-jeans",
+    "infants/infants-baby-girl/infants-baby-girl-inner-wear",
+    "infants/infants-baby-girl/infants-baby-girl-ethnic-wear",
+    "infants/infants-baby-boy",
+    "infants/infants-baby-boy/infants-baby-boy-t-shirt",
+    "infants/infants-baby-boy/infants-baby-boy-co-ord-set",
+    "infants/infants-baby-boy/infants-baby-boy-jeans",
+    "infants/infants-baby-boy/infants-baby-boy-ethnic-wear",
+    "infants/infants-baby-boy/infants-baby-boy-shirts",
+    "infants/infants-baby-boy/infants-baby-boy-pants",
+    "infants/infants-baby-boy/infants-baby-boy-trousers",
+    "infants/infants-baby-boy/infants-baby-boy-inner-wear",
+    "kids",
+    "teens",
+    "women",
+    "women/women-feeding",
+    "women/women-nighties",
+    "women/women-kurtis",
+    "women/women-co-ord-set",
+    "women/women-churidhar",
+    "women/women-tops",
+    "women/women-short-tops",
+    "women/women-sarees",
+    "women/women-inner-wears",
+    "women/women-in-skirt",
+    "women/women-blouse-materials",
+    "women/women-churidhar-materials",
+    "women/women-leggings",
+    "women/women-straight-cut-pants",
+    "kids-wear",
+    "boys-wear",
+    "girls-wear",
+    "boutique"
+  ],
+  "categoriesHiddenOrNotInMenu": [],
+  "products": [
+    {
+      "id": "navy-star-tan-bow-dress",
+      "slug": "navy-star-tan-bow-dress",
+      "categoryIds": []
+    },
+    {
+      "id": "olive-green-patterned-dress",
+      "slug": "olive-green-patterned-dress",
+      "categoryIds": []
+    },
+    {
+      "id": "beige-motif-pleated-dress",
+      "slug": "beige-motif-pleated-dress",
+      "categoryIds": []
+    },
+    {
+      "id": "pink-white-pleated-baby-dress",
+      "slug": "pink-white-pleated-baby-dress",
+      "categoryIds": [
+        "baby-essentials"
+      ]
+    },
+    {
+      "id": "sage-striped-baby-top-and-shorts",
+      "slug": "sage-striped-baby-top-and-shorts",
+      "categoryIds": [
+        "baby-essentials"
+      ]
+    },
+    {
+      "id": "cream-grey-rose-tiered-baby-dress",
+      "slug": "cream-grey-rose-tiered-baby-dress",
+      "categoryIds": [
+        "baby-essentials"
+      ]
+    },
+    {
+      "id": "grey-pinafore-baby-set",
+      "slug": "grey-pinafore-baby-set",
+      "categoryIds": [
+        "baby-essentials"
+      ]
+    },
+    {
+      "id": "dusty-blue-floral-dress",
+      "slug": "dusty-blue-floral-dress",
+      "categoryIds": []
+    },
+    {
+      "id": "cream-tiered-shirt-dress",
+      "slug": "cream-tiered-shirt-dress",
+      "categoryIds": []
+    },
+    {
+      "id": "kids-striped-shirts-burgundy-and-sage",
+      "slug": "kids-striped-shirts-burgundy-and-sage",
+      "categoryIds": [
+        "kids"
+      ]
+    },
+    {
+      "id": "kids-button-down-shirts-rose-and-burgundy",
+      "slug": "kids-button-down-shirts-rose-and-burgundy",
+      "categoryIds": [
+        "kids"
+      ]
+    },
+    {
+      "id": "kids-linen-shirts-brown-and-sage",
+      "slug": "kids-linen-shirts-brown-and-sage",
+      "categoryIds": [
+        "kids"
+      ]
+    }
+  ]
+}
