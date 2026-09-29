@@ -153,9 +153,9 @@ must be written and approved before Sprint 5 starts.
 |-------|--------|
 | Phase | Phase 1 — Customer Storefront |
 | Objective | Commerce-ready storefront behavior on the nullable catalog without implying orders, payment, reservation, or fulfillment |
-| Status | **IN_PROGRESS** (S5-T02–S5-T04 completed on explicit request; S5-T05+ await approval) |
+| Status | **COMPLETED (Track A)** — closed by S5-T08; Track B (S5-T05–S5-T07) DEFERRED, not implemented |
 | Dependencies | Sprint 4 completed |
-| Task IDs | S5-T01 (planning) · proposed S5-T02 … S5-T08 |
+| Task IDs | S5-T01 … S5-T08 |
 
 | Task ID | Name | Status |
 |---------|------|--------|
@@ -163,16 +163,18 @@ must be written and approved before Sprint 5 starts.
 | S5-T02 | Purchasability Rules (Track A) | **COMPLETED** |
 | S5-T03 | PDP Price & Availability Panel (Track A) | **COMPLETED** |
 | S5-T04 | Variant Attribute Selector (Track A) | **COMPLETED** |
-| S5-T05 | Local Cart Model & Persistence Boundary (Track B) | **PROPOSED** (requires Q1/Q2) |
-| S5-T06 | Add-to-Cart & Quantity Control (Track B) | **PROPOSED** (requires Q1/Q3/Q5) |
-| S5-T07 | Cart Page & Checkout-Unavailable State (Track B) | **PROPOSED** (requires Q1/Q4) |
-| S5-T08 | Sprint 5 Review | **PROPOSED** |
+| S5-T05 | Local Cart Model & Persistence Boundary (Track B) | **DEFERRED** (not implemented; requires Q1/Q2) |
+| S5-T06 | Add-to-Cart & Quantity Control (Track B) | **DEFERRED** (not implemented; requires Q1/Q3/Q5) |
+| S5-T07 | Cart Page & Checkout-Unavailable State (Track B) | **DEFERRED** (not implemented; requires Q1/Q4) |
+| S5-T08 | Sprint 5 Review | **COMPLETED** |
 
-Only explicitly requested Sprint 5 tasks are authorized. Track A (S5-T02–S5-T04)
-is completed; S5-T05 onward await approval (Track B requires Q1). Q3 and Q8 are resolved and Q4 is
-partly resolved. Q9 is open, so no price renders (`config/commerce.ts`). Other
-business questions in `docs/sprints/SPRINT-05.md` remain open. Search, Account, and
-Track Your Order are deferred.
+Sprint 5 is closed for Track A (S5-T01–S5-T04, review S5-T08). Track B is
+deferred pending renewed Q1/Q2 approval; its IDs stay reserved. Q3 and Q8 are
+resolved; Q4 is partly resolved. Q9 is open, so no price renders
+(`config/commerce.ts`). Search, listing-card prices, Account, and Track Your
+Order are deferred. The review added TD-010 (unverified Zoho allowance of 7,500
+requests/month) and TD-011 (homepage service claims need business
+confirmation).
 
 ### Sprint 6 — Production Backend
 

@@ -5,13 +5,15 @@
 | Sprint ID | S5 |
 | Phase | Phase 1 — Customer Storefront |
 | Objective | Add commerce-ready storefront behavior on the existing nullable catalog without implying orders, payment, stock reservation, or fulfillment |
-| Status | **IN_PROGRESS** — S5-T02–S5-T04 completed on explicit request; S5-T05 onward still await approval |
+| Status | **COMPLETED (Track A)** — S5-T01–S5-T04 and S5-T08 review completed; Track B (S5-T05–S5-T07) DEFERRED, not implemented |
 | Dependencies | Sprint 4 completed (S4-T12, commit `c4d47f757ee98f8bb1fa4d13e1089d0b801c3653`) |
 | Task IDs | S5-T01 (planning, completed) · proposed S5-T02 … S5-T08 |
 
 **Only explicitly requested tasks are authorized.** S5-T02, S5-T03, and S5-T04
 were approved by explicit human requests on 2026-09-29 and are completed.
-Track A is complete. No other Sprint 5 task
+Track A is complete. S5-T08 (review) was approved and completed on
+2026-09-29; it closes Sprint 5 for Track A and records S5-T05–S5-T07 as
+DEFERRED. No other Sprint 5 task
 is authorized until a human approves it. Approval must be recorded in this
 file, `SPRINT_STATUS.md`, and `CURRENT_TASK.md` before any task becomes
 `IN_PROGRESS`.
@@ -484,7 +486,7 @@ purchase control exists in any state.
 
 ### S5-T05 — Local Cart Model & Persistence Boundary (Track B, requires Q1/Q2)
 
-**Status:** PROPOSED — requires business decision
+**Status:** DEFERRED — not implemented; requires renewed Q1/Q2 approval (recorded in S5-T08)
 
 **Objective:** A device-local cart behind an application port, ready to be
 replaced by a server cart later without UI rewrites.
@@ -536,7 +538,7 @@ files.
 
 ### S5-T06 — Add-to-Cart & Quantity Control (Track B, requires Q1/Q3/Q5)
 
-**Status:** PROPOSED — requires business decision
+**Status:** DEFERRED — not implemented; requires renewed Q1/Q2 approval (recorded in S5-T08)
 
 **Objective:** Let customers add a purchasable product or variant to the local
 cart with a quantity.
@@ -587,7 +589,7 @@ disabled reasons as text, ≥ tap target, no hover-only affordances.
 
 ### S5-T07 — Cart Page & Checkout-Unavailable State (Track B, requires Q1/Q4)
 
-**Status:** PROPOSED — requires business decision
+**Status:** DEFERRED — not implemented; requires renewed Q1/Q2 approval (recorded in S5-T08)
 
 **Objective:** A mobile-first cart page and a truthful “checkout not
 available” boundary.
@@ -648,7 +650,145 @@ and `npm run test:http` pass.
 
 ### S5-T08 — Sprint 5 Review
 
-**Status:** PROPOSED — awaiting approval
+**Status:** COMPLETED (approved by explicit request, 2026-09-29). The review
+record is below; the original proposed spec follows it unchanged.
+
+#### Verdict
+
+**Sprint 5 can close as COMPLETED — Track A only.** S5-T01–S5-T04 are
+complete, verified, and committed. Track B (S5-T05–S5-T07: local cart,
+add-to-cart, cart page) was **not implemented** and is **DEFERRED** pending
+renewed approval of Q1/Q2. Those tasks are not complete and their IDs stay
+reserved. No release risk was found in Sprint 5 code; open items are business
+decisions and pre-existing debt.
+
+#### Task status
+
+| Task | Status | Commit | Evidence |
+|------|--------|--------|----------|
+| S5-T01 Planning | COMPLETED | `945121a` | This file |
+| S5-T02 Purchasability rules | COMPLETED | `a165b00` | `evaluate-purchasability.ts` + tests |
+| S5-T03 PDP price & availability | COMPLETED | `f3db555` | Panel on every PDP; `test:http` panel check |
+| S5-T04 Variant selector | COMPLETED | `8e6e0e7` | Selector + resolver + static-render tests |
+| S5-T05 Local cart store | DEFERRED (not implemented) | — | Q1/Q2 not approved |
+| S5-T06 PDP add to cart | DEFERRED (not implemented) | — | Depends on S5-T05 |
+| S5-T07 Cart page | DEFERRED (not implemented) | — | Depends on S5-T05/T06; Q4 copy open |
+| S5-T08 Sprint review | COMPLETED | this commit | This section |
+
+**Commit verification:** all four commits are ancestors of `HEAD` on
+`s5-t01-sprint-5-planning`, in order. `git branch -r --contains HEAD` is empty
+(nothing pushed); `origin/main` and local `main` are still `d31f07a`. The
+working tree was clean apart from generated `.next` output. `git diff c4d47f7
+HEAD` touches no infrastructure, repository, core domain type, SEO builder,
+sitemap, or robots file.
+
+#### Validation (fresh run at `8e6e0e7`, 2026-09-29)
+
+- `npm test`: 59 files, 335 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed (routes unchanged: `/` static, `/c/[slug]` and
+  `/p/[slug]` dynamic, `/robots.txt` and `/sitemap.xml` static)
+- `npm run test:http`: 18 tests passed (browser + Googlebot statuses, 404s,
+  PDP panel)
+- Production smoke (`next start`):
+  - `/sitemap.xml` 200 with 67 URLs; `/robots.txt` 200
+  - PDP has Organization, Product, and BreadcrumbList JSON-LD, no `offers`,
+    and the canonical link
+  - PDP shows “Price not available”
+  - `/cart` returns 404 (no cart route exists)
+- Not re-run in this review: the manual responsive and accessibility-tree
+  checks. The evidence is the S5-T03 record (390 px and ≈1024 px, no
+  horizontal scroll, 44 px phone link, labelled region) and the S5-T04
+  static-render tests.
+
+#### Review findings by area
+
+- **Catalog data:** unchanged. All 12 products still have `sku`, `uom`,
+  `pricing`, and `inventory` set to `null` and `variants: []`. No fixture
+  edits.
+- **Architecture:**
+  - Rules live in the application layer (`evaluatePurchasability`, view
+    models); pages only compose.
+  - The client component (`product-purchase-options.tsx`) holds selection
+    state only and swaps precomputed server view models.
+  - Repository ports and HTTP and dummy repositories are untouched.
+- **Responsive and accessibility:**
+  - Mobile-first panel with a labelled region and a `tel:` link.
+  - Selector uses native `fieldset`/`legend` radios and polite live regions.
+  - Current PDPs render no selector because no product has variants.
+- **SEO and structured data:** unchanged. No `offers` without real prices;
+  sitemap still has 67 URLs; canonical and robots unchanged.
+- **HTTP status:** unchanged. 200 for valid routes, real 404 for unknown
+  slugs, for both user agents.
+- **Tests:** rules, view models, selector, resolver, panel, and PDP wiring
+  are covered at application boundaries. The live PDP is also checked over
+  HTTP.
+- **Documentation:**
+  - `application/catalog/README.md`, `components/storefront/README.md`, and
+    `FRONTEND_ARCHITECTURE.md` match the code.
+  - S5-T02–S5-T04 used the checked-out branch instead of the planned
+    per-task branches (switching was prohibited). The same applies to this
+    review, instead of `s5-t08-sprint-review`.
+
+#### Business constraints confirmed
+
+| Constraint | Result |
+|------------|--------|
+| No invented prices, stock, SKUs, units, or variants | Confirmed. Catalog values remain `null`/empty; `priceDisplay` is `null`, so no amount renders |
+| Unknown inventory blocks purchase | Confirmed (`inventory_unknown` reason; tests) |
+| No variant fallback to parent price or stock | Confirmed (variant values only; tests) |
+| No cart, checkout, or order creation | Confirmed. No cart code or `localStorage`; `/cart` is 404; no purchase control in any state |
+| No Zoho calls or credentials | Confirmed. The source search finds no Zoho code, keys, or calls |
+| Zoho allowance | 7,500 requests/month recorded as a **future, unverified** constraint in `SPRINT-07.md` and TD-010 |
+| No merge or push without approval | Confirmed. Nothing pushed or merged |
+
+#### Deferred items (not decided here)
+
+- Cart and device-local guest cart (S5-T05–S5-T07): deferred pending renewed
+  approval of Q1/Q2.
+- Locale and currency (Q9) unresolved: price display stays disabled
+  (`priceDisplay = null`).
+- Listing-card prices and controls (Q10): deferred.
+- Search (Q7): deferred.
+- Account and order tracking: later sprint (Sprint 8 per §6).
+- **S5-T04 deviation:** unavailable variants and non-existent combinations
+  stay selectable and explain why, instead of being disabled. This was
+  recorded in S5-T04 and is not reopened here.
+- Other open questions: Q4 (availability, checkout, and cart copy), Q5
+  (quantity limit), Q6 (“In stock” wording), and Q11 (integrating Sprint 3–5
+  branches into `main`).
+
+#### Other findings (recorded, not fixed)
+
+- **TD-011, homepage service claims:** the trust strip says “Secure Payment
+  — 100% secure checkout”, “Free Shipping — On orders above ₹999”, “Easy
+  Returns”, and “24/7 Support”; the announcement bar adds “COD Available”.
+  This copy comes from the approved `DESIGN_OPTION_1.md`, but no online
+  checkout or payment exists. It needs business confirmation.
+- **TD-010:** the Zoho request allowance is unverified.
+- **No DOM or E2E test runner:** variant click and keyboard switching is
+  verified through pure logic and static markup only. No product has variants
+  for a manual check.
+- **Branch integration:** Sprints 3–5 are stacked on unmerged, unpushed
+  branches; `main` is still `d31f07a` (Q11, release risk carried from S4-T12).
+- **Existing TD items stay open:** TD-002, TD-003, TD-005, TD-006, and
+  TD-008. `test:http` is still manual (TD-006).
+- **Pre-existing dev-server console message:** “Router action dispatched
+  before initialization”. It was seen before S5-T03 and is not investigated.
+- **Canonical and JSON-LD URLs use the configured `NEXT_PUBLIC_SITE_URL`:**
+  `http://localhost:3000` locally. The production domain is still TBD, as
+  already tracked in `PROJECT_STATUS.md`.
+
+#### Recommendations (awaiting approval; not started)
+
+1. Business decisions on Q1/Q2 (cart), Q9 (locale and currency), Q4 (copy),
+   and TD-011 (homepage claims).
+2. Decide on Q11: integrate Sprints 3–5 into `main` before Sprint 6.
+3. If Q1/Q2 are approved, re-plan S5-T05–S5-T07. Otherwise start Sprint 6
+   planning. Neither is started by this review.
+
+#### Original proposed spec
 
 **Objective:** Verify Sprint 5 against this plan, the data-safety rules, SEO,
 accessibility, and responsiveness; synchronize documentation.

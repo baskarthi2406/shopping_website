@@ -36,10 +36,11 @@ or payments unless the current task explicitly schedules them.
 Status: **COMPLETED** (S4-T01–S4-T12 and fix S4-F01; review in
 `docs/sprints/SPRINT-04.md` → S4-T12)
 
-**Sprint 5 — Commerce UI** is **IN_PROGRESS**: S5-T01 planning and Track A
+**Sprint 5 — Commerce UI** is **COMPLETED (Track A)**: S5-T01 planning, Track A
 (S5-T02 Purchasability Rules, S5-T03 PDP Price & Availability Panel, S5-T04
-Variant Selector) are completed. S5-T05 onward await explicit approval
-(`docs/sprints/SPRINT-05.md`).
+Variant Selector), and the S5-T08 review are completed. Track B (S5-T05–S5-T07,
+local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
+approval (`docs/sprints/SPRINT-05.md` → S5-T08).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -48,10 +49,11 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S5-T04 Variant Selector is **COMPLETED**. No further task is approved;
-do not start S5-T05, Zoho integration, or any other task automatically.
+None. S5-T08 Sprint 5 Review is **COMPLETED**. No further task is approved;
+do not start Track B, Sprint 6, Zoho integration, or any other task
+automatically.
 
-Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
+Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-05.md`.
 
 There is **no S1-T09**. There is **no S2-T08**.
 
@@ -62,7 +64,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_5_IN_PROGRESS** (S5-T01–S5-T04 completed; next task awaits approval)
+**SPRINT_5_COMPLETED_TRACK_A** (S5-T01–S5-T04 and S5-T08 completed; Track B deferred; next step awaits approval)
 
 ---
 
@@ -191,14 +193,15 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S5-T02 — Purchasability Rules
 - S5-T03 — PDP Price & Availability Panel
 - S5-T04 — Variant Attribute Selector
+- S5-T08 — Sprint 5 Review (**Sprint 5 COMPLETED, Track A**)
 
 ## In progress
 
 - None.
 
 ## Pending
-- Sprint 5 — Commerce UI: proposed S5-T05–S5-T08, each requiring explicit
-  approval; open business questions in `docs/sprints/SPRINT-05.md`
+- Sprint 5 Track B — S5-T05–S5-T07 (local cart) **DEFERRED**, pending renewed
+  Q1/Q2 approval; open business questions in `docs/sprints/SPRINT-05.md`
 - Sprint 6 — Production Backend
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
@@ -208,13 +211,16 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- No code blocker for Sprint 5 planning. Open technical debt (TD-002–TD-009):
-  `docs/project/TECHNICAL_DEBT.md`.
+- No code blocker. Open technical debt (TD-002–TD-011):
+  `docs/project/TECHNICAL_DEBT.md`. TD-010: a Zoho allowance of 7,500
+  requests/month is a future constraint whose actual account limits are
+  unverified. TD-011: homepage service claims (secure checkout, free
+  shipping, COD, returns, 24/7 support) need business confirmation.
 - Zoho POS data access **not verified**: no authorized API access, docs, or
   sample responses reviewed. Required before Sprint 7 planning.
 - Reference-storefront (`minimystiq.zakyastore.in`) inspection **not
   completed**; no observations recorded.
-- Local `main` is still at the initial commit; Sprint 3–4 work is on unmerged,
+- Local `main` is still at the initial commit; Sprint 3–5 work is on unmerged,
   mostly unpushed stacked branches. Integration needs a human decision.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
@@ -228,6 +234,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-Decision on Q1 (local cart). If approved: **S5-T05 — Local Cart Model &
-Persistence Boundary**; if deferred: **S5-T08 — Sprint 5 Review** of Track A
-(see `docs/sprints/SPRINT-05.md`). Requires explicit human approval.
+A human decision is required. If Q1/Q2 are approved: re-plan **S5-T05–S5-T07**
+(Track B); otherwise: **Sprint 6 planning**. Also open: Q9, Q4, Q11 (merge into
+`main`), and TD-011 (see `docs/sprints/SPRINT-05.md` → S5-T08). Requires
+explicit human approval.

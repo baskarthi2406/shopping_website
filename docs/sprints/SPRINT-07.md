@@ -29,6 +29,15 @@
 - Conflict resolution, ownership, caching, webhooks/polling, and outage behavior
   remain TBD until the actual API is assessed.
 
+## Known constraints (unverified)
+
+- **API allowance:** a Zoho allowance of **7,500 requests per month** was
+  stated for this project (recorded in S5-T08). The account's actual limits
+  (per plan, per organization, per minute/day, and what counts as a request)
+  have **not** been verified. Verify them against the real account before
+  designing synchronization. Assume storefront page views must never call Zoho
+  directly: 7,500 per month averages about 250 per day. Tracked as TD-010.
+
 ## Exit criteria
 
 The storefront can switch from dummy/production repositories to Zoho-backed
