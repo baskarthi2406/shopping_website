@@ -37,6 +37,10 @@
   have **not** been verified. Verify them against the real account before
   designing synchronization. Assume storefront page views must never call Zoho
   directly: 7,500 per month averages about 250 per day. Tracked as TD-010.
+- **Readiness checklist:** `SPRINT-06.md` §9 (quota, permissions, auth and
+  token refresh, data mapping, pagination and budgeting, caching and sync
+  frequency, retries/rate limiting/monitoring, order and inventory
+  capabilities). All items are unverified until real account access exists.
 
 ## Exit criteria
 

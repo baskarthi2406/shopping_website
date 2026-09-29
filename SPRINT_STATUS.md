@@ -176,15 +176,32 @@ Order are deferred. The review added TD-010 (unverified Zoho allowance of 7,500
 requests/month) and TD-011 (homepage service claims need business
 confirmation).
 
-### Sprint 6 — Production Backend
+### Sprint 6 — Production Backend Foundation
 
 | Field | Value |
 |-------|--------|
 | Phase | Phase 2 — Production Backend |
-| Objective | Production Mini Mystiq API, persistence, and operational foundation |
-| Status | **NOT_STARTED** |
-| Dependencies | Sprint 5 completed |
-| Task IDs | TBD before Sprint 6 starts |
+| Objective | Production catalog API and PostgreSQL persistence behind the S4 contracts; storefront default and SEO unchanged |
+| Status | **PLANNED — AWAITING APPROVAL** |
+| Dependencies | Sprint 5 completed (Track A) |
+| Task IDs | S6-T01 (planning) · proposed S6-T02 … S6-T10 |
+
+| Task ID | Name | Status |
+|---------|------|--------|
+| S6-T01 | Sprint 6 Planning | **COMPLETED** |
+| S6-T02 | Backend Architecture Decisions (ADRs 0006–0008) | **PROPOSED** (gate G0) |
+| S6-T03 | Backend Skeleton and Operational Baseline | **PROPOSED** (gate G1: ADRs accepted) |
+| S6-T04 | Catalog Domain, Ports, and Use Cases (Backend) | **PROPOSED** |
+| S6-T05 | PostgreSQL Schema and Migrations | **PROPOSED** (gate G2) |
+| S6-T06 | PostgreSQL Catalog Repositories | **PROPOSED** |
+| S6-T07 | Approved Catalog Content Import | **PROPOSED** (gate G3) |
+| S6-T08 | Production Catalog Read API | **PROPOSED** |
+| S6-T09 | Storefront Production API Adapter (opt-in) | **PROPOSED** (gate G4; may be deferred) |
+| S6-T10 | Sprint 6 Review | **PROPOSED** |
+
+No Sprint 6 implementation task is approved. Open decisions (data ownership,
+toolchain, API topology, content approval, freshness, merge to `main`) are in
+`docs/sprints/SPRINT-06.md` §10. No Zoho work in Sprint 6.
 
 ### Sprint 7 — Zoho POS Integration
 

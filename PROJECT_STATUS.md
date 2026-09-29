@@ -28,6 +28,9 @@ This file is the live index of project state. A new AI session must read it afte
 Do **not** implement the production backend, Zoho integration, auth, checkout,
 or payments unless the current task explicitly schedules them.
 
+Phase 2 (Sprint 6 — Production Backend Foundation) is **planned and awaiting
+approval**; no Phase 2 implementation has started.
+
 ---
 
 ## Current Sprint
@@ -42,6 +45,10 @@ Variant Selector), and the S5-T08 review are completed. Track B (S5-T05–S5-T07
 local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
 approval (`docs/sprints/SPRINT-05.md` → S5-T08).
 
+**Sprint 6 — Production Backend Foundation** is **PLANNED — AWAITING
+APPROVAL**: S6-T01 planning completed; S6-T02–S6-T10 proposed with approval
+gates G0–G4 (`docs/sprints/SPRINT-06.md`).
+
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
 
@@ -49,11 +56,11 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S5-T08 Sprint 5 Review is **COMPLETED**. No further task is approved;
-do not start Track B, Sprint 6, Zoho integration, or any other task
-automatically.
+None. S6-T01 Sprint 6 Planning is **COMPLETED**. No further task is
+approved; do not start S6-T02, Python code, package installs, Zoho
+integration, or any other task automatically.
 
-Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-05.md`.
+Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-06.md`.
 
 There is **no S1-T09**. There is **no S2-T08**.
 
@@ -64,7 +71,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_5_COMPLETED_TRACK_A** (S5-T01–S5-T04 and S5-T08 completed; Track B deferred; next step awaits approval)
+**SPRINT_6_PLANNED_AWAITING_APPROVAL** (Sprint 5 completed for Track A; S6-T01 planning completed; next task S6-T02 awaits gate G0)
 
 ---
 
@@ -194,6 +201,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S5-T03 — PDP Price & Availability Panel
 - S5-T04 — Variant Attribute Selector
 - S5-T08 — Sprint 5 Review (**Sprint 5 COMPLETED, Track A**)
+- S6-T01 — Sprint 6 Planning
 
 ## In progress
 
@@ -202,7 +210,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 ## Pending
 - Sprint 5 Track B — S5-T05–S5-T07 (local cart) **DEFERRED**, pending renewed
   Q1/Q2 approval; open business questions in `docs/sprints/SPRINT-05.md`
-- Sprint 6 — Production Backend
+- Sprint 6 — Production Backend Foundation: proposed S6-T02–S6-T10, each
+  requiring explicit approval (gates G0–G4 in `docs/sprints/SPRINT-06.md`)
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
 - S3-T10 — Image Optimization (**DEFERRED**)
@@ -217,7 +226,15 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   unverified. TD-011: homepage service claims (secure checkout, free
   shipping, COD, returns, 24/7 support) need business confirmation.
 - Zoho POS data access **not verified**: no authorized API access, docs, or
-  sample responses reviewed. Required before Sprint 7 planning.
+  sample responses reviewed. Required before Sprint 7 planning; readiness
+  checklist in `docs/sprints/SPRINT-06.md` §9.
+- Data ownership is undecided: `BACKEND_ARCHITECTURE.md` calls PostgreSQL the
+  catalog/inventory system of record while Sprint 7 plans Zoho as the
+  product/price/stock source (Sprint 6 decision D1, ADR 0006 in S6-T02).
+- Backend toolchain (ORM, migrations, Python version, test DB), production API
+  prefix/topology, and CI vendor are undecided (Sprint 6 D2, D3, D11).
+  `TECH_STACK.md` and the development rules still defer some of these to
+  “Sprint 5”; S6-T02 is planned to correct that.
 - Reference-storefront (`minimystiq.zakyastore.in`) inspection **not
   completed**; no observations recorded.
 - Local `main` is still at the initial commit; Sprint 3–5 work is on unmerged,
@@ -234,7 +251,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-A human decision is required. If Q1/Q2 are approved: re-plan **S5-T05–S5-T07**
-(Track B); otherwise: **Sprint 6 planning**. Also open: Q9, Q4, Q11 (merge into
-`main`), and TD-011 (see `docs/sprints/SPRINT-05.md` → S5-T08). Requires
-explicit human approval.
+**S6-T02 — Backend Architecture Decisions (ADRs 0006–0008)**, after gate G0
+(Sprint 6 plan approved; decision on merging Sprints 3–5 into `main`).
+Sprint 5 Track B remains deferred pending Q1/Q2. Requires explicit human
+approval.
