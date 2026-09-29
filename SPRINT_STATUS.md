@@ -7,8 +7,8 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 
 ## How to read this file
 
-- Sprint status: `NOT_STARTED` | `IN_PROGRESS` | `COMPLETED`
-- Task status: `NOT_STARTED` | `IN_PROGRESS` | `COMPLETED` | `BLOCKED`
+- Sprint status: `NOT_STARTED` | `PLANNED — AWAITING APPROVAL` | `IN_PROGRESS` | `COMPLETED`
+- Task status: `NOT_STARTED` | `PROPOSED` | `IN_PROGRESS` | `COMPLETED` | `BLOCKED` | `DEFERRED`
 - Only one task may be `IN_PROGRESS`.
 
 ---
@@ -152,10 +152,25 @@ must be written and approved before Sprint 5 starts.
 | Field | Value |
 |-------|--------|
 | Phase | Phase 1 — Customer Storefront |
-| Objective | Search, account/cart/order-entry chrome and commerce interactions against stable contracts |
-| Status | **NOT_STARTED** |
+| Objective | Commerce-ready storefront behavior on the nullable catalog without implying orders, payment, reservation, or fulfillment |
+| Status | **PLANNED — AWAITING APPROVAL** |
 | Dependencies | Sprint 4 completed |
-| Task IDs | TBD before Sprint 5 starts |
+| Task IDs | S5-T01 (planning) · proposed S5-T02 … S5-T08 |
+
+| Task ID | Name | Status |
+|---------|------|--------|
+| S5-T01 | Sprint 5 Planning & Specification | **COMPLETED** |
+| S5-T02 | Purchasability Rules (Track A) | **PROPOSED** |
+| S5-T03 | PDP Price & Availability Panel (Track A) | **PROPOSED** |
+| S5-T04 | Variant Attribute Selector (Track A) | **PROPOSED** |
+| S5-T05 | Local Cart Model & Persistence Boundary (Track B) | **PROPOSED** (requires Q1/Q2) |
+| S5-T06 | Add-to-Cart & Quantity Control (Track B) | **PROPOSED** (requires Q1/Q3/Q5) |
+| S5-T07 | Cart Page & Checkout-Unavailable State (Track B) | **PROPOSED** (requires Q1/Q4) |
+| S5-T08 | Sprint 5 Review | **PROPOSED** |
+
+No Sprint 5 implementation task is authorized until the plan in
+`docs/sprints/SPRINT-05.md` and its business questions (Q1–Q11) are reviewed
+and approved. Search, Account, and Track Your Order are deferred.
 
 ### Sprint 6 — Production Backend
 

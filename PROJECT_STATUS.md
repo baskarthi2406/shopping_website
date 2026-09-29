@@ -36,8 +36,9 @@ or payments unless the current task explicitly schedules them.
 Status: **COMPLETED** (S4-T01–S4-T12 and fix S4-F01; review in
 `docs/sprints/SPRINT-04.md` → S4-T12)
 
-**Sprint 5 — Commerce UI** is **NOT_STARTED**. Its task specifications must be
-written and approved first.
+**Sprint 5 — Commerce UI** is **PLANNED — AWAITING APPROVAL** (S5-T01
+planning completed; proposed S5-T02–S5-T08 in `docs/sprints/SPRINT-05.md`).
+No Sprint 5 implementation task is authorized until the plan is approved.
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -46,8 +47,9 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S4-T12 Sprint Review is **COMPLETED**. No next task is approved; do not
-start Sprint 5, Zoho integration, or any other task automatically.
+None. S5-T01 Sprint 5 Planning & Specification is **COMPLETED**. No
+implementation task is approved; do not start S5-T02, Zoho integration, or any
+other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -60,7 +62,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_4_COMPLETED**
+**SPRINT_4_COMPLETED — SPRINT_5_PLANNED_AWAITING_APPROVAL**
 
 ---
 
@@ -173,14 +175,15 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T11 — API-driven Navigation
 - S4-F01 — Production Soft-404 Correction
 - S4-T12 — Sprint Review (**Sprint 4 COMPLETED**)
+- S5-T01 — Sprint 5 Planning & Specification
 
 ## In progress
 
 - None.
 
 ## Pending
-- Sprint 5 planning — write and approve task specifications (recommended next)
-- Sprint 5 — Commerce UI
+- Sprint 5 — Commerce UI: approval of plan and business questions Q1–Q11,
+  then proposed S5-T02–S5-T08
 - Sprint 6 — Production Backend
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
@@ -210,6 +213,5 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**Sprint 5 planning** — write and approve Sprint 5 task specifications
-(recommended; see `docs/sprints/SPRINT-04.md` → S4-T12). Requires explicit
-human approval.
+**Sprint 5 plan approval**, then **S5-T02 — Purchasability Rules** if approved
+(see `docs/sprints/SPRINT-05.md`). Requires explicit human approval.
