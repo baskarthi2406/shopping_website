@@ -1,7 +1,6 @@
 # Current Task
 
-Only this task may be implemented. Resume it only when a human explicitly
-requests S4-T12.
+No task is approved. Do not start any task until a human explicitly requests it.
 
 ---
 
@@ -9,59 +8,29 @@ requests S4-T12.
 
 | Field | Value |
 |-------|--------|
-| Task ID | S4-F01 |
-| Task | Production Soft-404 Correction |
+| Task ID | S4-T12 |
+| Task | Sprint Review |
 | Status | **COMPLETED** |
-| Scope | Unknown `/c/{slug}` and `/p/{slug}` return HTTP 404 in production for browser and Googlebot user agents; verified by `npm run test:http`. |
+| Scope | Sprint 4 closeout. Sprint 4 **COMPLETED**; S4-F01 corrected the soft-404 defect found in review. Reference-storefront inspection and Zoho data verification were **not completed**. Review: `docs/sprints/SPRINT-04.md` → S4-T12. Debt: `docs/project/TECHNICAL_DEBT.md`. |
 
 ---
 
 ## Task ID
 
-S4-T12
-
-## Task
-
-Sprint Review
+None.
 
 ## Status
 
-**IN_PROGRESS** — paused so S4-F01 could fix a defect found during the review.
-Review findings are not yet recorded in the repository. Do **not** resume
-automatically.
+**NOT_STARTED** — awaiting an explicitly approved next task.
 
 S3-T10 Image Optimization and the original “SEO-Friendly URL Strategy” remain
 **DEFERRED**. Do not start either automatically.
 
-## Objective
+## Recommended next task (do not start)
 
-See `docs/sprints/SPRINT-04.md` → S4-T12.
+**Sprint 5 planning** — write and approve Sprint 5 task specifications
+(Sprint 5 task IDs are TBD). Acceptance criteria are in
+`docs/sprints/SPRINT-04.md` → S4-T12 → Recommended next task.
 
-## Scope
-
-See `docs/sprints/SPRINT-04.md` → S4-T12.
-
-## Dependencies
-
-S4-T11, S4-F01.
-
-## Requirements
-
-See `docs/sprints/SPRINT-04.md` → S4-T12.
-
-## Acceptance criteria
-
-See `docs/sprints/SPRINT-04.md` → S4-T12.
-
-## Tests
-
-See `docs/sprints/SPRINT-04.md` → S4-T12. Include `npm run build` followed by
-`npm run test:http`.
-
-## Definition of Done
-
-See `docs/sprints/SPRINT-04.md` → S4-T12.
-
-## Next task after S4-T12 (do not start)
-
-Do not start Sprint 5 or Zoho integration automatically.
+Do not start Sprint 5, the production backend, or Zoho integration
+automatically.

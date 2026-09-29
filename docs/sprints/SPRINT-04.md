@@ -5,7 +5,7 @@
 | Sprint ID | S4 |
 | Phase | Phase 1 — Storefront + Dummy API |
 | Objective | Align customer navigation and define a vendor-isolated dummy catalog API without regressing the storefront |
-| Status | IN_PROGRESS |
+| Status | COMPLETED |
 | Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
 | Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B, S4-T10C) and fix S4-F01 |
 
@@ -599,6 +599,11 @@ variant/price/stock UI, or invented fallback catalog.
   price/SKU/stock UI
 - Non-blocking npm warning: unknown user config `devdir`
 
+**S4-T12 correction:** the “unknown category/product remain 404” test only
+asserted source text. The route loading boundaries added here made production
+return HTTP 200 (soft 404) for unknown slugs. Found in S4-T12, fixed by
+S4-F01, and now guarded by `npm run test:http` (TD-001).
+
 ### Definition of Done
 
 Loading, error, not-found, and empty states are in place without a storefront
@@ -901,7 +906,7 @@ S4-T12 review resumes only on explicit request.
 
 ## S4-T12 — Sprint Review
 
-**Status:** IN_PROGRESS (paused for S4-F01; resume only on explicit request)
+**Status:** COMPLETED
 
 ### Objective
 
@@ -910,4 +915,132 @@ SEO regressions; synchronize documentation.
 
 ### Guardrails
 
-Do not start Sprint 5 automatically.
+Review and documentation only. No features, Zoho client, database, auth, or
+unrelated fixes. Do not start Sprint 5 automatically.
+
+### Verdict
+
+**Sprint 4: COMPLETED — objective met, with recorded technical debt.** One
+production defect (soft 404, introduced by S4-T10) was found during this review
+and corrected by S4-F01 before closeout. No open defect blocks Sprint 5
+planning. The reference-storefront inspection and Zoho data verification were
+**not completed** (see below) and are not claimed.
+
+### Per-task status
+
+| Task | Status | Review note |
+|------|--------|-------------|
+| S4-T01 | COMPLETED | Audit recorded in `BACKEND_API_AUDIT.md` |
+| S4-T02 | COMPLETED | Taxonomy in fixtures only; recursive nav |
+| S4-T03 | COMPLETED | Contracts in `catalog-contracts.ts` / `STOREFRONT_CONTRACTS.md` |
+| S4-T04–T06 | COMPLETED | Dummy category/product/detail APIs; safe error envelopes |
+| S4-T07–T08 | COMPLETED | Generic variants; null pricing/inventory ≠ 0 |
+| S4-T09 | COMPLETED | Pages read through HTTP repositories |
+| S4-T10 | COMPLETED (corrected by S4-F01) | 404 claim was source-only; see note in S4-T10 |
+| S4-T10A–C | COMPLETED | Visual polish; mega-menu design frozen |
+| S4-T11 | COMPLETED | Header/footer nav via `catalog.listCategories()` |
+| S4-F01 | COMPLETED | Commit `feed5fe596b744650d0f95dc363946fefe40d198` |
+
+### Validation (HEAD `feed5fe`, branch `s4-f01-production-soft-404`)
+
+- Working tree clean before review (excluding generated `frontend/.next`)
+- `npm test`: 54 files, 255 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed; `/c/[slug]`, `/p/[slug]`, `/api/products*` dynamic;
+  `/`, `/api/categories`, `/robots.txt`, `/sitemap.xml` static
+- `npm run test:http`: 16 tests passed (production server; browser and
+  Googlebot user agents)
+- Non-blocking npm warning: unknown env config `devdir`
+
+### S4-F01 evidence
+
+Root cause, fix, and tests: see S4-F01 above and TD-001. Production HTTP
+evidence (`next start`, browser and Googlebot):
+
+| Request | Before S4-F01 | After S4-F01 |
+|---------|---------------|--------------|
+| `/`, `/c/baby-essentials`, `/c/infants`, `/c/infants-baby-girl-frock`, `/p/pink-white-pleated-baby-dress` | 200 | 200, no `noindex` |
+| `/c/does-not-exist`, `/p/does-not-exist`, `/c/Bad_Slug` | **200** + `noindex` | **404** + not-found UI + `noindex`, no Product/BreadcrumbList JSON-LD |
+| `/api/categories`, `/api/products` | 200 | 200 |
+| `/api/products/does-not-exist` | 404 | 404 |
+| `/sitemap.xml` (67 URLs), `/robots.txt` | 200 | 200 |
+
+`test:http` failed 4 of 14 against the pre-fix build and passes 16 of 16 now.
+
+### Review checks
+
+| Area | Result | Evidence |
+|------|--------|----------|
+| API/domain contracts | PASS | Contracts/domain last changed in S4-T08 (`5b32881`); unchanged by S4-T09–S4-F01 |
+| Repository boundaries | PASS | `domain/` has no Next/React/app-layer imports; `application/` production code imports only domain/ports; pages use `config/catalog` |
+| Dummy data integrity | PASS | Fixtures last changed in S4-T02 (`931a936`); 12 products; commerce values null, `variants: []`, nothing invented |
+| UI/API separation | PASS | No page/component imports `catalog-source`, fixture records, or Zoho names; only API routes, dispatch, and sitemap use `catalogSource` (by design) |
+| API-driven navigation | PASS | Layout/footer use `catalog.listCategories()`, memoized with one category request; empty-nav fallback on failure |
+| Loading/error/empty/not-found | PASS after S4-F01 | Skeletons, sanitized `error.tsx`, empty copy; real 404 status verified by `test:http` |
+| Accessibility | PASS (source + manual) | Disclosures, Escape/focus handling, `aria-*`, 44px targets, focus-visible, reduced motion, per S4-T02/T10A–C tests. No automated a11y tool or WCAG target (TBD) |
+| Responsive UI | PASS (manual, recorded) | 500/820/1440 CSS px review in S4-T02; mobile disclosure kept in S4-T10B/C. Not re-measured in S4-T12 |
+| Technical SEO | PASS | Canonicals, metadata, Product/BreadcrumbList/Organization JSON-LD, sitemap, robots unchanged; 404s now correct |
+| Build readiness | PASS with risks | Build and all checks green; see release risks |
+
+### Remaining technical debt
+
+Recorded in `docs/project/TECHNICAL_DEBT.md`:
+
+- TD-002 category listing scans the whole catalog (`listByCategorySlug`, `getById`)
+- TD-003 external/provider product images unsupported
+- TD-004 no inventory-by-location model
+- TD-005 no stable, persistent SEO slug source for Zoho items
+- TD-006 `test:http` not run automatically in CI
+- TD-007 stale generated `.next/dev/types` after route moves (accepted)
+- TD-008 API client has no timeout/retry/caching policy for a real network
+- TD-009 menu order relies on record order; no menu-order field
+
+### Release and repository risks (not code defects)
+
+- Local `main` is still at the initial commit (`d31f07a`). Sprint 3–4 work
+  lives on stacked task branches ending at `s4-f01-production-soft-404`; most
+  Sprint 3–4 branches are not pushed. Integrating into `main` and pushing need
+  an explicit human decision.
+- Production domain, hosting, and CI remain TBD.
+
+### Reference-storefront inspection
+
+**NOT COMPLETED.** A read-only browser inspection of
+`https://minimystiq.zakyastore.in/` was started during S4-T12 but returned no
+results and saved no screenshots. No observations are recorded, and none may be
+assumed. Repeat it as a separate, explicitly requested task if still needed.
+
+### Zoho data-access status
+
+**NOT VERIFIED.** No authorized Zoho POS API access, credentials, API
+documentation, or sample responses were available to this review. No Zoho
+fields, identifiers, pagination, rate limits, image hosting, stock locations, or
+slug sources have been verified. ADR 0005 and Sprint 7 prerequisites stand.
+The dummy API must not be assumed to match Zoho.
+
+### Recommended next task (do not start)
+
+**Sprint 5 planning — write and approve Sprint 5 task specifications** (Sprint
+5 task IDs are TBD).
+
+Acceptance criteria:
+
+- `docs/sprints/SPRINT-05.md` lists task IDs, objectives, dependencies, tests,
+  and Definitions of Done for approved Commerce UI scope
+- Search, account, cart, Track Your Order, and variant-selection behavior stay
+  TBD unless the business approves them. Nothing is invented
+- No Zoho, production backend, auth, or payment implementation is scheduled
+- Each task names its checks, including `npm run build && npm run test:http`
+  for route-affecting work
+- Human approval recorded before any S5 task becomes `IN_PROGRESS`
+
+In parallel, the business owner should decide on integrating and pushing
+Sprint 3–4 branches, and should gather authorized Zoho API access and
+documentation for Sprint 7 planning.
+
+### Definition of Done
+
+Review recorded with evidence, technical debt registered, status documents
+synchronized, and Sprint 4 marked **COMPLETED**. Sprint 5 remains
+**NOT_STARTED**.

@@ -119,7 +119,7 @@ deferred.
 |-------|--------|
 | Phase | Phase 1 — Storefront + Dummy API |
 | Objective | Customer navigation, stable API/domain contracts, dummy catalog APIs, and API-driven storefront |
-| Status | **IN_PROGRESS** |
+| Status | **COMPLETED** |
 | Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
 | Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B, S4-T10C) and fix S4-F01 |
 
@@ -140,7 +140,12 @@ deferred.
 | S4-T10C | Final Mega Menu Visual Refinement | **COMPLETED** |
 | S4-T11 | API-driven Navigation | **COMPLETED** |
 | S4-F01 | Production Soft-404 Correction | **COMPLETED** |
-| S4-T12 | Sprint Review | **IN_PROGRESS** (paused; resume on request) |
+| S4-T12 | Sprint Review | **COMPLETED** |
+
+Sprint 4 is complete. S4-F01 corrected the S4-T10 soft-404 defect found in
+review. Reference-storefront inspection and Zoho data verification were not
+completed; open debt is in `docs/project/TECHNICAL_DEBT.md`. Sprint 5 task IDs
+must be written and approved before Sprint 5 starts.
 
 ### Sprint 5 — Commerce UI
 

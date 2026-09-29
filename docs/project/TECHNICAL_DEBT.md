@@ -125,3 +125,32 @@ After a route file moves, `next build` type-checks generated
 `.next/dev/types/validator.ts` from an earlier `next dev` run and fails with
 “Cannot find module '../../../app/page.js'”. Delete `frontend/.next/dev/types`
 (generated) or restart `next dev` to regenerate it. No source change required.
+
+---
+
+## TD-008 — Catalog API client has no network resilience policy
+
+| Field | Value |
+|-------|-------|
+| Status | OPEN |
+| Found | S4-T12 review |
+| Area | `infrastructure/catalog/catalog-api-client.ts` |
+
+The client has no timeout, retry, or HTTP caching/revalidation policy. That is
+safe today because the dummy API is dispatched in-process. Before any real
+network transport (production backend or Zoho-backed API), define timeouts,
+retry rules, and caching; failures must keep the existing sanitized error UI.
+
+---
+
+## TD-009 — Menu order relies on record order
+
+| Field | Value |
+|-------|-------|
+| Status | ACCEPTED (API menu-order field is a business/API TBD) |
+| Found | S4-T12 review |
+| Area | `domain/catalog/category.ts`, category records, `GET /api/categories` |
+
+No category field defines menu order; header, footer, and mega-menu follow
+record/array order. A provider or production backend must preserve order or a
+contract-level order field must be approved (ADR/contract update).

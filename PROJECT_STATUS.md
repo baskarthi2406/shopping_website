@@ -33,7 +33,11 @@ or payments unless the current task explicitly schedules them.
 ## Current Sprint
 
 **Sprint 4 — Customer Storefront + Dummy API Foundation**
-Status: **IN_PROGRESS** (S4-T01–S4-T11 and fix S4-F01 completed)
+Status: **COMPLETED** (S4-T01–S4-T12 and fix S4-F01; review in
+`docs/sprints/SPRINT-04.md` → S4-T12)
+
+**Sprint 5 — Commerce UI** is **NOT_STARTED**. Its task specifications must be
+written and approved first.
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -42,10 +46,8 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-**S4-T12 — Sprint Review**
-Status: **IN_PROGRESS** (paused for S4-F01)
-
-Resume S4-T12 only on explicit request.
+None. S4-T12 Sprint Review is **COMPLETED**. No next task is approved; do not
+start Sprint 5, Zoho integration, or any other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
 
@@ -58,7 +60,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_4_IN_PROGRESS**
+**SPRINT_4_COMPLETED**
 
 ---
 
@@ -170,12 +172,14 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T10C — Final Mega Menu Visual Refinement
 - S4-T11 — API-driven Navigation
 - S4-F01 — Production Soft-404 Correction
+- S4-T12 — Sprint Review (**Sprint 4 COMPLETED**)
 
 ## In progress
 
-- S4-T12 — Sprint Review (paused for S4-F01; resume only on request)
+- None.
 
 ## Pending
+- Sprint 5 planning — write and approve task specifications (recommended next)
 - Sprint 5 — Commerce UI
 - Sprint 6 — Production Backend
 - Sprint 7 — Zoho POS Integration
@@ -186,8 +190,14 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- None for resuming S4-T12 when explicitly requested. Open technical debt:
+- No code blocker for Sprint 5 planning. Open technical debt (TD-002–TD-009):
   `docs/project/TECHNICAL_DEBT.md`.
+- Zoho POS data access **not verified**: no authorized API access, docs, or
+  sample responses reviewed. Required before Sprint 7 planning.
+- Reference-storefront (`minimystiq.zakyastore.in`) inspection **not
+  completed**; no observations recorded.
+- Local `main` is still at the initial commit; Sprint 3–4 work is on unmerged,
+  mostly unpushed stacked branches. Integration needs a human decision.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
   auth/rate limits, future product filters/search,
@@ -200,4 +210,6 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S4-T12 — Sprint Review**
+**Sprint 5 planning** — write and approve Sprint 5 task specifications
+(recommended; see `docs/sprints/SPRINT-04.md` → S4-T12). Requires explicit
+human approval.
