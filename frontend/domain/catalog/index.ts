@@ -1,6 +1,7 @@
 export type { CatalogImage } from "./catalog-image";
 export type { Category, CategoryVisibility } from "./category";
 export {
+  isCurrencyCode,
   validateInventory,
   validateMoney,
   validatePricing,

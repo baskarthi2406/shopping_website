@@ -65,6 +65,13 @@ export {
   toProductPageViewModel,
   type ProductPageViewModel,
 } from "./product-page-view-model";
+export {
+  evaluatePurchasability,
+  PURCHASABILITY_REASONS,
+  type PurchasabilityReason,
+  type PurchasabilityRequest,
+  type PurchasabilityResult,
+} from "./evaluate-purchasability";
 export { listCategories } from "./list-categories";
 export { listFeaturedProducts } from "./list-featured-products";
 export { listProducts } from "./list-products";

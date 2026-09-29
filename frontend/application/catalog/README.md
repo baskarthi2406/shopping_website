@@ -42,4 +42,13 @@ pagination envelope. Default page/page size are 1/12 at the API boundary.
 returns the S4-T03 detail envelope or `not_found`. Invalid catalog-slug syntax
 is `invalid_request`. Repository failures propagate to the HTTP adapter.
 
+**S5-T02:** `evaluatePurchasability({ product, variantId?, quantity })` is the
+single purchase-eligibility rule. It is pure, deterministic, and returns
+`{ purchasable, reasons }`, with `reasons` ordered as in
+`PURCHASABILITY_REASONS`. Missing price, currency, status, or inventory always
+blocks and is never defaulted. Variants are judged on their own pricing and
+inventory (no parent inheritance). SKU/UOM never block. User-facing copy is
+not defined here (Sprint 5 Q4). Codes and rules:
+`docs/sprints/SPRINT-05.md` → S5-T02.
+
 Full semantics: `docs/architecture/STOREFRONT_CONTRACTS.md`.

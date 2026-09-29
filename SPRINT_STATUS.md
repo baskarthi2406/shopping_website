@@ -153,14 +153,14 @@ must be written and approved before Sprint 5 starts.
 |-------|--------|
 | Phase | Phase 1 — Customer Storefront |
 | Objective | Commerce-ready storefront behavior on the nullable catalog without implying orders, payment, reservation, or fulfillment |
-| Status | **PLANNED — AWAITING APPROVAL** |
+| Status | **IN_PROGRESS** (S5-T02 completed on explicit request; S5-T03+ await approval) |
 | Dependencies | Sprint 4 completed |
 | Task IDs | S5-T01 (planning) · proposed S5-T02 … S5-T08 |
 
 | Task ID | Name | Status |
 |---------|------|--------|
 | S5-T01 | Sprint 5 Planning & Specification | **COMPLETED** |
-| S5-T02 | Purchasability Rules (Track A) | **PROPOSED** |
+| S5-T02 | Purchasability Rules (Track A) | **COMPLETED** |
 | S5-T03 | PDP Price & Availability Panel (Track A) | **PROPOSED** |
 | S5-T04 | Variant Attribute Selector (Track A) | **PROPOSED** |
 | S5-T05 | Local Cart Model & Persistence Boundary (Track B) | **PROPOSED** (requires Q1/Q2) |
@@ -168,9 +168,10 @@ must be written and approved before Sprint 5 starts.
 | S5-T07 | Cart Page & Checkout-Unavailable State (Track B) | **PROPOSED** (requires Q1/Q4) |
 | S5-T08 | Sprint 5 Review | **PROPOSED** |
 
-No Sprint 5 implementation task is authorized until the plan in
-`docs/sprints/SPRINT-05.md` and its business questions (Q1–Q11) are reviewed
-and approved. Search, Account, and Track Your Order are deferred.
+Only explicitly requested Sprint 5 tasks are authorized. S5-T02 is completed;
+S5-T03 onward await approval. Q3 and Q8 were resolved by S5-T02; other business
+questions in `docs/sprints/SPRINT-05.md` remain open. Search, Account, and
+Track Your Order are deferred.
 
 ### Sprint 6 — Production Backend
 

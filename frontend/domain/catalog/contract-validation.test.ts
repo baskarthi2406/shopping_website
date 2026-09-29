@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 import type { Product } from "./product";
 import {
+  isCurrencyCode,
   validateInventory,
   validatePricing,
   validateProduct,
@@ -26,6 +27,13 @@ function product(overrides: Partial<Product> = {}): Product {
 }
 
 describe("catalog contract validation", () => {
+  it("recognises only three-letter uppercase currency codes", () => {
+    expect(isCurrencyCode("TST")).toBe(true);
+    for (const value of ["", "tst", "TS", "TEST", null, undefined, 123]) {
+      expect(isCurrencyCode(value)).toBe(false);
+    }
+  });
+
   it("accepts products with unknown optional commerce data", () => {
     expect(validateProduct(product())).toEqual([]);
   });

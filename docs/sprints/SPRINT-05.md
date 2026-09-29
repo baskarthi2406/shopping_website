@@ -5,14 +5,21 @@
 | Sprint ID | S5 |
 | Phase | Phase 1 — Customer Storefront |
 | Objective | Add commerce-ready storefront behavior on the existing nullable catalog without implying orders, payment, stock reservation, or fulfillment |
-| Status | **PLANNED — AWAITING APPROVAL** |
+| Status | **IN_PROGRESS** — S5-T02 completed on explicit request; S5-T03 onward still await approval |
 | Dependencies | Sprint 4 completed (S4-T12, commit `c4d47f757ee98f8bb1fa4d13e1089d0b801c3653`) |
 | Task IDs | S5-T01 (planning, completed) · proposed S5-T02 … S5-T08 |
 
-**No Sprint 5 implementation task is authorized** until a human reviews and
-approves this plan, including the business decisions listed in section 8.
-Approval must be recorded in this file, `SPRINT_STATUS.md`, and
-`CURRENT_TASK.md` before any task becomes `IN_PROGRESS`.
+**Only explicitly requested tasks are authorized.** S5-T02 was approved by an
+explicit human request on 2026-09-29 and is completed. No other Sprint 5 task
+is authorized until a human approves it. Approval must be recorded in this
+file, `SPRINT_STATUS.md`, and `CURRENT_TASK.md` before any task becomes
+`IN_PROGRESS`.
+
+**Decisions recorded with S5-T02 (from the S5-T02 request):** unknown inventory
+blocks purchase (resolves Q3), and a variant never inherits the parent price
+(resolves Q8). The rule also requires verified `availableToSell` to cover the
+requested quantity; this narrows the Q5 default. Q1, Q2, Q4, Q6, Q7, and Q9–Q11
+remain open.
 
 ## Task ID convention
 
@@ -107,17 +114,17 @@ Execution tracks:
    verified store contact link from the footer data. Product JSON-LD stays
    without `offers`.
 4. **Unknown inventory (`inventory: null` or `status: "unknown"`):** no stock
-   text and no quantity. Whether unknown inventory blocks adding to a local cart
-   is **Q3**. Default until decided: **blocks** (conservative).
+   text and no quantity. Unknown inventory **blocks** purchase (Q3 resolved in
+   S5-T02); only verified `availableToSell` covers a requested quantity.
    `out_of_stock` always blocks and shows “Out of stock”. `in_stock` never shows
    a quantity unless stock display is approved (Q6).
 5. **No SKU or UOM:** never blocks display. Nothing is rendered for missing
    values, with no “N/A” and no invented unit. SKU display is out of scope
    unless approved.
 6. **Variants present:** purchasability is evaluated on the selected variant.
-   Variant pricing/inventory is used when present. Falling back to
-   product-level pricing is **not** assumed (Q8; default: no fallback, so the
-   variant is not purchasable without its own price). A selection is
+   Only the variant's own pricing/inventory is used. It **never** falls back
+   to product-level pricing (Q8 resolved in S5-T02), so a variant without its
+   own price is not purchasable. A selection is
    **invalid** when it matches no variant, matches more than one variant, or
    matches an `inactive` variant. Invalid, incomplete, or unavailable
    selections disable add-to-cart and show which choice is needed.
@@ -175,52 +182,89 @@ commit `docs(s5): plan sprint 5`.
 
 ### S5-T02 — Purchasability Rules (Track A)
 
-**Status:** PROPOSED — awaiting approval
+**Status:** COMPLETED (approved by explicit request, 2026-09-29)
 
-**Objective:** One application-layer rule that decides whether a product (and
-an optional variant selection) can be added to a cart, and why not.
+**Objective:** One application-layer rule that decides whether a quantity of a
+product (and an optional selected variant) can be bought, and why not.
 
-**Scope:**
+**Implementation (as completed):**
 
-- Pure function in `frontend/application/catalog/` (for example
-  `evaluatePurchasability(product, selection)`) returning `purchasable` plus a
-  typed reason list: `inactive`, `price_missing`, `inventory_unknown`,
-  `out_of_stock`, `variant_required`, `variant_invalid`, `variant_inactive`.
-- Implements rules 2–7 of section 4. The unknown-inventory policy is an
-  explicit parameter whose default is to block (Q3).
-- Exported through `application/catalog/index.ts` and the catalog composition
-  if needed.
+- `frontend/application/catalog/evaluate-purchasability.ts`:
+  `evaluatePurchasability({ product, variantId?, quantity })` →
+  `{ purchasable, reasons }`. Pure, deterministic, non-mutating, and free of
+  React/Next/browser/infrastructure/provider imports. Exported from
+  `application/catalog/index.ts` with `PURCHASABILITY_REASONS` and its types.
+- Additive domain predicate `isCurrencyCode` in
+  `domain/catalog/contract-validation.ts`, now also used by `validateMoney`.
+  Existing contracts, fixtures, and repositories are unchanged.
+- The unknown-inventory policy is **not** a parameter: the S5-T02 request made
+  blocking mandatory (Q3 resolved).
+- Variant selection is by `variantId`. Resolving attribute choices to a variant
+  (and ambiguity) belongs to S5-T04.
 
-**Exclusions:** no UI, no cart, no contract or fixture changes, no pricing
-arithmetic.
+**Reason codes** (always reported in this order; `reasons` is empty exactly
+when `purchasable` is true):
 
-**Dependencies:** Sprint 5 plan approved.
+| Code | Blocks when |
+|------|-------------|
+| `product_not_found` | `product` is `null` (returned alone) |
+| `product_status_unknown` | product status missing or not `active`/`inactive` |
+| `product_inactive` | product status `inactive` |
+| `variant_required` | product has variants and no non-blank `variantId` |
+| `variant_not_found` | `variantId` matches no variant, or is given for a product without variants |
+| `variant_status_unknown` | selected variant status missing or unrecognised |
+| `variant_inactive` | selected variant status `inactive` |
+| `quantity_invalid` | quantity not a positive safe integer |
+| `price_missing` | no pricing/price at the purchasable level |
+| `price_invalid` | amount not finite or ≤ 0 (never treated as free) |
+| `currency_invalid` | currency missing or not a three-letter uppercase code |
+| `inventory_unknown` | inventory `null`; status `unknown`; or `in_stock` without a valid `availableToSell` |
+| `out_of_stock` | inventory status `out_of_stock` |
+| `insufficient_inventory` | `availableToSell` < a valid requested quantity |
 
-**Affected:** `application/catalog/*` (new module + test), `application/catalog/index.ts`.
+Rules:
 
-**Acceptance criteria:**
+- The purchasable level is the product when it has no variants, otherwise the
+  selected variant. A variant uses only its own pricing and inventory (no
+  parent inheritance, Q8 resolved).
+- When no variant can be resolved, price and inventory are not evaluated.
+- SKU and UOM are never considered.
+- Only `availableToSell` establishes quantity availability. `stockOnHand` and
+  `reserved` are not used to infer it.
 
-- Every current fixture product evaluates to not purchasable with reason
-  `price_missing` (checked through a fake repository mirroring null commerce
-  fields, not by importing fixtures).
-- Priced, active, `in_stock` fakes are purchasable. `out_of_stock` fakes
-  never are. Unknown inventory follows the policy parameter.
-- Variant cases: required, complete valid, incomplete, non-matching,
-  ambiguous, and inactive selections return the correct reasons.
-- No imports from React, Next.js, or infrastructure.
+**Limitations and open decisions:** no user-facing copy mapping (Q4, S5-T03).
+No per-line maximum beyond verified `availableToSell` (Q5). No existing
+consumers yet. All current catalog products evaluate to
+`price_missing` + `inventory_unknown`.
 
-**Automated tests:** colocated unit tests for all reasons and combinations;
-boundary test (no framework imports).
+**Tests:** `evaluate-purchasability.test.ts` (synthetic data only) covers:
+- valid purchase; missing, zero, negative, and non-finite prices; missing and
+  invalid currency
+- unknown inventory (null, `unknown` status, `in_stock` without quantity);
+  out of stock; insufficient stock
+- invalid quantities (0, negative, fractional, NaN, Infinity, unsafe integer)
+- variants: required, valid, inactive, unknown status, not found; variant id on
+  a product without variants; variant without price despite a parent price;
+  variant unknown, short, or out-of-stock inventory
+- missing SKU/UOM still purchasable; missing, unknown, or inactive product
+  status
+- catalog-shaped null commerce product; multiple reasons in stable order and
+  deterministic; no input mutation; unique codes; dependency boundary
 
-**Manual validation:** none (no UI).
+`contract-validation.test.ts` covers `isCurrencyCode`.
 
-**Accessibility/responsive:** not applicable.
+**Validation:**
 
-**Documentation:** `application/catalog/README.md`, this file, status files.
+- `npm test`: 55 files, 290 tests passed
+- `npm run typecheck`: passed
+- `npm run lint`: passed
+- `npm run build`: passed
+- `npm run test:http`: 16 tests passed (no route changes; regression check)
+- Non-blocking npm warning: unknown env config `devdir`
 
-**Definition of done:** rule implemented and tested; all checks pass.
-
-**Git/stop:** branch `s5-t02-purchasability-rules`; commit
+**Git/stop:** committed on the checked-out branch `s5-t01-sprint-5-planning`.
+The request prohibited switching branches, so no separate
+`s5-t02-purchasability-rules` branch was created. Commit
 `feat(s5): add purchasability rules`; STOP.
 
 ---
@@ -576,12 +620,12 @@ manually.
 |----|----------|----------------------|
 | Q1 | Build the local cart (Track B) now, knowing no current product has a price, or wait for real pricing data? | Track B **DEFERRED** |
 | Q2 | Is a device-local guest cart (`localStorage`, no account) acceptable? | Not built |
-| Q3 | Can a product with a price but **unknown** inventory be added to the local cart? | Blocked |
+| Q3 | Can a product with a price but **unknown** inventory be added to the local cart? | **Resolved (S5-T02):** blocked |
 | Q4 | Approved copy for “price not available”, “checkout not available”, and the cart device-only notice? Keep the phone contact as the call to action? | Working copy in this plan, subject to review |
 | Q5 | Maximum quantity per line when stock is unknown or large? | `availableToSell` when known; otherwise add-to-cart blocked by Q3 |
 | Q6 | May the storefront show “In stock” (status only, no numbers)? | Show only “Out of stock” |
 | Q7 | Is search in scope for Sprint 5? If yes: behavior, fields searched, and results page indexing | Deferred |
-| Q8 | For variants without their own price, may product-level pricing apply? | No fallback |
+| Q8 | For variants without their own price, may product-level pricing apply? | **Resolved (S5-T02):** no fallback |
 | Q9 | Display locale and currency formatting (for example `en-IN` / INR)? | Required before S5-T03 shows any price; no price data exists yet |
 | Q10 | Should listing cards show prices / add-to-cart when data exists? | No |
 | Q11 | Integrate Sprint 3–4 branches into `main` (and push) before Sprint 5 implementation? | Stack on `s4-t12-sprint-review`; no merge or push |
