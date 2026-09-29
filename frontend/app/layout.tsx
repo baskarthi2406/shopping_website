@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
+import { unstable_rethrow } from "next/navigation";
 import { JsonLd } from "@/app/json-ld";
-import { toCatalogNavItems } from "@/application/catalog";
+import { cormorant, sourceSans } from "@/app/fonts";
+import { toCatalogNavItems, toFooterNavViewModel } from "@/application/catalog";
 import { buildOrganizationStructuredData } from "@/application/seo/organization-structured-data";
 import { StorefrontShell } from "@/components/storefront/storefront-shell";
 import { catalog } from "@/config/catalog";
@@ -15,8 +17,17 @@ export const metadata: Metadata = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  const categories = await catalog.listCategories();
-  const navigation = toCatalogNavItems(categories);
+  let navigation = toCatalogNavItems([]);
+  let footerNav = toFooterNavViewModel([]);
+
+  try {
+    const categories = await catalog.listCategories();
+    navigation = toCatalogNavItems(categories);
+    footerNav = toFooterNavViewModel(categories);
+  } catch (error) {
+    unstable_rethrow(error);
+  }
+
   const origin = resolveSiteOrigin();
   const organizationStructuredData = buildOrganizationStructuredData(
     organization,
@@ -24,12 +35,18 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   );
 
   return (
-    <html lang="en">
+    <html lang="en" className={`${sourceSans.variable} ${cormorant.variable}`}>
       <body>
         {organizationStructuredData ? (
           <JsonLd data={organizationStructuredData} />
         ) : null}
-        <StorefrontShell navigation={navigation}>{children}</StorefrontShell>
+        <StorefrontShell
+          navigation={navigation}
+          footerNav={footerNav}
+          contact={organization}
+        >
+          {children}
+        </StorefrontShell>
       </body>
     </html>
   );

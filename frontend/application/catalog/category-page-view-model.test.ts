@@ -9,6 +9,10 @@ const category: Category = {
   id: "baby-essentials",
   slug: "baby-essentials",
   name: "Baby Essentials",
+  parentId: null,
+  children: [],
+  visibility: "visible",
+  showInMenu: true,
   description: null,
   image: null,
 };
@@ -25,9 +29,12 @@ const product: Product = {
     },
   ],
   categoryIds: ["baby-essentials"],
-  variants: [{ id: "sage-striped-baby-top-and-shorts-default" }],
-  uomCode: null,
-  inventoryStatus: "unknown",
+  sku: null,
+  uom: null,
+  pricing: null,
+  inventory: null,
+  status: "active",
+  variants: [],
 };
 
 describe("toProductCardViewModel", () => {
@@ -51,7 +58,7 @@ describe("toProductCardViewModel", () => {
   it("does not invent price or inventory display fields", () => {
     expect(toProductCardViewModel(product)).not.toHaveProperty("price");
     expect(toProductCardViewModel(product)).not.toHaveProperty(
-      "inventoryStatus",
+      "inventory",
     );
   });
 });
@@ -73,5 +80,13 @@ describe("toCategoryPageViewModel", () => {
       { label: "Home", href: "/" },
       { label: "Baby Essentials", href: null },
     ]);
+  });
+
+  it("keeps a valid category with zero products as an empty collection", () => {
+    const view = toCategoryPageViewModel(category, []);
+
+    expect(view.productCount).toBe(0);
+    expect(view.products).toEqual([]);
+    expect(view.name).toBe("Baby Essentials");
   });
 });

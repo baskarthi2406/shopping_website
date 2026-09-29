@@ -11,5 +11,7 @@ describe("product page JSON-LD wiring", () => {
     expect(source).toContain("JsonLd");
     expect(source).toContain("notFound()");
     expect(source).toContain("toCanonicalUrl");
+    expect(source).toContain('from "@/config/catalog"');
+    expect(source).not.toMatch(/product-records|category-records/);
   });
 });

@@ -30,5 +30,8 @@ Suggested sections:
 | [0002](0002-nextjs-app-router-server-components.md) | App Router + Server Components | Accepted |
 | [0003](0003-modular-monolith-backend.md) | Modular monolith backend | Accepted |
 | [0004](0004-repository-swap-static-to-http.md) | Static → HTTP repository swap | Accepted |
+| [0005](0005-stable-storefront-contracts-and-zoho-adapter.md) | Stable storefront contracts and Zoho adapter boundary | Accepted |
 
-Baseline architecture in `docs/architecture/` is refined during S1-T01. Stack (Next.js, FastAPI, PostgreSQL) is already decided and does not need an ADR unless it changes.
+Baseline architecture in `docs/architecture/` was established during S1-T01.
+FastAPI/PostgreSQL remain the planned production-backend stack. ADR 0005 records
+the revised dummy-API timing and vendor-isolation boundary.

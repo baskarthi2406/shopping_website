@@ -8,6 +8,7 @@ import { buildBreadcrumbStructuredData } from "@/application/seo/breadcrumb-stru
 import { buildCategoryMetadata } from "@/application/seo/category-metadata";
 import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
 import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
+import { CatalogEmptyState } from "@/components/storefront/catalog-empty-state";
 import { ProductCard } from "@/components/storefront/product-card";
 import { Container } from "@/components/ui/container";
 import { catalog } from "@/config/catalog";
@@ -57,7 +58,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         <Breadcrumbs items={view.breadcrumb} />
 
         <header className="mt-4">
-          <h1 className="text-h1 font-semibold tracking-tight text-foreground">
+          <h1 className="font-display text-h1 font-semibold tracking-tight text-foreground">
             {view.name}
           </h1>
           {view.description ? (
@@ -71,9 +72,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
         </header>
 
         {view.products.length === 0 ? (
-          <p className="mt-8 text-body text-foreground-secondary">
-            No products in this category yet.
-          </p>
+          <CatalogEmptyState message="No products in this category yet." />
         ) : (
           <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
             {view.products.map((product) => (

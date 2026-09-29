@@ -14,15 +14,22 @@ const product: Product = {
     },
   ],
   categoryIds: ["baby-essentials"],
-  variants: [{ id: "sage-striped-baby-top-and-shorts-default" }],
-  uomCode: null,
-  inventoryStatus: "unknown",
+  sku: null,
+  uom: null,
+  pricing: null,
+  inventory: null,
+  status: "active",
+  variants: [],
 };
 
 const babyEssentials: Category = {
   id: "baby-essentials",
   slug: "baby-essentials",
   name: "Baby Essentials",
+  parentId: null,
+  children: [],
+  visibility: "visible",
+  showInMenu: true,
   description: null,
   image: null,
 };
@@ -65,7 +72,16 @@ describe("toProductPageViewModel", () => {
     const view = toProductPageViewModel(product, [babyEssentials]);
 
     expect(view).not.toHaveProperty("price");
-    expect(view).not.toHaveProperty("inventoryStatus");
+    expect(view).not.toHaveProperty("inventory");
     expect(view).not.toHaveProperty("variants");
+  });
+
+  it("keeps null pricing, null inventory, and empty variants as a valid product", () => {
+    expect(product.pricing).toBeNull();
+    expect(product.inventory).toBeNull();
+    expect(product.variants).toEqual([]);
+    expect(toProductPageViewModel(product, [babyEssentials]).name).toBe(
+      product.name,
+    );
   });
 });

@@ -84,13 +84,13 @@ S2-T01 delivered `/c/[slug]`. S2-T02 is complete with no duplicate route. S2-T03
 
 See the live Sprint 2 section above. Status: **COMPLETED**.
 
-### Sprint 3 — Homepage + SEO
+### Sprint 3 — Storefront + SEO
 
 | Field | Value |
 |-------|--------|
 | Phase | Phase 1 |
 | Objective | Option 1 homepage, then first-class SEO: URLs, metadata, sitemap, robots, structured data, OG, images, internal linking |
-| Status | **IN_PROGRESS** |
+| Status | **MOSTLY_COMPLETE** |
 | Dependencies | Sprint 2 completed |
 | Task IDs | S3-T01 … S3-T11 |
 
@@ -105,59 +105,87 @@ See the live Sprint 2 section above. Status: **COMPLETED**.
 | S3-T07 | Breadcrumb Structured Data | **COMPLETED** |
 | S3-T08 | Organization Structured Data | **COMPLETED** |
 | S3-T09 | OpenGraph | **COMPLETED** |
-| S3-T10 | Image Optimization | **NOT_STARTED** |
+| S3-T10 | Image Optimization | **DEFERRED** |
+| S3-T11 | Internal Linking and SEO Review | **DEFERRED** (review moved to S4-T12) |
 
-Original “SEO-Friendly URL Strategy” was reordered out of S3-T01 and remains **NOT_STARTED** (deferred in `docs/sprints/SPRINT-03.md`). Do not start S3-T10 automatically.
+S3-T01–S3-T09 are complete. S3-T10 Image Optimization is intentionally
+**DEFERRED**; S3-T11 review scope moved to S4-T12. Customer navigation/header
+alignment continues in Sprint 4. Original “SEO-Friendly URL Strategy” remains
+deferred.
 
-### Sprint 4 — Cart & Storefront Completion
-
-| Field | Value |
-|-------|--------|
-| Phase | Phase 1 |
-| Objective | Client-side cart, storefront completion, Phase 1 review. No payments. |
-| Status | **NOT_STARTED** |
-| Dependencies | Sprint 3 completed |
-| Task IDs | S4-T01 … S4-T07 |
-
-### Sprint 5 — FastAPI Backend Foundation
+### Sprint 4 — Customer Storefront + Dummy API Foundation
 
 | Field | Value |
 |-------|--------|
-| Phase | Phase 2 — Backend + Admin |
-| Objective | FastAPI app, PostgreSQL, backend layers, API contract, frontend API repository adapter |
+| Phase | Phase 1 — Storefront + Dummy API |
+| Objective | Customer navigation, stable API/domain contracts, dummy catalog APIs, and API-driven storefront |
+| Status | **COMPLETED** |
+| Dependencies | S3-T01–S3-T09 completed; S3-T10 deferred |
+| Task IDs | S4-T01 … S4-T12 (including S4-T10A, S4-T10B, S4-T10C) and fix S4-F01 |
+
+| Task ID | Name | Status |
+|---------|------|--------|
+| S4-T01 | Backend/API Audit & Cleanup | **COMPLETED** |
+| S4-T02 | Customer Navigation & Hierarchical Category UI | **COMPLETED** |
+| S4-T03 | API/Domain Contracts | **COMPLETED** |
+| S4-T04 | Dummy Category API | **COMPLETED** |
+| S4-T05 | Dummy Product API | **COMPLETED** |
+| S4-T06 | Dummy Product Detail API | **COMPLETED** |
+| S4-T07 | Variant/Size/Color Model | **COMPLETED** |
+| S4-T08 | Pricing/Inventory Model | **COMPLETED** |
+| S4-T09 | Connect UI to Dummy API | **COMPLETED** |
+| S4-T10 | Loading/Error/Empty States | **COMPLETED** |
+| S4-T10A | Classic-Modern Storefront UI Polish | **COMPLETED** |
+| S4-T10B | Refine Mega Menu Boutique UI | **COMPLETED** |
+| S4-T10C | Final Mega Menu Visual Refinement | **COMPLETED** |
+| S4-T11 | API-driven Navigation | **COMPLETED** |
+| S4-F01 | Production Soft-404 Correction | **COMPLETED** |
+| S4-T12 | Sprint Review | **COMPLETED** |
+
+Sprint 4 is complete. S4-F01 corrected the S4-T10 soft-404 defect found in
+review. Reference-storefront inspection and Zoho data verification were not
+completed; open debt is in `docs/project/TECHNICAL_DEBT.md`. Sprint 5 task IDs
+must be written and approved before Sprint 5 starts.
+
+### Sprint 5 — Commerce UI
+
+| Field | Value |
+|-------|--------|
+| Phase | Phase 1 — Customer Storefront |
+| Objective | Search, account/cart/order-entry chrome and commerce interactions against stable contracts |
 | Status | **NOT_STARTED** |
 | Dependencies | Sprint 4 completed |
-| Task IDs | S5-T01 … S5-T06 |
+| Task IDs | TBD before Sprint 5 starts |
 
-### Sprint 6 — Products + Categories + UOM + Admin
+### Sprint 6 — Production Backend
 
 | Field | Value |
 |-------|--------|
-| Phase | Phase 2 |
-| Objective | Product/category/UOM APIs and corresponding admin modules |
+| Phase | Phase 2 — Production Backend |
+| Objective | Production Mini Mystiq API, persistence, and operational foundation |
 | Status | **NOT_STARTED** |
 | Dependencies | Sprint 5 completed |
-| Task IDs | S6-T01 … S6-T08 |
+| Task IDs | TBD before Sprint 6 starts |
 
-### Sprint 7 — Inventory + Cart + Orders
+### Sprint 7 — Zoho POS Integration
 
 | Field | Value |
 |-------|--------|
-| Phase | Phase 2 |
-| Objective | Inventory, persisted cart, orders; admin inventory/orders; storefront integration |
+| Phase | Phase 2 — External Integration |
+| Objective | Zoho POS repository/adapter integration behind stable Mini Mystiq contracts |
 | Status | **NOT_STARTED** |
 | Dependencies | Sprint 6 completed |
-| Task IDs | S7-T01 … S7-T06 |
+| Task IDs | TBD before Sprint 7 starts |
 
-### Sprint 8 — Customers + Authentication + RBAC + Audit
+### Sprint 8 — Orders, Checkout & Operations
 
 | Field | Value |
 |-------|--------|
-| Phase | Phase 2 |
-| Objective | Customers, auth, RBAC, audit logs, related admin |
+| Phase | Phase 2 — Orders & Operations |
+| Objective | Approved order, checkout, account/auth, and operational workflows |
 | Status | **NOT_STARTED** |
 | Dependencies | Sprint 7 completed |
-| Task IDs | S8-T01 … S8-T07 |
+| Task IDs | TBD before Sprint 8 starts |
 
 ### Sprint 9 — Payment + Email + Messaging + Shipping
 

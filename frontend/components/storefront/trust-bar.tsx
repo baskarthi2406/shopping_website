@@ -11,14 +11,11 @@ export function TrustBar({ items }: TrustBarProps) {
 
   return (
     <section aria-label="Store policies from the approved homepage design">
-      <Container className="py-8 sm:py-10">
-        <ul className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+      <Container className="py-10 sm:py-12">
+        <ul className="grid grid-cols-1 gap-6 border-t border-border pt-8 sm:grid-cols-2 lg:grid-cols-4 lg:gap-8">
           {items.map((item) => (
-            <li
-              key={item.title}
-              className="rounded-lg bg-surface-muted px-4 py-4"
-            >
-              <p className="text-small font-semibold text-foreground">
+            <li key={item.title} className="min-w-0">
+              <p className="font-display text-small font-semibold text-foreground">
                 {item.title}
               </p>
               <p className="mt-1 text-caption text-foreground-secondary">

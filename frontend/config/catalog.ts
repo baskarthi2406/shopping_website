@@ -1,49 +1,34 @@
-import {
-  getCategoryBySlug,
-  getCategoryPage,
-  getHomePage,
-  getProductById,
-  getProductBySlug,
-  getProductPage,
-  listCategories,
-  listFeaturedProducts,
-  listProducts,
-  listProductsByCategory,
-  type CategoryRepository,
-  type ProductRepository,
-  type UomRepository,
-} from "@/application/catalog";
-import { listIndexableUrls } from "@/application/seo/list-indexable-urls";
-import { StaticCategoryRepository } from "@/infrastructure/catalog/static-category-repository";
-import { StaticProductRepository } from "@/infrastructure/catalog/static-product-repository";
+import { cache } from "react";
+import { HttpCategoryRepository } from "@/infrastructure/catalog/http-category-repository";
+import { HttpProductRepository } from "@/infrastructure/catalog/http-product-repository";
 import { StaticUomRepository } from "@/infrastructure/catalog/static-uom-repository";
+import {
+  createCatalogApiClient,
+  type CatalogApiClient,
+} from "@/infrastructure/catalog/catalog-api-client";
+import { dispatchCatalogApi } from "./catalog-api-dispatch";
+import { createCatalog } from "./create-catalog";
 
-const productRepository: ProductRepository = new StaticProductRepository();
-const categoryRepository: CategoryRepository = new StaticCategoryRepository();
-const uomRepository: UomRepository = new StaticUomRepository();
+const catalogApi = createCatalogApiClient(dispatchCatalogApi);
+const storefrontCatalogApi: CatalogApiClient = {
+  getCategoryTree: cache(() => catalogApi.getCategoryTree()),
+  getProductCollection: (query) => catalogApi.getProductCollection(query),
+  getProductBySlug: cache((slug: string) => catalogApi.getProductBySlug(slug)),
+};
+const productRepository = new HttpProductRepository(storefrontCatalogApi);
+const categoryRepository = new HttpCategoryRepository(storefrontCatalogApi);
+const uomRepository = new StaticUomRepository();
 
 /**
- * Composition root for catalog data.
- * Pages and later UI call these functions. They must not import static records.
- * Phase 2 swaps the repository implementations here only (ADR 0004).
+ * Storefront composition root. Pages and layout navigation call these use
+ * cases and never choose a repository or import fixtures. Product/category
+ * reads go through the dummy API client (ADR 0004). Category tree and product
+ * detail reads are request-memoized so header, footer, route existence checks,
+ * and pages share one GET /api/categories and one product detail request.
+ * UOM has no dummy endpoint yet, so it stays static.
  */
-export const catalog = {
-  getProductById: (id: string) => getProductById(productRepository, id),
-  getProductBySlug: (slug: string) => getProductBySlug(productRepository, slug),
-  getProductPage: (slug: string) =>
-    getProductPage(productRepository, categoryRepository, slug),
-  listProducts: () => listProducts(productRepository),
-  listProductsByCategory: (categorySlug: string) =>
-    listProductsByCategory(productRepository, categorySlug),
-  listFeaturedProducts: () => listFeaturedProducts(productRepository),
-  getCategoryBySlug: (slug: string) =>
-    getCategoryBySlug(categoryRepository, slug),
-  getCategoryPage: (slug: string) =>
-    getCategoryPage(categoryRepository, productRepository, slug),
-  getHomePage: () => getHomePage(categoryRepository, productRepository),
-  listCategories: () => listCategories(categoryRepository),
-  listIndexableUrls: () =>
-    listIndexableUrls(categoryRepository, productRepository),
-  listUoms: () => uomRepository.list(),
-  getUomByCode: (code: string) => uomRepository.getByCode(code),
-};
+export const catalog = createCatalog(
+  productRepository,
+  categoryRepository,
+  uomRepository,
+);

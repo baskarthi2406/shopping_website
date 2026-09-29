@@ -1,7 +1,7 @@
 import { existsSync } from "node:fs";
 import path from "node:path";
 import { describe, expect, it } from "vitest";
-import { isCatalogSlug } from "@/domain/catalog";
+import { isCatalogSlug, validateProduct } from "@/domain/catalog";
 import { StaticCategoryRepository } from "./static-category-repository";
 import { StaticProductRepository } from "./static-product-repository";
 
@@ -18,6 +18,17 @@ describe("StaticProductRepository", () => {
     const listed = await products.list();
     expect(listed).toHaveLength(12);
     expect(listed.every((item) => isCatalogSlug(item.slug))).toBe(true);
+    expect(listed.every((item) => item.variants.length === 0)).toBe(true);
+    expect(
+      listed.every(
+        (item) =>
+          item.sku === null &&
+          item.uom === null &&
+          item.pricing === null &&
+          item.inventory === null,
+      ),
+    ).toBe(true);
+    expect(listed.flatMap((item) => validateProduct(item))).toEqual([]);
   });
 
   it("has unique product ids and slugs", async () => {
@@ -27,6 +38,15 @@ describe("StaticProductRepository", () => {
 
     expect(new Set(ids).size).toBe(ids.length);
     expect(new Set(slugs).size).toBe(slugs.length);
+  });
+
+  it("returns deterministic product order", async () => {
+    const first = await products.list();
+    const second = await products.list();
+
+    expect(second.map((product) => product.slug)).toEqual(
+      first.map((product) => product.slug),
+    );
   });
 
   it("only assigns category ids that exist", async () => {
@@ -53,6 +73,14 @@ describe("StaticProductRepository", () => {
   it("returns null for an unknown slug or id", async () => {
     await expect(products.getBySlug("missing-product")).resolves.toBeNull();
     await expect(products.getById("missing-product")).resolves.toBeNull();
+  });
+
+  it("looks up products by public SEO slug deterministically", async () => {
+    const first = await products.getBySlug("pink-white-pleated-baby-dress");
+    const second = await products.getBySlug("pink-white-pleated-baby-dress");
+
+    expect(first?.slug).toBe("pink-white-pleated-baby-dress");
+    expect(second).toEqual(first);
   });
 
   it("lists products in baby-essentials and kids, and none for unknown or empty categories", async () => {
@@ -95,11 +123,12 @@ describe("StaticProductRepository", () => {
   it("maps fixtures to domain defaults without invented commerce fields", async () => {
     const dress = await products.getBySlug("olive-green-patterned-dress");
 
-    expect(dress?.uomCode).toBeNull();
-    expect(dress?.inventoryStatus).toBe("unknown");
-    expect(dress?.variants).toEqual([
-      { id: "olive-green-patterned-dress-default" },
-    ]);
+    expect(dress?.sku).toBeNull();
+    expect(dress?.uom).toBeNull();
+    expect(dress?.pricing).toBeNull();
+    expect(dress?.inventory).toBeNull();
+    expect(dress?.status).toBe("active");
+    expect(dress?.variants).toEqual([]);
     expect(dress?.images[0]?.src).toBe("/olive-green-patterned-dress.jpg");
     expect(dress?.images[0]?.alt).not.toBe("olive-green-patterned-dress.jpg");
   });

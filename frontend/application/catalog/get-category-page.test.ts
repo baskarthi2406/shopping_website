@@ -12,9 +12,12 @@ function product(
     description: "In-memory test product",
     images: [],
     categoryIds: [],
-    variants: [{ id: `${overrides.id}-default` }],
-    uomCode: null,
-    inventoryStatus: "unknown",
+    sku: null,
+    uom: null,
+    pricing: null,
+    inventory: null,
+    status: "active",
+    variants: [],
     ...overrides,
   };
 }
@@ -24,6 +27,10 @@ function category(
 ): Category {
   return {
     name: "Test category",
+    parentId: null,
+    children: [],
+    visibility: "visible",
+    showInMenu: true,
     description: null,
     image: null,
     ...overrides,
@@ -121,6 +128,13 @@ describe("getCategoryPage", () => {
     const page = await getCategoryPage(categories, products, "infants");
 
     expect(page?.category).toEqual(infants);
+    expect(page?.products).toEqual([]);
+  });
+
+  it("treats an empty product list as success, not a missing category", async () => {
+    const page = await getCategoryPage(categories, products, "infants");
+
+    expect(page).not.toBeNull();
     expect(page?.products).toEqual([]);
   });
 });

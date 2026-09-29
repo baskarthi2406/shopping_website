@@ -8,6 +8,10 @@ function category(
   overrides: Partial<Category> & Pick<Category, "id" | "slug" | "name">,
 ): Category {
   return {
+    parentId: null,
+    children: [],
+    visibility: "visible",
+    showInMenu: true,
     description: null,
     image: null,
     ...overrides,
@@ -21,9 +25,12 @@ function product(
     description: "In-memory test product",
     images: [],
     categoryIds: [],
-    variants: [{ id: `${overrides.id}-default` }],
-    uomCode: null,
-    inventoryStatus: "unknown",
+    sku: null,
+    uom: null,
+    pricing: null,
+    inventory: null,
+    status: "active",
+    variants: [],
     ...overrides,
   };
 }

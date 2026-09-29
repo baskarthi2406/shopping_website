@@ -2,17 +2,39 @@ import type { ReactNode } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { AnnouncementBar } from "@/components/storefront/announcement-bar";
-import { CatalogNavigation } from "@/components/storefront/catalog-navigation";
+import {
+  DesktopCatalogNavigation,
+  MobileCatalogNavigation,
+  StoreToolPlaceholders,
+  type CatalogNavItem,
+} from "@/components/storefront/catalog-navigation";
+import {
+  StorefrontFooter,
+  type FooterContact,
+  type FooterNavLink,
+} from "@/components/storefront/storefront-footer";
 import { Container } from "@/components/ui/container";
 
 type StorefrontShellProps = {
   children: ReactNode;
-  navigation?: readonly { label: string; href: string }[];
+  navigation?: readonly CatalogNavItem[];
+  footerNav?: {
+    shop: readonly FooterNavLink[];
+    collections: readonly FooterNavLink[];
+  };
+  contact: FooterContact;
 };
+
+const EMPTY_FOOTER_NAV = {
+  shop: [],
+  collections: [],
+} as const;
 
 export function StorefrontShell({
   children,
   navigation = [],
+  footerNav = EMPTY_FOOTER_NAV,
+  contact,
 }: StorefrontShellProps) {
   return (
     <>
@@ -22,7 +44,7 @@ export function StorefrontShell({
       <div className="flex min-h-dvh flex-col bg-background text-foreground">
         <AnnouncementBar />
         <header className="border-b border-border bg-surface">
-          <Container className="flex min-h-[var(--mm-header-min)] items-center justify-between gap-3 py-2 sm:gap-6">
+          <Container className="relative flex min-h-[var(--mm-header-min)] items-center justify-between gap-3 py-2 md:gap-6">
             <Link
               href="/"
               className="inline-flex min-h-[var(--mm-tap-min)] shrink-0 items-center rounded-md"
@@ -37,55 +59,23 @@ export function StorefrontShell({
                 style={{ width: "auto" }}
               />
             </Link>
-            {navigation.length > 0 ? (
-              <details className="sm:hidden">
-                <summary className="inline-flex min-h-[var(--mm-tap-min)] cursor-pointer list-none items-center rounded-md text-small font-medium text-foreground [&::-webkit-details-marker]:hidden">
-                  Categories
-                </summary>
-                <div className="pt-1">
-                  <CatalogNavigation items={navigation} />
-                </div>
-              </details>
-            ) : null}
-            <div className="hidden sm:block">
-              <CatalogNavigation items={navigation} />
-            </div>
+            <StoreToolPlaceholders className="hidden items-center gap-1 md:flex" />
+            <MobileCatalogNavigation items={navigation} />
           </Container>
+          <div className="hidden border-t border-border md:block">
+            <Container>
+              <DesktopCatalogNavigation items={navigation} />
+            </Container>
+          </div>
         </header>
         <main id="main-content" className="flex-1">
           {children}
         </main>
-        <footer className="border-t border-border bg-surface">
-          <Container className="flex flex-col gap-4 py-6 sm:flex-row sm:items-start sm:justify-between">
-            <div>
-              <p className="text-small font-semibold text-foreground">
-                Mini Mystiq
-              </p>
-              <p className="mt-1 text-caption text-foreground-muted">
-                Baby Clothes & Toys
-              </p>
-              <p className="mt-1 text-caption text-foreground-muted">
-                Delivering Style & Tech
-              </p>
-            </div>
-            {navigation.length > 0 ? (
-              <nav aria-label="Footer categories">
-                <ul className="flex flex-col gap-1 sm:items-end">
-                  {navigation.map((item) => (
-                    <li key={item.href}>
-                      <Link
-                        href={item.href}
-                        className="inline-flex min-h-[var(--mm-tap-min)] items-center text-small text-foreground-secondary hover:text-primary"
-                      >
-                        {item.label}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </nav>
-            ) : null}
-          </Container>
-        </footer>
+        <StorefrontFooter
+          shop={footerNav.shop}
+          collections={footerNav.collections}
+          contact={contact}
+        />
       </div>
     </>
   );

@@ -9,34 +9,48 @@ Only decided capabilities are listed as requirements. Everything else is **TBD**
 The public site must eventually allow visitors to:
 
 1. Land on a storefront home page matching **Design Option 1** (`docs/project/DESIGN_OPTION_1.md`). Copy in that spec is intended homepage copy.
-2. Browse categories shown in Option 1: Baby Essentials, Infants, Kids, Teens, Women (plus New Arrivals, Offers in nav). Data model / catalog completeness **TBD**.
+2. Browse prominent ecommerce navigation for Baby Essentials, Infants, Kids,
+   Teens, and Women. The customer reference includes deeper hierarchy such as
+   Infants → Baby Girl/Baby Boy → product subcategories. Exact complete
+   taxonomy/order remains **TBD** and must come from data, not React constants.
 3. Browse product listings.
 4. View product details.
 5. Use SEO-friendly, crawlable catalog URLs.
-6. Manage a cart (add/update/remove). Checkout payment is **not** Phase 1.
+6. Eventually access Search, Account, Cart, and Track Your Order from customer
+   navigation. Their behavior is scheduled separately and remains **TBD** until
+   the corresponding task.
 7. Use the storefront comfortably on a phone (mobile-first). See `MOBILE_REQUIREMENTS.md`.
 
 ## Catalog (partially decided)
 
-- Products belong to categories.
-- Units of measure (UOM) are a planned domain concept (needed in Phase 2 admin; Phase 1 mock data may include a simple UOM field).
-- Product attributes beyond name, description, images, price display, and category: **TBD**.
-- Variants (size/color): **TBD**.
+- Products may belong to one or more categories; exact cardinality and
+  descendant-listing behavior are **TBD**.
+- Categories require parent/child hierarchy, visibility, and menu-display
+  semantics. S4-T02 implements these in the domain/static repository and
+  recursive UI; S4-T03 defines ordered recursive application responses.
+- Units of measure (UOM) use a nullable code/label contract; actual values and
+  management behavior are **TBD**.
+- Product SKU, pricing, inventory, and publication fields have nullable
+  provider-independent shapes; actual business values remain **TBD**.
+- Variants use generic name/value attributes for size, color, or other options;
+  actual option vocabulary and values remain **TBD**. Current fixtures have no
+  populated variants. Do not invent sizes or colors.
 - Stock display on the storefront: **TBD**.
 - Listing filter/sort: **TBD**. S2-T05 deferred this; see `CATALOG_FILTER_SORT.md`. Do not invent facets.
 - Phase 1 static catalog (S2-T06, reviewed S2-T07): 12 approved product photos. Toys pending assets. Five dresses remain uncategorized (age/taxonomy TBD). Infants/teens/women may stay empty.
 
-## Cart (Phase 1)
+## Commerce UI (Sprint 5)
 
-- Client-side cart for storefront completion (Sprint 4).
-- Guest vs authenticated cart: **TBD** (auth is Phase 2).
+- Cart/application persistence contract: **TBD**.
+- Guest vs authenticated cart: **TBD**.
 - Promo codes: **TBD** (coupons in later admin; commerce rules TBD).
 
-## Phase 2 — Backend capabilities (planned, not specified in detail)
+## API/backend capabilities (planned, not specified in detail)
 
-- Persist products, categories, UOM, inventory, carts, orders, customers.
-- Admin management of those entities.
-- Authentication, RBAC, audit logs.
+- Sprint 4: stable API/domain contracts and dummy category/product APIs.
+- Sprint 6: production API and persistence.
+- Sprint 7: Zoho POS integration behind repository adapters.
+- Sprint 8: approved orders, checkout, account/auth, and operations workflows.
 
 Exact workflows, statuses, and business rules: **TBD**.
 
@@ -48,10 +62,12 @@ Payment, email, messaging, shipping: **TBD** (providers and rules).
 
 Segmentation, campaigns, analytics: **TBD**.
 
-## Non-goals for Phase 1
+## Non-goals for S4-T01
 
 - FastAPI
 - PostgreSQL
+- Dummy API implementation
+- Zoho integration
 - Admin UI
 - Payments
 - Customer accounts

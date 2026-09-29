@@ -1,6 +1,6 @@
 # Frontend — Mini Mystiq
 
-Phase 1 SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys).
+SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys).
 
 ## Stack
 
@@ -11,7 +11,9 @@ Phase 1 SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys)
 - ESLint (`eslint-config-next`)
 - Vitest 4 (unit tests)
 
-Server Components are the default. No state-management library. No API client. No backend dependencies.
+Server Components are the default. No state-management library or API-client/
+backend dependency has been added. The first read-only dummy route is the
+S4-T04 category endpoint.
 
 ## Run
 
@@ -45,7 +47,10 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S2-T03:** crawlable product detail at `/p/[slug]` via `catalog.getProductPage`. Example: `/p/pink-white-pleated-baby-dress`. Unknown slugs use `notFound()`. No price, stock, variants, or cart. JSON-LD is Sprint 3.
 
-**S2-T04:** header catalog nav (categories from `listCategories`) and a shared `Breadcrumbs` component on `/c/` and `/p/`. Wrapping links, no hamburger Client Component, no cart/search. Breadcrumb JSON-LD is Sprint 3.
+**S2-T04:** header catalog nav (categories from `listCategories`) and a shared
+`Breadcrumbs` component on `/c/` and `/p/`. S4-T02 later replaced the flat
+header rendering with recursive customer navigation while preserving this data
+flow and the existing routes.
 
 **S2-T05:** listing filter/sort deferred. Category pages do not expose Filter/Sort UI or query parameters. See `docs/requirements/CATALOG_FILTER_SORT.md`.
 
@@ -71,7 +76,47 @@ Valid development slugs: `/c/baby-essentials` (four products), `/c/kids` (three 
 
 **S3-T09:** OpenGraph review. Existing S3-T02/S3-T03 metadata already met the contract (hero / category stand-in / primary product image; canonical equals `og:url`). Tests added; helpers unchanged.
 
-**Not implemented yet:** category index, cart, search, filters/sort, Option 1 search/wishlist/account/cart chrome, admin. SEO-friendly URL strategy is deferred from original S3-T01.
+**S4-T01:** repository-wide backend/API audit found no API routes, server
+actions, backend application, DB/ORM, HTTP client, auth, or obsolete backend
+dependency. Existing static repositories and clean interfaces remain.
+
+**S4-T02:** customer-reference taxonomy is represented as flat infrastructure
+records mapped to recursive domain `children`. Mobile uses a scrollable Menu
+disclosure; tablet/desktop use a prominent single-row category bar and
+hierarchy dropdowns. Search, Account, Cart, and Track Your Order are disabled
+visual entry points only. Homepage category tiles remain the existing five
+image-backed categories.
+
+**S4-T03:** provider-independent contracts define recursive categories,
+product summaries/details, generic variant attributes, nullable SKU/UOM/
+pricing/inventory, publication and availability status, product pagination,
+and consistent detail errors. Static fixtures keep unknown commerce values
+null and no longer synthesize default variants. See
+`docs/architecture/STOREFRONT_CONTRACTS.md`.
+
+**S4-T04:** `GET /api/categories` returns the stable ordered recursive category
+collection from `StaticCategoryRepository` through an application use case.
+The route is force-static and maps failures to the shared safe error envelope.
+The existing UI does not fetch this endpoint.
+
+**S4-T05:** `GET /api/products` returns paginated product summaries from the 12
+approved records. Supported queries are positive integer `page` and `pageSize`;
+defaults are 1 and 12. Invalid/unsupported queries return the shared 400 error,
+and repository failures return a sanitized 500. No filters are implemented.
+
+**S4-T06:** `GET /api/products/[slug]` returns the full product-detail envelope
+for an approved public SEO slug. Unknown well-formed slugs return 404
+`not_found`; invalid slug syntax and unsupported query parameters return 400.
+Unknown SKU/UOM/pricing/inventory remain null and variants remain empty. The
+existing UI does not fetch this endpoint.
+
+**S4-T07:** variants are generic `name`/`value` attributes. Size and color are
+examples, not typed fields. Current fixtures keep `variants: []`. No variant
+UI, API, or invented option values.
+
+**Not implemented yet:** API repository/UI wiring, cart/search/account/order
+behavior, filters/sort, admin, or Zoho integration. S3-T10 Image Optimization
+and the original SEO-friendly URL strategy remain deferred.
 
 ## Architecture
 
@@ -92,7 +137,8 @@ App / Pages → Presentation → Application → Domain → Repository interface
 Infrastructure implements repositories. Configuration binds them.
 ```
 
-**Forbidden:** React → static JSON; React → FastAPI/SQL; Domain → Next.js/React.
+**Forbidden:** React → static/dummy/Zoho DTOs; React → FastAPI/SQL; Domain →
+Next.js/React. Infrastructure maps transport/vendor DTOs to domain contracts.
 
 There is no top-level `repositories/` or `types/` folder. Canonical domain models belong in `domain/`.
 
@@ -140,6 +186,18 @@ Local development may omit it; `config/site.ts` then uses `http://localhost:3000
 ```bash
 npm test
 npm run test:watch
+```
+
+**Production HTTP status checks (S4-F01):** `*.http.test.ts` files are
+excluded from `npm test`. They start `next start` against the existing `.next`
+production build on a free local port and assert real response status codes
+(existing `/`, `/c/{slug}`, `/p/{slug}` → 200; missing category/product → 404
+with the not-found page and `noindex`) for a browser and a Googlebot user
+agent. Config: `vitest.http.config.mts`.
+
+```bash
+npm run build
+npm run test:http
 ```
 
 Component and E2E testing remain later tasks. No coverage thresholds.

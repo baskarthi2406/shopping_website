@@ -18,6 +18,17 @@ describe("layout Organization JSON-LD wiring", () => {
     expect(layout).toContain("JsonLd");
     expect(layout).toContain("toCanonicalUrl");
     expect(layout).toContain("@/config/organization");
+    expect(layout).toContain("@/config/catalog");
+    expect(layout).toContain("catalog.listCategories");
+    expect(layout).toContain("unstable_rethrow");
+    expect(layout).toContain("toCatalogNavItems");
+    expect(layout).toContain("toFooterNavViewModel");
+    expect(layout).not.toContain("catalog-source");
+    expect(layout).not.toMatch(/\bfetch\s*\(/);
+    expect(layout).toContain("@/app/fonts");
+    expect(layout).toContain("sourceSans.variable");
+    expect(layout).toContain("cormorant.variable");
+    expect(layout).not.toMatch(/product-records|category-records/);
     expect(productPage).not.toContain("buildOrganizationStructuredData");
     expect(categoryPage).not.toContain("buildOrganizationStructuredData");
   });

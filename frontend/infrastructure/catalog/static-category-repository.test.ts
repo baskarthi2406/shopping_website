@@ -9,14 +9,22 @@ const publicDir = path.resolve(import.meta.dirname, "../../public");
 describe("StaticCategoryRepository", () => {
   const categories = new StaticCategoryRepository();
 
-  it("lists the Option 1 nav categories", async () => {
+  it("lists customer-reference categories with stable top-level order", async () => {
     const listed = await categories.list();
-    expect(listed.map((item) => item.slug)).toEqual([
+    expect(
+      listed
+        .filter((item) => item.parentId === null)
+        .map((item) => item.slug),
+    ).toEqual([
       "baby-essentials",
       "infants",
       "kids",
       "teens",
       "women",
+      "kids-wear",
+      "boys-wear",
+      "girls-wear",
+      "boutique",
     ]);
     expect(listed.every((item) => isCatalogSlug(item.slug))).toBe(true);
   });
@@ -29,9 +37,49 @@ describe("StaticCategoryRepository", () => {
     expect(byId).toEqual(bySlug);
   });
 
+  it("builds arbitrary-depth parent and child relationships", async () => {
+    const infants = await categories.getBySlug("infants");
+    const babyGirl = await categories.getBySlug("infants-baby-girl");
+    const frock = await categories.getBySlug("infants-baby-girl-frock");
+
+    expect(infants?.children.map((item) => item.name)).toEqual([
+      "Baby Girl",
+      "Baby Boy",
+    ]);
+    expect(babyGirl?.parentId).toBe("infants");
+    expect(babyGirl?.children.some((item) => item.name === "Frock")).toBe(true);
+    expect(frock).toMatchObject({
+      parentId: "infants-baby-girl",
+      children: [],
+      visibility: "visible",
+      showInMenu: true,
+    });
+  });
+
+  it("keeps empty customer-reference categories routable", async () => {
+    await expect(
+      categories.getBySlug("women-straight-cut-pants"),
+    ).resolves.toMatchObject({
+        name: "Straight Cut Pants",
+        parentId: "women",
+      });
+    await expect(categories.getBySlug("boutique")).resolves.toMatchObject({
+      name: "Boutique",
+      children: [],
+    });
+  });
+
   it("returns null for an unknown slug or id", async () => {
     await expect(categories.getBySlug("missing")).resolves.toBeNull();
     await expect(categories.getById("missing")).resolves.toBeNull();
+  });
+
+  it("returns deterministic hierarchy results", async () => {
+    const first = await categories.list();
+    const second = await categories.list();
+
+    expect(second).toBe(first);
+    expect(second).toEqual(first);
   });
 
   it("uses documented stand-in images, not invented category art", async () => {
@@ -43,8 +91,7 @@ describe("StaticCategoryRepository", () => {
   it("points category stand-in images at files that exist in frontend/public", async () => {
     const listed = await categories.list();
 
-    for (const category of listed) {
-      expect(category.image).not.toBeNull();
+    for (const category of listed.filter((item) => item.image !== null)) {
       const filename = category.image?.src.replace(/^\//, "") ?? "";
       expect(existsSync(path.join(publicDir, filename))).toBe(true);
     }

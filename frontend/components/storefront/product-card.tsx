@@ -19,24 +19,24 @@ export function ProductCard({
   const Heading = headingAs;
 
   return (
-    <article className="h-full overflow-hidden rounded-lg border border-border bg-surface shadow-sm">
+    <article className="h-full overflow-hidden rounded-md border border-border bg-surface transition-shadow duration-[var(--mm-duration)] hover:shadow-sm">
       <Link
         href={href}
-        className="flex h-full min-h-[var(--mm-tap-min)] flex-col rounded-lg"
+        className="group flex h-full min-h-[var(--mm-tap-min)] flex-col rounded-md"
       >
-        <div className="relative aspect-[3/4] bg-surface-muted">
+        <div className="relative aspect-[3/4] overflow-hidden bg-surface-muted">
           {image ? (
             <Image
               src={image.src}
               alt={image.alt}
               fill
               sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
-              className="object-contain p-2"
+              className="mm-hover-zoom object-contain p-3"
             />
           ) : null}
         </div>
         <div className="flex flex-1 flex-col gap-1 p-3">
-          <Heading className="text-small font-semibold text-foreground sm:text-body">
+          <Heading className="font-sans text-small font-medium text-foreground sm:text-body">
             {name}
           </Heading>
           <p className="line-clamp-2 text-caption text-foreground-secondary">

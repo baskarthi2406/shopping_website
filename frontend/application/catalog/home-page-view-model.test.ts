@@ -10,9 +10,12 @@ function product(
     description: "In-memory test product",
     images: [],
     categoryIds: [],
-    variants: [{ id: `${overrides.id}-default` }],
-    uomCode: null,
-    inventoryStatus: "unknown",
+    sku: null,
+    uom: null,
+    pricing: null,
+    inventory: null,
+    status: "active",
+    variants: [],
     ...overrides,
   };
 }
@@ -22,6 +25,10 @@ function category(
 ): Category {
   return {
     name: "Test category",
+    parentId: null,
+    children: [],
+    visibility: "visible",
+    showInMenu: true,
     description: null,
     image: null,
     ...overrides,
@@ -57,7 +64,7 @@ describe("toHomePageViewModel", () => {
     categoryIds: ["kids"],
   });
 
-  it("maps catalog categories and products without hard-coded names", () => {
+  it("maps image-backed top-level categories without hard-coded names", () => {
     const view = toHomePageViewModel({
       categories: [kids, empty],
       products: [shirt],
@@ -72,7 +79,6 @@ describe("toHomePageViewModel", () => {
           alt: "Burgundy and sage striped kids shirts",
         },
       },
-      { name: "Infants", href: "/c/infants", image: null },
     ]);
     expect(view.products).toEqual([
       {

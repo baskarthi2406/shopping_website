@@ -1,3 +1,4 @@
+import { CatalogSectionEmpty } from "@/components/storefront/catalog-empty-state";
 import { ProductCard } from "@/components/storefront/product-card";
 import { Container } from "@/components/ui/container";
 
@@ -12,15 +13,21 @@ type HomeProductsProps = {
 
 export function HomeProducts({ products }: HomeProductsProps) {
   if (products.length === 0) {
-    return null;
+    return (
+      <CatalogSectionEmpty
+        headingId="home-products-heading"
+        heading="Clothing in the catalog"
+        message="No products in the catalog yet."
+      />
+    );
   }
 
   return (
     <section aria-labelledby="home-products-heading">
-      <Container className="py-8 sm:py-10">
+      <Container className="py-10 sm:py-12">
         <h2
           id="home-products-heading"
-          className="text-h2 font-semibold tracking-tight text-foreground"
+          className="font-display text-h2 font-semibold tracking-tight text-foreground"
         >
           Clothing in the catalog
         </h2>
@@ -28,7 +35,7 @@ export function HomeProducts({ products }: HomeProductsProps) {
           Current products from the Mini Mystiq catalog. This is not a featured
           selection.
         </p>
-        <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
+        <ul className="mt-8 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">
           {products.map((product) => (
             <li key={product.href} className="min-w-0">
               <ProductCard {...product} headingAs="h3" />

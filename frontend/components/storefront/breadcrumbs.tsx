@@ -33,7 +33,7 @@ export function Breadcrumbs({ items }: BreadcrumbsProps) {
               {item.href && !isLast ? (
                 <Link
                   href={item.href}
-                  className="inline-flex min-h-[var(--mm-tap-min)] items-center text-primary hover:text-primary-hover"
+                  className="inline-flex min-h-[var(--mm-tap-min)] items-center text-primary transition-colors duration-[var(--mm-duration)] hover:text-primary-hover"
                 >
                   {item.label}
                 </Link>

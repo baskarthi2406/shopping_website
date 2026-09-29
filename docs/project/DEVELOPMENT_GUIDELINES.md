@@ -26,7 +26,8 @@ Never start the next task automatically.
 
 ## Layering
 
-See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; implemented through S3-T07).
+See `docs/architecture/FRONTEND_ARCHITECTURE.md` (S1-T02 contract; audited
+through S4-T01).
 
 ```
 App / Pages → Presentation → Application → Domain → Repository interface
@@ -35,8 +36,9 @@ Infrastructure implements repositories. Configuration binds them.
 
 **Forbidden:** React → static JSON; React → FastAPI/SQL; Domain → Next.js/React.
 
-Phase 1 infrastructure = static/mock data.  
-Phase 2 infrastructure = HTTP client → FastAPI + PostgreSQL behind the same frontend repository interface.
+Current infrastructure = static/mock data.
+Planned infrastructure = dummy HTTP repository → production backend → Zoho
+adapter behind the same frontend repository interfaces (ADR 0005).
 
 Pages are Server Components by default. Client Components are small interactive islands only.
 
@@ -62,6 +64,11 @@ Product detail (S2-T03): `app/p/[slug]/page.tsx` calls `catalog.getProductPage`.
 
 Catalog nav (S2-T04): `app/layout.tsx` calls `catalog.listCategories` and `toCatalogNavItems`. `StorefrontShell` receives nav props. `Breadcrumbs` and `CatalogNavigation` are presentation-only. No `"use client"`. BreadcrumbList JSON-LD is S3-T07.
 
+Backend/API audit (S4-T01): no API routes, server actions, backend application,
+database/ORM, auth, or HTTP client code exists. Keep static repositories and
+their interfaces. S4-T02+ must keep category hierarchy data-driven. Raw
+dummy/Zoho DTOs stay in infrastructure and map to Mini Mystiq contracts.
+
 Listing filter/sort (S2-T05): **deferred**. Do not add facets, query-parameter listings, or placeholder Filter/Sort controls until business rules exist (`docs/requirements/CATALOG_FILTER_SORT.md`).
 
 Static catalog (S2-T06): 12 development products from approved assets. Do not invent toys, prices, or age taxonomy. Infants/teens/women remain empty on purpose.
@@ -83,6 +90,8 @@ Metadata helpers live in `application/seo/`. Sitemap URL listing is `listIndexab
 - No secrets in Git.
 - No extra dependencies without a task need.
 - Unit tests: Vitest (`npm test`). Colocate `*.test.ts`. Application tests use repository fakes, not static fixtures. Domain tests stay framework-free. Component/E2E tests are later tasks.
+- Production HTTP status checks: `npm run build && npm run test:http` (`*.http.test.ts`, S4-F01). Route status codes must be verified against a production build, not by source text or rendered `noindex` alone.
+- Route existence checks for `/c/{slug}` and `/p/{slug}` live in the segment `layout.tsx`, above the segment `loading.tsx`. Do not add a `loading.tsx` or `Suspense` boundary above those layouts (the homepage skeleton is scoped to `app/(home)/`); once streaming starts, `notFound()` can no longer return HTTP 404.
 - Visual tokens: Option 1 via `frontend/app/globals.css`. Use semantic utilities (`bg-primary`, `text-foreground`), not raw hex. Breakpoints and hex are implementation defaults until a brand guide says otherwise.
 
 ## Definition of Done

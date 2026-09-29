@@ -1,6 +1,6 @@
 # Target Architecture
 
-**Status:** Accepted for S1-T01. Sprint 1 foundation is implemented as of S1-T08.  
+**Status:** Accepted for S1-T01; revised through S4-T03 and ADR 0005.
 Significant changes require an ADR.
 
 **Product:** Mini Mystiq — Baby Clothes & Toys  
@@ -14,8 +14,10 @@ Significant changes require an ADR.
 - SEO-first, crawlable storefront
 - Mobile-first (Mobile → Tablet → Desktop)
 - SOLID, testable domain and application layers
-- Phase 1 static repositories replaced in Phase 2 by API repositories **without a storefront rewrite**
+- Static repositories replaced by dummy/API/Zoho-backed repositories **without
+  a storefront rewrite**
 - Backend: **modular monolith** (ADR 0003) — not microservices
+- Vendor isolation: Zoho DTOs stay behind repository adapters (ADR 0005)
 - Approved assets only (`docs/project/DESIGN_ASSETS.md`); logo `mini-mystiq-logo.png`
 
 ---
@@ -23,19 +25,19 @@ Significant changes require an ADR.
 ## 2. System overview
 
 ```
-Phase 1                          Phase 2
-───────                          ───────
-Next.js UI                       Next.js UI  (same)
-  → Application services           → Application services  (same)
-    → Repository interface           → Repository interface  (same)
-      → Static repository              → HTTP repository
-                                           → FastAPI modular monolith
-                                             → Application / Domain
-                                               → SQL repository
-                                                 → PostgreSQL
+Current                         Planned
+───────                         ───────
+Next.js UI                      Next.js UI (same)
+  → Application services         → Application services (same)
+    → Repository interface         → Repository interface (same)
+      → Static repository            → Dummy API repository (Sprint 4)
+                                       → Production backend (Sprint 6)
+                                       → Zoho adapter (Sprint 7)
 ```
 
-One Git repository (`shopping/`). Apps: `frontend/` (Phase 1+), `backend/` (Phase 2).
+One Git repository (`shopping/`). `frontend/` contains the storefront and the
+S4-T04 read-only dummy category route. `backend/` contains documentation only;
+production implementation is scheduled for Sprint 6.
 
 ---
 
@@ -66,14 +68,14 @@ Infrastructure (static data, HTTP client, PostgreSQL)
 
 Logical domains (modules). Not services.
 
-| Domain | Phase 1 storefront | Phase 2 backend |
+| Domain | Current/planned storefront | Future production/integration |
 |--------|--------------------|-----------------|
 | Catalog (Product, Category, UOM) | Yes (static) | Yes |
-| Cart | Client-side (Sprint 4) | Persisted (Sprint 7) |
-| Inventory | Display **TBD** | Sprint 7 |
-| Ordering | Checkout shell only | Sprint 7–9 |
-| Identity / Customer | Header chrome only | Sprint 8 |
-| Admin / Audit | No | Sprint 6–8 |
+| Cart | Commerce UI planned Sprint 5 | Persistence/workflow TBD Sprint 6/8 |
+| Inventory | Provider-independent snapshot contract (S4-T03) | Production/Zoho integration S6–S7 |
+| Ordering | No implementation | Sprint 8 |
+| Identity / Customer | Navigation expectation only | Sprint 8 scope TBD |
+| Admin / Audit | No implementation | Production/operations scope TBD |
 | Marketing / CMS | No | Later; TBD |
 
 Keep module folders aligned with these names so a domain can be extracted later **without** starting as microservices.
@@ -83,50 +85,85 @@ Keep module folders aligned with these names so a domain can be extracted later 
 ## 5. Repository swap
 
 ```
-IProductRepository
-ICategoryRepository
-ICartRepository   (Phase 1: client storage; Phase 2: HTTP)
+ProductRepository
+CategoryRepository
+CartRepository   (future; exact persistence contract TBD)
 ```
 
-| Phase | Frontend implementation |
+| Stage | Frontend implementation |
 |-------|-------------------------|
-| 1 | `StaticProductRepository` / `StaticCategoryRepository` / `StaticUomRepository` (S1-T05); bound in `frontend/config/catalog.ts` |
-| 2 | `HttpProductRepository` calling FastAPI; same method signatures |
+| Current | `StaticProductRepository` / `StaticCategoryRepository` / `StaticUomRepository`; bound in `frontend/config/catalog.ts` |
+| Sprint 4 | Dummy API repositories implementing stable Mini Mystiq contracts |
+| Sprint 6 | Production API/backend repositories |
+| Sprint 7 | Zoho-backed adapters behind the same application semantics |
 
-Composition (env or config) selects the implementation. **Do not** branch inside page files.
+Composition selects the implementation. **Do not** branch inside page files.
+Raw dummy or Zoho DTOs do not cross infrastructure mappers (ADR 0005).
 
 ADR 0004.
 
 ---
 
-## 6. Phase 1 data flow
+## 6. Current data flow
 
 ```
 Next.js (Server Components for catalog)
   → Catalog application services
-    → IProductRepository / ICategoryRepository
+    → ProductRepository / CategoryRepository
       → Static repository
         → Static product/category data + SEO image paths from DESIGN_ASSETS.md
 ```
 
-No FastAPI, no PostgreSQL, no admin implementation.
+No production API, FastAPI, PostgreSQL, Zoho, auth, or admin implementation
+exists.
+
+S4-T04/S4-T05/S4-T06 additionally expose separate development paths without changing
+UI data access:
+
+```text
+GET /api/categories
+  → getCategoryCollection
+    → CategoryRepository
+      → StaticCategoryRepository
+        → approved static category records
+
+GET /api/products?page={page}&pageSize={pageSize}
+  → getProductCollection
+    → ProductRepository
+      → StaticProductRepository
+        → approved static product records
+
+GET /api/products/{slug}
+  → getProductDetail
+    → ProductRepository
+      → StaticProductRepository
+        → approved static product records
+```
 
 ---
 
-## 7. Phase 2 data flow
+## 7. Planned API and integration flow
 
 ```
 Next.js
   → same application services
     → same repository interfaces
-      → HTTP repository (API client)
-        → FastAPI (modular monolith)
-          → application / domain
-            → repository interface
-              → PostgreSQL
+      → HTTP repository
+        → Mini Mystiq API contract
+          → dummy implementation (Sprint 4)
+          → production backend (Sprint 6)
+              → Zoho anti-corruption adapter (Sprint 7)
 ```
 
 Next.js **never** opens a DB connection.
+
+S4-T03 defines recursive category, product summary/detail, generic variant,
+nullable pricing/inventory/SKU/UOM, minimal product pagination, and
+provider-independent error contracts. S4-T08 finalized money and inventory
+invariants without populating catalog commerce values. S4-T09 connected
+storefront pages to the dummy category/product APIs through a provider-neutral
+client. S4-T10 added loading, sanitized catalog errors, not-found, and empty
+collection states. See `STOREFRONT_CONTRACTS.md`.
 
 ---
 
@@ -135,22 +172,29 @@ Next.js **never** opens a DB connection.
 - Next.js App Router, React, TypeScript, Tailwind (ADR 0002)
 - Server Components for catalog/SEO pages; Client Components for cart, search box, wishlist chrome, mobile nav
 - Mobile-first; Design Option 1
-- **Layer contract (S1-T02):** `FRONTEND_ARCHITECTURE.md` — pages → presentation → application → domain → repository interfaces; infrastructure implements repositories. No React → JSON/API.
+- **Layer contract (S1-T02):** `FRONTEND_ARCHITECTURE.md` — pages → presentation → application → domain → repository interfaces; infrastructure implements repositories. Storefront pages use dummy API HTTP repositories; they must not import fixtures.
 
 ---
 
-## 9. Backend (summary)
+## 9. Backend/API roadmap (summary)
 
-- Python + FastAPI + PostgreSQL
-- **Modular monolith**, one deployable, one database
-- Thin routers; domain in modules
-- Details: `BACKEND_ARCHITECTURE.md`, ADR 0003
+- Sprint 4 defines stable contracts and dummy APIs. The S4-T03 contracts are
+  transport-neutral. S4-T04 selected existing Next.js route handlers for the
+  development API and implemented `GET /api/categories`; production remains
+  independent.
+- Sprint 6 implements the production backend. Python + FastAPI + PostgreSQL and
+  modular-monolith shape remain accepted (ADR 0003) unless superseded.
+- Sprint 7 implements Zoho adapters. Vendor DTOs are infrastructure-only
+  (ADR 0005).
+- Audit evidence: `BACKEND_API_AUDIT.md`.
 
 ---
 
 ## 10. Admin
 
-Phase 2. Same backend application services. UI host **TBD** (ADR in Sprint 6). Desktop-priority, still responsive. Not indexed. Modules: `docs/requirements/ADMIN_REQUIREMENTS.md`.
+Future production/operations work. UI host and schedule are **TBD**. Admin stays
+responsive, authenticated, and not indexed. Modules:
+`docs/requirements/ADMIN_REQUIREMENTS.md`.
 
 ---
 
@@ -194,7 +238,9 @@ Breakpoints / nav pattern / CWV numbers: **TBD** (Tailwind defaults when UI star
 | Domain / application | Pure unit tests | Vitest (S1-T06); fakes for use cases |
 | Static repositories | List/get/slug | Vitest (S1-T06) |
 | UI | Optional component tests | Later; not configured |
-| FastAPI | API + repository tests | Sprint 5+ |
+| Dummy API | Contract/API tests with fakes | Sprint 4+ |
+| Production backend | API + repository tests | Sprint 6+ |
+| Zoho adapter | Mapper/contract tests; no real provider in CI | Sprint 7+ |
 
 Documentation-only tasks: review, no runtime tests. Frontend unit runner is Vitest.
 
@@ -203,8 +249,8 @@ Documentation-only tasks: review, no runtime tests. Frontend unit runner is Vite
 ## 14. Security boundaries
 
 - No secrets in Git
-- Phase 1: no customer auth; Account/Wishlist icons are chrome (behavior TBD)
-- Phase 2: auth at API; RBAC on admin; frontend does not talk to Postgres
+- Current: no customer auth; Account remains a navigation expectation only
+- Future: auth at API; RBAC on admin; frontend does not talk to persistence
 - Do not index cart, checkout, or admin
 - Validate input at FastAPI boundaries
 - PII rules TBD Sprint 8
@@ -213,7 +259,9 @@ Documentation-only tasks: review, no runtime tests. Frontend unit runner is Vite
 
 ## 15. Target folder structure
 
-Frontend layer folders were created in **S1-T04**. Static catalog **S1-T05**, Vitest **S1-T06**, tokens/shell **S1-T07**. Backend remains Sprint 5+.
+Frontend layer folders were created in **S1-T04**. Static catalog **S1-T05**,
+Vitest **S1-T06**, tokens/shell **S1-T07**. Dummy API work starts only when its
+Sprint 4 task is explicitly requested; production backend remains Sprint 6.
 
 As implemented, Next.js routes are `frontend/app/` (no `src/`). Domain, application, infrastructure, components, config, and lib sit beside `app/`. Details: `FRONTEND_ARCHITECTURE.md` §17.
 
@@ -229,12 +277,12 @@ shopping/
       cart/
       seo/
     infrastructure/
-      catalog/              # static/ now; http/ in Phase 2
+      catalog/              # static now; dummy/http adapters later
       cart/
     components/             # presentational, mobile-first
     config/
     lib/
-  backend/                  # FastAPI modular monolith (Sprint 5+)
+  backend/                  # docs only now; production backend Sprint 6
     app/
       api/                  # routers by module
       modules/
@@ -257,6 +305,7 @@ shopping/
 | 0002 | App Router + Server Components for catalog |
 | 0003 | Modular monolith backend (not microservices) |
 | 0004 | Repository interfaces; static → HTTP without UI rewrite |
+| 0005 | Stable storefront contracts; dummy/Zoho adapters isolated |
 
 ---
 
@@ -264,9 +313,11 @@ shopping/
 
 - Domain, trailing slash, locales
 - Exact Tailwind breakpoint px and CWV budgets
-- ORM, migration tool, API error envelope (Sprint 5)
-- Admin UI host (Sprint 6)
-- Auth provider (Sprint 8)
+- Remaining product endpoint/query mapping and default product page size
+- ORM and migration tool (Sprint 6)
+- Admin UI host and schedule
+- Auth provider and scope (Sprint 8)
+- Verified Zoho API shape/auth/rate limits/sync behavior (Sprint 7)
 - Payment/email/shipping vendors (Sprint 9)
 - Legal entity (wireframe “Enn2Gee”)
 - Category data taxonomy vs Option 1 nav labels

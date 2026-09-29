@@ -2,7 +2,9 @@
 
 Repository: **shopping**
 
-**Mini Mystiq** — SEO-first, **mobile-first** e-commerce storefront for baby clothes and toys, with a later FastAPI + PostgreSQL backend and admin.
+**Mini Mystiq** — SEO-first, **mobile-first** ecommerce storefront for baby
+clothes and toys, with stable application/API contracts, dummy development
+adapters, and a later production/Zoho integration path.
 
 Tagline: **Delivering Style & Tech**
 
@@ -29,7 +31,7 @@ Brand name, legal entity, domain, pricing, catalog taxonomy, and vendors are **T
 - TypeScript
 - Tailwind CSS
 
-**Phase 2 — Backend**
+**Planned production backend (Sprint 6)**
 
 - Python
 - FastAPI
@@ -43,8 +45,10 @@ SOLID and clean architecture:
 
 - Domain and application layers independent of UI and persistence
 - Repository abstractions
-- Phase 1: static/mock repositories
-- Phase 2: same interfaces backed by FastAPI + PostgreSQL
+- Current: static/mock repositories
+- Sprint 4: dummy APIs behind the same application-owned contracts
+- Sprint 6: production backend behind the same interfaces
+- Sprint 7: Zoho POS adapter isolated from the storefront
 
 The storefront must not need a major rewrite when mock data is replaced by the API.
 
@@ -63,8 +67,8 @@ See `docs/architecture/ARCHITECTURE.md` and `docs/requirements/MOBILE_REQUIREMEN
 | Phase | Name | Sprints |
 |-------|------|---------|
 | Bootstrap | Project control | S0 |
-| 1 | SEO-first storefront | S1–S4 |
-| 2 | Backend + admin | S5–S8 |
+| 1 | Storefront + dummy API + commerce UI | S1–S5 |
+| 2 | Production backend + Zoho + operations | S6–S8 |
 | 3 | Commerce | S9 |
 | 4 | Digital marketing | S10 |
 | 5 | Production | S11 |
@@ -90,7 +94,7 @@ shopping/
 │   └── decisions/
 ├── .cursor/rules/
 ├── frontend/          # Phase 1 Next.js storefront (initialized S1-T03)
-└── backend/           # Phase 2 FastAPI (not started)
+└── backend/           # Production backend docs only (implementation Sprint 6)
 ```
 
 Do not create a nested `baby-store/` directory.
@@ -142,12 +146,16 @@ Then implement **only** the current task.
 
 | Field | Value |
 |-------|--------|
-| Phase | Phase 1 — SEO-First Storefront |
-| Overall status | SPRINT_3_IN_PROGRESS |
-| Current sprint | Sprint 3 — Homepage + SEO (**IN_PROGRESS**) |
-| Last completed | S3-T03 — Canonical Site URL and Metadata Base |
-| Current task | S3-T04 — XML Sitemap (**NOT_STARTED**) |
+| Phase | Phase 1 — Customer Storefront + Dummy API Foundation |
+| Overall status | SPRINT_4_IN_PROGRESS |
+| Current sprint | Sprint 4 — Customer Storefront + Dummy API Foundation (**IN_PROGRESS**) |
+| Last completed | S4-T10 — Loading/Error/Empty States |
+| Current task | S4-T11 — API-driven Navigation (**NOT_STARTED**) |
 
-Do **not** start S3-T04 automatically. There is no S1-T09. There is no S2-T08. Original SEO URL strategy is deferred.
+Do **not** start S4-T11 automatically. S3-T10 Image Optimization and the
+original SEO URL strategy are deferred.
 
-Phase 2 backend implementation has **not** started. Storefront: Option 1 homepage `/`, `/c/[slug]`, `/p/[slug]`, catalog nav + breadcrumbs. Static catalog: 12 approved products. Filter/sort deferred (S2-T05). Dynamic metadata (S3-T02). Canonical origin via `NEXT_PUBLIC_SITE_URL` (S3-T03; production domain TBD). Unit tests: Vitest (`npm test`).
+S4-T10 added storefront loading skeletons, sanitized catalog errors, not-found
+for unknown slugs, and explicit empty collections. Null pricing/inventory and
+empty variants remain valid. Header navigation still uses the static backing
+composition until S4-T11.
