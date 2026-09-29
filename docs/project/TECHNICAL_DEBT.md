@@ -154,3 +154,37 @@ retry rules, and caching; failures must keep the existing sanitized error UI.
 No category field defines menu order; header, footer, and mega-menu follow
 record/array order. A provider or production backend must preserve order or a
 contract-level order field must be approved (ADR/contract update).
+
+---
+
+## TD-010 — Zoho request allowance is unverified
+
+| Field | Value |
+|-------|-------|
+| Status | OPEN (future integration constraint) |
+| Found | S5-T08 review |
+| Area | Sprint 7 Zoho adapter, synchronization, caching |
+
+A Zoho allowance of 7,500 requests per month (about 250 per day) was stated
+for this project. The actual account limits have not been verified. Before
+Sprint 7 design, confirm the real limits and what counts as a request, and plan
+for storefront traffic never to call Zoho per page view. No Zoho code,
+credentials, or calls exist today.
+
+---
+
+## TD-011 — Homepage service claims need business confirmation
+
+| Field | Value |
+|-------|-------|
+| Status | OPEN (business decision; not changed) |
+| Found | S5-T08 review |
+| Area | `application/catalog/home-page-view-model.ts` (trust items), announcement bar, `docs/project/DESIGN_OPTION_1.md` |
+
+The approved design copy shows “Free Shipping — On orders above ₹999”, “Easy
+Returns”, “COD Available”, “Secure Payment — 100% secure checkout”, and
+“24/7 Support”. The storefront has no cart, checkout, payment, shipping, or
+returns flow, so “secure checkout” in particular describes something that does
+not exist online. `DESIGN_OPTION_1.md` says to update the design file (not
+silently drop the copy) if operations cannot honor these. A business owner must
+confirm or revise the copy; no change was made in Sprint 5.

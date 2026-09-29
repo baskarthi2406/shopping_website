@@ -11,6 +11,11 @@ export type ContractViolation = {
 
 const CURRENCY_CODE_PATTERN = /^[A-Z]{3}$/;
 
+/** Three-letter uppercase currency code, as required by `Money.currency`. */
+export function isCurrencyCode(value: unknown): value is string {
+  return typeof value === "string" && CURRENCY_CODE_PATTERN.test(value);
+}
+
 function add(
   issues: ContractViolation[],
   path: string,
@@ -43,7 +48,7 @@ export function validateMoney(
     add(issues, `${path}.amount`, "must be a finite, non-negative number");
   }
 
-  if (!CURRENCY_CODE_PATTERN.test(money.currency)) {
+  if (!isCurrencyCode(money.currency)) {
     add(issues, `${path}.currency`, "must be a three-letter uppercase code");
   }
 

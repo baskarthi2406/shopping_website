@@ -28,6 +28,9 @@ This file is the live index of project state. A new AI session must read it afte
 Do **not** implement the production backend, Zoho integration, auth, checkout,
 or payments unless the current task explicitly schedules them.
 
+Phase 2 (Sprint 6 — Production Backend Foundation) is **planned and awaiting
+approval**; no Phase 2 implementation has started.
+
 ---
 
 ## Current Sprint
@@ -36,8 +39,15 @@ or payments unless the current task explicitly schedules them.
 Status: **COMPLETED** (S4-T01–S4-T12 and fix S4-F01; review in
 `docs/sprints/SPRINT-04.md` → S4-T12)
 
-**Sprint 5 — Commerce UI** is **NOT_STARTED**. Its task specifications must be
-written and approved first.
+**Sprint 5 — Commerce UI** is **COMPLETED (Track A)**: S5-T01 planning, Track A
+(S5-T02 Purchasability Rules, S5-T03 PDP Price & Availability Panel, S5-T04
+Variant Selector), and the S5-T08 review are completed. Track B (S5-T05–S5-T07,
+local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
+approval (`docs/sprints/SPRINT-05.md` → S5-T08).
+
+**Sprint 6 — Production Backend Foundation** is **PLANNED — AWAITING
+APPROVAL**: S6-T01 planning completed; S6-T02–S6-T10 proposed with approval
+gates G0–G4 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -46,10 +56,11 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S4-T12 Sprint Review is **COMPLETED**. No next task is approved; do not
-start Sprint 5, Zoho integration, or any other task automatically.
+None. S6-T01 Sprint 6 Planning is **COMPLETED**. No further task is
+approved; do not start S6-T02, Python code, package installs, Zoho
+integration, or any other task automatically.
 
-Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-04.md`.
+Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-06.md`.
 
 There is **no S1-T09**. There is **no S2-T08**.
 
@@ -60,7 +71,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_4_COMPLETED**
+**SPRINT_6_PLANNED_AWAITING_APPROVAL** (Sprint 5 completed for Track A; S6-T01 planning completed; next task S6-T02 awaits gate G0)
 
 ---
 
@@ -102,6 +113,18 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   segment layouts resolve slugs before loading boundaries; verified with
   `npm run build && npm run test:http`
 - Technical-debt register: `docs/project/TECHNICAL_DEBT.md`
+- Pure purchase-eligibility rule `evaluatePurchasability` with stable reason
+  codes (S5-T02); all current products are not purchasable
+  (`price_missing`, `inventory_unknown`)
+- PDP price & availability panel (S5-T03): “Price not available” /
+  “Availability not confirmed” for today's catalog, plus a `tel:` link to the
+  verified store phone. Prices render only when `config/commerce.ts`
+  `priceDisplay` is approved (currently `null`, Q9). No purchase controls; no
+  JSON-LD `offers`
+- PDP variant selector (S5-T04): native radio groups rendered only for real,
+  selectable variants; switches precomputed per-variant commerce; no
+  auto-selection or parent price/stock fallback. No current product has
+  variants, so no selector renders today
 - Loading, sanitized catalog errors, not-found, and empty collection states
   (S4-T10); null pricing/inventory/variants remain valid product data
 - Storefront footer polish (S4-T10A): brand, category-derived Shop/Collections,
@@ -173,15 +196,22 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S4-T11 — API-driven Navigation
 - S4-F01 — Production Soft-404 Correction
 - S4-T12 — Sprint Review (**Sprint 4 COMPLETED**)
+- S5-T01 — Sprint 5 Planning & Specification
+- S5-T02 — Purchasability Rules
+- S5-T03 — PDP Price & Availability Panel
+- S5-T04 — Variant Attribute Selector
+- S5-T08 — Sprint 5 Review (**Sprint 5 COMPLETED, Track A**)
+- S6-T01 — Sprint 6 Planning
 
 ## In progress
 
 - None.
 
 ## Pending
-- Sprint 5 planning — write and approve task specifications (recommended next)
-- Sprint 5 — Commerce UI
-- Sprint 6 — Production Backend
+- Sprint 5 Track B — S5-T05–S5-T07 (local cart) **DEFERRED**, pending renewed
+  Q1/Q2 approval; open business questions in `docs/sprints/SPRINT-05.md`
+- Sprint 6 — Production Backend Foundation: proposed S6-T02–S6-T10, each
+  requiring explicit approval (gates G0–G4 in `docs/sprints/SPRINT-06.md`)
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
 - S3-T10 — Image Optimization (**DEFERRED**)
@@ -190,13 +220,24 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Blockers
 
-- No code blocker for Sprint 5 planning. Open technical debt (TD-002–TD-009):
-  `docs/project/TECHNICAL_DEBT.md`.
+- No code blocker. Open technical debt (TD-002–TD-011):
+  `docs/project/TECHNICAL_DEBT.md`. TD-010: a Zoho allowance of 7,500
+  requests/month is a future constraint whose actual account limits are
+  unverified. TD-011: homepage service claims (secure checkout, free
+  shipping, COD, returns, 24/7 support) need business confirmation.
 - Zoho POS data access **not verified**: no authorized API access, docs, or
-  sample responses reviewed. Required before Sprint 7 planning.
+  sample responses reviewed. Required before Sprint 7 planning; readiness
+  checklist in `docs/sprints/SPRINT-06.md` §9.
+- Data ownership is undecided: `BACKEND_ARCHITECTURE.md` calls PostgreSQL the
+  catalog/inventory system of record while Sprint 7 plans Zoho as the
+  product/price/stock source (Sprint 6 decision D1, ADR 0006 in S6-T02).
+- Backend toolchain (ORM, migrations, Python version, test DB), production API
+  prefix/topology, and CI vendor are undecided (Sprint 6 D2, D3, D11).
+  `TECH_STACK.md` and the development rules still defer some of these to
+  “Sprint 5”; S6-T02 is planned to correct that.
 - Reference-storefront (`minimystiq.zakyastore.in`) inspection **not
   completed**; no observations recorded.
-- Local `main` is still at the initial commit; Sprint 3–4 work is on unmerged,
+- Local `main` is still at the initial commit; Sprint 3–5 work is on unmerged,
   mostly unpushed stacked branches. Integration needs a human decision.
 - Business/API TBD: taxonomy beyond the supplied S4-T02 reference,
   descendant-listing semantics, API menu-order field, Zoho API access/schema/
@@ -210,6 +251,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**Sprint 5 planning** — write and approve Sprint 5 task specifications
-(recommended; see `docs/sprints/SPRINT-04.md` → S4-T12). Requires explicit
-human approval.
+**S6-T02 — Backend Architecture Decisions (ADRs 0006–0008)**, after gate G0
+(Sprint 6 plan approved; decision on merging Sprints 3–5 into `main`).
+Sprint 5 Track B remains deferred pending Q1/Q2. Requires explicit human
+approval.

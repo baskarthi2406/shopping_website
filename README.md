@@ -146,16 +146,14 @@ Then implement **only** the current task.
 
 | Field | Value |
 |-------|--------|
-| Phase | Phase 1 — Customer Storefront + Dummy API Foundation |
-| Overall status | SPRINT_4_IN_PROGRESS |
-| Current sprint | Sprint 4 — Customer Storefront + Dummy API Foundation (**IN_PROGRESS**) |
-| Last completed | S4-T10 — Loading/Error/Empty States |
-| Current task | S4-T11 — API-driven Navigation (**NOT_STARTED**) |
+| Phase | Phase 1 — Customer Storefront + Dummy API Foundation (Phase 2 / Sprint 6 planned, not started) |
+| Overall status | SPRINT_6_PLANNED_AWAITING_APPROVAL |
+| Current sprint | Sprint 6 — Production Backend Foundation (**PLANNED — AWAITING APPROVAL**) |
+| Last completed | S6-T01 — Sprint 6 Planning |
+| Current task | None; next proposed S6-T02 — Backend Architecture Decisions (**NOT_STARTED**) |
 
-Do **not** start S4-T11 automatically. S3-T10 Image Optimization and the
-original SEO URL strategy are deferred.
-
-S4-T10 added storefront loading skeletons, sanitized catalog errors, not-found
-for unknown slugs, and explicit empty collections. Null pricing/inventory and
-empty variants remain valid. Header navigation still uses the static backing
-composition until S4-T11.
+Sprint 4 is complete. Sprint 5 is complete for Track A (purchasability rules,
+PDP price/availability panel, variant selector); the local cart (Track B) is
+deferred. No price renders until locale/currency is approved. Do **not** start
+S6-T02 automatically. S3-T10 Image Optimization and the original SEO URL
+strategy are deferred.

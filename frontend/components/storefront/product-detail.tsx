@@ -1,6 +1,14 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
+import {
+  ProductCommercePanel,
+  type ProductCommercePanelProps,
+} from "@/components/storefront/product-commerce-panel";
+import {
+  ProductPurchaseOptions,
+  type ProductPurchaseOptionsProps,
+} from "@/components/storefront/product-purchase-options";
 
 export type ProductDetailProps = {
   product: {
@@ -10,9 +18,12 @@ export type ProductDetailProps = {
     categories: readonly { name: string; href: string }[];
     breadcrumb: readonly { label: string; href: string | null }[];
   };
+  commerce?: ProductCommercePanelProps;
+  /** Present only for products with safely selectable variants. */
+  variantOptions?: Omit<ProductPurchaseOptionsProps, "commerce" | "telephone"> | null;
 };
 
-export function ProductDetail({ product }: ProductDetailProps) {
+export function ProductDetail({ product, commerce, variantOptions }: ProductDetailProps) {
   const primaryImage = product.images[0] ?? null;
   const additionalImages = product.images.slice(1);
 
@@ -62,6 +73,11 @@ export function ProductDetail({ product }: ProductDetailProps) {
             <p className="mt-3 text-body text-foreground-secondary">
               {product.description}
             </p>
+          ) : null}
+          {commerce && variantOptions ? (
+            <ProductPurchaseOptions {...variantOptions} {...commerce} />
+          ) : commerce ? (
+            <ProductCommercePanel {...commerce} />
           ) : null}
           {product.categories.length > 0 ? (
             <p className="mt-6 text-small text-foreground-secondary">

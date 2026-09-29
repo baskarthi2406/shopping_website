@@ -42,4 +42,30 @@ pagination envelope. Default page/page size are 1/12 at the API boundary.
 returns the S4-T03 detail envelope or `not_found`. Invalid catalog-slug syntax
 is `invalid_request`. Repository failures propagate to the HTTP adapter.
 
+**S5-T02:** `evaluatePurchasability({ product, variantId?, quantity })` is the
+single purchase-eligibility rule. It is pure, deterministic, and returns
+`{ purchasable, reasons }`, with `reasons` ordered as in
+`PURCHASABILITY_REASONS`. Missing price, currency, status, or inventory always
+blocks and is never defaulted. Variants are judged on their own pricing and
+inventory (no parent inheritance). SKU/UOM never block. User-facing copy is
+not defined here (Sprint 5 Q4). Codes and rules:
+`docs/sprints/SPRINT-05.md` → S5-T02.
+
+**S5-T03:** `toProductCommerceViewModel(product, { priceDisplay, variantId? })`
+maps `evaluatePurchasability` (quantity 1) to PDP strings. A price is formatted
+only when it is verified and its currency is listed in `priceDisplay`
+(`config/commerce.ts`, currently `null`, so no price renders). Availability:
+explicit `out_of_stock` → “Out of stock”; inactive → “Not currently
+available”; unknown status/inventory or unresolved variant → “Availability not
+confirmed”; confirmed stock shows no message (“In stock” is undecided, Q6).
+Copy constants live in `catalog-messages.ts`.
+
+**S5-T04:** `toVariantSelectorViewModel` derives option groups from real
+variant attributes and returns `null` for no or unusable variants (blank or
+duplicate ids/names/values, inconsistent attribute names, duplicate
+combinations). `resolveVariantSelection` (`variant-selection.ts`, client-safe)
+maps explicit choices to a variant id and never auto-selects.
+`toProductPurchaseOptionsViewModel` precomputes the no-selection and
+per-variant commerce view models for the PDP.
+
 Full semantics: `docs/architecture/STOREFRONT_CONTRACTS.md`.

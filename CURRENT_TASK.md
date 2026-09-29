@@ -7,11 +7,11 @@ No task is approved. Do not start any task until a human explicitly requests it.
 ## Last completed task
 
 | Field | Value |
-|-------|--------|
-| Task ID | S4-T12 |
-| Task | Sprint Review |
+|-------|-------|
+| Task ID | S6-T01 |
+| Task | Sprint 6 Planning |
 | Status | **COMPLETED** |
-| Scope | Sprint 4 closeout. Sprint 4 **COMPLETED**; S4-F01 corrected the soft-404 defect found in review. Reference-storefront inspection and Zoho data verification were **not completed**. Review: `docs/sprints/SPRINT-04.md` → S4-T12. Debt: `docs/project/TECHNICAL_DEBT.md`. |
+| Scope | Planning only. Proposed S6-T02–S6-T10 (ADRs, backend skeleton, catalog domain, PostgreSQL schema and repositories, content import, catalog API, opt-in storefront adapter, review) with approval gates G0–G4 and a Sprint 7 Zoho readiness checklist. No code, packages, contracts, or fixtures changed. Details: `docs/sprints/SPRINT-06.md`. |
 
 ---
 
@@ -21,16 +21,17 @@ None.
 
 ## Status
 
-**NOT_STARTED** — awaiting an explicitly approved next task.
+**NOT_STARTED** — Sprint 6 is PLANNED — AWAITING APPROVAL.
 
-S3-T10 Image Optimization and the original “SEO-Friendly URL Strategy” remain
-**DEFERRED**. Do not start either automatically.
-
-## Recommended next task (do not start)
-
-**Sprint 5 planning** — write and approve Sprint 5 task specifications
-(Sprint 5 task IDs are TBD). Acceptance criteria are in
-`docs/sprints/SPRINT-04.md` → S4-T12 → Recommended next task.
-
-Do not start Sprint 5, the production backend, or Zoho integration
+S3-T10 Image Optimization, the original “SEO-Friendly URL Strategy”, and
+Sprint 5 Track B (S5-T05–S5-T07) remain **DEFERRED**. Do not start them
 automatically.
+
+## Next task after approval (do not start)
+
+**S6-T02 — Backend Architecture Decisions (ADRs 0006–0008)**, after gate G0:
+approval of the Sprint 6 plan and a decision on merging Sprints 3–5 into
+`main` (Q11/D12).
+
+Do not install packages, create Python code, or start Zoho integration before
+the ADRs are accepted (gate G1).

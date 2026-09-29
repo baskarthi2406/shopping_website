@@ -7,8 +7,8 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 
 ## How to read this file
 
-- Sprint status: `NOT_STARTED` | `IN_PROGRESS` | `COMPLETED`
-- Task status: `NOT_STARTED` | `IN_PROGRESS` | `COMPLETED` | `BLOCKED`
+- Sprint status: `NOT_STARTED` | `PLANNED — AWAITING APPROVAL` | `IN_PROGRESS` | `COMPLETED`
+- Task status: `NOT_STARTED` | `PROPOSED` | `IN_PROGRESS` | `COMPLETED` | `BLOCKED` | `DEFERRED`
 - Only one task may be `IN_PROGRESS`.
 
 ---
@@ -152,20 +152,56 @@ must be written and approved before Sprint 5 starts.
 | Field | Value |
 |-------|--------|
 | Phase | Phase 1 — Customer Storefront |
-| Objective | Search, account/cart/order-entry chrome and commerce interactions against stable contracts |
-| Status | **NOT_STARTED** |
+| Objective | Commerce-ready storefront behavior on the nullable catalog without implying orders, payment, reservation, or fulfillment |
+| Status | **COMPLETED (Track A)** — closed by S5-T08; Track B (S5-T05–S5-T07) DEFERRED, not implemented |
 | Dependencies | Sprint 4 completed |
-| Task IDs | TBD before Sprint 5 starts |
+| Task IDs | S5-T01 … S5-T08 |
 
-### Sprint 6 — Production Backend
+| Task ID | Name | Status |
+|---------|------|--------|
+| S5-T01 | Sprint 5 Planning & Specification | **COMPLETED** |
+| S5-T02 | Purchasability Rules (Track A) | **COMPLETED** |
+| S5-T03 | PDP Price & Availability Panel (Track A) | **COMPLETED** |
+| S5-T04 | Variant Attribute Selector (Track A) | **COMPLETED** |
+| S5-T05 | Local Cart Model & Persistence Boundary (Track B) | **DEFERRED** (not implemented; requires Q1/Q2) |
+| S5-T06 | Add-to-Cart & Quantity Control (Track B) | **DEFERRED** (not implemented; requires Q1/Q3/Q5) |
+| S5-T07 | Cart Page & Checkout-Unavailable State (Track B) | **DEFERRED** (not implemented; requires Q1/Q4) |
+| S5-T08 | Sprint 5 Review | **COMPLETED** |
+
+Sprint 5 is closed for Track A (S5-T01–S5-T04, review S5-T08). Track B is
+deferred pending renewed Q1/Q2 approval; its IDs stay reserved. Q3 and Q8 are
+resolved; Q4 is partly resolved. Q9 is open, so no price renders
+(`config/commerce.ts`). Search, listing-card prices, Account, and Track Your
+Order are deferred. The review added TD-010 (unverified Zoho allowance of 7,500
+requests/month) and TD-011 (homepage service claims need business
+confirmation).
+
+### Sprint 6 — Production Backend Foundation
 
 | Field | Value |
 |-------|--------|
 | Phase | Phase 2 — Production Backend |
-| Objective | Production Mini Mystiq API, persistence, and operational foundation |
-| Status | **NOT_STARTED** |
-| Dependencies | Sprint 5 completed |
-| Task IDs | TBD before Sprint 6 starts |
+| Objective | Production catalog API and PostgreSQL persistence behind the S4 contracts; storefront default and SEO unchanged |
+| Status | **PLANNED — AWAITING APPROVAL** |
+| Dependencies | Sprint 5 completed (Track A) |
+| Task IDs | S6-T01 (planning) · proposed S6-T02 … S6-T10 |
+
+| Task ID | Name | Status |
+|---------|------|--------|
+| S6-T01 | Sprint 6 Planning | **COMPLETED** |
+| S6-T02 | Backend Architecture Decisions (ADRs 0006–0008) | **PROPOSED** (gate G0) |
+| S6-T03 | Backend Skeleton and Operational Baseline | **PROPOSED** (gate G1: ADRs accepted) |
+| S6-T04 | Catalog Domain, Ports, and Use Cases (Backend) | **PROPOSED** |
+| S6-T05 | PostgreSQL Schema and Migrations | **PROPOSED** (gate G2) |
+| S6-T06 | PostgreSQL Catalog Repositories | **PROPOSED** |
+| S6-T07 | Approved Catalog Content Import | **PROPOSED** (gate G3) |
+| S6-T08 | Production Catalog Read API | **PROPOSED** |
+| S6-T09 | Storefront Production API Adapter (opt-in) | **PROPOSED** (gate G4; may be deferred) |
+| S6-T10 | Sprint 6 Review | **PROPOSED** |
+
+No Sprint 6 implementation task is approved. Open decisions (data ownership,
+toolchain, API topology, content approval, freshness, merge to `main`) are in
+`docs/sprints/SPRINT-06.md` §10. No Zoho work in Sprint 6.
 
 ### Sprint 7 — Zoho POS Integration
 
