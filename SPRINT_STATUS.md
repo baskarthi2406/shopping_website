@@ -182,23 +182,26 @@ confirmation).
 |-------|--------|
 | Phase | Phase 2 — Server-side foundation (single Next.js application, ADR 0006) |
 | Objective | Server-only isolation, catalog contract conformance, provenance rules, outbound request policy; storefront, SEO, and dummy API unchanged; Zoho gated on verified access |
-| Status | **PLANNED — AWAITING APPROVAL** (revised in S6-T02) |
+| Status | **IN_PROGRESS** (revised in S6-T02; S6-T11 completed) |
 | Dependencies | Sprint 5 completed (Track A) |
-| Task IDs | S6-T01, S6-T02 · S6-T03–S6-T10 withdrawn · proposed S6-T11 … S6-T16 |
+| Task IDs | S6-T01, S6-T02, S6-T11 · S6-T03–S6-T10 withdrawn · proposed S6-T12 … S6-T16 |
 
 | Task ID | Name | Status |
 |---------|------|--------|
 | S6-T01 | Sprint 6 Planning | **COMPLETED** (sequence withdrawn by S6-T02) |
 | S6-T02 | Revise Sprint 6 for a Next.js-only Architecture | **COMPLETED** |
 | S6-T03 – S6-T10 | FastAPI/PostgreSQL tasks from S6-T01 | **WITHDRAWN** (ADR 0006, ADR 0008; IDs not reused) |
-| S6-T11 | Server-only Boundary and Secret Isolation | **PROPOSED** (gate G0) |
-| S6-T12 | Catalog Contract Conformance Suite | **PROPOSED** |
+| S6-T11 | Server-only Boundary and Secret Isolation | **COMPLETED** (explicit user approval) |
+| S6-T12 | Catalog Contract Conformance Suite | **PROPOSED** (not approved) |
 | S6-T13 | Field Provenance Rules | **PROPOSED** (gate G1: ADR 0007 provenance accepted) |
 | S6-T14 | Outbound Request Policy (server-only) | **PROPOSED** (gate G2: ADR 0009 accepted) |
 | S6-T15 | Zoho Access Verification and Readiness Report | **PROPOSED** (gate GZ: access + approval; else deferred to Sprint 7) |
 | S6-T16 | Sprint 6 Review | **PROPOSED** |
 
-No Sprint 6 implementation task is approved. ADR 0006 (Next.js-only) is
+S6-T11 added `import "server-only"` to the `config/` server composition roots
+and `config/server-env.ts`, an import-graph test, and `npm run test:boundary`
+(production-build secret scan plus rejected client-import controls). No
+dependency added. No further Sprint 6 task is approved. ADR 0006 (Next.js-only) is
 accepted; ADRs 0007–0009 are proposed. No database is selected. Open decisions
 are in `docs/sprints/SPRINT-06.md` §8. No Zoho calls in Sprint 6 unless GZ is
 approved.

@@ -5,9 +5,9 @@
 | Sprint ID | S6 |
 | Phase | Phase 2 — Server-side foundation (single Next.js application) |
 | Objective | Prepare provider-independent server-side foundations in the existing Next.js application (server-only isolation, catalog contract conformance, provenance rules, outbound request policy) without changing storefront behavior, SEO, or the dummy catalog API, and gate Zoho work on verified access |
-| Status | **PLANNED — AWAITING APPROVAL** (S6-T01 and S6-T02 completed; no implementation task is approved) |
+| Status | **IN PROGRESS** (S6-T01, S6-T02, S6-T11 completed; no further task is approved) |
 | Dependencies | Sprint 5 completed (Track A; S5-T08, commit `5525b68`) |
-| Task IDs | S6-T01, S6-T02 (completed) · S6-T03–S6-T10 **WITHDRAWN** · proposed S6-T11 … S6-T16 |
+| Task IDs | S6-T01, S6-T02, S6-T11 (completed) · S6-T03–S6-T10 **WITHDRAWN** · proposed S6-T12 … S6-T16 |
 
 **Only explicitly requested tasks are authorized.** Proposed tasks stay
 `PROPOSED` until a human approves them; approval is recorded here, in
@@ -98,7 +98,7 @@ Next.js application (ADR 0006)
 | I2 | Stale “Sprint 5” references for backend tooling decisions | Fixed in `TECH_STACK.md`, `PROJECT_DEVELOPMENT_RULES.md` §15–17, `.cursor/rules/testing.mdc` |
 | I3 | Stale comment “S4-T11 will move navigation…” in `config/catalog-source.ts` | Recorded; code unchanged (documentation-only task) |
 | I4 | Public `/api/*` routes: if later backed by provider data, each request could spend quota | ADR 0006 §6 and ADR 0009: cache/snapshot only; production exposure open (D-API) |
-| I5 | Vitest cannot resolve `server-only` without the package or an alias | Decided in S6-T11 (alias to Next's bundled module vs adding the package) |
+| I5 | Vitest cannot resolve `server-only` without the package or an alias | Resolved in S6-T11: Vitest alias to Next's bundled `empty.js`; no package added |
 | I6 | Historical records (SPRINT-00–02, `BACKEND_API_AUDIT.md`, the non-goals list in `FUNCTIONAL_REQUIREMENTS.md`) still mention FastAPI/PostgreSQL | Left unchanged as history |
 
 ## 4. Sprint objectives and acceptance criteria
@@ -168,7 +168,7 @@ Commit `docs(s6): revise sprint 6 for nextjs-only architecture`.
 
 ### S6-T11 — Server-only Boundary and Secret Isolation
 
-**Status:** PROPOSED — requires gate G0
+**Status:** COMPLETED — approved explicitly by the user (S6-T11 only)
 
 **Objective:** Make it structurally impossible (and tested) for server
 configuration, infrastructure, or secrets to reach browser bundles.
@@ -205,6 +205,70 @@ the guard).
 
 **Git/stop:** branch `s6-t11-server-only-boundary`; commit
 `feat(s6): enforce server-only boundary`; STOP.
+
+**Result:**
+
+- Protected with `import "server-only"`: `config/catalog.ts` (storefront
+  composition root), `config/catalog-source.ts` (dummy API backing store for
+  route handlers and sitemap), `config/catalog-api-dispatch.ts` (in-process
+  dispatch into route handlers), and new `config/server-env.ts`
+  (`readServerEnv`: rejects `NEXT_PUBLIC_*`, blank → `null`, errors never
+  include values). No module reads a secret yet.
+- `infrastructure/` modules were not marked: they hold no secrets or
+  environment reads and are reachable only through the protected `config/`
+  roots; the import-graph test separately forbids any client path into
+  `infrastructure/`. `config/site.ts` / `organization.ts` are public values.
+  Browser-safe application/domain modules stay unmarked (tested).
+- I5 resolved: no dependency added. Next 16.3 resolves `server-only`
+  natively. `vitest.config.mts` aliases it to
+  `next/dist/compiled/server-only/empty.js`, the module Next uses for server
+  code. This lets unit tests import server modules; it does not replace
+  build verification.
+- `config/server-only-boundary.test.ts` (in `npm test`): import-graph walk
+  from every `"use client"` module (fails on unresolved imports; includes a
+  resolver self-check).
+- `npm run test:boundary` (`config/server-only-boundary.build.test.ts`,
+  `vitest.build.config.mts`): real production builds.
+  1. Real app with a synthetic non-public secret: build succeeds; the secret
+     and two server-only literals (`http://catalog.local`, a dispatch error
+     string) are absent from client artifacts, and the literals are present
+     in server chunks (scan sensitivity).
+  2. Isolated valid fixture: a server-only module reads the synthetic
+     secret and renders a derived state; a client `NEXT_PUBLIC_` control is
+     found in client files, the server marker is found in server chunks, and
+     neither the secret nor the marker is in client files.
+  3. Negative controls (direct and transitive client import of a server-only
+     module): the build fails with Next's
+     `'server-only' cannot be imported from a Client Component module`
+     error naming the fixture files.
+
+  Client artifacts scanned: `.next/static/**`, prerendered
+  `.next/server/app/**/*.{html,rsc,body}`, `*client-reference-manifest.js`,
+  `build-manifest.json`. Fixtures live in gitignored
+  `frontend/.boundary-fixtures/` (excluded from tsconfig, ESLint, and
+  `npm test`) and are deleted before and after the run; no invalid import
+  exists in the real app. Synthetic values are random per run and redacted
+  from output.
+- Environment convention documented in `frontend/README.md`,
+  `frontend/config/README.md`, `.env.example`.
+- Checks: `npm test` 61 files / 343 tests; typecheck; lint; `npm run build`;
+  `npm run test:http` 18/18; `npm run test:boundary` 4/4. No dependency,
+  lockfile, UI, route, SEO, or contract change.
+
+**Deviations and limitations:**
+
+- Stayed on `s5-t01-sprint-5-planning` (branch switching prohibited).
+- The build test runs as a separate `test:boundary` suite, not inside
+  `test:http`: it rebuilds several apps and overwrites `.next`.
+- The real app does not read the synthetic secret (no production code reads
+  secrets yet, and no canary reader was added to shipped code), so the
+  real-app secret scan is weak; the fixture is the meaningful positive
+  control. Turbopack import traces omit pure re-export modules, so the
+  transitive fixture uses a wrapper function.
+- Scanning is for exact markers only; it cannot prove that derived or
+  transformed secret values never leak. Server-side logging/error hygiene
+  remains a review obligation (and S6-T14).
+- I3 (stale comment in `config/catalog-source.ts`) left unchanged.
 
 ---
 
@@ -361,14 +425,14 @@ the debt register (TD-008, TD-010).
 
 | Gate | Before | Requires |
 |------|--------|----------|
-| G0 | S6-T11 | Revised plan approved; decision on merging Sprints 3–5 into `main` (D12) or continuing to stack |
+| G0 | S6-T11 | Revised plan approved; decision on merging Sprints 3–5 into `main` (D12) or continuing to stack. **Passed for S6-T11 by explicit user approval**, continuing to stack on the current branch; D12 remains open |
 | G1 | S6-T13 | ADR 0007 provenance section accepted (ownership columns may stay open) |
 | G2 | S6-T14 | ADR 0009 accepted |
 | GZ | S6-T15 | Zoho access or account documentation supplied, and explicit approval |
 | GP | Any persistence task (none proposed) | ADR 0008 amended with evidence and accepted |
 
 ```text
-S6-T01 (done) → S6-T02 (done) → G0 → S6-T11 → S6-T12 → G1 → S6-T13
+S6-T01 (done) → S6-T02 (done) → G0 → S6-T11 (done) → S6-T12 → G1 → S6-T13
                                         └──────→ G2 → S6-T14
 GZ → S6-T15 (independent; may be deferred)
 all approved tasks → S6-T16

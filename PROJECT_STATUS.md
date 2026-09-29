@@ -46,10 +46,10 @@ Variant Selector), and the S5-T08 review are completed. Track B (S5-T05–S5-T07
 local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
 approval (`docs/sprints/SPRINT-05.md` → S5-T08).
 
-**Sprint 6 — Next.js Server-side Foundation** is **PLANNED — AWAITING
-APPROVAL**: S6-T01 planning and the S6-T02 Next.js-only revision are
-completed; S6-T03–S6-T10 (FastAPI/PostgreSQL) are withdrawn; S6-T11–S6-T16
-are proposed with gates G0, G1, G2, GZ (`docs/sprints/SPRINT-06.md`).
+**Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
+planning, the S6-T02 Next.js-only revision, and S6-T11 Server-only Boundary
+are completed; S6-T03–S6-T10 (FastAPI/PostgreSQL) are withdrawn; S6-T12–S6-T16
+are proposed with gates G1, G2, GZ (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -58,9 +58,9 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S6-T02 (Next.js-only architecture revision) is **COMPLETED**. No
-further task is approved; do not start S6-T11, package installs, persistence,
-Zoho integration, or any other task automatically.
+None. S6-T11 (Server-only Boundary and Secret Isolation) is **COMPLETED**.
+No further task is approved; do not start S6-T12, package installs,
+persistence, Zoho integration, or any other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-06.md`.
 
@@ -73,7 +73,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_6_PLANNED_AWAITING_APPROVAL** (Sprint 5 completed for Track A; S6-T01 and S6-T02 completed; next task S6-T11 awaits gate G0)
+**SPRINT_6_IN_PROGRESS** (Sprint 5 completed for Track A; S6-T01, S6-T02, S6-T11 completed; next task S6-T12 awaits approval)
 
 ---
 
@@ -206,6 +206,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S5-T08 — Sprint 5 Review (**Sprint 5 COMPLETED, Track A**)
 - S6-T01 — Sprint 6 Planning (task sequence later withdrawn)
 - S6-T02 — Revise Sprint 6 for a Next.js-only Architecture
+- S6-T11 — Server-only Boundary and Secret Isolation
 
 ## In progress
 
@@ -214,7 +215,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 ## Pending
 - Sprint 5 Track B — S5-T05–S5-T07 (local cart) **DEFERRED**, pending renewed
   Q1/Q2 approval; open business questions in `docs/sprints/SPRINT-05.md`
-- Sprint 6 — Next.js Server-side Foundation: proposed S6-T11–S6-T16, each
+- Sprint 6 — Next.js Server-side Foundation: proposed S6-T12–S6-T16, each
   requiring explicit approval (gates in `docs/sprints/SPRINT-06.md` §6)
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
@@ -252,7 +253,6 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S6-T11 — Server-only Boundary and Secret Isolation**, after gate G0
-(revised Sprint 6 plan approved; decision on merging Sprints 3–5 into `main`).
-Sprint 5 Track B remains deferred pending Q1/Q2. Requires explicit human
-approval.
+**S6-T12 — Catalog Contract Conformance Suite**. The decision on merging
+Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains deferred
+pending Q1/Q2. Requires explicit human approval.

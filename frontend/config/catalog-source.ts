@@ -1,3 +1,4 @@
+import "server-only";
 import { StaticCategoryRepository } from "@/infrastructure/catalog/static-category-repository";
 import { StaticProductRepository } from "@/infrastructure/catalog/static-product-repository";
 import { StaticUomRepository } from "@/infrastructure/catalog/static-uom-repository";

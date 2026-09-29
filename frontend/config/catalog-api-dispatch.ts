@@ -1,3 +1,4 @@
+import "server-only";
 import { createGetCategoriesHandler } from "@/app/api/categories/get-categories-handler";
 import { createGetProductsHandler } from "@/app/api/products/get-products-handler";
 import { createGetProductDetailHandler } from "@/app/api/products/[slug]/get-product-detail-handler";

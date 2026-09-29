@@ -13,6 +13,8 @@ const eslintConfig = defineConfig([
     "build/**",
     "next-env.d.ts",
     "coverage/**",
+    // Temporary build fixtures (created and deleted by test:boundary).
+    ".boundary-fixtures/**",
   ]),
 ]);
 

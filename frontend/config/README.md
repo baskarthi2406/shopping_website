@@ -25,3 +25,13 @@ in this folder only (ADR 0004/0005).
 `organization.ts` holds public Organization JSON-LD facts (brand name, approved logo path, listing telephone and PostalAddress). It is not a legal-entity record: do not add `legalName` or social profiles here until they are confirmed.
 
 Secrets go in `.env.local` (gitignored). The site URL is not a secret.
+
+**Server-only (S6-T11):** `catalog.ts`, `catalog-source.ts`,
+`catalog-api-dispatch.ts`, and `server-env.ts` begin with
+`import "server-only"`. They are the server composition roots where a future
+provider credential would be bound; a Client Component import fails
+`next build`. `server-env.ts` exposes `readServerEnv(name)` for server-only
+settings (rejects `NEXT_PUBLIC_*`, never echoes values). `site.ts` and
+`organization.ts` hold public values and stay unmarked. Keep the guard; move
+logic instead. Tests: `server-only-boundary.test.ts` and
+`npm run test:boundary`.

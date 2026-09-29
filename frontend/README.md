@@ -34,6 +34,8 @@ npm run lint
 npm test
 npm run test:watch
 npm run build
+npm run test:http
+npm run test:boundary
 npm start
 ```
 
@@ -171,6 +173,23 @@ Local development may omit it; `config/site.ts` then uses `http://localhost:3000
 - Prefer server-only variables unless the value must reach the browser (`NEXT_PUBLIC_*`).
 - Bind infrastructure in `config/` (S1-T05+). Pages must not read ad-hoc `process.env` for data-source choice.
 
+**Server-only convention (S6-T11):**
+
+- `NEXT_PUBLIC_*` values are inlined into browser bundles. Never use that
+  prefix for credentials, tokens, or provider settings.
+- Server-only settings are read through `readServerEnv(name)` in
+  `config/server-env.ts`. It rejects `NEXT_PUBLIC_*` names, treats blank as
+  unset (`null`), and its errors name the variable, never its value.
+- `config/catalog.ts`, `config/catalog-source.ts`,
+  `config/catalog-api-dispatch.ts`, and `config/server-env.ts` start with
+  `import "server-only"`. Importing them (directly or transitively) from a
+  `"use client"` module fails `next build`. Fix such a failure by moving logic
+  to a browser-safe module, never by removing the guard.
+- Secrets must not reach client props, serialized view models, route
+  responses, logs, or error messages.
+- No server-only variable is defined yet; `.env.example` lists public values
+  only.
+
 ## Testing
 
 **Runner:** Vitest 4 (Node). Config: `vitest.config.mts`.
@@ -198,6 +217,33 @@ agent. Config: `vitest.http.config.mts`.
 ```bash
 npm run build
 npm run test:http
+```
+
+**Server-only boundary (S6-T11):**
+
+- `config/server-only-boundary.test.ts` (in `npm test`) walks the source import
+  graph: every `"use client"` module must not reach `config/`,
+  `infrastructure/`, or a `server-only` module, and the protected modules
+  must keep their `import "server-only"`.
+- `vitest.config.mts` aliases `server-only` to Next's bundled
+  `next/dist/compiled/server-only/empty.js` (the module Next itself uses for
+  server code), so unit tests can import server modules. The alias does not
+  test client rejection; the `server-only` package is not installed because
+  Next resolves the import natively.
+- `npm run test:boundary` (`*.build.test.ts`, `vitest.build.config.mts`; four
+  production builds) is the production verification. It runs `next build` on the
+  real app with a synthetic secret and scans client artifacts (`.next/static`,
+  prerendered HTML/RSC, client reference and build manifests). It then builds
+  throwaway fixtures under `.boundary-fixtures/` (gitignored, deleted
+  afterwards): a valid app that proves the scan detects a
+  `NEXT_PUBLIC_` control and keeps a server-only marker server-side, plus two
+  invalid apps (direct and transitive client imports of a server-only module)
+  that must fail with Next's `'server-only' cannot be imported from a Client
+  Component module` error. Synthetic values are random per run and redacted
+  from failure output. It overwrites `.next`.
+
+```bash
+npm run test:boundary
 ```
 
 Component and E2E testing remain later tasks. No coverage thresholds.

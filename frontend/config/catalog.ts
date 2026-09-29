@@ -1,3 +1,4 @@
+import "server-only";
 import { cache } from "react";
 import { HttpCategoryRepository } from "@/infrastructure/catalog/http-category-repository";
 import { HttpProductRepository } from "@/infrastructure/catalog/http-product-repository";

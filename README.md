@@ -146,15 +146,17 @@ Then implement **only** the current task.
 
 | Field | Value |
 |-------|--------|
-| Phase | Phase 1 — Customer Storefront + Dummy API Foundation (Phase 2 / Sprint 6 planned, not started) |
-| Overall status | SPRINT_6_PLANNED_AWAITING_APPROVAL |
-| Current sprint | Sprint 6 — Next.js Server-side Foundation (**PLANNED — AWAITING APPROVAL**, revised in S6-T02) |
-| Last completed | S6-T02 — Revise Sprint 6 for a Next.js-only architecture |
-| Current task | None; next proposed S6-T11 — Server-only Boundary and Secret Isolation (**NOT_STARTED**) |
+| Phase | Phase 1 — Customer Storefront + Dummy API Foundation (Phase 2 / Sprint 6 in progress) |
+| Overall status | SPRINT_6_IN_PROGRESS |
+| Current sprint | Sprint 6 — Next.js Server-side Foundation (**IN PROGRESS**) |
+| Last completed | S6-T11 — Server-only Boundary and Secret Isolation |
+| Current task | None; next proposed S6-T12 — Catalog Contract Conformance Suite (**NOT_STARTED**) |
 
 Sprint 4 is complete. Sprint 5 is complete for Track A (purchasability rules,
 PDP price/availability panel, variant selector); the local cart (Track B) is
 deferred. No price renders until locale/currency is approved. ADR 0006 keeps
 UI and server-side code in one Next.js application (no FastAPI backend); no
-database is selected. Do **not** start S6-T11 automatically. S3-T10 Image Optimization and the original SEO URL
+database is selected. S6-T11 guards server configuration with
+`import "server-only"` and verifies it with production builds. Do **not** start
+S6-T12 automatically. S3-T10 Image Optimization and the original SEO URL
 strategy are deferred.
