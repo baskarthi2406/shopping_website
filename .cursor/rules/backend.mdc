@@ -1,25 +1,26 @@
 ---
-description: Production FastAPI, PostgreSQL, and backend rules
-globs: backend/**/*.{py,toml,ini,md,sql}
+description: Server-side Next.js rules (Route Handlers, server-only modules, provider adapters, persistence)
+globs: frontend/{app/api,config,infrastructure}/**/*.{ts,tsx,md},backend/**
 alwaysApply: false
 ---
 
-# Backend
+# Server-side (Next.js)
 
-Production backend implementation starts in Sprint 6. Sprint 4 dummy API tasks
-do not authorize FastAPI, Python packages, PostgreSQL, or SQL unless an accepted
-ADR and current task explicitly change that decision.
+There is no separate backend service (ADR 0006 supersedes ADR 0003). Do not add
+Python, FastAPI, Docker, or database code to `backend/`; it is a placeholder
+README only.
 
-When a production-backend task is active:
+- Route Handlers are HTTP only: validation, status codes, composition. Business
+  rules live in `domain/` and `application/`.
+- Modules that read secrets or call external services import `server-only`.
+  Secrets never use `NEXT_PUBLIC_`. `.env.example` holds empty placeholders only.
+- Client Components never import `config/`, `infrastructure/`, or provider code.
+- No page render or public Route Handler calls a provider per request; follow
+  ADR 0009 (cache/snapshot, bounded retries, request budget). No pass-through
+  proxy routes.
+- Provider (Zoho) DTOs stay in `infrastructure/` behind mappers (ADR 0005).
+  Do not invent Zoho endpoints, fields, scopes, or limits.
+- No database, ORM, migration tool, or KV store unless ADR 0008 is amended and
+  accepted.
 
-- FastAPI routers are HTTP only: validation, status codes, auth dependencies.
-- Business rules live in application/domain modules, not route functions.
-- Repositories abstract PostgreSQL. Routers must not import ORM models directly.
-- Schema changes go through migrations. Never commit secrets; use `.env.example` without values that are real credentials.
-- Frontend must not access PostgreSQL; it uses the API via a repository adapter.
-- Admin APIs require auth/RBAC once Sprint 8 exists; until then document the risk.
-
-Match `docs/architecture/BACKEND_ARCHITECTURE.md`. Stable storefront-facing
-contracts start in S4-T03; production implementation details are Sprint 6.
-Zoho DTOs remain behind infrastructure adapters (ADR 0005). Mark undecided
-schema fields TBD.
+Match `docs/architecture/BACKEND_ARCHITECTURE.md` (server-side architecture).

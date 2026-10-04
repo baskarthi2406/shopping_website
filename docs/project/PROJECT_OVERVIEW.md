@@ -32,8 +32,10 @@ Enable customers to discover, browse, and (in later phases) purchase baby clothe
 - Homepage visual design: **Option 1 finalized** (`docs/project/DESIGN_OPTION_1.md`, ADR 0001).
 - Sprint 4: customer navigation hierarchy, stable contracts, and dummy catalog
   APIs.
-- Sprint 6: planned FastAPI + PostgreSQL **modular monolith** production backend.
-- Sprint 7: Zoho POS integration behind repository adapters (ADR 0005).
+- Sprint 6: Next.js server-side foundations; no separate backend (ADR 0006)
+  and no database selected (ADR 0008).
+- Sprint 7: Zoho POS integration behind server-only repository adapters
+  (ADR 0005, ADR 0009).
 - Sprint 8: orders, checkout, and operations as requirements are confirmed.
 - Phases 3–5: commerce, marketing, production.
 

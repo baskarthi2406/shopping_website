@@ -1,11 +1,14 @@
 import type { Category, Product } from "@/domain/catalog";
 import type { CategoryRepository } from "./category-repository";
 import { getCategoryBySlug } from "./get-category-by-slug";
+import { listCategoryAncestors } from "./list-category-ancestors";
 import { listProductsByCategory } from "./list-products-by-category";
 import type { ProductRepository } from "./product-repository";
 
 export type CategoryPageData = {
   readonly category: Category;
+  /** Parent chain, root first; empty for a top-level category. */
+  readonly ancestors: readonly Category[];
   readonly products: readonly Product[];
 };
 
@@ -24,6 +27,9 @@ export async function getCategoryPage(
     return null;
   }
 
-  const listed = await listProductsByCategory(products, category.slug);
-  return { category, products: listed };
+  const [ancestors, listed] = await Promise.all([
+    listCategoryAncestors(categories, category),
+    listProductsByCategory(products, category.slug),
+  ]);
+  return { category, ancestors, products: listed };
 }

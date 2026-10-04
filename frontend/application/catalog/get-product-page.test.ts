@@ -129,6 +129,32 @@ describe("getProductPage", () => {
     expect(page?.categories).toEqual([]);
   });
 
+  it("returns the primary category's parent chain", async () => {
+    const women = category({ id: "women", slug: "women", name: "Women" });
+    const coOrdSet = category({
+      id: "women-co-ord-set",
+      slug: "women-co-ord-set",
+      name: "Co-Ord Set",
+      parentId: "women",
+    });
+    const set = product({ id: "set", slug: "set", categoryIds: ["women-co-ord-set"] });
+
+    const page = await getProductPage(
+      new InMemoryProductRepository([set]),
+      new InMemoryCategoryRepository([women, coOrdSet]),
+      "set",
+    );
+
+    expect(page?.categories).toEqual([coOrdSet]);
+    expect(page?.primaryCategoryAncestors).toEqual([women]);
+  });
+
+  it("returns no ancestors when the product has no resolved category", async () => {
+    const page = await getProductPage(products, categories, "olive-green-patterned-dress");
+
+    expect(page?.primaryCategoryAncestors).toEqual([]);
+  });
+
   it("omits category ids that do not resolve", async () => {
     const orphan = product({
       id: "orphan",

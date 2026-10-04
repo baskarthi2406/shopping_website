@@ -45,7 +45,11 @@ export default async function ProductPage({ params }: ProductPageProps) {
     notFound();
   }
 
-  const view = toProductPageViewModel(data.product, data.categories);
+  const view = toProductPageViewModel(
+    data.product,
+    data.categories,
+    data.primaryCategoryAncestors,
+  );
   const { commerce, selector, commerceByVariant } = toProductPurchaseOptionsViewModel(
     data.product,
     { priceDisplay },

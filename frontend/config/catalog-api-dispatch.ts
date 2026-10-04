@@ -1,18 +1,10 @@
+import "server-only";
 import { createGetCategoriesHandler } from "@/app/api/categories/get-categories-handler";
 import { createGetProductsHandler } from "@/app/api/products/get-products-handler";
 import { createGetProductDetailHandler } from "@/app/api/products/[slug]/get-product-detail-handler";
 import type { CatalogApiDispatch } from "@/infrastructure/catalog/catalog-api-client";
 import { catalogSource } from "./catalog-source";
-
-const getCategories = createGetCategoriesHandler(() =>
-  catalogSource.getCategoryCollection(),
-);
-const getProducts = createGetProductsHandler((query) =>
-  catalogSource.getProductCollection(query),
-);
-const getProduct = createGetProductDetailHandler((slug) =>
-  catalogSource.getProductDetail(slug),
-);
+import type { Catalog } from "./create-catalog";
 
 /**
  * Same-process dummy API transport. Invokes the public route handlers so the
@@ -20,29 +12,37 @@ const getProduct = createGetProductDetailHandler((slug) =>
  * deadlocks during RSC/build). A future external API can replace this dispatch
  * with fetch() without changing pages.
  */
-export const dispatchCatalogApi: CatalogApiDispatch = async (url) => {
-  const request = new Request(url);
+export function createCatalogApiDispatch(source: Catalog): CatalogApiDispatch {
+  const getCategories = createGetCategoriesHandler(() => source.getCategoryCollection());
+  const getProducts = createGetProductsHandler((query) => source.getProductCollection(query));
+  const getProduct = createGetProductDetailHandler((slug) => source.getProductDetail(slug));
 
-  if (url.pathname === "/api/categories") {
-    return getCategories();
-  }
+  return async (url) => {
+    const request = new Request(url);
 
-  const productDetail = /^\/api\/products\/([^/]+)$/.exec(url.pathname);
-  if (productDetail?.[1] !== undefined) {
-    return getProduct(request, decodeURIComponent(productDetail[1]));
-  }
+    if (url.pathname === "/api/categories") {
+      return getCategories();
+    }
 
-  if (url.pathname === "/api/products") {
-    return getProducts(request);
-  }
+    const productDetail = /^\/api\/products\/([^/]+)$/.exec(url.pathname);
+    if (productDetail?.[1] !== undefined) {
+      return getProduct(request, decodeURIComponent(productDetail[1]));
+    }
 
-  return Response.json(
-    {
-      error: {
-        code: "not_found",
-        message: "Catalog endpoint was not found",
+    if (url.pathname === "/api/products") {
+      return getProducts(request);
+    }
+
+    return Response.json(
+      {
+        error: {
+          code: "not_found",
+          message: "Catalog endpoint was not found",
+        },
       },
-    },
-    { status: 404 },
-  );
-};
+      { status: 404 },
+    );
+  };
+}
+
+export const dispatchCatalogApi: CatalogApiDispatch = createCatalogApiDispatch(catalogSource);

@@ -21,22 +21,22 @@
 | Linting | ESLint 9.39.5 + `eslint-config-next` 16.3.0 | Reviewed S1-T06; keep Next Core Web Vitals + TypeScript |
 | Formatting | No Prettier | Decided S1-T06 — avoid a second style tool; ESLint + editor defaults |
 
-## Planned production backend — Sprint 6
+## Server-side (Next.js) — Sprint 6 onward
 
 | Concern | Choice | Status |
 |---------|--------|--------|
-| Language | Python | Decided; not started |
-| API | FastAPI modular monolith (ADR 0003) | Decided; not started |
-| Database | PostgreSQL | Decided; not started |
-| Migrations | TBD | Sprint 5 |
-| ORM / SQL layer | TBD | Sprint 5 |
+| Application | Single Next.js application; no separate backend (ADR 0006, supersedes ADR 0003) | Decided S6-T02 |
+| Server code | Server Components, server-only modules, Route Handlers (Node.js runtime) | Decided (ADR 0006) |
+| Database / persistence | None selected; PostgreSQL is only a candidate (ADR 0008) | Open |
+| Migrations / ORM | Not applicable unless ADR 0008 selects a store | Open |
+| Hosting / runtime model | TBD | Sprint 11 |
 | Auth | TBD | Sprint 8 |
 
 ## Planned integration — Sprint 7
 
 | Concern | Choice | Status |
 |---------|--------|--------|
-| POS integration | Zoho POS behind repository/mapper adapters | Planned; API details TBD |
+| POS integration | Zoho POS behind server-only repository/mapper adapters (ADR 0009) | Planned; API details, quota, and fields unverified |
 | Vendor isolation | Mini Mystiq contracts + anti-corruption mapping | Decided; ADR 0005 |
 
 ## Phase 3+
@@ -45,8 +45,8 @@ Payment, email, messaging, shipping, analytics, hosting, CI/CD: **TBD**.
 
 ## Explicitly out of current S4-T01
 
-- FastAPI application code
-- PostgreSQL schema
+- Separate backend service code (none planned; ADR 0006)
+- Database schema (no store selected; ADR 0008)
 - Dummy API implementation
 - Zoho integration
 - Admin implementation

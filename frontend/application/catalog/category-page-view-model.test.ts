@@ -82,6 +82,58 @@ describe("toCategoryPageViewModel", () => {
     ]);
   });
 
+  it("prefixes the breadcrumb with linked ancestors, root first", () => {
+    const infants: Category = { ...category, id: "infants", slug: "infants", name: "Infants" };
+    const babyGirl: Category = {
+      ...category,
+      id: "infants-baby-girl",
+      slug: "infants-baby-girl",
+      name: "Baby Girl",
+      parentId: "infants",
+    };
+    const coOrdSet: Category = {
+      ...category,
+      id: "infants-baby-girl-co-ord-set",
+      slug: "infants-baby-girl-co-ord-set",
+      name: "Co-Ord Set",
+      parentId: "infants-baby-girl",
+    };
+
+    const view = toCategoryPageViewModel(coOrdSet, [], [infants, babyGirl]);
+
+    expect(view.breadcrumb).toEqual([
+      { label: "Home", href: "/" },
+      { label: "Infants", href: "/c/infants" },
+      { label: "Baby Girl", href: "/c/infants-baby-girl" },
+      { label: "Co-Ord Set", href: null },
+    ]);
+  });
+
+  it("links visible direct subcategories in category order", () => {
+    const child = (id: string, name: string, visibility: Category["visibility"] = "visible") => ({
+      ...category,
+      id,
+      slug: id,
+      name,
+      parentId: "baby-essentials",
+      visibility,
+    });
+    const parent: Category = {
+      ...category,
+      children: [
+        child("baby-essentials-feeding", "Feeding"),
+        child("baby-essentials-hidden", "Hidden", "hidden"),
+        child("baby-essentials-grooming", "Grooming"),
+      ],
+    };
+
+    expect(toCategoryPageViewModel(parent, []).subcategories).toEqual([
+      { name: "Feeding", href: "/c/baby-essentials-feeding" },
+      { name: "Grooming", href: "/c/baby-essentials-grooming" },
+    ]);
+    expect(toCategoryPageViewModel(category, []).subcategories).toEqual([]);
+  });
+
   it("keeps a valid category with zero products as an empty collection", () => {
     const view = toCategoryPageViewModel(category, []);
 

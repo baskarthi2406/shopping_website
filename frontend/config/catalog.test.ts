@@ -1,6 +1,10 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { toCatalogNavItems, toFooterNavViewModel } from "@/application/catalog";
+import {
+  toCatalogNavItems,
+  toCategoryPageViewModel,
+  toFooterNavViewModel,
+} from "@/application/catalog";
 import { catalog } from "./catalog";
 import { catalogSource } from "./catalog-source";
 
@@ -48,6 +52,37 @@ describe("storefront catalog composition", () => {
 
     expect(page?.category.slug).toBe("infants");
     expect(page?.products).toEqual([]);
+  });
+
+  it("resolves category → subcategory → listing through the dummy API", async () => {
+    const women = await catalog.getCategoryPage("women");
+    const coOrdSet = await catalog.getCategoryPage("women-co-ord-set");
+    const infantsCoOrdSet = await catalog.getCategoryPage("infants-baby-girl-co-ord-set");
+
+    expect(women?.ancestors).toEqual([]);
+    expect(women?.category.children.map((child) => child.slug)).toContain("women-co-ord-set");
+    expect(coOrdSet?.ancestors.map((category) => category.slug)).toEqual(["women"]);
+    expect(infantsCoOrdSet?.ancestors.map((category) => category.slug)).toEqual([
+      "infants",
+      "infants-baby-girl",
+    ]);
+  });
+
+  it("links every visible subcategory to an existing category page", async () => {
+    const categories = await catalog.listCategories();
+    const slugs = new Set(categories.map((category) => category.slug));
+    const parents = categories.filter((category) => category.children.length > 0);
+
+    expect(parents.length).toBeGreaterThan(0);
+    for (const parent of parents) {
+      const view = toCategoryPageViewModel(parent, []);
+      for (const link of view.subcategories) {
+        expect(slugs.has(link.href.replace(/^\/c\//, "")), link.href).toBe(true);
+      }
+      expect(view.subcategories.length).toBe(
+        parent.children.filter((child) => child.visibility === "visible").length,
+      );
+    }
   });
 
   it("does not bind static product or category repositories in the storefront catalog", () => {

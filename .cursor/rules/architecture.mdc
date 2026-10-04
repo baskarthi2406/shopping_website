@@ -15,24 +15,28 @@ Workflow: Plan → Implement → Test → Review → Document → Update status 
 
 ## Layers
 
-- Domain: no Next.js, React, FastAPI, SQL, or Tailwind.
+- Domain: no Next.js, React, SQL, Tailwind, or provider SDKs.
 - Application: use cases; depends on domain and repository interfaces only.
-- Infrastructure: static/mock repos now; dummy HTTP, production SQL, and vendor
-  adapters only in their scheduled tasks.
-- UI/HTTP: thin pages and routers.
+- Infrastructure: static/mock repos and the dummy API client now; server-only
+  provider adapters and any approved persistence only in their scheduled tasks.
+- UI/HTTP: thin pages and Route Handlers.
 
-Current: `Next.js → Application → Repository interface → static/mock data`.
-Planned: same frontend interfaces; `HttpRepository → Mini Mystiq API contract →
-dummy or production implementation → optional Zoho adapter`.
+One Next.js application owns UI and server-side code (ADR 0006); no separate
+backend service.
+
+Current: `Next.js → Application → Repository interface → HTTP repository →
+in-process dummy API → static data`.
+Planned: same interfaces; implementation selected in `config/` → Mini Mystiq
+API contract → dummy or server-only Zoho adapter (cache/snapshot, ADR 0009).
 
 Do not rewrite the storefront when replacing mock repositories with API repositories.
 
 ## Phase guardrails
 
 - Storefront is mobile-first (Mobile → Tablet → Desktop). Admin may be desktop-priority but must stay responsive.
-- Sprint 4 may implement only its scheduled dummy API. FastAPI/PostgreSQL
-  production backend waits for Sprint 6; Zoho waits for Sprint 7. No admin or
-  payments without an explicit task.
+- No separate backend service (ADR 0006). No database unless ADR 0008 is
+  amended and accepted. Zoho waits for Sprint 7 and verified access. No admin,
+  cart, checkout, or payments without an explicit task.
 - Do not initialize Next.js or install packages unless the current task says so.
 - Significant architecture changes require an ADR in `docs/decisions/`.
 - Undecided business facts are TBD. Do not invent them.

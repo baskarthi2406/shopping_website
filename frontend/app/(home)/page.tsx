@@ -3,6 +3,7 @@ import { unstable_rethrow } from "next/navigation";
 import { toNextMetadata } from "@/app/to-next-metadata";
 import { toHomePageViewModel } from "@/application/catalog";
 import { buildHomeMetadata } from "@/application/seo/home-metadata";
+import { CatalogDemoLink } from "@/components/storefront/catalog-demo-link";
 import { CatalogUnavailable } from "@/components/storefront/catalog-unavailable";
 import { HomeCategories } from "@/components/storefront/home-categories";
 import { HomeHero } from "@/components/storefront/home-hero";
@@ -11,6 +12,7 @@ import { HomeProducts } from "@/components/storefront/home-products";
 import { HomePromo } from "@/components/storefront/home-promo";
 import { TrustBar } from "@/components/storefront/trust-bar";
 import { catalog } from "@/config/catalog";
+import { isCatalogDemoEnabled } from "@/config/catalog-demo";
 
 export async function generateMetadata(): Promise<Metadata> {
   return toNextMetadata(buildHomeMetadata());
@@ -41,6 +43,7 @@ export default async function Home() {
         <>
           <HomeCategories categories={view.categories} />
           <HomeProducts products={view.products} />
+          {isCatalogDemoEnabled() ? <CatalogDemoLink /> : null}
         </>
       )}
       <HomePromo href={view.promo.href} image={view.promo.image} />

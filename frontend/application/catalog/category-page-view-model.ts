@@ -8,6 +8,11 @@ export type ProductCardViewModel = {
   readonly image: { readonly src: string; readonly alt: string } | null;
 };
 
+export type SubcategoryLinkViewModel = {
+  readonly name: string;
+  readonly href: string;
+};
+
 export type CategoryPageViewModel = {
   readonly slug: string;
   readonly name: string;
@@ -15,6 +20,8 @@ export type CategoryPageViewModel = {
   readonly canonicalPath: string;
   readonly productCount: number;
   readonly products: readonly ProductCardViewModel[];
+  /** Visible direct subcategories, in category order. */
+  readonly subcategories: readonly SubcategoryLinkViewModel[];
   readonly breadcrumb: readonly BreadcrumbItemViewModel[];
 };
 
@@ -31,9 +38,15 @@ export function toProductCardViewModel(
   };
 }
 
+/**
+ * Category page view. Products are the category's own placements (no
+ * aggregation from subcategories); subcategories link one level down.
+ * `ancestors` (root first) prefix the breadcrumb.
+ */
 export function toCategoryPageViewModel(
   category: Category,
   products: readonly Product[],
+  ancestors: readonly Category[] = [],
 ): CategoryPageViewModel {
   return {
     slug: category.slug,
@@ -42,8 +55,15 @@ export function toCategoryPageViewModel(
     canonicalPath: `/c/${category.slug}`,
     productCount: products.length,
     products: products.map(toProductCardViewModel),
+    subcategories: category.children
+      .filter((child) => child.visibility === "visible")
+      .map((child) => ({ name: child.name, href: `/c/${child.slug}` })),
     breadcrumb: [
       { label: "Home", href: "/" },
+      ...ancestors.map((ancestor) => ({
+        label: ancestor.name,
+        href: `/c/${ancestor.slug}`,
+      })),
       { label: category.name, href: null },
     ],
   };

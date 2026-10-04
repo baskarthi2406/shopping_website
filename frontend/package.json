@@ -10,6 +10,7 @@
     "typecheck": "tsc --noEmit",
     "test": "vitest run",
     "test:http": "vitest run --config vitest.http.config.mts",
+    "test:boundary": "vitest run --config vitest.build.config.mts",
     "test:watch": "vitest"
   },
   "dependencies": {

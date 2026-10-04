@@ -247,6 +247,69 @@ loads this detail envelope through the catalog API client (S4-T09). The page
 does not display price, SKU, stock, or variant selectors while those values
 remain unknown.
 
+## Catalog API conformance suite (S6-T12)
+
+`frontend/infrastructure/catalog/catalog-api-contract.ts` exports
+`describeCatalogApiContract(label, getDispatch)` and the underlying named
+checks. It runs against any `CatalogApiDispatch` (`(url: URL) =>
+Promise<Response>`), the seam `catalog-api-client` consumes, so a future
+fetch-based or provider-backed implementation can be verified without Zoho and
+without changing pages. `config/catalog-api-dispatch.contract.test.ts` runs it
+against the in-process dummy dispatch; `catalog-api-contract.test.ts` runs it
+against an independent synthetic fake and proves every check rejects a
+deliberately broken implementation.
+
+**Verified contract (code is the source of truth):**
+
+| Endpoint | Success | Errors |
+|----------|---------|--------|
+| `GET /api/categories` | `200 { data: Category[] }`, ordered roots, recursive `children`, every node `parentId` = its parent's `id` (roots `null`), IDs and slugs unique across the tree, hidden / not-in-menu categories allowed | `500 temporarily_unavailable` on loader failure (handler tests) |
+| `GET /api/products` | `200 { data: ProductSummary[], pagination: { page, pageSize, total, hasNext } }`; defaults page 1 / pageSize 12; `hasNext = page × pageSize < total`; stable order, identical across page sizes; beyond the end → empty `data`, requested page, `hasNext: false` | `400 invalid_request` for zero/negative/decimal/non-numeric/empty/unsafe/duplicate values or any parameter other than `page`/`pageSize`; `500 temporarily_unavailable` |
+| `GET /api/products/{slug}` | `200 { data: Product }` for every listed slug; equals its list summary plus `variants` | `404 not_found` (well-formed unknown slug); `400 invalid_request` (invalid slug syntax or any query parameter); `500 temporarily_unavailable` |
+
+All responses are JSON. Errors are exactly `{ error: { code, message } }` with
+a non-empty message; only the code is contractual (the client reads codes).
+Entity shapes are treated as closed: missing fields and unexpected fields
+(for example a leaked provider `item_id`) are violations. Nullable `sku`,
+`uom`, `pricing`, and `inventory` must be present as `null` or a valid value,
+list items never carry `variants`, and entities must pass `validateProduct`
+(money, inventory, variant invariants).
+
+Current dummy data (dummy-specific tests, not part of the reusable suite):
+54 categories, all visible and in menus; 12 products with `sku`, `uom`,
+`pricing`, `inventory` all `null` and `variants: []`; product `categoryIds`
+reference categories in the tree; sitemap category and product paths equal the
+API's. `config/catalog-api-dispatch.golden.json` records category slug paths
+in presentation order, hidden / not-in-menu slugs, and product
+`id`/`slug`/`categoryIds` in list order. Names, descriptions, and images are
+normalized out (copy edits are not contract drift). After an approved content
+change, regenerate with `UPDATE_CATALOG_GOLDEN=1 npx vitest run
+config/catalog-api-dispatch.contract.test.ts` and review the diff.
+
+**Ambiguous or undocumented (recorded, not asserted, not changed):**
+
+- `GET /api/categories` ignores query parameters (returns 200) although it
+  documents none and the product endpoints reject unsupported ones.
+- No maximum `pageSize`; any safe positive integer is accepted.
+- Leading-zero integers (`page=01`) are rejected by the current parser;
+  “positive integer” does not say.
+- A detail request with both an unknown slug and a query parameter returns
+  400 (query checked first); precedence is undocumented, so the suite uses a
+  listed slug.
+- Product list order is repository order; no sort key is defined. The suite
+  requires stability only; the golden file pins the current order.
+- Referential integrity of product `categoryIds` and sitemap inclusion of
+  hidden categories are not documented (none are hidden today).
+- Unknown `/api/*` paths return a JSON `404 not_found` only in the in-process
+  dispatch; Next routing would serve its own 404.
+- Treating shapes as closed follows the boundary rule above but is not stated
+  as an API rule elsewhere; confirm before external implementations.
+
+Limitations: the suite runs in-process through the dispatch seam, not over a
+network; `500` mapping cannot be triggered through a healthy dispatch and
+stays covered by handler tests; the client still casts envelopes without
+runtime validation (TD-008).
+
 ## IDs and SEO slugs
 
 IDs identify entities and relationships inside application contracts. Slugs

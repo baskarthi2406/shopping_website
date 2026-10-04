@@ -8,7 +8,7 @@ Do not mark future tasks completed. Do not start a task that is not in `CURRENT_
 ## How to read this file
 
 - Sprint status: `NOT_STARTED` | `PLANNED — AWAITING APPROVAL` | `IN_PROGRESS` | `COMPLETED`
-- Task status: `NOT_STARTED` | `PROPOSED` | `IN_PROGRESS` | `COMPLETED` | `BLOCKED` | `DEFERRED`
+- Task status: `NOT_STARTED` | `PROPOSED` | `IN_PROGRESS` | `COMPLETED` | `BLOCKED` | `DEFERRED` | `WITHDRAWN`
 - Only one task may be `IN_PROGRESS`.
 
 ---
@@ -176,39 +176,48 @@ Order are deferred. The review added TD-010 (unverified Zoho allowance of 7,500
 requests/month) and TD-011 (homepage service claims need business
 confirmation).
 
-### Sprint 6 — Production Backend Foundation
+### Sprint 6 — Next.js Server-side Foundation
 
 | Field | Value |
 |-------|--------|
-| Phase | Phase 2 — Production Backend |
-| Objective | Production catalog API and PostgreSQL persistence behind the S4 contracts; storefront default and SEO unchanged |
-| Status | **PLANNED — AWAITING APPROVAL** |
+| Phase | Phase 2 — Server-side foundation (single Next.js application, ADR 0006) |
+| Objective | Server-only isolation, catalog contract conformance, provenance rules, outbound request policy; storefront, SEO, and dummy API unchanged; Zoho gated on verified access |
+| Status | **IN_PROGRESS** (revised in S6-T02; S6-T11–S6-T14 completed) |
 | Dependencies | Sprint 5 completed (Track A) |
-| Task IDs | S6-T01 (planning) · proposed S6-T02 … S6-T10 |
+| Task IDs | S6-T01, S6-T02, S6-T11–S6-T14 · S6-T03–S6-T10 withdrawn · proposed S6-T15, S6-T16 |
 
 | Task ID | Name | Status |
 |---------|------|--------|
-| S6-T01 | Sprint 6 Planning | **COMPLETED** |
-| S6-T02 | Backend Architecture Decisions (ADRs 0006–0008) | **PROPOSED** (gate G0) |
-| S6-T03 | Backend Skeleton and Operational Baseline | **PROPOSED** (gate G1: ADRs accepted) |
-| S6-T04 | Catalog Domain, Ports, and Use Cases (Backend) | **PROPOSED** |
-| S6-T05 | PostgreSQL Schema and Migrations | **PROPOSED** (gate G2) |
-| S6-T06 | PostgreSQL Catalog Repositories | **PROPOSED** |
-| S6-T07 | Approved Catalog Content Import | **PROPOSED** (gate G3) |
-| S6-T08 | Production Catalog Read API | **PROPOSED** |
-| S6-T09 | Storefront Production API Adapter (opt-in) | **PROPOSED** (gate G4; may be deferred) |
-| S6-T10 | Sprint 6 Review | **PROPOSED** |
+| S6-T01 | Sprint 6 Planning | **COMPLETED** (sequence withdrawn by S6-T02) |
+| S6-T02 | Revise Sprint 6 for a Next.js-only Architecture | **COMPLETED** |
+| S6-T03 – S6-T10 | FastAPI/PostgreSQL tasks from S6-T01 | **WITHDRAWN** (ADR 0006, ADR 0008; IDs not reused) |
+| S6-T11 | Server-only Boundary and Secret Isolation | **COMPLETED** (explicit user approval) |
+| S6-T12 | Catalog Contract Conformance Suite | **COMPLETED** (explicit user approval) |
+| S6-T13 | Field Provenance Rules | **COMPLETED** (gate G1 passed 2026-10-04) |
+| S6-T14 | Server-side Zoho Request Wrapper (redefined from Outbound Request Policy) | **COMPLETED** (gate G2 passed via ADR 0009 amendment) |
+| S6-T15 | Zoho Access Verification and Readiness Report | **IN PROGRESS** (GZ passed; catalog PARTIAL; demo checkout → draft Sales Order works and is frozen at `589b74a`; gaps in `docs/project/PRODUCTION-READINESS.md`; decision gate in `docs/project/PRODUCTION-DECISIONS.md`; category mapping partially implemented per `docs/project/CATEGORY-MAPPING-DESIGN.md`; interim in-memory Zoho catalog snapshot behind `CATALOG_PRODUCT_SOURCE=zoho-snapshot`, ADR 0009 amendment; hosting/snapshot decision record in `docs/project/HOSTING-SNAPSHOT-DECISION.md`, hosting NOT DECIDED; category → subcategory navigation audited and breadcrumb/subcategory links fixed; full Zoho catalog demo mode `CATALOG_PRODUCT_SOURCE=zoho-demo` with server-side image proxy, demo only) |
+| S6-T16 | Sprint 6 Review | **PROPOSED** |
 
-No Sprint 6 implementation task is approved. Open decisions (data ownership,
-toolchain, API topology, content approval, freshness, merge to `main`) are in
-`docs/sprints/SPRINT-06.md` §10. No Zoho work in Sprint 6.
+S6-T11 added `import "server-only"` to the `config/` server composition roots
+and `config/server-env.ts`, an import-graph test, and `npm run test:boundary`
+(production-build secret scan plus rejected client-import controls). No
+dependency added. S6-T12 added a reusable catalog API conformance suite
+(`describeCatalogApiContract`) run against the dummy dispatch and a synthetic
+fake, a normalized golden file, and a record of contract ambiguities. S6-T13
+added pure field provenance rules (ADR 0007 provenance accepted; 24 h
+threshold), not yet wired into runtime. S6-T14 added the server-only Zoho
+request wrapper (config, timeout, sanitized errors); Zoho capability
+verification is deferred to S6-T15. No further Sprint 6 task is approved. ADR 0006 (Next.js-only) is
+accepted; ADRs 0007–0009 are proposed. No database is selected. Open decisions
+are in `docs/sprints/SPRINT-06.md` §8. No Zoho calls in Sprint 6 unless GZ is
+approved.
 
 ### Sprint 7 — Zoho POS Integration
 
 | Field | Value |
 |-------|--------|
 | Phase | Phase 2 — External Integration |
-| Objective | Zoho POS repository/adapter integration behind stable Mini Mystiq contracts |
+| Objective | Zoho POS server-only adapter integration behind stable Mini Mystiq contracts |
 | Status | **NOT_STARTED** |
 | Dependencies | Sprint 6 completed |
 | Task IDs | TBD before Sprint 7 starts |

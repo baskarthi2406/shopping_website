@@ -25,11 +25,12 @@ This file is the live index of project state. A new AI session must read it afte
 
 **Phase 1 — Customer Storefront + Dummy API Foundation**
 
-Do **not** implement the production backend, Zoho integration, auth, checkout,
-or payments unless the current task explicitly schedules them.
+Do **not** implement provider integrations, persistence, Zoho integration,
+auth, checkout, or payments unless the current task explicitly schedules them.
 
-Phase 2 (Sprint 6 — Production Backend Foundation) is **planned and awaiting
-approval**; no Phase 2 implementation has started.
+Phase 2 (Sprint 6 — Next.js Server-side Foundation) is **planned and awaiting
+approval**; no Phase 2 implementation has started. ADR 0006 keeps UI and
+server-side functionality in one Next.js application (no separate backend).
 
 ---
 
@@ -45,9 +46,26 @@ Variant Selector), and the S5-T08 review are completed. Track B (S5-T05–S5-T07
 local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
 approval (`docs/sprints/SPRINT-05.md` → S5-T08).
 
-**Sprint 6 — Production Backend Foundation** is **PLANNED — AWAITING
-APPROVAL**: S6-T01 planning completed; S6-T02–S6-T10 proposed with approval
-gates G0–G4 (`docs/sprints/SPRINT-06.md`).
+**Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
+planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
+S6-T12 Catalog Contract Conformance Suite are completed; S6-T03–S6-T10
+(FastAPI/PostgreSQL) are withdrawn; S6-T13 Field Provenance Rules is
+completed (gate G1 passed); S6-T14 Server-side Zoho Request Wrapper is
+completed (gate G2 passed via ADR 0009 amendment); S6-T15 (Zoho feasibility)
+is in progress — the Zoho demo (product → cart → checkout → draft Sales Order
+`SO-00001`) works and is frozen at baseline `589b74a`, with production gaps in
+`docs/project/PRODUCTION-READINESS.md`; Zoho → storefront category mapping is
+partially implemented (`docs/project/CATEGORY-MAPPING-DESIGN.md`, high-confidence
+rows only; remaining placements await owner decision OD-6); an interim
+in-memory Zoho catalog snapshot (opt-in `CATALOG_PRODUCT_SOURCE=zoho-snapshot`,
+ADR 0009 amendment) removes per-page Zoho reads; durable snapshot storage
+awaits the hosting decision (`docs/project/HOSTING-SNAPSHOT-DECISION.md`,
+OD-9); category → subcategory navigation audited (ancestor breadcrumbs and
+subcategory links added); full Zoho catalog demo mode
+(`CATALOG_PRODUCT_SOURCE=zoho-demo`: all 49 products incl. unmapped ones,
+INR prices, server-side image proxy, `/catalog` view; demo only, production
+rule unchanged); S6-T16 is proposed
+(`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
 Optimization intentionally deferred.
@@ -56,9 +74,10 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S6-T01 Sprint 6 Planning is **COMPLETED**. No further task is
-approved; do not start S6-T02, Python code, package installs, Zoho
-integration, or any other task automatically.
+None. S6-T14 (Server-side Zoho Request Wrapper) is **COMPLETED**. The S6-T15
+Zoho demo is complete and frozen at `589b74a`. No further task is approved; do
+not start production work, payment, Sprint 7, package installs, persistence,
+Zoho writes, or any other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-06.md`.
 
@@ -71,7 +90,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_6_PLANNED_AWAITING_APPROVAL** (Sprint 5 completed for Track A; S6-T01 planning completed; next task S6-T02 awaits gate G0)
+**SPRINT_6_IN_PROGRESS** (Sprint 5 completed for Track A; S6-T01, S6-T02, S6-T11–S6-T14 completed; S6-T15 Zoho feasibility in progress — demo product → cart → checkout → draft Zoho Sales Order works, see `docs/project/DEMO-ZOHO-SALES-ORDER.md`)
 
 ---
 
@@ -152,11 +171,12 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 ### API/backend roadmap
 
 - Sprint 4: stable Mini Mystiq API/domain contracts and dummy catalog APIs
-- Sprint 6: production backend (planned FastAPI modular monolith + PostgreSQL;
-  ADR 0003)
-- Sprint 7: Zoho POS adapter behind repository interfaces (ADR 0005)
+- Sprint 6: Next.js server-side foundations (ADR 0006 supersedes the FastAPI
+  + PostgreSQL plan of ADR 0003; no database selected, ADR 0008)
+- Sprint 7: server-only Zoho POS adapter behind repository interfaces
+  (ADR 0005, ADR 0009)
 - Read-only dummy category, product collection, and product detail routes
-  implemented in Next.js; no production backend implementation exists
+  implemented in Next.js; no provider integration exists
 
 ---
 
@@ -201,7 +221,12 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S5-T03 — PDP Price & Availability Panel
 - S5-T04 — Variant Attribute Selector
 - S5-T08 — Sprint 5 Review (**Sprint 5 COMPLETED, Track A**)
-- S6-T01 — Sprint 6 Planning
+- S6-T01 — Sprint 6 Planning (task sequence later withdrawn)
+- S6-T02 — Revise Sprint 6 for a Next.js-only Architecture
+- S6-T11 — Server-only Boundary and Secret Isolation
+- S6-T12 — Catalog Contract Conformance Suite
+- S6-T13 — Field Provenance Rules
+- S6-T14 — Server-side Zoho Request Wrapper
 
 ## In progress
 
@@ -210,8 +235,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 ## Pending
 - Sprint 5 Track B — S5-T05–S5-T07 (local cart) **DEFERRED**, pending renewed
   Q1/Q2 approval; open business questions in `docs/sprints/SPRINT-05.md`
-- Sprint 6 — Production Backend Foundation: proposed S6-T02–S6-T10, each
-  requiring explicit approval (gates G0–G4 in `docs/sprints/SPRINT-06.md`)
+- Sprint 6 — Next.js Server-side Foundation: proposed S6-T15, S6-T16, each
+  requiring explicit approval (gates in `docs/sprints/SPRINT-06.md` §6)
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
 - S3-T10 — Image Optimization (**DEFERRED**)
@@ -225,16 +250,14 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   requests/month is a future constraint whose actual account limits are
   unverified. TD-011: homepage service claims (secure checkout, free
   shipping, COD, returns, 24/7 support) need business confirmation.
-- Zoho POS data access **not verified**: no authorized API access, docs, or
-  sample responses reviewed. Required before Sprint 7 planning; readiness
-  checklist in `docs/sprints/SPRINT-06.md` §9.
-- Data ownership is undecided: `BACKEND_ARCHITECTURE.md` calls PostgreSQL the
-  catalog/inventory system of record while Sprint 7 plans Zoho as the
-  product/price/stock source (Sprint 6 decision D1, ADR 0006 in S6-T02).
-- Backend toolchain (ORM, migrations, Python version, test DB), production API
-  prefix/topology, and CI vendor are undecided (Sprint 6 D2, D3, D11).
-  `TECH_STACK.md` and the development rules still defer some of these to
-  “Sprint 5”; S6-T02 is planned to correct that.
+- Zoho POS access verified for the demo (S6-T15): OAuth, catalog reads, and
+  one draft Sales Order. Production gaps (tax, location stock, images,
+  customers, order confirmation, persistent idempotency, categories, request
+  limits) are open: `docs/project/PRODUCTION-READINESS.md`.
+- Field-level data ownership is undecided (ADR 0007, Proposed). Persistence is
+  not selected (ADR 0008, Proposed). Provider access policy is proposed
+  (ADR 0009). Hosting/runtime model, public exposure of `/api/*` in
+  production, and CI vendor are undecided (`SPRINT-06.md` §8).
 - Reference-storefront (`minimystiq.zakyastore.in`) inspection **not
   completed**; no observations recorded.
 - Local `main` is still at the initial commit; Sprint 3–5 work is on unmerged,
@@ -251,7 +274,10 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S6-T02 — Backend Architecture Decisions (ADRs 0006–0008)**, after gate G0
-(Sprint 6 plan approved; decision on merging Sprints 3–5 into `main`).
-Sprint 5 Track B remains deferred pending Q1/Q2. Requires explicit human
-approval.
+None approved. The S6-T15 Zoho demo is frozen at `589b74a`; candidate next
+work is the P0 backlog in `docs/project/PRODUCTION-READINESS.md`, each item
+requiring an explicit task. The P0 decision gate
+(`docs/project/PRODUCTION-DECISIONS.md`) awaits owner decisions OD-1–OD-9 and
+Zoho verifications V1–V11. The decision on
+merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains
+deferred pending Q1/Q2. Requires explicit human approval.

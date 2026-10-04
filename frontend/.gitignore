@@ -12,6 +12,7 @@
 
 # testing
 /coverage
+/.boundary-fixtures/
 
 # next.js
 /.next/

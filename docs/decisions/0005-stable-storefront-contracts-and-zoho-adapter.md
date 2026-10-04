@@ -3,6 +3,10 @@
 - **Status:** Accepted
 - **Date:** 2026-09-14
 
+Amended by ADR 0006 (S6-T02): references below to a FastAPI production
+boundary and ADR 0003 are superseded. Production and Zoho-backed
+implementations are Next.js server-only code behind the same contracts.
+
 ## Context
 
 Mini Mystiq needs a dummy API during development and may integrate with Zoho POS

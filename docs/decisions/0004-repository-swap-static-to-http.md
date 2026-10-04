@@ -4,6 +4,8 @@
 - **Date:** 2026-08-11
 
 Extended by ADR 0005 (stable storefront contracts and Zoho adapter boundary).
+Under ADR 0006, “production” implementations are Next.js server-only code, not
+a separate backend.
 
 ## Context
 
