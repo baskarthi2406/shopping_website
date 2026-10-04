@@ -1,3 +1,4 @@
+import { StorefrontPrice } from "@/components/storefront/storefront-price";
 import { toTelHref } from "@/components/storefront/to-tel-href";
 
 export type ProductCommercePanelProps = {
@@ -27,10 +28,7 @@ export function ProductCommercePanel({ commerce, telephone }: ProductCommercePan
 
       {commerce.price !== null ? (
         <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="font-display text-h2 font-semibold text-foreground">
-            <span className="sr-only">Price: </span>
-            {commerce.price}
-          </span>
+          <StorefrontPrice amount={commerce.price} size="detail" label="Price: " />
           {commerce.compareAtPrice !== null ? (
             <s className="text-body text-foreground-muted">
               <span className="sr-only">Original price: </span>

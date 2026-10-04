@@ -46,14 +46,21 @@ describe("catalog navigation presentation contract", () => {
     }
   });
 
-  it("links the cart and keeps the other store tools unavailable", () => {
+  it("links the cart, offers header search, and keeps account tools unavailable", () => {
     expect(navigationSource).toContain("<CartLink />");
     expect(navigationSource).toContain('aria-disabled="true"');
     expect(navigationSource).toContain("(coming soon)");
+    expect(navigationSource).toContain("Account");
+    expect(navigationSource).toContain("Track Your Order");
     expect(navigationSource).not.toContain('href="/account"');
     expect(navigationSource).not.toContain('href="/track');
     const cartLink = readFileSync(path.join(import.meta.dirname, "cart-link.tsx"), "utf8");
     expect(cartLink).toContain('href="/cart"');
+    expect(shellSource).toContain("<StorefrontSearch");
+    const search = readFileSync(path.join(import.meta.dirname, "storefront-search.tsx"), "utf8");
+    expect(search).toContain('action="/search"');
+    expect(search).toContain('role="search"');
+    expect(search).toContain("min-h-[var(--mm-tap-min)]");
   });
 
   it("refines mega-menu panels without hardcoding taxonomy", () => {

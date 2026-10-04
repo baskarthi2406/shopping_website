@@ -9,9 +9,9 @@ No task is approved. Do not start any task until a human explicitly requests it.
 | Field | Value |
 |-------|-------|
 | Task ID | Owner request (not a sprint task id) |
-| Task | Show verified Zoho selling prices on the normal storefront |
+| Task | Polish storefront price type, cart quantity, and header search |
 | Status | **COMPLETED** |
-| Scope | `zoho-snapshot` shows a fresh verified Zoho `rate` in INR. Listings show that price only when every variant shares it. The selected variant price is the cart and review price. Stale, missing, and invalid rates stay hidden and block Add to Cart. `label_rate`, discounts, and GST are unchanged. `/demo` and SO-00001 are unchanged. |
+| Scope | Verified prices use one readable type treatment on cards, product detail, cart, and checkout. Cart lines show `Qty`. Header search filters the existing catalog by product name, and by category or SKU when those are already on the catalog record. Price values, provenance, stock limits, taxonomy, and Zoho access are unchanged. |
 
 ---
 
@@ -77,6 +77,8 @@ order). Images use the existing catalog proxy and fall back safely.
 The normal `zoho-snapshot` storefront shows a fresh verified Zoho selling
 price (`rate`). A listing shows that price only when every variant shares
 it. `label_rate` is not displayed. The selected variant's selling price is the cart and review price.
+Those prices use shared typography. Each cart line shows its quantity.
+The header searches the catalog already loaded for the storefront.
 Checkout revalidation names a price or stock change and does not
 rewrite the cart. Customer-facing GST is unresolved
 (`STOREFRONT_TAX_POLICY`); no tax is added to the subtotal. `/demo`

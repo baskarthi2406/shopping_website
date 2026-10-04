@@ -526,6 +526,11 @@ same price. Live check (`zoho-demo`): Girl Coord Set size 0-3M Pink
 `GIR-0-3-PIN` and Green `GIR-0-3-GRE` at ₹464; Women → Co-Ord Set lists one
 product; Yellow XXL `COO-YEL-XXL` is out of stock at ₹398. One snapshot
 refresh (2 GETs). One image GET timed out; no Zoho writes.
+A later owner request keeps those prices and adds shared price typography,
+a visible cart quantity, and header search. Search uses the catalog the
+storefront already loads. It matches the product name, and a category name
+or SKU only when that text is already on the catalog record. It does not
+call Zoho from the browser.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

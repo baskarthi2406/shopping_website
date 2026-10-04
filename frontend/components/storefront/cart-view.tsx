@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { CatalogImage } from "@/components/storefront/catalog-image";
+import { StorefrontPrice } from "@/components/storefront/storefront-price";
 import { STOREFRONT_TAX_NOTE } from "@/application/storefront-cart/tax-policy";
 import { formatCartMoney } from "@/application/storefront-cart/cart-candidate";
 import { useStorefrontCart } from "@/application/storefront-cart/use-storefront-cart";
@@ -19,7 +20,7 @@ const primaryButton =
 const quietButton =
   "inline-flex min-h-[var(--mm-tap-min)] min-w-[var(--mm-tap-min)] items-center justify-center rounded-md border border-border px-3 text-small text-foreground hover:border-primary focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-focus disabled:cursor-not-allowed disabled:opacity-50";
 
-function CartLineRow({
+export function CartLineRow({
   line,
   notice,
   onSetQuantity,
@@ -56,13 +57,19 @@ function CartLineRow({
               {line.sku}
             </p>
           ) : null}
-          <p className="mt-2 text-small text-foreground">
-            <span className="sr-only">Unit price: </span>
-            {formatCartMoney(line.unitPrice, line.priceLocale)}
+          <p className="mt-2">
+            <StorefrontPrice
+              amount={formatCartMoney(line.unitPrice, line.priceLocale)}
+              size="line"
+              label="Unit price: "
+            />
           </p>
-          <p className="text-small font-semibold text-foreground">
-            <span className="sr-only">Line total: </span>
-            {formatCartMoney(storefrontLineTotal(line), line.priceLocale)}
+          <p className="mt-1">
+            <StorefrontPrice
+              amount={formatCartMoney(storefrontLineTotal(line), line.priceLocale)}
+              size="total"
+              label="Line total: "
+            />
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             <button
@@ -74,9 +81,12 @@ function CartLineRow({
             >
               −
             </button>
-            <span className="min-w-8 text-center text-small" aria-live="polite">
-              <span className="sr-only">Quantity: </span>
-              {line.quantity}
+            <span
+              className="inline-flex min-h-[var(--mm-tap-min)] min-w-16 items-center justify-center text-small text-foreground-secondary"
+              aria-live="polite"
+            >
+              Qty:{" "}
+              <span className="ml-1 font-semibold tabular-nums text-foreground">{line.quantity}</span>
             </span>
             <button
               type="button"
@@ -149,8 +159,12 @@ export function CartView() {
       </div>
       <div className="mt-6 min-w-0">
         {subtotal !== null ? (
-          <p className="text-body font-semibold text-foreground">
-            Subtotal: {formatCartMoney(subtotal, cart.lines[0].priceLocale)}
+          <p className="text-small text-foreground-secondary">
+            Subtotal:{" "}
+            <StorefrontPrice
+              amount={formatCartMoney(subtotal, cart.lines[0].priceLocale)}
+              size="total"
+            />
           </p>
         ) : (
           <p className="text-body font-semibold text-foreground">Subtotal is unavailable.</p>

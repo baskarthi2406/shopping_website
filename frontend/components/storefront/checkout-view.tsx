@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { formatCartMoney } from "@/application/storefront-cart/cart-candidate";
 import { CatalogImage } from "@/components/storefront/catalog-image";
+import { StorefrontPrice } from "@/components/storefront/storefront-price";
 import { STOREFRONT_TAX_NOTE } from "@/application/storefront-cart/tax-policy";
 import {
   validateCheckoutDetails,
@@ -87,16 +88,21 @@ export function OrderReview({
               <p className="break-words font-semibold text-foreground">{line.productName}</p>
               <p className="break-words text-small text-foreground-secondary">{line.variantLabel}</p>
               {line.sku ? <p className="break-words text-small text-foreground-secondary">{line.sku}</p> : null}
-              <p className="text-small text-foreground">
-                Quantity {line.quantity} · {formatCartMoney(storefrontLineTotal(line), line.priceLocale)}
+              <p className="text-small text-foreground-secondary">
+                Quantity {line.quantity} ·{" "}
+                <StorefrontPrice
+                  amount={formatCartMoney(storefrontLineTotal(line), line.priceLocale)}
+                  size="line"
+                />
               </p>
             </div>
           </li>
         ))}
       </ul>
       {subtotal !== null ? (
-        <p className="mt-4 text-body font-semibold text-foreground">
-          Subtotal: {formatCartMoney(subtotal, cart.lines[0].priceLocale)}
+        <p className="mt-4 text-small text-foreground-secondary">
+          Subtotal:{" "}
+          <StorefrontPrice amount={formatCartMoney(subtotal, cart.lines[0].priceLocale)} size="total" />
         </p>
       ) : null}
       <p className="mt-1 text-small text-foreground-secondary">{STOREFRONT_TAX_NOTE}</p>
@@ -160,7 +166,13 @@ export function CheckoutView() {
     <div className="min-w-0">
       <h1 className="font-display text-h1 font-semibold tracking-tight text-foreground">Checkout</h1>
       <p className="mt-2 text-small text-foreground-secondary">
-        Subtotal {subtotal !== null ? formatCartMoney(subtotal, cart.lines[0].priceLocale) : "unavailable"}.{" "}
+        Subtotal{" "}
+        {subtotal !== null ? (
+          <StorefrontPrice amount={formatCartMoney(subtotal, cart.lines[0].priceLocale)} size="line" />
+        ) : (
+          "unavailable"
+        )}
+        .{" "}
         {STOREFRONT_TAX_NOTE}
       </p>
       <form

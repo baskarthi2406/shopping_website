@@ -258,7 +258,7 @@ export function MobileCatalogNavigation({ items }: CatalogNavigationProps) {
 }
 
 export function StoreToolPlaceholders({ className = "" }: { className?: string }) {
-  const tools = ["Search", "Account", "Track Your Order"] as const;
+  const tools = ["Account", "Track Your Order"] as const;
 
   return (
     <ul className={className} aria-label="Store tools">

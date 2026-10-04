@@ -49,6 +49,8 @@ not place a Zoho order and does not change `/demo`. A later owner
 request also locked image fallback, variant selling prices, known stock
 limits, and an explicit unresolved GST policy (no tax calculation). A later
 request shows that verified selling price on the normal snapshot storefront.
+A later request polishes that price's type, shows the cart quantity, and
+adds header search over the existing catalog.
 
 **Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
 planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
@@ -71,7 +73,10 @@ INR prices, server-side image proxy, `/catalog` view; demo only, production
 rule unchanged); category listings stay direct membership and product
 detail selects the real Zoho variant (SKU, price, availability); the normal
 `zoho-snapshot` storefront shows a fresh verified Zoho `rate` in INR and
-does not show `label_rate` or a discount; S6-T16 is proposed
+does not show `label_rate` or a discount; verified prices share one type
+treatment, cart lines show quantity, and the header searches the existing
+catalog by product name (category and SKU only when already on the record);
+S6-T16 is proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
@@ -115,8 +120,9 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - Product detail `/p/[slug]` (S2-T03)
 - Catalog nav + shared breadcrumbs (S2-T04)
 - Customer-reference hierarchical category model and prominent responsive
-  navigation (S4-T02); Search, Account, Cart, and Track Your Order are disabled
-  visual entry points only
+  navigation (S4-T02); Account and Track Your Order stay disabled visual
+  entry points. Cart links to `/cart`. Search is a header field over the
+  existing catalog (`/search`)
 - Stable provider-independent catalog domain/application contracts (S4-T03);
   recursive categories, product summaries/details, generic variants, nullable
   commerce data, pagination, and error envelopes

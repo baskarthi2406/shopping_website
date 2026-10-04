@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { CatalogImage } from "@/components/storefront/catalog-image";
+import { StorefrontPrice } from "@/components/storefront/storefront-price";
 
 export type ProductCardProps = {
   href: string;
@@ -48,7 +49,9 @@ export function ProductCard({
             {description}
           </p>
           {price !== null ? (
-            <p className="text-small font-semibold text-foreground">{price}</p>
+            <p className="mt-auto pt-1">
+              <StorefrontPrice amount={price} size="card" />
+            </p>
           ) : priceMessage !== null ? (
             <p className="text-caption text-foreground-muted">{priceMessage}</p>
           ) : null}

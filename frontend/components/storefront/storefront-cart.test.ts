@@ -6,6 +6,7 @@ vi.mock("next/navigation", () => ({
   useRouter: () => ({ push: () => undefined }),
 }));
 import { ProductCartActions } from "./product-cart-actions";
+import { CartLineRow } from "./cart-view";
 import { OrderReview } from "./checkout-view";
 import type { CartCandidate } from "@/application/storefront-cart/cart-candidate";
 import { STOREFRONT_TAX_NOTE } from "@/application/storefront-cart/tax-policy";
@@ -68,6 +69,25 @@ describe("product cart actions", () => {
     const html = renderToStaticMarkup(createElement(ProductCartActions, { choice: ready }));
     expect(html).toContain("Add to cart");
     expect(html).toContain("Buy now");
+  });
+});
+
+describe("cart line quantity", () => {
+  it("shows Qty beside the product name and price", () => {
+    const html = renderToStaticMarkup(
+      createElement(CartLineRow, {
+        line: cart.lines[0],
+        notice: null,
+        onSetQuantity: () => null,
+        onRemove: () => undefined,
+      }),
+    );
+    expect(html).toContain("Girl Coord set");
+    expect(html).toContain("Qty:");
+    expect(html).toContain(">2<");
+    expect(html).toContain("tabular-nums");
+    expect(html).toContain("Decrease quantity of Girl Coord set");
+    expect(html).toContain("Increase quantity of Girl Coord set");
   });
 });
 
