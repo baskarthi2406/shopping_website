@@ -34,8 +34,10 @@ feasibility **PARTIAL, sufficient for demo**
 (`docs/project/S6-T15-ZOHO-CATALOG-FEASIBILITY.md`). Demo product → cart →
 checkout → Zoho Sales Order **works** (`docs/project/DEMO-ZOHO-SALES-ORDER.md`):
 one owner-approved draft demo Sales Order (`SO-00001`) created and verified.
-No invoice or payment. Tax treatment and location stock remain open. No
-further task is approved.
+No invoice or payment. Demo **frozen** at baseline commit `589b74a`;
+production gaps and P0/P1/P2 backlog in `docs/project/PRODUCTION-READINESS.md`
+(assessment only). No further task is approved; do not start production work,
+payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope
 

@@ -472,7 +472,9 @@ verdict **PARTIAL, sufficient for demo** — see
 `docs/project/S6-T15-ZOHO-CATALOG-FEASIBILITY.md`. Demo order flow
 (owner-approved, one draft Sales Order `SO-00001`) works — see
 `docs/project/DEMO-ZOHO-SALES-ORDER.md`. Tax treatment to be confirmed before
-production checkout; location-specific inventory validation deferred.
+production checkout; location-specific inventory validation deferred. Demo
+frozen at baseline `589b74a`; production gap assessment and backlog:
+`docs/project/PRODUCTION-READINESS.md`.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

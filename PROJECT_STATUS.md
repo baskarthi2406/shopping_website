@@ -52,7 +52,9 @@ S6-T12 Catalog Contract Conformance Suite are completed; S6-T03–S6-T10
 (FastAPI/PostgreSQL) are withdrawn; S6-T13 Field Provenance Rules is
 completed (gate G1 passed); S6-T14 Server-side Zoho Request Wrapper is
 completed (gate G2 passed via ADR 0009 amendment); S6-T15 (Zoho feasibility)
-and S6-T16 are proposed
+is in progress — the Zoho demo (product → cart → checkout → draft Sales Order
+`SO-00001`) works and is frozen at baseline `589b74a`, with production gaps in
+`docs/project/PRODUCTION-READINESS.md`; S6-T16 is proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
@@ -62,9 +64,10 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S6-T14 (Server-side Zoho Request Wrapper) is **COMPLETED**. No further
-task is approved; do not start S6-T15, package installs, persistence, Zoho
-calls, or any other task automatically.
+None. S6-T14 (Server-side Zoho Request Wrapper) is **COMPLETED**. The S6-T15
+Zoho demo is complete and frozen at `589b74a`. No further task is approved; do
+not start production work, payment, Sprint 7, package installs, persistence,
+Zoho writes, or any other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-06.md`.
 
@@ -237,9 +240,10 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
   requests/month is a future constraint whose actual account limits are
   unverified. TD-011: homepage service claims (secure checkout, free
   shipping, COD, returns, 24/7 support) need business confirmation.
-- Zoho POS data access **not verified**: no authorized API access, docs, or
-  sample responses reviewed. Required before Sprint 7 planning; readiness
-  checklist in `docs/sprints/SPRINT-06.md` §7.
+- Zoho POS access verified for the demo (S6-T15): OAuth, catalog reads, and
+  one draft Sales Order. Production gaps (tax, location stock, images,
+  customers, order confirmation, persistent idempotency, categories, request
+  limits) are open: `docs/project/PRODUCTION-READINESS.md`.
 - Field-level data ownership is undecided (ADR 0007, Proposed). Persistence is
   not selected (ADR 0008, Proposed). Provider access policy is proposed
   (ADR 0009). Hosting/runtime model, public exposure of `/api/*` in
@@ -260,8 +264,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S6-T15 — Zoho feasibility spike** (highest priority for the 3-day demo:
-authentication, items, prices, stock, IDs, order creation, limits). Needs gate
-GZ: Zoho access supplied and explicit approval. The decision on
+None approved. The S6-T15 Zoho demo is frozen at `589b74a`; candidate next
+work is the P0 backlog in `docs/project/PRODUCTION-READINESS.md`, each item
+requiring an explicit task. The decision on
 merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains
 deferred pending Q1/Q2. Requires explicit human approval.

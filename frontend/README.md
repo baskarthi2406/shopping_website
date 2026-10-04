@@ -191,7 +191,9 @@ Local development may omit it; `config/site.ts` then uses `http://localhost:3000
   `ZOHO_ACCESS_TOKEN`, optional `ZOHO_REQUEST_TIMEOUT_MS`, read by
   `infrastructure/zoho/zoho-config.ts`. `infrastructure/zoho/zoho-client.ts`
   is the only path for Zoho requests (explicit timeout, sanitized errors,
-  untrusted responses). Zoho capability is not yet verified (S6-T15).
+  untrusted responses). The S6-T15 demo (`/demo`, server env
+  `ZOHO_DEMO_ENABLED=true`) is frozen at `589b74a`; see
+  `docs/project/DEMO-ZOHO-SALES-ORDER.md`.
 
 ## Testing
 

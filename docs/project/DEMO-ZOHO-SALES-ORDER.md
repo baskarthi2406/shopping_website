@@ -1,7 +1,11 @@
 # Demo — Mini Mystiq Product → Cart → Checkout → Zoho Sales Order
 
-Status: **DEMO WORKS** (2026-10-04). Part of the S6-T15 Zoho feasibility spike.
-Not production checkout.
+Status: **DEMO WORKS — FROZEN** (2026-10-04). Part of the S6-T15 Zoho
+feasibility spike. Not production checkout.
+
+**Demo baseline commit: `589b74a`.** Do not change the demo flow. Do not
+create another Zoho order or modify/delete `SO-00001` automatically.
+Production gaps and backlog: `docs/project/PRODUCTION-READINESS.md`.
 
 ## Flow
 
