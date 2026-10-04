@@ -1,5 +1,5 @@
-import Image from "next/image";
 import Link from "next/link";
+import { CatalogImage } from "@/components/storefront/catalog-image";
 
 export type ProductCardProps = {
   href: string;
@@ -32,10 +32,9 @@ export function ProductCard({
       >
         <div className="relative aspect-[3/4] overflow-hidden bg-surface-muted">
           {image ? (
-            <Image
+            <CatalogImage
               src={image.src}
               alt={image.alt}
-              fill
               sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
               className="mm-hover-zoom object-contain p-3"
             />

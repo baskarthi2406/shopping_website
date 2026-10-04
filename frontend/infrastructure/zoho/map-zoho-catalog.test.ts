@@ -66,6 +66,18 @@ describe("mapZohoItemsToProducts", () => {
     expect(JSON.stringify(product)).not.toMatch(/490|200|Vendor/);
   });
 
+  it("does not use sales_rate, pricebook_rate, or label_rate when they differ from rate", () => {
+    const [product] = mapZohoItemsToProducts(
+      [item("Pink", { sales_rate: 943, pricebook_rate: 864, label_rate: 999 })],
+      "XTS",
+    );
+    expect(product.variants[0].pricing).toEqual({
+      price: { amount: 464, currency: "XTS" },
+      compareAtPrice: null,
+    });
+    expect(JSON.stringify(product)).not.toMatch(/943|864|999/);
+  });
+
   it("drops a missing or non-positive price", () => {
     const [product] = mapZohoItemsToProducts([item("a", { rate: 0 }), item("b", { rate: "464" })], "XTS");
     expect(product.variants.map((variant) => variant.pricing)).toEqual([null, null]);

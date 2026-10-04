@@ -3,6 +3,8 @@
 import { useState } from "react";
 import Link from "next/link";
 import { formatCartMoney } from "@/application/storefront-cart/cart-candidate";
+import { CatalogImage } from "@/components/storefront/catalog-image";
+import { STOREFRONT_TAX_NOTE } from "@/application/storefront-cart/tax-policy";
 import {
   validateCheckoutDetails,
   type CheckoutDetails,
@@ -70,13 +72,25 @@ export function OrderReview({
       <h2 className="mt-6 font-display text-h3 font-semibold text-foreground">Items</h2>
       <ul className="mt-3 divide-y divide-border">
         {cart.lines.map((line) => (
-          <li key={line.variantId} className="min-w-0 py-3">
-            <p className="break-words font-semibold text-foreground">{line.productName}</p>
-            <p className="break-words text-small text-foreground-secondary">{line.variantLabel}</p>
-            {line.sku ? <p className="break-words text-small text-foreground-secondary">{line.sku}</p> : null}
-            <p className="text-small text-foreground">
-              Quantity {line.quantity} · {formatCartMoney(storefrontLineTotal(line), line.priceLocale)}
-            </p>
+          <li key={line.variantId} className="flex min-w-0 gap-3 py-3">
+            {line.imageSrc ? (
+              <div className="relative h-16 w-14 shrink-0 overflow-hidden rounded-md border border-border bg-surface">
+                <CatalogImage
+                  src={line.imageSrc}
+                  alt={line.imageAlt ?? line.productName}
+                  sizes="56px"
+                  className="object-contain"
+                />
+              </div>
+            ) : null}
+            <div className="min-w-0">
+              <p className="break-words font-semibold text-foreground">{line.productName}</p>
+              <p className="break-words text-small text-foreground-secondary">{line.variantLabel}</p>
+              {line.sku ? <p className="break-words text-small text-foreground-secondary">{line.sku}</p> : null}
+              <p className="text-small text-foreground">
+                Quantity {line.quantity} · {formatCartMoney(storefrontLineTotal(line), line.priceLocale)}
+              </p>
+            </div>
           </li>
         ))}
       </ul>
@@ -85,9 +99,7 @@ export function OrderReview({
           Subtotal: {formatCartMoney(subtotal, cart.lines[0].priceLocale)}
         </p>
       ) : null}
-      <p className="mt-1 text-small text-foreground-secondary">
-        GST, shipping, and discounts are not included.
-      </p>
+      <p className="mt-1 text-small text-foreground-secondary">{STOREFRONT_TAX_NOTE}</p>
 
       <h2 className="mt-6 font-display text-h3 font-semibold text-foreground">Customer</h2>
       <dl className="mt-3 space-y-2 text-body">
@@ -148,8 +160,8 @@ export function CheckoutView() {
     <div className="min-w-0">
       <h1 className="font-display text-h1 font-semibold tracking-tight text-foreground">Checkout</h1>
       <p className="mt-2 text-small text-foreground-secondary">
-        Subtotal {subtotal !== null ? formatCartMoney(subtotal, cart.lines[0].priceLocale) : "unavailable"}.
-        GST, shipping, and discounts are not included.
+        Subtotal {subtotal !== null ? formatCartMoney(subtotal, cart.lines[0].priceLocale) : "unavailable"}.{" "}
+        {STOREFRONT_TAX_NOTE}
       </p>
       <form
         className="mt-6 max-w-xl min-w-0 space-y-4"

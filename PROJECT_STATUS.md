@@ -45,7 +45,9 @@ Status: **COMPLETED** (S4-T01–S4-T12 and fix S4-F01; review in
 Variant Selector), and the S5-T08 review are completed. Track B task ids
 (S5-T05–S5-T07) stay **DEFERRED** as specified. A later owner request added a
 separate browser cart and checkout review (`/cart`, `/checkout`) that does
-not place a Zoho order and does not change `/demo`.
+not place a Zoho order and does not change `/demo`. A later owner
+request also locked image fallback, variant selling prices, known stock
+limits, and an explicit unresolved GST policy (no tax calculation).
 
 **Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
 planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
@@ -283,4 +285,6 @@ requiring an explicit task. The P0 decision gate
 Zoho verifications V1–V11. The decision on
 merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B task ids
 remain deferred. The owner-requested browser cart and checkout review is
-done and does not place orders. Requires explicit human approval.
+done and does not place orders. Image fallback, variant price and stock
+consistency, and the unresolved GST note are in place; no tax is
+calculated. Requires explicit human approval.

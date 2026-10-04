@@ -8,6 +8,7 @@ vi.mock("next/navigation", () => ({
 import { ProductCartActions } from "./product-cart-actions";
 import { OrderReview } from "./checkout-view";
 import type { CartCandidate } from "@/application/storefront-cart/cart-candidate";
+import { STOREFRONT_TAX_NOTE } from "@/application/storefront-cart/tax-policy";
 import type { StorefrontCart } from "@/domain/storefront-cart/storefront-cart";
 
 const ready: CartCandidate = {
@@ -89,6 +90,9 @@ describe("order review", () => {
     expect(html).toContain("12 Avanam Road, Peravurani");
     expect(html).toContain('href="/cart"');
     expect(html).toContain("Subtotal");
+    expect(html).toContain(STOREFRONT_TAX_NOTE);
+    expect(html).not.toMatch(/including GST|GST are not included|\+ .*GST|5%/i);
+    expect(html).not.toContain("487");
     expect(html).not.toMatch(/order placed|payment successful/i);
   });
 });

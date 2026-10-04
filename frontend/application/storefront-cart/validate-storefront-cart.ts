@@ -1,6 +1,15 @@
 import type { Money, Product } from "@/domain/catalog";
 import type { PriceDisplayConfig } from "@/application/catalog/product-commerce-view-model";
+import type { CartCandidate } from "./cart-candidate";
 import { toCartCandidates } from "./cart-candidate";
+
+function itemName(product: Product, candidate: CartCandidate): string {
+  const variant = candidate.variantLabel.trim();
+  if (variant === "" || variant === product.name) {
+    return product.name;
+  }
+  return `${product.name} (${variant})`;
+}
 
 export type StorefrontCartIssue = {
   readonly variantId: string;
@@ -48,10 +57,11 @@ export function validateStorefrontCart(
       issues.push({ variantId: line.variantId, message: "This variant is no longer available." });
       continue;
     }
+    const name = itemName(product, candidate);
     if (!candidate.canAdd || candidate.unitPrice === null) {
       issues.push({
         variantId: line.variantId,
-        message: candidate.blockMessage ?? "This item cannot be checked out.",
+        message: `${name}: ${candidate.blockMessage ?? "This item cannot be checked out."}`,
       });
       continue;
     }
@@ -61,7 +71,7 @@ export function validateStorefrontCart(
     ) {
       issues.push({
         variantId: line.variantId,
-        message: "The price for this item changed. Remove it and add it again before checkout.",
+        message: `The price for ${name} changed. Review your cart and add it again before checkout.`,
       });
       continue;
     }
@@ -70,8 +80,8 @@ export function validateStorefrontCart(
         variantId: line.variantId,
         message:
           candidate.availableToSell <= 0
-            ? "Out of stock."
-            : `Only ${candidate.availableToSell} available.`,
+            ? `${name} is out of stock.`
+            : `Only ${candidate.availableToSell} available for ${name}.`,
       });
     }
   }

@@ -625,7 +625,7 @@ cache or snapshot.
 | D4 | Persistent store, if any (ADR 0008 P1–P6) | None |
 | D-API | Whether `/api/*` stays public in production and what backs it | Dummy, as today |
 | D5 | Cart and device-local cart (Q1/Q2) | Browser cart and checkout review exist by a later owner request. They do not place a Zoho order. Production cart/checkout remains open |
-| D6 | Locale and currency (Q9) | Price display disabled (`priceDisplay = null`) |
+| D6 | Locale and currency (Q9) | Price display disabled (`priceDisplay = null`) except the `zoho-demo` selling-price display. Customer-facing GST is unresolved (`STOREFRONT_TAX_POLICY`); no tax is calculated |
 | D7 | Listing-card prices (Q10) and search (Q7) | Deferred |
 | D8 | Account and order tracking | Deferred (Sprint 8) |
 | D9 | Homepage claims: secure payment, free shipping, returns, COD, 24/7 support (TD-011) | Unchanged; business confirmation needed |
@@ -642,7 +642,7 @@ cache or snapshot.
 |------|--------|
 | Zoho client, SDK, credentials, sync, adapter | Sprint 7, after §7 verification |
 | Any database or persistent store | Only via ADR 0008 amendment |
-| Cart, checkout, orders, payment, shipping, tax | Sprint 8–9, separate approval. A browser cart and checkout review (no Zoho write) was added later by owner request; production order creation is still out of scope |
+| Cart, checkout, orders, payment, shipping, tax | Sprint 8–9, separate approval. A browser cart and checkout review (no Zoho write) was added later by owner request; production order creation is still out of scope. Storefront GST stays unresolved and is not calculated |
 | Authentication, accounts, admin, RBAC | Sprint 8 |
 | Deployment, hosting, monitoring vendor | Sprint 11 |
 | Sprint 5 Track B (S5-T05–S5-T07) | Pending Q1/Q2 |

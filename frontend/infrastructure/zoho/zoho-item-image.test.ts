@@ -45,6 +45,30 @@ describe("createZohoItemImageFetcher", () => {
     expect(fetchImpl).not.toHaveBeenCalled();
   });
 
+  it("fails a hung image request as a timeout without credentials", async () => {
+    const fetchImpl = vi.fn<typeof fetch>(
+      (_url, init) =>
+        new Promise((_resolve, reject) => {
+          init?.signal?.addEventListener("abort", () => {
+            reject(new DOMException("The operation was aborted.", "AbortError"));
+          });
+        }),
+    );
+    const fetchImage = createZohoItemImageFetcher({
+      config: { apiBaseUrl: "https://api.example.test/pos/v1", timeoutMs: 20 },
+      organizationId: ORG,
+      tokens: { getAccessToken: async () => TOKEN },
+      fetchImpl,
+    });
+
+    const error = await fetchImage("11").catch((caught: unknown) => caught);
+
+    expect(error).toBeInstanceOf(ZohoItemImageError);
+    expect((error as Error).message).toContain("timeout");
+    expect((error as Error).message).not.toContain(TOKEN);
+    expect((error as Error).message).not.toContain(ORG);
+  });
+
   it("returns null when Zoho has no image", async () => {
     const { fetchImage } = fetcher(() => Response.json({ code: 1 }, { status: 404 }));
 

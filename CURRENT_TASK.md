@@ -9,9 +9,9 @@ No task is approved. Do not start any task until a human explicitly requests it.
 | Field | Value |
 |-------|-------|
 | Task ID | Owner request (not a sprint task id) |
-| Task | Storefront cart and checkout review |
+| Task | Storefront images, variant price, stock, and GST presentation |
 | Status | **COMPLETED** |
-| Scope | Browser cart for the normal product page: Add to cart and Buy now for an available selected variant, `/cart`, `/checkout` customer details, and an order review that does not place an order. Catalog re-check is a read through `POST /api/storefront-cart/validate`. No Zoho Sales Order, customer, payment, or inventory write. `/demo` and SO-00001 are unchanged. Sprint 5 Track B task ids stay deferred. |
+| Scope | Catalog images keep the server-side proxy and fall back to the empty frame when an image fails. Verified variant selling prices stay consistent from the product page through cart and order review. Known stock limits and out-of-stock variants still block purchase. GST stays an explicit unresolved policy with no tax calculation. No Zoho write. `/demo` and SO-00001 are unchanged. |
 
 ---
 
@@ -73,8 +73,13 @@ membership, no descendant duplication). Product detail selects real Zoho
 variants and shows that variant's SKU, price, and availability; listings show
 one price only when every variant shares it. Storefront cart and checkout review are implemented for the normal
 product page (browser storage, catalog read for validation, no Zoho
-order). `/demo` and SO-00001 stay frozen. No further task is approved; do not start production work,
-payment, or Sprint 7 automatically.
+order). Images use the existing catalog proxy and fall back safely.
+The selected variant's selling price is the cart and review price.
+Checkout revalidation names a price or stock change and does not
+rewrite the cart. Customer-facing GST is unresolved
+(`STOREFRONT_TAX_POLICY`); no tax is added to the subtotal. `/demo`
+and SO-00001 stay frozen. No further task is approved; do not start
+production work, payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope
 

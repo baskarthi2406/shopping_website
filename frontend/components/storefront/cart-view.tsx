@@ -1,8 +1,9 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { CatalogImage } from "@/components/storefront/catalog-image";
+import { STOREFRONT_TAX_NOTE } from "@/application/storefront-cart/tax-policy";
 import { formatCartMoney } from "@/application/storefront-cart/cart-candidate";
 import { useStorefrontCart } from "@/application/storefront-cart/use-storefront-cart";
 import {
@@ -34,10 +35,9 @@ function CartLineRow({
       <div className="flex min-w-0 gap-3">
         {line.imageSrc ? (
           <div className="relative h-24 w-20 shrink-0 overflow-hidden rounded-md border border-border bg-surface">
-            <Image
+            <CatalogImage
               src={line.imageSrc}
               alt={line.imageAlt ?? line.productName}
-              fill
               sizes="80px"
               className="object-contain"
             />
@@ -155,9 +155,7 @@ export function CartView() {
         ) : (
           <p className="text-body font-semibold text-foreground">Subtotal is unavailable.</p>
         )}
-        <p className="mt-1 text-small text-foreground-secondary">
-          GST, shipping, and discounts are not included.
-        </p>
+        <p className="mt-1 text-small text-foreground-secondary">{STOREFRONT_TAX_NOTE}</p>
         <div className="mt-4 flex flex-col gap-2 sm:flex-row sm:flex-wrap">
           <Link href="/checkout" className={primaryButton}>
             Proceed to checkout

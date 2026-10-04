@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import Image from "next/image";
 import Link from "next/link";
+import { CatalogImage } from "@/components/storefront/catalog-image";
 import { imageForVariant } from "@/application/catalog/variant-selection";
 import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
 import {
@@ -34,7 +34,7 @@ export function ProductDetail({ product, commerce, variantOptions, cartChoices }
   const [variantId, setVariantId] = useState<string | null>(null);
   const selectedImage = variantId === null ? undefined : imageForVariant(product.images, variantId);
   const primaryImage = selectedImage ?? product.images[0] ?? null;
-  const additionalImages = product.images.filter((image) => image !== primaryImage);
+  const additionalImages = product.images.filter((image) => image.src !== primaryImage?.src);
 
   return (
     <>
@@ -44,10 +44,9 @@ export function ProductDetail({ product, commerce, variantOptions, cartChoices }
         <div>
           <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border bg-surface">
             {primaryImage ? (
-              <Image
+              <CatalogImage
                 src={primaryImage.src}
                 alt={primaryImage.alt}
-                fill
                 priority
                 sizes="(max-width: 1023px) 100vw, 50vw"
                 className="object-contain p-4"
@@ -61,10 +60,9 @@ export function ProductDetail({ product, commerce, variantOptions, cartChoices }
                   key={image.src}
                   className="relative aspect-[3/4] overflow-hidden rounded-md bg-surface-muted"
                 >
-                  <Image
+                  <CatalogImage
                     src={image.src}
                     alt={image.alt}
-                    fill
                     sizes="(max-width: 1023px) 50vw, 25vw"
                     className="object-contain p-2"
                   />
