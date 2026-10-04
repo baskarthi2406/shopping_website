@@ -9,6 +9,8 @@ import {
   ProductCommercePanel,
   type ProductCommercePanelProps,
 } from "@/components/storefront/product-commerce-panel";
+import type { CartCandidate } from "@/application/storefront-cart/cart-candidate";
+import { ProductCartActions } from "@/components/storefront/product-cart-actions";
 import {
   ProductPurchaseOptions,
   type ProductPurchaseOptionsProps,
@@ -24,10 +26,11 @@ export type ProductDetailProps = {
   };
   commerce?: ProductCommercePanelProps;
   /** Present only for products with safely selectable variants. */
-  variantOptions?: Omit<ProductPurchaseOptionsProps, "commerce" | "telephone"> | null;
+  variantOptions?: Omit<ProductPurchaseOptionsProps, "commerce" | "telephone" | "cartChoices"> | null;
+  cartChoices?: readonly CartCandidate[];
 };
 
-export function ProductDetail({ product, commerce, variantOptions }: ProductDetailProps) {
+export function ProductDetail({ product, commerce, variantOptions, cartChoices }: ProductDetailProps) {
   const [variantId, setVariantId] = useState<string | null>(null);
   const selectedImage = variantId === null ? undefined : imageForVariant(product.images, variantId);
   const primaryImage = selectedImage ?? product.images[0] ?? null;
@@ -84,10 +87,14 @@ export function ProductDetail({ product, commerce, variantOptions }: ProductDeta
             <ProductPurchaseOptions
               {...variantOptions}
               {...commerce}
+              cartChoices={cartChoices}
               onResolvedVariantId={setVariantId}
             />
           ) : commerce ? (
-            <ProductCommercePanel {...commerce} />
+            <>
+              <ProductCommercePanel {...commerce} />
+              {cartChoices ? <ProductCartActions choice={cartChoices[0] ?? null} /> : null}
+            </>
           ) : null}
           {product.categories.length > 0 ? (
             <p className="mt-6 text-small text-foreground-secondary">

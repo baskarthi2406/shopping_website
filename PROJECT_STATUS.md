@@ -42,9 +42,10 @@ Status: **COMPLETED** (S4-T01–S4-T12 and fix S4-F01; review in
 
 **Sprint 5 — Commerce UI** is **COMPLETED (Track A)**: S5-T01 planning, Track A
 (S5-T02 Purchasability Rules, S5-T03 PDP Price & Availability Panel, S5-T04
-Variant Selector), and the S5-T08 review are completed. Track B (S5-T05–S5-T07,
-local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
-approval (`docs/sprints/SPRINT-05.md` → S5-T08).
+Variant Selector), and the S5-T08 review are completed. Track B task ids
+(S5-T05–S5-T07) stay **DEFERRED** as specified. A later owner request added a
+separate browser cart and checkout review (`/cart`, `/checkout`) that does
+not place a Zoho order and does not change `/demo`.
 
 **Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
 planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
@@ -280,5 +281,6 @@ work is the P0 backlog in `docs/project/PRODUCTION-READINESS.md`, each item
 requiring an explicit task. The P0 decision gate
 (`docs/project/PRODUCTION-DECISIONS.md`) awaits owner decisions OD-1–OD-9 and
 Zoho verifications V1–V11. The decision on
-merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains
-deferred pending Q1/Q2. Requires explicit human approval.
+merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B task ids
+remain deferred. The owner-requested browser cart and checkout review is
+done and does not place orders. Requires explicit human approval.

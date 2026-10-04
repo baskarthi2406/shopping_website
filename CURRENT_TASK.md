@@ -8,10 +8,10 @@ No task is approved. Do not start any task until a human explicitly requests it.
 
 | Field | Value |
 |-------|-------|
-| Task ID | S6-T14 |
-| Task | Server-side Zoho Request Wrapper (redefined by the project owner from “Outbound Request Policy” for the 3-day Zoho feasibility demo) |
+| Task ID | Owner request (not a sprint task id) |
+| Task | Storefront cart and checkout review |
 | Status | **COMPLETED** |
-| Scope | Gate G2 passed via the minimum ADR 0009 boundary amendment. Server-only `infrastructure/zoho/zoho-config.ts` and `zoho-client.ts`: server env configuration, explicit timeout, origin-locked paths, sanitized errors, untrusted `unknown` responses. S6-T14 establishes the server-side Zoho integration boundary; actual Zoho capability verification is deferred to S6-T15. No Zoho request, mapping, order creation, UI, contract, or dependency change. Details: `docs/sprints/SPRINT-06.md` → S6-T14. |
+| Scope | Browser cart for the normal product page: Add to cart and Buy now for an available selected variant, `/cart`, `/checkout` customer details, and an order review that does not place an order. Catalog re-check is a read through `POST /api/storefront-cart/validate`. No Zoho Sales Order, customer, payment, or inventory write. `/demo` and SO-00001 are unchanged. Sprint 5 Track B task ids stay deferred. |
 
 ---
 
@@ -71,7 +71,9 @@ frozen `/demo` flow are unchanged (`docs/sprints/SPRINT-06.md`). Category →
 subcategory → product navigation verified on the existing taxonomy (direct
 membership, no descendant duplication). Product detail selects real Zoho
 variants and shows that variant's SKU, price, and availability; listings show
-one price only when every variant shares it. No further task is approved; do not start production work,
+one price only when every variant shares it. Storefront cart and checkout review are implemented for the normal
+product page (browser storage, catalog read for validation, no Zoho
+order). `/demo` and SO-00001 stay frozen. No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope

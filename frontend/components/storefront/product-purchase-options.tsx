@@ -6,10 +6,12 @@ import {
   type VariantSelection,
   type VariantSelectorViewModel,
 } from "@/application/catalog/variant-selection";
+import type { CartCandidate } from "@/application/storefront-cart/cart-candidate";
 import {
   ProductCommercePanel,
   type ProductCommercePanelProps,
 } from "@/components/storefront/product-commerce-panel";
+import { ProductCartActions } from "@/components/storefront/product-cart-actions";
 
 type Commerce = ProductCommercePanelProps["commerce"];
 
@@ -19,6 +21,7 @@ export type ProductPurchaseOptionsProps = {
   commerce: Commerce;
   commerceByVariant: Readonly<Record<string, Commerce>>;
   telephone: string;
+  cartChoices?: readonly CartCandidate[];
   /** Fires with the resolved variant id, or null while the choice is incomplete. */
   onResolvedVariantId?: (variantId: string | null) => void;
 };
@@ -28,6 +31,7 @@ export function ProductPurchaseOptions({
   commerce,
   commerceByVariant,
   telephone,
+  cartChoices,
   onResolvedVariantId,
 }: ProductPurchaseOptionsProps) {
   const baseId = useId();
@@ -82,6 +86,11 @@ export function ProductPurchaseOptions({
       <div aria-live="polite">
         <ProductCommercePanel commerce={current} telephone={telephone} />
       </div>
+      {cartChoices ? (
+        <ProductCartActions
+          choice={variantId === null ? null : (cartChoices.find((item) => item.variantId === variantId) ?? null)}
+        />
+      ) : null}
     </div>
   );
 }

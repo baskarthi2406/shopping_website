@@ -46,12 +46,14 @@ describe("catalog navigation presentation contract", () => {
     }
   });
 
-  it("labels non-functional store tools without creating fake routes", () => {
+  it("links the cart and keeps the other store tools unavailable", () => {
+    expect(navigationSource).toContain("<CartLink />");
     expect(navigationSource).toContain('aria-disabled="true"');
     expect(navigationSource).toContain("(coming soon)");
-    expect(navigationSource).not.toContain('href="/cart"');
     expect(navigationSource).not.toContain('href="/account"');
     expect(navigationSource).not.toContain('href="/track');
+    const cartLink = readFileSync(path.join(import.meta.dirname, "cart-link.tsx"), "utf8");
+    expect(cartLink).toContain('href="/cart"');
   });
 
   it("refines mega-menu panels without hardcoding taxonomy", () => {
