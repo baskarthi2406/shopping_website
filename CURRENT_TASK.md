@@ -9,9 +9,9 @@ No task is approved. Do not start any task until a human explicitly requests it.
 | Field | Value |
 |-------|-------|
 | Task ID | Owner request (not a sprint task id) |
-| Task | Polish storefront price type, cart quantity, and header search |
+| Task | Update the project README with progress and pending work |
 | Status | **COMPLETED** |
-| Scope | Verified prices use one readable type treatment on cards, product detail, cart, and checkout. Cart lines show `Qty`. Header search filters the existing catalog by product name, and by category or SKU when those are already on the catalog record. Price values, provenance, stock limits, taxonomy, and Zoho access are unchanged. |
+| Scope | Root README now summarizes the verified storefront, Zoho snapshot, pricing, stock, cart, search, and open decisions. No application code, tests, or configuration changed. |
 
 ---
 

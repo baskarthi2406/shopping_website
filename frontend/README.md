@@ -2,6 +2,11 @@
 
 SEO-first, mobile-first storefront for Mini Mystiq (Baby Clothes & Toys).
 
+Current capabilities, Zoho status, and pending work are in the repository
+root [README](../README.md). The sprint notes below are historical. Where they
+still say search, cart, prices, or Zoho are absent, the root README and
+`PROJECT_STATUS.md` win.
+
 ## Stack
 
 - Next.js 16 (App Router)
@@ -116,9 +121,11 @@ existing UI does not fetch this endpoint.
 examples, not typed fields. Current fixtures keep `variants: []`. No variant
 UI, API, or invented option values.
 
-**Not implemented yet:** API repository/UI wiring, cart/search/account/order
-behavior, filters/sort, admin, or Zoho integration. S3-T10 Image Optimization
-and the original SEO-friendly URL strategy remain deferred.
+**Later than this section:** the storefront now has catalog API wiring, a
+browser cart, checkout review, header search, verified snapshot prices, and a
+server-side Zoho catalog path. Account, order tracking, payment, and normal
+storefront order creation are still not implemented. Filters/sort, admin, and
+S3-T10 Image Optimization remain deferred. See the root README.
 
 ## Architecture
 
@@ -268,4 +275,6 @@ Category and product pages implement `generateMetadata` (unique title/descriptio
 
 ## Mobile-first
 
-Storefront UX is Mobile → Tablet → Desktop. This scaffold only establishes the foundation (no horizontal overflow on the root page). Responsive storefront UI is later tasks.
+Storefront UX is Mobile → Tablet → Desktop. Responsive category navigation,
+product pages, cart, checkout, and header search are implemented. See the root
+README for what is still pending.

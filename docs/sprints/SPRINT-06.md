@@ -531,6 +531,8 @@ a visible cart quantity, and header search. Search uses the catalog the
 storefront already loads. It matches the product name, and a category name
 or SKU only when that text is already on the catalog record. It does not
 call Zoho from the browser.
+The repository root `README.md` is the stakeholder summary of this progress
+and of work that is still pending or undecided.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 
