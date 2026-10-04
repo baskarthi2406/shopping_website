@@ -493,6 +493,10 @@ products published. Durable storage and request counting remain open.
 Hosting/snapshot decision record: `docs/project/HOSTING-SNAPSHOT-DECISION.md`
 (hosting NOT DECIDED; Option A in-memory for a long-running Node host with
 fixed instances, Option B shared/durable for serverless; awaits OD-9).
+Category → subcategory navigation audit: menus already complete; added
+ancestor breadcrumbs (category and product pages, JSON-LD included) and
+subcategory links on category pages (`components/storefront/subcategory-links.tsx`);
+listings remain direct membership. Details: `CATEGORY-MAPPING-DESIGN.md` §8.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

@@ -35,6 +35,7 @@ export {
   toProductCardViewModel,
   type CategoryPageViewModel,
   type ProductCardViewModel,
+  type SubcategoryLinkViewModel,
 } from "./category-page-view-model";
 export {
   AVAILABILITY_NOT_CONFIRMED_MESSAGE,
@@ -101,6 +102,7 @@ export {
   type PurchasabilityResult,
 } from "./evaluate-purchasability";
 export { listCategories } from "./list-categories";
+export { listCategoryAncestors } from "./list-category-ancestors";
 export { listFeaturedProducts } from "./list-featured-products";
 export { listProducts } from "./list-products";
 export { listProductsByCategory } from "./list-products-by-category";

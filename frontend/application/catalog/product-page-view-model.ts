@@ -21,18 +21,27 @@ export type ProductPageViewModel = {
   readonly breadcrumb: readonly BreadcrumbItemViewModel[];
 };
 
+/**
+ * The breadcrumb is one trail: Home › primary category ancestors › primary
+ * category › product. All resolved categories remain in `categories`.
+ */
 export function toProductPageViewModel(
   product: Product,
   categories: readonly Category[],
+  primaryCategoryAncestors: readonly Category[] = [],
 ): ProductPageViewModel {
-  const categoryLinks = categories.map((category) => ({
+  const toLink = (category: Category) => ({
     name: category.name,
     href: `/c/${category.slug}`,
-  }));
+  });
+  const categoryLinks = categories.map(toLink);
+  const primary = categories[0];
+  const trail =
+    primary === undefined ? [] : [...primaryCategoryAncestors, primary].map(toLink);
 
   const breadcrumb: BreadcrumbItemViewModel[] = [
     { label: "Home", href: "/" },
-    ...categoryLinks.map((category) => ({
+    ...trail.map((category) => ({
       label: category.name,
       href: category.href,
     })),

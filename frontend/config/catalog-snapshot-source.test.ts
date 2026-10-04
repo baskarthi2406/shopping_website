@@ -75,6 +75,8 @@ describe("storefront catalog over the Zoho snapshot", () => {
       expect(home.products.map((entry) => entry.id)).toEqual(["500"]);
       expect(category?.products.map((entry) => entry.id)).toEqual(["500"]);
       expect(product?.product.categoryIds).toEqual(["women-co-ord-set"]);
+      expect(product?.primaryCategoryAncestors.map((entry) => entry.slug)).toEqual(["women"]);
+      expect(category?.ancestors.map((entry) => entry.slug)).toEqual(["women"]);
       expect(urls.filter((url) => url.path.startsWith("/p/"))).toEqual([
         { path: "/p/group-500-500" },
       ]);

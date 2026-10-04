@@ -60,7 +60,8 @@ rows only; remaining placements await owner decision OD-6); an interim
 in-memory Zoho catalog snapshot (opt-in `CATALOG_PRODUCT_SOURCE=zoho-snapshot`,
 ADR 0009 amendment) removes per-page Zoho reads; durable snapshot storage
 awaits the hosting decision (`docs/project/HOSTING-SNAPSHOT-DECISION.md`,
-OD-9); S6-T16 is proposed
+OD-9); category → subcategory navigation audited (ancestor breadcrumbs and
+subcategory links added); S6-T16 is proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image

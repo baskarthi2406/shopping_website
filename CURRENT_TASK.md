@@ -58,7 +58,10 @@ snapshot, request counting, and images await V1, OD-7, OD-9, ADR 0008.
 Hosting/snapshot decision record (`docs/project/HOSTING-SNAPSHOT-DECISION.md`):
 hosting NOT DECIDED; in-memory snapshot acceptable only for a long-running
 Node host with fixed instances, shared/durable snapshot required for
-serverless; owner decision OD-9 required first. No further task is approved; do not start production work,
+serverless; owner decision OD-9 required first. Category → subcategory
+navigation audited: menus unchanged; category and product breadcrumbs now
+include the ancestor trail; category pages link visible subcategories;
+listings stay direct membership (`CATEGORY-MAPPING-DESIGN.md` §8). No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope

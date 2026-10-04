@@ -10,6 +10,7 @@ import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
 import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
 import { CatalogEmptyState } from "@/components/storefront/catalog-empty-state";
 import { ProductCard } from "@/components/storefront/product-card";
+import { SubcategoryLinks } from "@/components/storefront/subcategory-links";
 import { Container } from "@/components/ui/container";
 import { catalog } from "@/config/catalog";
 import { resolveSiteOrigin, toCanonicalUrl } from "@/config/site";
@@ -41,7 +42,13 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     notFound();
   }
 
-  const view = toCategoryPageViewModel(data.category, data.products);
+  const view = toCategoryPageViewModel(
+    data.category,
+    data.products,
+    data.ancestors,
+  );
+  const showsSubcategoriesOnly =
+    view.products.length === 0 && view.subcategories.length > 0;
   const origin = resolveSiteOrigin();
   const breadcrumbStructuredData = buildBreadcrumbStructuredData(view, (path) =>
     toCanonicalUrl(origin, path),
@@ -66,12 +73,19 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
               {view.description}
             </p>
           ) : null}
-          <p className="mt-3 text-small text-foreground-muted">
-            {productCountLabel}
-          </p>
+          {showsSubcategoriesOnly ? null : (
+            <p className="mt-3 text-small text-foreground-muted">
+              {productCountLabel}
+            </p>
+          )}
         </header>
 
-        {view.products.length === 0 ? (
+        <SubcategoryLinks
+          categoryName={view.name}
+          subcategories={view.subcategories}
+        />
+
+        {showsSubcategoriesOnly ? null : view.products.length === 0 ? (
           <CatalogEmptyState message="No products in this category yet." />
         ) : (
           <ul className="mt-6 grid grid-cols-2 gap-3 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4 lg:gap-6">

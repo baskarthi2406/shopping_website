@@ -131,6 +131,36 @@ describe("getCategoryPage", () => {
     expect(page?.products).toEqual([]);
   });
 
+  it("returns no ancestors for a top-level category", async () => {
+    const page = await getCategoryPage(categories, products, "baby-essentials");
+
+    expect(page?.ancestors).toEqual([]);
+  });
+
+  it("returns the parent chain for a subcategory, root first", async () => {
+    const women = category({ id: "women", slug: "women", name: "Women" });
+    const coOrdSet = category({
+      id: "women-co-ord-set",
+      slug: "women-co-ord-set",
+      name: "Co-Ord Set",
+      parentId: "women",
+    });
+    const set = product({
+      id: "set",
+      slug: "set",
+      categoryIds: ["women-co-ord-set"],
+    });
+
+    const page = await getCategoryPage(
+      new InMemoryCategoryRepository([women, coOrdSet]),
+      new InMemoryProductRepository([set]),
+      "women-co-ord-set",
+    );
+
+    expect(page?.ancestors).toEqual([women]);
+    expect(page?.products.map((item) => item.slug)).toEqual(["set"]);
+  });
+
   it("treats an empty product list as success, not a missing category", async () => {
     const page = await getCategoryPage(categories, products, "infants");
 

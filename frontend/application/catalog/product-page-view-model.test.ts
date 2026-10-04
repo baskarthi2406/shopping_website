@@ -58,6 +58,31 @@ describe("toProductPageViewModel", () => {
     ]);
   });
 
+  it("builds one breadcrumb trail through the primary category's ancestors", () => {
+    const women: Category = { ...babyEssentials, id: "women", slug: "women", name: "Women" };
+    const coOrdSet: Category = {
+      ...babyEssentials,
+      id: "women-co-ord-set",
+      slug: "women-co-ord-set",
+      name: "Co-Ord Set",
+      parentId: "women",
+    };
+    const tops: Category = { ...babyEssentials, id: "women-tops", slug: "women-tops", name: "Tops", parentId: "women" };
+
+    const view = toProductPageViewModel(product, [coOrdSet, tops], [women]);
+
+    expect(view.breadcrumb).toEqual([
+      { label: "Home", href: "/" },
+      { label: "Women", href: "/c/women" },
+      { label: "Co-Ord Set", href: "/c/women-co-ord-set" },
+      { label: "Sage striped baby top and shorts", href: null },
+    ]);
+    expect(view.categories).toEqual([
+      { name: "Co-Ord Set", href: "/c/women-co-ord-set" },
+      { name: "Tops", href: "/c/women-tops" },
+    ]);
+  });
+
   it("omits category crumbs when the product has no resolved categories", () => {
     const view = toProductPageViewModel(product, []);
 

@@ -416,3 +416,13 @@ Current behavior (from code, unchanged here):
   `/c/{slug}` routes; only the breadcrumb trail and parent-listing semantics
   need work. A product appears in exactly one location unless owner decision
   5 allows more.
+
+**Navigation audit (2026-10-04, implemented):** header and mobile menus
+already rendered the full tree (all depths, "View all" links) and were not
+changed. Fixed: category pages now render `Home › ancestors › category`
+(also in BreadcrumbList JSON-LD) and link their visible direct
+subcategories; a parent category with subcategories but no direct products
+shows the subcategory links instead of "No products in this category yet";
+product pages render one trail `Home › ancestors › primary category ›
+product`. Listings remain direct membership (no descendant aggregation,
+pending owner decision 6). Category URLs and the Zoho mapping are unchanged.
