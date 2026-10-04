@@ -50,7 +50,8 @@ request also locked image fallback, variant selling prices, known stock
 limits, and an explicit unresolved GST policy (no tax calculation). A later
 request shows that verified selling price on the normal snapshot storefront.
 A later request polishes that price's type, shows the cart quantity, and
-adds header search over the existing catalog.
+adds header search over the existing catalog. The root README now summarizes
+that progress and the open decisions.
 
 **Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
 planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
