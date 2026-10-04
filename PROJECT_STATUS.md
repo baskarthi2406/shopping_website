@@ -77,7 +77,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_6_IN_PROGRESS** (Sprint 5 completed for Track A; S6-T01, S6-T02, S6-T11–S6-T14 completed; next task S6-T15 Zoho feasibility awaits Zoho access and approval)
+**SPRINT_6_IN_PROGRESS** (Sprint 5 completed for Track A; S6-T01, S6-T02, S6-T11–S6-T14 completed; S6-T15 Zoho feasibility in progress — demo product → cart → checkout → draft Zoho Sales Order works, see `docs/project/DEMO-ZOHO-SALES-ORDER.md`)
 
 ---
 

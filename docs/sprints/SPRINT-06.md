@@ -469,8 +469,10 @@ error messages.
 **Status:** IN PROGRESS — gate GZ passed (owner-approved access,
 2026-10-04). Authentication and read-only catalog feasibility verified:
 verdict **PARTIAL, sufficient for demo** — see
-`docs/project/S6-T15-ZOHO-CATALOG-FEASIBILITY.md`. Order capability not yet
-tested (requires an explicit owner decision).
+`docs/project/S6-T15-ZOHO-CATALOG-FEASIBILITY.md`. Demo order flow
+(owner-approved, one draft Sales Order `SO-00001`) works — see
+`docs/project/DEMO-ZOHO-SALES-ORDER.md`. Tax treatment to be confirmed before
+production checkout; location-specific inventory validation deferred.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

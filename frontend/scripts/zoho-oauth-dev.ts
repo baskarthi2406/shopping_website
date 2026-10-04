@@ -567,15 +567,123 @@ async function catalog(): Promise<void> {
   );
 }
 
+export const DEMO_CUSTOMER_NAME = "MINI MYSTIQ DEMO - DO NOT FULFILL";
+
+/** Finds the demo contact by exact name; creates it only when none exists. */
+async function demoCustomer(): Promise<void> {
+  const env = loadEnv();
+  const organizationId = requireEnv(env, "ZOHO_ORGANIZATION_ID");
+  const accessToken = await refreshAccessToken(env);
+  const apiOrigin = new URL(requireEnv(env, "ZOHO_API_BASE_URL")).origin;
+  const get = createReadOnlyGet(accessToken, apiOrigin);
+  const org = { organization_id: organizationId };
+
+  const list = await get("/inventory/v1/contacts", { ...org, contact_name: DEMO_CUSTOMER_NAME }, { shape: false });
+  const matches = (isRecord(list) && Array.isArray(list.contacts) ? list.contacts : [])
+    .filter(isRecord)
+    .filter((contact) => contact.contact_name === DEMO_CUSTOMER_NAME);
+  console.log(`Exact-name matches: ${matches.length}`);
+
+  let contactId = matches.length > 0 ? text(matches[0].contact_id) : null;
+  if (contactId === null) {
+    const url = new URL("/inventory/v1/contacts", apiOrigin);
+    url.search = new URLSearchParams(org).toString();
+    const response = await fetch(url, {
+      method: "POST",
+      headers: {
+        Authorization: `Zoho-oauthtoken ${accessToken}`,
+        Accept: "application/json",
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contact_name: DEMO_CUSTOMER_NAME,
+        contact_type: "customer",
+        gst_treatment: "consumer",
+        notes: "Mini Mystiq training demo customer. Orders for this contact must not be fulfilled.",
+      }),
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+    const body: unknown = await response.json().catch(() => null);
+    console.log(`\n=== POST /inventory/v1/contacts -> HTTP ${response.status}`);
+    const record = isRecord(body) ? body : {};
+    for (const line of describeShape({ code: record.code, message: record.message })) console.log(line);
+    contactId = isRecord(record.contact) ? text(record.contact.contact_id) : null;
+  }
+  if (contactId === null) {
+    throw new ZohoDevAuthError("demo customer not found or created");
+  }
+  saveEnv({ ZOHO_DEMO_CUSTOMER_ID: contactId });
+  console.log(`Demo customer id ${maskId(contactId)} stored as ZOHO_DEMO_CUSTOMER_ID`);
+}
+
+/** Read-only verification of one demo sales order by its Mini Mystiq reference. */
+async function verifyOrder(): Promise<void> {
+  const reference = process.argv[3] ?? "";
+  if (!/^MMDEMO-[A-Z0-9]{10}$/.test(reference)) {
+    throw new ZohoDevAuthError("usage: verify-order MMDEMO-XXXXXXXXXX");
+  }
+  const env = loadEnv();
+  const organizationId = requireEnv(env, "ZOHO_ORGANIZATION_ID");
+  const get = createReadOnlyGet(
+    await refreshAccessToken(env),
+    new URL(requireEnv(env, "ZOHO_API_BASE_URL")).origin,
+  );
+  const org = { organization_id: organizationId };
+
+  const list = await get("/inventory/v1/salesorders", { ...org, reference_number: reference }, { shape: false });
+  const matches = (isRecord(list) && Array.isArray(list.salesorders) ? list.salesorders : [])
+    .filter(isRecord)
+    .filter((order) => order.reference_number === reference);
+  console.log(`Sales orders with reference ${reference}: ${matches.length}`);
+  const id = matches.length === 1 ? text(matches[0].salesorder_id) : null;
+  if (id === null) return;
+
+  const detail = await get(`/inventory/v1/salesorders/${encodeURIComponent(id)}`, org, { shape: false });
+  const order = isRecord(detail) && isRecord(detail.salesorder) ? detail.salesorder : {};
+  const pick = (key: string) => JSON.stringify(order[key] ?? null);
+  console.log("\n=== Sales order (selected fields)");
+  for (const key of [
+    "salesorder_number", "status", "order_status", "reference_number", "customer_name", "date",
+    "currency_code", "is_inclusive_tax", "sub_total", "tax_total", "total",
+  ]) {
+    console.log(`${key}: ${pick(key)}`);
+  }
+  console.log(`customer_id matches ZOHO_DEMO_CUSTOMER_ID: ${String(order.customer_id) === env.ZOHO_DEMO_CUSTOMER_ID}`);
+  console.log(`notes first line: ${JSON.stringify(String(order.notes ?? "").split("\n")[0])}`);
+  const lines = Array.isArray(order.line_items) ? order.line_items.filter(isRecord) : [];
+  for (const line of lines) {
+    console.log(
+      `line: ${JSON.stringify(line.name)} sku=${JSON.stringify(line.sku)} qty=${String(line.quantity)} rate=${String(line.rate)} item_total=${String(line.item_total)} tax=${JSON.stringify(line.tax_name)} ${String(line.tax_percentage)}%`,
+    );
+  }
+  for (const line of lines) {
+    const itemId = text(line.item_id);
+    if (itemId === null) continue;
+    const item = await get(`/inventory/v1/items/${encodeURIComponent(itemId)}`, org, { shape: false });
+    const record = isRecord(item) && isRecord(item.item) ? item.item : {};
+    console.log(
+      `stock after order for ${JSON.stringify(record.sku)}: on_hand=${String(record.stock_on_hand)} committed=${String(record.actual_committed_stock)} available_for_sale=${String(record.actual_available_for_sale_stock)}`,
+    );
+  }
+}
+
 const isCli =
   process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isCli) {
   const command = process.argv[2];
-  const commands: Record<string, () => Promise<void>> = { authorize, probe, catalog };
+  const commands: Record<string, () => Promise<void>> = {
+    authorize,
+    probe,
+    catalog,
+    "demo-customer": demoCustomer,
+    "verify-order": verifyOrder,
+  };
   const run = command !== undefined && Object.hasOwn(commands, command) ? commands[command] : null;
   if (run === null) {
-    console.error("Usage: node scripts/zoho-oauth-dev.ts <authorize|probe|catalog>");
+    console.error(
+      "Usage: node scripts/zoho-oauth-dev.ts <authorize|probe|catalog|demo-customer|verify-order REF>",
+    );
     process.exitCode = 2;
   } else {
     run().catch((error: unknown) => {
