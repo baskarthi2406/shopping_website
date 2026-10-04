@@ -38,7 +38,11 @@ No invoice or payment. Demo **frozen** at baseline commit `589b74a`;
 production gaps and P0/P1/P2 backlog in `docs/project/PRODUCTION-READINESS.md`
 (assessment only). P0 decision gate (owner decisions OD-1–OD-9, Zoho
 verifications V1–V11, P0 order) in `docs/project/PRODUCTION-DECISIONS.md`,
-awaiting owner answers. No further task is approved; do not start production work,
+awaiting owner answers. Read-only tax verification
+(`docs/project/ZOHO-TAX-VERIFICATION.md`): SO-00001 taxed 5% on top
+(`is_inclusive_tax: false`); inclusive/exclusive is configuration-dependent;
+`label_rate` not verified; tax decision still blocked on owner input. No
+further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope
