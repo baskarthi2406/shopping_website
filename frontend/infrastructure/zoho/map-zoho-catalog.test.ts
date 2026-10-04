@@ -1,4 +1,15 @@
 import { describe, expect, it } from "vitest";
+import { toProductCardViewModel } from "@/application/catalog/category-page-view-model";
+import { PRICE_NOT_AVAILABLE_MESSAGE } from "@/application/catalog/catalog-messages";
+import { toProductPurchaseOptionsViewModel } from "@/application/catalog/product-variant-selector";
+import { toCartCandidates } from "@/application/storefront-cart/cart-candidate";
+import { validateStorefrontCart } from "@/application/storefront-cart/validate-storefront-cart";
+import { priceDisplayFor } from "@/config/commerce";
+import {
+  addStorefrontItem,
+  EMPTY_STOREFRONT_CART,
+  storefrontSubtotal,
+} from "@/domain/storefront-cart/storefront-cart";
 import {
   mapZohoInventory,
   mapZohoItemsToProducts,
@@ -43,7 +54,7 @@ describe("mapZohoItemsToProducts", () => {
       slug: "test-coord-set-000100",
       name: "Test Coord set",
       sku: null,
-      pricing: null,
+      pricing: { price: { amount: 464, currency: "XTS" }, compareAtPrice: null },
       uom: { code: "pcs", label: "pcs" },
       status: "active",
     });
@@ -66,9 +77,48 @@ describe("mapZohoItemsToProducts", () => {
     expect(JSON.stringify(product)).not.toMatch(/490|200|Vendor/);
   });
 
+  it("does not use sales_rate, pricebook_rate, or label_rate when they differ from rate", () => {
+    const [product] = mapZohoItemsToProducts(
+      [item("Pink", { sales_rate: 943, pricebook_rate: 864, label_rate: 999 })],
+      "XTS",
+    );
+    expect(product.variants[0].pricing).toEqual({
+      price: { amount: 464, currency: "XTS" },
+      compareAtPrice: null,
+    });
+    expect(JSON.stringify(product)).not.toMatch(/943|864|999/);
+  });
+
   it("drops a missing or non-positive price", () => {
     const [product] = mapZohoItemsToProducts([item("a", { rate: 0 }), item("b", { rate: "464" })], "XTS");
     expect(product.variants.map((variant) => variant.pricing)).toEqual([null, null]);
+  });
+
+  it("keeps a fresh verified rate and hides a stale, missing, or invalid one", () => {
+    const fresh = { priceObservedAt: "2026-10-04T10:00:00.000Z", priceEvaluatedAt: "2026-10-04T12:00:00.000Z" };
+    const stale = { priceObservedAt: "2026-10-03T11:00:00.000Z", priceEvaluatedAt: "2026-10-04T12:00:00.000Z" };
+    const [priced] = mapZohoItemsToProducts(
+      [item("Sandal", { sku: "INS-8PA", rate: 359, label_rate: 410 })],
+      "INR",
+      () => null,
+      fresh,
+    );
+    expect(priced.variants[0].pricing).toEqual({
+      price: { amount: 359, currency: "INR" },
+      compareAtPrice: null,
+    });
+    expect(JSON.stringify(priced)).not.toMatch(/410|authorization|refresh_token|client_secret/i);
+
+    const [expired] = mapZohoItemsToProducts([item("Sandal", { rate: 359 })], "INR", () => null, stale);
+    expect(expired.variants[0].pricing).toBeNull();
+
+    const [invalid] = mapZohoItemsToProducts(
+      [item("a", { rate: -1 }), item("b", { rate: Number.NaN }), item("c", { rate: undefined })],
+      "INR",
+      () => null,
+      fresh,
+    );
+    expect(invalid.variants.map((variant) => variant.pricing)).toEqual([null, null, null]);
   });
 
   it("treats an item without a group as its own product", () => {
@@ -190,5 +240,98 @@ describe("readZohoSalesOrderNumber", () => {
     expect(readZohoSalesOrderNumber({ code: 1001, message: "x" })).toBeNull();
     expect(readZohoSalesOrderNumber({ code: 0, salesorder: {} })).toBeNull();
     expect(readZohoSalesOrderNumber(null)).toBeNull();
+  });
+});
+
+const FRESH = {
+  priceObservedAt: "2026-10-04T10:00:00.000Z",
+  priceEvaluatedAt: "2026-10-04T12:00:00.000Z",
+};
+const inr = new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" });
+const snapshotPrices = priceDisplayFor("zoho-snapshot");
+
+describe("verified selling price on the normal storefront", () => {
+  it("shows one listing price only when every variant shares it", () => {
+    const [coord] = mapZohoItemsToProducts(
+      [item("Pink", { rate: 464 }), item("Green", { rate: 464 })],
+      "INR",
+      () => "infants-baby-girl-co-ord-set",
+      FRESH,
+    );
+    const [kurti] = mapZohoItemsToProducts(
+      [item("Pink", { rate: 943, group_name: "2pc kurti" }), item("Violet", { rate: 864, group_name: "2pc kurti" })],
+      "INR",
+      () => "women-co-ord-set",
+      FRESH,
+    );
+    expect(coord.pricing).toEqual({ price: { amount: 464, currency: "INR" }, compareAtPrice: null });
+    expect(kurti.pricing).toBeNull();
+    const listed = (product: (typeof coord)) =>
+      toProductCardViewModel({ ...product, variants: [] }, snapshotPrices);
+    expect(listed(coord).price).toBe(inr.format(464));
+    const mixed = listed(kurti);
+    expect(mixed.price).toBeNull();
+    expect(mixed.priceMessage).toBe(PRICE_NOT_AVAILABLE_MESSAGE);
+    expect(JSON.stringify(mixed)).not.toMatch(/943|864/);
+  });
+
+  it("shows the selected variant price and carts that exact amount", () => {
+    const [inskirt] = mapZohoItemsToProducts(
+      [
+        item("sandal", {
+          sku: "INS-8PA",
+          rate: 359,
+          label_rate: 410,
+          group_name: "inskirt",
+          attribute_option_name1: "8part",
+          attribute_option_name2: "Sandal",
+          actual_available_stock: 2,
+          stock_on_hand: 2,
+        }),
+      ],
+      "INR",
+      () => "women-in-skirt",
+      FRESH,
+    );
+    const purchase = toProductPurchaseOptionsViewModel(inskirt, { priceDisplay: snapshotPrices });
+    const sandal = purchase.commerceByVariant.sandal;
+    expect(sandal).toMatchObject({ sku: "INS-8PA", price: inr.format(359), purchasable: true });
+    expect(JSON.stringify(sandal)).not.toMatch(/410|Save/);
+
+    const [choice] = toCartCandidates(inskirt, snapshotPrices);
+    expect(choice?.canAdd).toBe(true);
+    expect(choice?.unitPrice).toEqual({ amount: 359, currency: "INR" });
+    if (choice?.unitPrice === null || choice.priceLocale === null || !choice.canAdd) {
+      throw new Error("expected a purchasable priced variant");
+    }
+    const added = addStorefrontItem(EMPTY_STOREFRONT_CART, {
+      productId: choice.productId,
+      productSlug: choice.productSlug,
+      productName: choice.productName,
+      variantId: choice.variantId,
+      sku: choice.sku,
+      attributes: choice.attributes,
+      variantLabel: choice.variantLabel,
+      unitPrice: choice.unitPrice,
+      priceLocale: choice.priceLocale,
+      availableToSell: choice.availableToSell,
+      imageSrc: choice.imageSrc,
+      imageAlt: choice.imageAlt,
+    });
+    expect(added.error).toBeNull();
+    expect(storefrontSubtotal(added.cart)).toEqual({ amount: 359, currency: "INR" });
+
+    const line = {
+      productId: inskirt.id,
+      productSlug: inskirt.slug,
+      variantId: "sandal",
+      quantity: 1,
+      unitPrice: { amount: 400, currency: "INR" as const },
+    };
+    const before = structuredClone(line);
+    const review = validateStorefrontCart([line], () => inskirt, snapshotPrices);
+    expect(review.ok).toBe(false);
+    expect(review.issues[0]?.message).toContain("changed");
+    expect(line).toEqual(before);
   });
 });

@@ -30,6 +30,8 @@ export type ProductCommerceViewModel = {
   readonly availability: AvailabilityState | null;
   readonly availabilityMessage: string | null;
   readonly purchasable: boolean;
+  /** SKU of the selected variant, or of the product when it has no variants. */
+  readonly sku: string | null;
 };
 
 export type ProductCommerceOptions = {
@@ -142,5 +144,17 @@ export function toProductCommerceViewModel(
     availability,
     availabilityMessage: availability === null ? null : AVAILABILITY_MESSAGES[availability],
     purchasable,
+    sku: skuFor(product, variantId),
   };
+}
+
+function skuFor(product: Product, variantId: string | null): string | null {
+  const source =
+    product.variants.length === 0
+      ? product.sku
+      : variantId === null
+        ? null
+        : (product.variants.find((variant) => variant.id === variantId)?.sku ?? null);
+  const sku = source?.trim() ?? "";
+  return sku === "" ? null : sku;
 }

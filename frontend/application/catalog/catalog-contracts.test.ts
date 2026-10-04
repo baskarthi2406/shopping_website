@@ -95,6 +95,37 @@ describe("catalog application contracts", () => {
     ]);
   });
 
+  it("publishes one list price only when every variant shares it", () => {
+    const price = { price: { amount: 464, currency: "INR" }, compareAtPrice: null };
+    const variant = product().variants[0];
+    if (variant === undefined) {
+      throw new Error("expected a variant");
+    }
+    const uniform = toProductSummary({
+      ...product(),
+      variants: [
+        { ...variant, id: "pink", pricing: price },
+        { ...variant, id: "green", pricing: price },
+      ],
+    });
+    const mixed = toProductSummary({
+      ...product(),
+      variants: [
+        { ...variant, id: "pink", pricing: price },
+        {
+          ...variant,
+          id: "violet",
+          pricing: { price: { amount: 864, currency: "INR" }, compareAtPrice: null },
+        },
+      ],
+    });
+
+    expect(uniform.pricing).toEqual(price);
+    expect(uniform).not.toHaveProperty("variants");
+    expect(mixed.pricing).toBeNull();
+    expect(JSON.stringify(mixed)).not.toMatch(/864|464/);
+  });
+
   it("keeps pricing and inventory nullable in list and detail envelopes", () => {
     const summary = toProductSummary(product());
     const detail = createDetailResponse(product()).data;

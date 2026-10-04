@@ -7,6 +7,7 @@ import type {
   SyntheticEvent,
 } from "react";
 import Link from "next/link";
+import { CartLink } from "@/components/storefront/cart-link";
 
 export type CatalogNavItem = {
   label: string;
@@ -257,10 +258,13 @@ export function MobileCatalogNavigation({ items }: CatalogNavigationProps) {
 }
 
 export function StoreToolPlaceholders({ className = "" }: { className?: string }) {
-  const tools = ["Search", "Account", "Cart", "Track Your Order"] as const;
+  const tools = ["Account", "Track Your Order"] as const;
 
   return (
-    <ul className={className} aria-label="Store tools coming soon">
+    <ul className={className} aria-label="Store tools">
+      <li>
+        <CartLink />
+      </li>
       {tools.map((tool) => (
         <li key={tool}>
           <span

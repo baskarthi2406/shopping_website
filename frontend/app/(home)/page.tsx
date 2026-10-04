@@ -12,6 +12,7 @@ import { HomeProducts } from "@/components/storefront/home-products";
 import { HomePromo } from "@/components/storefront/home-promo";
 import { TrustBar } from "@/components/storefront/trust-bar";
 import { catalog } from "@/config/catalog";
+import { priceDisplay } from "@/config/commerce";
 import { isCatalogDemoEnabled } from "@/config/catalog-demo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -25,10 +26,10 @@ const EMPTY_HOME_DATA = {
 
 export default async function Home() {
   let catalogFailed = false;
-  let view = toHomePageViewModel(EMPTY_HOME_DATA);
+  let view = toHomePageViewModel(EMPTY_HOME_DATA, priceDisplay);
 
   try {
-    view = toHomePageViewModel(await catalog.getHomePage());
+    view = toHomePageViewModel(await catalog.getHomePage(), priceDisplay);
   } catch (error) {
     unstable_rethrow(error);
     catalogFailed = true;

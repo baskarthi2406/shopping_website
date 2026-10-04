@@ -1,11 +1,15 @@
-import Image from "next/image";
 import Link from "next/link";
+import { CatalogImage } from "@/components/storefront/catalog-image";
+import { StorefrontPrice } from "@/components/storefront/storefront-price";
 
 export type ProductCardProps = {
   href: string;
   name: string;
   description: string;
   image: { src: string; alt: string } | null;
+  price?: string | null;
+  priceMessage?: string | null;
+  availabilityMessage?: string | null;
   headingAs?: "h2" | "h3";
 };
 
@@ -14,6 +18,9 @@ export function ProductCard({
   name,
   description,
   image,
+  price = null,
+  priceMessage = null,
+  availabilityMessage = null,
   headingAs = "h2",
 }: ProductCardProps) {
   const Heading = headingAs;
@@ -26,10 +33,9 @@ export function ProductCard({
       >
         <div className="relative aspect-[3/4] overflow-hidden bg-surface-muted">
           {image ? (
-            <Image
+            <CatalogImage
               src={image.src}
               alt={image.alt}
-              fill
               sizes="(max-width: 639px) 50vw, (max-width: 1023px) 33vw, 25vw"
               className="mm-hover-zoom object-contain p-3"
             />
@@ -42,6 +48,16 @@ export function ProductCard({
           <p className="line-clamp-2 text-caption text-foreground-secondary">
             {description}
           </p>
+          {price !== null ? (
+            <p className="mt-auto pt-1">
+              <StorefrontPrice amount={price} size="card" />
+            </p>
+          ) : priceMessage !== null ? (
+            <p className="text-caption text-foreground-muted">{priceMessage}</p>
+          ) : null}
+          {availabilityMessage !== null ? (
+            <p className="text-caption font-semibold text-foreground">{availabilityMessage}</p>
+          ) : null}
         </div>
       </Link>
     </article>

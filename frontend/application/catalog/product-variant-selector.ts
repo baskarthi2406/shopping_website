@@ -1,4 +1,5 @@
-import type { Product } from "@/domain/catalog";
+import type { Product, ProductVariant } from "@/domain/catalog";
+import { VARIANT_LIST_LABEL } from "./catalog-messages";
 import {
   toProductCommerceViewModel,
   type ProductCommerceOptions,
@@ -17,11 +18,10 @@ export type ProductPurchaseOptionsViewModel = {
 const normalizeName = (name: string) => name.trim().toLowerCase();
 
 /**
- * Builds option groups from real variant attributes. Returns `null` (no
- * selector) unless every variant has a non-blank id, unique non-blank
- * attribute names with non-blank values, the same attribute names as every
- * other variant, and a unique value combination. Nothing is invented or
- * defaulted.
+ * Builds option groups from real variant attributes. A shared attribute
+ * matrix is used only when every variant has a unique id, the same attribute
+ * names, and a unique value combination. Otherwise each variant is listed on
+ * its own. Blank or duplicate ids produce no selector. Nothing is invented.
  */
 export function toVariantSelectorViewModel(
   product: Product,
@@ -29,6 +29,80 @@ export function toVariantSelectorViewModel(
   if (product.variants.length === 0) {
     return null;
   }
+
+  return toAttributeSelector(product) ?? toExplicitVariantSelector(product);
+}
+
+/**
+ * One choice per variant when the variants do not share a safe attribute
+ * matrix. Labels come from each variant's own attributes, then its SKU, then
+ * its id. Colliding labels are disambiguated so a choice cannot resolve to a
+ * different variant.
+ */
+function toExplicitVariantSelector(product: Product): VariantSelectorViewModel | null {
+  const ids = product.variants.map((variant) => variant.id.trim());
+  if (ids.some((id) => id === "") || new Set(ids).size !== ids.length) {
+    return null;
+  }
+
+  const labels = product.variants.map(variantLabel);
+  const unique = labels.map((label, index) => {
+    if (labels.filter((candidate) => candidate === label).length === 1) {
+      return label;
+    }
+    const sku = product.variants[index]?.sku?.trim() ?? "";
+    const suffix = sku !== "" && sku !== label ? sku : ids[index];
+    return `${label} (${suffix})`;
+  });
+
+  return {
+    groups: [{ key: "variant", label: sharedAttributeLabel(product.variants), values: unique }],
+    variants: product.variants.map((variant, index) => ({
+      id: variant.id,
+      values: { variant: unique[index] ?? variant.id },
+    })),
+  };
+}
+
+function variantLabel(variant: ProductVariant): string {
+  const seen = new Set<string>();
+  const parts: string[] = [];
+  for (const attribute of variant.attributes) {
+    const name = attribute.name.trim();
+    const value = attribute.value.trim();
+    const key = normalizeName(name);
+    if (name === "" || value === "" || seen.has(key)) {
+      continue;
+    }
+    seen.add(key);
+    parts.push(`${name} ${value}`);
+  }
+  if (parts.length > 0) {
+    return parts.join(", ");
+  }
+  const sku = variant.sku?.trim() ?? "";
+  return sku === "" ? variant.id.trim() : sku;
+}
+
+function sharedAttributeLabel(variants: readonly ProductVariant[]): string {
+  const names = variants.map((variant) => {
+    const usable = variant.attributes.filter(
+      (attribute) => attribute.name.trim() !== "" && attribute.value.trim() !== "",
+    );
+    return usable.length === 1 ? usable[0]?.name.trim() ?? null : null;
+  });
+  const first = names[0];
+  if (
+    first !== null &&
+    first !== undefined &&
+    names.every((name) => name !== null && normalizeName(name) === normalizeName(first))
+  ) {
+    return first;
+  }
+  return VARIANT_LIST_LABEL;
+}
+
+function toAttributeSelector(product: Product): VariantSelectorViewModel | null {
 
   const groups = new Map<string, { label: string; values: string[] }>();
   const variants: VariantChoiceViewModel[] = [];

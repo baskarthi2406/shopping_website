@@ -23,6 +23,21 @@ export type VariantSelectorViewModel = {
   readonly variants: readonly VariantChoiceViewModel[];
 };
 
+/**
+ * Image whose path identifies this variant (`.../{variantId}/{documentId}`).
+ * Returns undefined when this variant has no image of its own.
+ */
+export function imageForVariant<T extends { readonly src: string }>(
+  images: readonly T[],
+  variantId: string,
+): T | undefined {
+  const id = variantId.trim();
+  if (id === "" || id.includes("/")) {
+    return undefined;
+  }
+  return images.find((image) => image.src.split("?")[0]?.split("/").at(-2) === id);
+}
+
 /** Selected value per group key; `null` or absent means not chosen. */
 export type VariantSelection = Readonly<Record<string, string | null | undefined>>;
 

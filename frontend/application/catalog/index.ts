@@ -113,4 +113,5 @@ export { listCategories } from "./list-categories";
 export { listCategoryAncestors } from "./list-category-ancestors";
 export { listFeaturedProducts } from "./list-featured-products";
 export { listProducts } from "./list-products";
+export { searchStorefrontProducts } from "./search-storefront-products";
 export { listProductsByCategory } from "./list-products-by-category";

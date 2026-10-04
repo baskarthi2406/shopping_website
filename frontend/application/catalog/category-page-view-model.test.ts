@@ -1,9 +1,11 @@
 import { describe, expect, it } from "vitest";
 import type { Category, Product } from "@/domain/catalog";
+import { OUT_OF_STOCK_MESSAGE, PRICE_NOT_AVAILABLE_MESSAGE } from "./catalog-messages";
 import {
   toCategoryPageViewModel,
   toProductCardViewModel,
 } from "./category-page-view-model";
+import type { PriceDisplayConfig } from "./product-commerce-view-model";
 
 const category: Category = {
   id: "baby-essentials",
@@ -60,6 +62,76 @@ describe("toProductCardViewModel", () => {
     expect(toProductCardViewModel(product)).not.toHaveProperty(
       "inventory",
     );
+  });
+
+  it("shows one price only when every variant has that same verified price", () => {
+    const display: PriceDisplayConfig = { locale: "en-IN", currencies: ["INR"] };
+    const priced = {
+      ...product,
+      pricing: null,
+      variants: [
+        {
+          id: "1",
+          sku: "A",
+          attributes: [],
+          pricing: { price: { amount: 464, currency: "INR" }, compareAtPrice: null },
+          inventory: { stockOnHand: 1, availableToSell: 1, reserved: null, status: "in_stock" as const },
+          status: "active" as const,
+        },
+        {
+          id: "2",
+          sku: "B",
+          attributes: [],
+          pricing: { price: { amount: 464, currency: "INR" }, compareAtPrice: null },
+          inventory: { stockOnHand: 1, availableToSell: 1, reserved: null, status: "in_stock" as const },
+          status: "active" as const,
+        },
+      ],
+    };
+    const same = toProductCardViewModel(priced, display);
+    expect(same.price).toBe(
+      new Intl.NumberFormat("en-IN", { style: "currency", currency: "INR" }).format(464),
+    );
+    expect(same.priceMessage).toBeNull();
+    expect(same.availabilityMessage).toBeNull();
+
+    const mixed = toProductCardViewModel(
+      {
+        ...priced,
+        variants: [
+          priced.variants[0]!,
+          {
+            ...priced.variants[1]!,
+            pricing: { price: { amount: 500, currency: "INR" }, compareAtPrice: null },
+          },
+        ],
+      },
+      display,
+    );
+    expect(mixed.price).toBeNull();
+    expect(mixed.priceMessage).toBe(PRICE_NOT_AVAILABLE_MESSAGE);
+    expect(JSON.stringify(mixed)).not.toContain("500");
+  });
+
+  it("summarizes availability only when every variant is out of stock", () => {
+    const display: PriceDisplayConfig = { locale: "en-IN", currencies: ["INR"] };
+    const soldOut = toProductCardViewModel(
+      {
+        ...product,
+        variants: [
+          {
+            id: "1",
+            sku: "A",
+            attributes: [],
+            pricing: { price: { amount: 464, currency: "INR" }, compareAtPrice: null },
+            inventory: { stockOnHand: 0, availableToSell: 0, reserved: null, status: "out_of_stock" as const },
+            status: "active" as const,
+          },
+        ],
+      },
+      display,
+    );
+    expect(soldOut.availabilityMessage).toBe(OUT_OF_STOCK_MESSAGE);
   });
 });
 

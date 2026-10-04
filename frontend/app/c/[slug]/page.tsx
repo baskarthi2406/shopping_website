@@ -13,6 +13,7 @@ import { ProductCard } from "@/components/storefront/product-card";
 import { SubcategoryLinks } from "@/components/storefront/subcategory-links";
 import { Container } from "@/components/ui/container";
 import { catalog } from "@/config/catalog";
+import { priceDisplay } from "@/config/commerce";
 import { resolveSiteOrigin, toCanonicalUrl } from "@/config/site";
 
 type CategoryPageProps = {
@@ -46,6 +47,7 @@ export default async function CategoryPage({ params }: CategoryPageProps) {
     data.category,
     data.products,
     data.ancestors,
+    priceDisplay,
   );
   const showsSubcategoriesOnly =
     view.products.length === 0 && view.subcategories.length > 0;

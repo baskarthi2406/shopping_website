@@ -90,16 +90,41 @@ describe("toVariantSelectorViewModel", () => {
     });
   });
 
+  it("lists each variant explicitly when they do not share a safe attribute matrix", () => {
+    expect(toVariantSelectorViewModel(product([variant("x", {}, { sku: "SKU-X" })]))).toEqual({
+      groups: [{ key: "variant", label: "Variant", values: ["SKU-X"] }],
+      variants: [{ id: "x", values: { variant: "SKU-X" } }],
+    });
+
+    expect(
+      toVariantSelectorViewModel(
+        product([variant("x", { Option: "A" }), variant("y", { Finish: "B" })]),
+      ),
+    ).toEqual({
+      groups: [{ key: "variant", label: "Variant", values: ["Option A", "Finish B"] }],
+      variants: [
+        { id: "x", values: { variant: "Option A" } },
+        { id: "y", values: { variant: "Finish B" } },
+      ],
+    });
+  });
+
+  it("disambiguates variants that share a label so selection cannot switch variants", () => {
+    const selector = toVariantSelectorViewModel(
+      product([
+        variant("x", { Option: "A" }, { sku: "SKU-X" }),
+        variant("y", { Option: "A" }, { sku: "SKU-Y" }),
+      ]),
+    );
+
+    expect(selector?.variants.map((choice) => [choice.id, choice.values.variant])).toEqual([
+      ["x", "Option A (SKU-X)"],
+      ["y", "Option A (SKU-Y)"],
+    ]);
+    expect(resolveVariantSelection(selector!, { variant: "Option A (SKU-X)" }).variantId).toBe("x");
+  });
+
   it.each([
-    ["no attributes", [variant("x", {})]],
-    ["blank value", [variant("x", { Option: " " })]],
-    ["blank name", [{ ...variant("x", {}), attributes: [{ name: " ", value: "A" }] }]],
-    [
-      "duplicate attribute name",
-      [{ ...variant("x", {}), attributes: [{ name: "Option", value: "A" }, { name: "option", value: "B" }] }],
-    ],
-    ["inconsistent attribute names", [variant("x", { Option: "A" }), variant("y", { Finish: "B" })]],
-    ["duplicate combination", [variant("x", { Option: "A" }), variant("y", { Option: " A " })]],
     ["duplicate variant id", [variant("x", { Option: "A" }), variant("x", { Option: "B" })]],
     ["blank variant id", [variant(" ", { Option: "A" })]],
   ])("does not build a selector for %s", (_label, variants) => {
@@ -161,9 +186,23 @@ describe("toProductPurchaseOptionsViewModel", () => {
   });
 
   it("gives each variant its own commerce state, so switching changes the display", () => {
-    const { commerceByVariant } = toProductPurchaseOptionsViewModel(twoByTwo, options);
-    expect(commerceByVariant["a-1"]).toMatchObject({ price: format(500), purchasable: true });
-    expect(commerceByVariant["a-2"]).toMatchObject({ price: format(600), purchasable: true });
+    const sized = product([
+      variant("a-1", { Size: "S" }, { sku: "SKU-S", pricing: pricing(500), inventory: stock(3) }),
+      variant("a-2", { Size: "M" }, { sku: "SKU-M", pricing: pricing(600), inventory: stock(0, "out_of_stock") }),
+    ]);
+    const { commerceByVariant } = toProductPurchaseOptionsViewModel(sized, options);
+    expect(commerceByVariant["a-1"]).toMatchObject({
+      price: format(500),
+      sku: "SKU-S",
+      purchasable: true,
+      availability: null,
+    });
+    expect(commerceByVariant["a-2"]).toMatchObject({
+      price: format(600),
+      sku: "SKU-M",
+      purchasable: false,
+      availability: "out_of_stock",
+    });
   });
 
   it("never falls back to the parent price for a variant without one", () => {
@@ -205,8 +244,21 @@ describe("toProductPurchaseOptionsViewModel", () => {
     });
   });
 
-  it("does not offer a selector for unusable variants and stays blocked", () => {
-    const result = toProductPurchaseOptionsViewModel(product([variant("x", {})]), options);
+  it("still lists a variant that has no attributes, using its SKU", () => {
+    const result = toProductPurchaseOptionsViewModel(
+      product([variant("x", {}, { sku: "SKU-X", pricing: pricing(450) })]),
+      options,
+    );
+    expect(result.selector?.variants).toEqual([{ id: "x", values: { variant: "SKU-X" } }]);
+    expect(result.commerceByVariant.x).toMatchObject({ price: format(450), sku: "SKU-X", purchasable: true });
+    expect(result.commerce).toMatchObject({ price: null, sku: null, purchasable: false });
+  });
+
+  it("does not offer a selector for duplicate variant ids and stays blocked", () => {
+    const result = toProductPurchaseOptionsViewModel(
+      product([variant("x", { Option: "A" }), variant("x", { Option: "B" })]),
+      options,
+    );
     expect(result.selector).toBeNull();
     expect(result.commerce).toMatchObject({ price: null, purchasable: false });
   });

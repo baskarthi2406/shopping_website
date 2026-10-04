@@ -1,6 +1,7 @@
 import type { Category, Product } from "@/domain/catalog";
 import type { ProductCardViewModel } from "./category-page-view-model";
 import { toProductCardViewModel } from "./category-page-view-model";
+import type { PriceDisplayConfig } from "./product-commerce-view-model";
 import type { HomePageData } from "./get-home-page";
 
 /** Approved homepage assets and Option 1 copy. See DESIGN_ASSETS.md and DESIGN_OPTION_1.md. */
@@ -58,7 +59,10 @@ function firstCatalogHref(
   return target ? `/c/${target.slug}` : null;
 }
 
-export function toHomePageViewModel(data: HomePageData): HomePageViewModel {
+export function toHomePageViewModel(
+  data: HomePageData,
+  priceDisplay: PriceDisplayConfig | null = null,
+): HomePageViewModel {
   const shopHref = firstCatalogHref(data.categories, data.products);
 
   return {
@@ -83,7 +87,7 @@ export function toHomePageViewModel(data: HomePageData): HomePageViewModel {
           ? { src: category.image.src, alt: category.image.alt }
           : null,
       })),
-    products: data.products.map(toProductCardViewModel),
+    products: data.products.map((product) => toProductCardViewModel(product, priceDisplay)),
     promo: {
       href: shopHref,
       image: HOME_PROMO_IMAGE,

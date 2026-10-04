@@ -8,6 +8,9 @@ type CatalogDemoGroupsProps = {
       name: string;
       description: string;
       image: { src: string; alt: string } | null;
+      price?: string | null;
+      priceMessage?: string | null;
+      availabilityMessage?: string | null;
       placed: boolean;
     }[];
   }[];
@@ -37,6 +40,9 @@ export function CatalogDemoGroups({ groups }: CatalogDemoGroupsProps) {
                     name={product.name}
                     description={product.description}
                     image={product.image}
+                    price={product.price}
+                    priceMessage={product.priceMessage}
+                    availabilityMessage={product.availabilityMessage}
                     headingAs="h3"
                   />
                   {product.placed ? null : (

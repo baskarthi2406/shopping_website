@@ -1,10 +1,16 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
+import { CatalogImage } from "@/components/storefront/catalog-image";
+import { imageForVariant } from "@/application/catalog/variant-selection";
 import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
 import {
   ProductCommercePanel,
   type ProductCommercePanelProps,
 } from "@/components/storefront/product-commerce-panel";
+import type { CartCandidate } from "@/application/storefront-cart/cart-candidate";
+import { ProductCartActions } from "@/components/storefront/product-cart-actions";
 import {
   ProductPurchaseOptions,
   type ProductPurchaseOptionsProps,
@@ -20,12 +26,15 @@ export type ProductDetailProps = {
   };
   commerce?: ProductCommercePanelProps;
   /** Present only for products with safely selectable variants. */
-  variantOptions?: Omit<ProductPurchaseOptionsProps, "commerce" | "telephone"> | null;
+  variantOptions?: Omit<ProductPurchaseOptionsProps, "commerce" | "telephone" | "cartChoices"> | null;
+  cartChoices?: readonly CartCandidate[];
 };
 
-export function ProductDetail({ product, commerce, variantOptions }: ProductDetailProps) {
-  const primaryImage = product.images[0] ?? null;
-  const additionalImages = product.images.slice(1);
+export function ProductDetail({ product, commerce, variantOptions, cartChoices }: ProductDetailProps) {
+  const [variantId, setVariantId] = useState<string | null>(null);
+  const selectedImage = variantId === null ? undefined : imageForVariant(product.images, variantId);
+  const primaryImage = selectedImage ?? product.images[0] ?? null;
+  const additionalImages = product.images.filter((image) => image.src !== primaryImage?.src);
 
   return (
     <>
@@ -35,10 +44,9 @@ export function ProductDetail({ product, commerce, variantOptions }: ProductDeta
         <div>
           <div className="relative aspect-[3/4] overflow-hidden rounded-lg border border-border bg-surface">
             {primaryImage ? (
-              <Image
+              <CatalogImage
                 src={primaryImage.src}
                 alt={primaryImage.alt}
-                fill
                 priority
                 sizes="(max-width: 1023px) 100vw, 50vw"
                 className="object-contain p-4"
@@ -52,10 +60,9 @@ export function ProductDetail({ product, commerce, variantOptions }: ProductDeta
                   key={image.src}
                   className="relative aspect-[3/4] overflow-hidden rounded-md bg-surface-muted"
                 >
-                  <Image
+                  <CatalogImage
                     src={image.src}
                     alt={image.alt}
-                    fill
                     sizes="(max-width: 1023px) 50vw, 25vw"
                     className="object-contain p-2"
                   />
@@ -75,9 +82,17 @@ export function ProductDetail({ product, commerce, variantOptions }: ProductDeta
             </p>
           ) : null}
           {commerce && variantOptions ? (
-            <ProductPurchaseOptions {...variantOptions} {...commerce} />
+            <ProductPurchaseOptions
+              {...variantOptions}
+              {...commerce}
+              cartChoices={cartChoices}
+              onResolvedVariantId={setVariantId}
+            />
           ) : commerce ? (
-            <ProductCommercePanel {...commerce} />
+            <>
+              <ProductCommercePanel {...commerce} />
+              {cartChoices ? <ProductCartActions choice={cartChoices[0] ?? null} /> : null}
+            </>
           ) : null}
           {product.categories.length > 0 ? (
             <p className="mt-6 text-small text-foreground-secondary">

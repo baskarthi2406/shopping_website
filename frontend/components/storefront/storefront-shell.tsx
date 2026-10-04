@@ -13,6 +13,7 @@ import {
   type FooterContact,
   type FooterNavLink,
 } from "@/components/storefront/storefront-footer";
+import { StorefrontSearch } from "@/components/storefront/storefront-search";
 import { Container } from "@/components/ui/container";
 
 type StorefrontShellProps = {
@@ -44,23 +45,26 @@ export function StorefrontShell({
       <div className="flex min-h-dvh flex-col bg-background text-foreground">
         <AnnouncementBar />
         <header className="border-b border-border bg-surface">
-          <Container className="relative flex min-h-[var(--mm-header-min)] items-center justify-between gap-3 py-2 md:gap-6">
-            <Link
-              href="/"
-              className="inline-flex min-h-[var(--mm-tap-min)] shrink-0 items-center rounded-md"
-            >
-              <Image
-                src="/mini-mystiq-logo.png"
-                alt="Mini Mystiq"
-                width={160}
-                height={73}
-                priority
-                className="h-[var(--mm-logo-height)] w-auto object-contain"
-                style={{ width: "auto" }}
-              />
-            </Link>
-            <StoreToolPlaceholders className="hidden items-center gap-1 md:flex" />
-            <MobileCatalogNavigation items={navigation} />
+          <Container className="relative py-2">
+            <div className="flex min-h-[var(--mm-header-min)] items-center justify-between gap-3 md:gap-6">
+              <Link
+                href="/"
+                className="inline-flex min-h-[var(--mm-tap-min)] shrink-0 items-center rounded-md"
+              >
+                <Image
+                  src="/mini-mystiq-logo.png"
+                  alt="Mini Mystiq"
+                  width={160}
+                  height={73}
+                  priority
+                  className="h-[var(--mm-logo-height)] w-auto object-contain"
+                  style={{ width: "auto" }}
+                />
+              </Link>
+              <StoreToolPlaceholders className="hidden items-center gap-1 md:flex" />
+              <MobileCatalogNavigation items={navigation} />
+            </div>
+            <StorefrontSearch className="mt-2" />
           </Container>
           <div className="hidden border-t border-border md:block">
             <Container>

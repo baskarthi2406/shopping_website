@@ -42,9 +42,15 @@ Status: **COMPLETED** (S4-T01–S4-T12 and fix S4-F01; review in
 
 **Sprint 5 — Commerce UI** is **COMPLETED (Track A)**: S5-T01 planning, Track A
 (S5-T02 Purchasability Rules, S5-T03 PDP Price & Availability Panel, S5-T04
-Variant Selector), and the S5-T08 review are completed. Track B (S5-T05–S5-T07,
-local cart) is **DEFERRED** and not implemented, pending renewed Q1/Q2
-approval (`docs/sprints/SPRINT-05.md` → S5-T08).
+Variant Selector), and the S5-T08 review are completed. Track B task ids
+(S5-T05–S5-T07) stay **DEFERRED** as specified. A later owner request added a
+separate browser cart and checkout review (`/cart`, `/checkout`) that does
+not place a Zoho order and does not change `/demo`. A later owner
+request also locked image fallback, variant selling prices, known stock
+limits, and an explicit unresolved GST policy (no tax calculation). A later
+request shows that verified selling price on the normal snapshot storefront.
+A later request polishes that price's type, shows the cart quantity, and
+adds header search over the existing catalog.
 
 **Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
 planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
@@ -64,7 +70,13 @@ OD-9); category → subcategory navigation audited (ancestor breadcrumbs and
 subcategory links added); full Zoho catalog demo mode
 (`CATALOG_PRODUCT_SOURCE=zoho-demo`: all 49 products incl. unmapped ones,
 INR prices, server-side image proxy, `/catalog` view; demo only, production
-rule unchanged); S6-T16 is proposed
+rule unchanged); category listings stay direct membership and product
+detail selects the real Zoho variant (SKU, price, availability); the normal
+`zoho-snapshot` storefront shows a fresh verified Zoho `rate` in INR and
+does not show `label_rate` or a discount; verified prices share one type
+treatment, cart lines show quantity, and the header searches the existing
+catalog by product name (category and SKU only when already on the record);
+S6-T16 is proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
@@ -108,8 +120,9 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - Product detail `/p/[slug]` (S2-T03)
 - Catalog nav + shared breadcrumbs (S2-T04)
 - Customer-reference hierarchical category model and prominent responsive
-  navigation (S4-T02); Search, Account, Cart, and Track Your Order are disabled
-  visual entry points only
+  navigation (S4-T02); Account and Track Your Order stay disabled visual
+  entry points. Cart links to `/cart`. Search is a header field over the
+  existing catalog (`/search`)
 - Stable provider-independent catalog domain/application contracts (S4-T03);
   recursive categories, product summaries/details, generic variants, nullable
   commerce data, pagination, and error envelopes
@@ -279,5 +292,9 @@ work is the P0 backlog in `docs/project/PRODUCTION-READINESS.md`, each item
 requiring an explicit task. The P0 decision gate
 (`docs/project/PRODUCTION-DECISIONS.md`) awaits owner decisions OD-1–OD-9 and
 Zoho verifications V1–V11. The decision on
-merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains
-deferred pending Q1/Q2. Requires explicit human approval.
+merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B task ids
+remain deferred. The owner-requested browser cart and checkout review is
+done and does not place orders. Image fallback, variant price and stock
+consistency, and the unresolved GST note are in place; no tax is
+calculated. The normal snapshot storefront shows a fresh verified Zoho
+selling price and does not show a compare-at price. Requires explicit human approval.

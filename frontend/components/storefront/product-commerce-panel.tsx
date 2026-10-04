@@ -1,3 +1,4 @@
+import { StorefrontPrice } from "@/components/storefront/storefront-price";
 import { toTelHref } from "@/components/storefront/to-tel-href";
 
 export type ProductCommercePanelProps = {
@@ -7,6 +8,7 @@ export type ProductCommercePanelProps = {
     priceMessage: string | null;
     availability: "out_of_stock" | "not_available" | "unconfirmed" | null;
     availabilityMessage: string | null;
+    sku?: string | null;
   };
   telephone: string;
 };
@@ -26,10 +28,7 @@ export function ProductCommercePanel({ commerce, telephone }: ProductCommercePan
 
       {commerce.price !== null ? (
         <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-          <span className="font-display text-h2 font-semibold text-foreground">
-            <span className="sr-only">Price: </span>
-            {commerce.price}
-          </span>
+          <StorefrontPrice amount={commerce.price} size="detail" label="Price: " />
           {commerce.compareAtPrice !== null ? (
             <s className="text-body text-foreground-muted">
               <span className="sr-only">Original price: </span>
@@ -40,6 +39,13 @@ export function ProductCommercePanel({ commerce, telephone }: ProductCommercePan
       ) : (
         <p className="text-body font-semibold text-foreground">{commerce.priceMessage}</p>
       )}
+
+      {commerce.sku ? (
+        <p className="mt-2 text-small text-foreground-secondary">
+          <span className="sr-only">SKU: </span>
+          {commerce.sku}
+        </p>
+      ) : null}
 
       {commerce.availabilityMessage !== null ? (
         <p

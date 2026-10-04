@@ -88,7 +88,11 @@ beforeAll(async () => {
   server = spawn(
     process.execPath,
     [nextBin, "start", "--port", String(port), "--hostname", "127.0.0.1"],
-    { cwd: frontendRoot, stdio: "ignore" },
+    {
+      cwd: frontendRoot,
+      stdio: "ignore",
+      env: { ...process.env, CATALOG_PRODUCT_SOURCE: "static" },
+    },
   );
   await waitForServer(baseUrl, 60_000);
 }, 90_000);

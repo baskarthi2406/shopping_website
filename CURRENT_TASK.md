@@ -8,10 +8,10 @@ No task is approved. Do not start any task until a human explicitly requests it.
 
 | Field | Value |
 |-------|-------|
-| Task ID | S6-T14 |
-| Task | Server-side Zoho Request Wrapper (redefined by the project owner from “Outbound Request Policy” for the 3-day Zoho feasibility demo) |
+| Task ID | Owner request (not a sprint task id) |
+| Task | Polish storefront price type, cart quantity, and header search |
 | Status | **COMPLETED** |
-| Scope | Gate G2 passed via the minimum ADR 0009 boundary amendment. Server-only `infrastructure/zoho/zoho-config.ts` and `zoho-client.ts`: server env configuration, explicit timeout, origin-locked paths, sanitized errors, untrusted `unknown` responses. S6-T14 establishes the server-side Zoho integration boundary; actual Zoho capability verification is deferred to S6-T15. No Zoho request, mapping, order creation, UI, contract, or dependency change. Details: `docs/sprints/SPRINT-06.md` → S6-T14. |
+| Scope | Verified prices use one readable type treatment on cards, product detail, cart, and checkout. Cart lines show `Qty`. Header search filters the existing catalog by product name, and by category or SKU when those are already on the catalog record. Price values, provenance, stock limits, taxonomy, and Zoho access are unchanged. |
 
 ---
 
@@ -67,8 +67,23 @@ publishes all active, contract-valid Zoho products (unmapped ones without a
 storefront category, inspectable at `/catalog`), shows INR variant prices,
 and serves images through the server-side proxy
 `/api/catalog-images/{itemId}/{documentId}`; production publication and the
-frozen `/demo` flow are unchanged (`docs/sprints/SPRINT-06.md`). No further task is approved; do not start production work,
-payment, or Sprint 7 automatically.
+frozen `/demo` flow are unchanged (`docs/sprints/SPRINT-06.md`). Category →
+subcategory → product navigation verified on the existing taxonomy (direct
+membership, no descendant duplication). Product detail selects real Zoho
+variants and shows that variant's SKU, price, and availability; listings show
+one price only when every variant shares it. Storefront cart and checkout review are implemented for the normal
+product page (browser storage, catalog read for validation, no Zoho
+order). Images use the existing catalog proxy and fall back safely.
+The normal `zoho-snapshot` storefront shows a fresh verified Zoho selling
+price (`rate`). A listing shows that price only when every variant shares
+it. `label_rate` is not displayed. The selected variant's selling price is the cart and review price.
+Those prices use shared typography. Each cart line shows its quantity.
+The header searches the catalog already loaded for the storefront.
+Checkout revalidation names a price or stock change and does not
+rewrite the cart. Customer-facing GST is unresolved
+(`STOREFRONT_TAX_POLICY`); no tax is added to the subtotal. `/demo`
+and SO-00001 stay frozen. No further task is approved; do not start
+production work, payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope
 

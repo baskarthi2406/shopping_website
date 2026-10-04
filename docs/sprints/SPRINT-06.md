@@ -514,6 +514,23 @@ all priced, 156 in stock, 49 products with images, 13 mapped and 36 unmapped;
 one snapshot refresh per server start; no secrets in responses or logs. Each
 uncached image view costs one Zoho GET (about 4 MB), so images count toward the
 request budget (V1, OD-9).
+Category → subcategory → product navigation uses the existing menu tree and
+direct membership: a parent page links subcategories and does not repeat their
+products; a subcategory lists only its own products, in catalog order.
+Unmapped products stay out of those listings. Product detail keeps one URL per
+item group. Variant choices come from Zoho attributes when they form a safe
+matrix, otherwise one choice per variant. The selected variant shows its own
+SKU, INR price, and availability; an out-of-stock variant stays visible and is
+not purchasable. Listing cards show a price only when every variant has that
+same price. Live check (`zoho-demo`): Girl Coord Set size 0-3M Pink
+`GIR-0-3-PIN` and Green `GIR-0-3-GRE` at ₹464; Women → Co-Ord Set lists one
+product; Yellow XXL `COO-YEL-XXL` is out of stock at ₹398. One snapshot
+refresh (2 GETs). One image GET timed out; no Zoho writes.
+A later owner request keeps those prices and adds shared price typography,
+a visible cart quantity, and header search. Search uses the catalog the
+storefront already loads. It matches the product name, and a category name
+or SKU only when that text is already on the catalog record. It does not
+call Zoho from the browser.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 
@@ -612,8 +629,8 @@ cache or snapshot.
 | D3 | Whether provenance/`asOf` enters the public contract | No |
 | D4 | Persistent store, if any (ADR 0008 P1–P6) | None |
 | D-API | Whether `/api/*` stays public in production and what backs it | Dummy, as today |
-| D5 | Cart and device-local cart (Q1/Q2) | Deferred |
-| D6 | Locale and currency (Q9) | Price display disabled (`priceDisplay = null`) |
+| D5 | Cart and device-local cart (Q1/Q2) | Browser cart and checkout review exist by a later owner request. They do not place a Zoho order. Production cart/checkout remains open |
+| D6 | Locale and currency (Q9) | Verified Zoho `rate` (INR) is shown for `zoho-snapshot` and `zoho-demo` when the 24-hour price observation is fresh. The static catalog stays unpriced. `label_rate` is not a compare-at price. Customer-facing GST is unresolved (`STOREFRONT_TAX_POLICY`); no tax is calculated |
 | D7 | Listing-card prices (Q10) and search (Q7) | Deferred |
 | D8 | Account and order tracking | Deferred (Sprint 8) |
 | D9 | Homepage claims: secure payment, free shipping, returns, COD, 24/7 support (TD-011) | Unchanged; business confirmation needed |
@@ -630,7 +647,7 @@ cache or snapshot.
 |------|--------|
 | Zoho client, SDK, credentials, sync, adapter | Sprint 7, after §7 verification |
 | Any database or persistent store | Only via ADR 0008 amendment |
-| Cart, checkout, orders, payment, shipping, tax | Sprint 8–9, separate approval |
+| Cart, checkout, orders, payment, shipping, tax | Sprint 8–9, separate approval. A browser cart and checkout review (no Zoho write) was added later by owner request; production order creation is still out of scope. Storefront GST stays unresolved and is not calculated |
 | Authentication, accounts, admin, RBAC | Sprint 8 |
 | Deployment, hosting, monitoring vendor | Sprint 11 |
 | Sprint 5 Track B (S5-T05–S5-T07) | Pending Q1/Q2 |

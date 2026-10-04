@@ -1,3 +1,4 @@
+import { readFileSync } from "node:fs";
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { CatalogSnapshotUnavailableError } from "@/infrastructure/catalog/catalog-snapshot";
 import {
@@ -119,6 +120,11 @@ function zohoFetch(image: { status: number; type: string } = { status: 200, type
 }
 
 describe("createZohoCatalogRuntime", () => {
+  it("caps the catalog snapshot at the 24-hour provenance freshness window", () => {
+    const source = readFileSync(new URL("./zoho-catalog.ts", import.meta.url), "utf8");
+    expect(source).toContain("maxAgeMs: DEFAULT_FRESHNESS_THRESHOLD_MS");
+  });
+
   it("reports missing Zoho settings as unavailable and logs only the setting name", async () => {
     const errors = vi.spyOn(console, "error").mockImplementation(() => {});
     const runtime = createZohoCatalogRuntime({

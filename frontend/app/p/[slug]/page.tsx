@@ -11,6 +11,7 @@ import { buildBreadcrumbStructuredData } from "@/application/seo/breadcrumb-stru
 import { buildNotFoundMetadata } from "@/application/seo/page-metadata";
 import { buildProductMetadata } from "@/application/seo/product-metadata";
 import { buildProductStructuredData } from "@/application/seo/product-structured-data";
+import { toCartCandidates } from "@/application/storefront-cart/cart-candidate";
 import { ProductDetail } from "@/components/storefront/product-detail";
 import { Container } from "@/components/ui/container";
 import { catalog } from "@/config/catalog";
@@ -73,6 +74,7 @@ export default async function ProductPage({ params }: ProductPageProps) {
           product={view}
           commerce={{ commerce, telephone: organization.telephone }}
           variantOptions={selector ? { selector, commerceByVariant } : null}
+          cartChoices={toCartCandidates(data.product, priceDisplay)}
         />
       </Container>
     </>

@@ -1,13 +1,22 @@
 import type { DemoSalesOrder } from "@/application/checkout/place-demo-order";
 import { DEMO_ORDER_LABEL, DEMO_PAYMENT_LABEL } from "@/application/checkout/demo-order";
+import { sharedVariantSellingPrice } from "@/application/catalog/catalog-contracts";
+import {
+  DEFAULT_FRESHNESS_THRESHOLD_MS,
+  resolvePricingProvenance,
+} from "@/application/catalog/field-provenance";
 import type {
   CatalogImage,
   Inventory,
+  Pricing,
   Product,
   ProductVariant,
   VariantAttribute,
 } from "@/domain/catalog";
 import type { ZohoCategoryResolver } from "./zoho-category-mapping";
+
+/** Owning source for the Zoho selling-price field (`rate`). */
+export const ZOHO_SELLING_PRICE_SOURCE = "zoho";
 
 /**
  * Zoho POS → storefront mapping (S6-T15 demo). A Zoho item is one sellable
@@ -55,6 +64,32 @@ export function mapZohoInventory(item: ZohoRecord): Inventory {
   };
 }
 
+/**
+ * Verified selling price from Zoho `rate` only. A missing, non-positive, or
+ * contract-invalid rate stays hidden, as does an observation older than the
+ * 24-hour freshness threshold. `label_rate` is never read.
+ */
+export function verifiedZohoSellingPrice(
+  rate: unknown,
+  currency: string,
+  observedAt: string,
+  evaluatedAt: string,
+): Pricing | null {
+  const amount = finite(rate);
+  const value: Pricing | null =
+    amount !== null && amount > 0
+      ? { price: { amount, currency }, compareAtPrice: null }
+      : null;
+  return resolvePricingProvenance(
+    { source: ZOHO_SELLING_PRICE_SOURCE, observedAt, value },
+    {
+      ownerSource: ZOHO_SELLING_PRICE_SOURCE,
+      freshnessThresholdMs: DEFAULT_FRESHNESS_THRESHOLD_MS,
+    },
+    evaluatedAt,
+  ).pricing;
+}
+
 function attributesOf(item: ZohoRecord): VariantAttribute[] {
   return [1, 2, 3].flatMap((index) => {
     const name = text(item[`attribute_name${index}`]);
@@ -63,17 +98,25 @@ function attributesOf(item: ZohoRecord): VariantAttribute[] {
   });
 }
 
-export function mapZohoVariant(item: ZohoRecord, currency: string): ProductVariant | null {
+export function mapZohoVariant(
+  item: ZohoRecord,
+  currency: string,
+  priceTiming: { readonly observedAt: string; readonly evaluatedAt: string },
+): ProductVariant | null {
   const id = text(item.item_id);
   if (id === null) {
     return null;
   }
-  const rate = finite(item.rate);
   return {
     id,
     sku: text(item.sku),
     attributes: attributesOf(item),
-    pricing: rate !== null && rate > 0 ? { price: { amount: rate, currency }, compareAtPrice: null } : null,
+    pricing: verifiedZohoSellingPrice(
+      item.rate,
+      currency,
+      priceTiming.observedAt,
+      priceTiming.evaluatedAt,
+    ),
     inventory: mapZohoInventory(item),
     status: item.status === "active" ? "active" : "inactive",
   };
@@ -115,6 +158,13 @@ export type MapZohoItemsOptions = {
    * have no images. The URL must not carry provider URLs or credentials.
    */
   readonly imageSrc?: (ref: ZohoItemImageRef) => string;
+  /**
+   * When the selling rate was observed, and when that observation is judged.
+   * Both default to the mapping time, so a snapshot built now carries a fresh
+   * price. A snapshot older than 24 hours is not served.
+   */
+  readonly priceObservedAt?: string;
+  readonly priceEvaluatedAt?: string;
 };
 
 /** At most this many distinct images per product, in variant order. */
@@ -132,13 +182,15 @@ export function mapZohoItemsToProducts(
   resolveCategory: ZohoCategoryResolver = () => null,
   options: MapZohoItemsOptions = {},
 ): Product[] {
+  const observedAt = options.priceObservedAt ?? new Date().toISOString();
+  const priceTiming = { observedAt, evaluatedAt: options.priceEvaluatedAt ?? observedAt };
   const products = new Map<
     string,
     { product: Product; variants: ProductVariant[]; images: CatalogImage[]; documents: Set<string> }
   >();
   for (const raw of items) {
     if (!isRecord(raw)) continue;
-    const variant = mapZohoVariant(raw, currency);
+    const variant = mapZohoVariant(raw, currency, priceTiming);
     if (variant === null) continue;
     const productId = text(raw.group_id) ?? variant.id;
     let entry = products.get(productId);
@@ -185,6 +237,7 @@ export function mapZohoItemsToProducts(
   return [...products.values()].map(({ product, variants, images }) => ({
     ...product,
     images,
+    pricing: sharedVariantSellingPrice(variants),
     status: variants.some((variant) => variant.status === "active") ? "active" : "inactive",
     variants,
   }));

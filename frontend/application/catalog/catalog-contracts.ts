@@ -1,7 +1,9 @@
 import type {
   Category,
+  Pricing,
   Product,
   ProductSummary,
+  ProductVariant,
 } from "@/domain/catalog";
 
 export type CollectionResponse<T> = {
@@ -94,6 +96,26 @@ export function createErrorResponse(
   return { error: { code, message } };
 }
 
+/**
+ * One selling price for a product list. Product lists omit variants, so this
+ * is set only when every variant has that same verified price. Mixed or
+ * missing variant prices stay null. There is no "from" price.
+ */
+export function sharedVariantSellingPrice(
+  variants: readonly ProductVariant[],
+): Pricing | null {
+  const first = variants[0]?.pricing;
+  if (first === undefined || first === null) {
+    return null;
+  }
+  const { amount, currency } = first.price;
+  const shared = variants.every((variant) => {
+    const price = variant.pricing?.price;
+    return price !== undefined && price.amount === amount && price.currency === currency;
+  });
+  return shared ? { price: { amount, currency }, compareAtPrice: null } : null;
+}
+
 export function toProductSummary(product: Product): ProductSummary {
   return {
     id: product.id,
@@ -104,7 +126,10 @@ export function toProductSummary(product: Product): ProductSummary {
     categoryIds: product.categoryIds,
     sku: product.sku,
     uom: product.uom,
-    pricing: product.pricing,
+    pricing:
+      product.variants.length > 0
+        ? sharedVariantSellingPrice(product.variants)
+        : product.pricing,
     inventory: product.inventory,
     status: product.status,
   };
