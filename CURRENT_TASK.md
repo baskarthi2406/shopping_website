@@ -54,7 +54,11 @@ implemented (P0-9, ADR 0009 amendment): `CATALOG_PRODUCT_SOURCE=zoho-snapshot`
 serves storefront products from an in-memory, per-process Zoho snapshot
 (background refresh, default 6 h; never served past 24 h; one shared
 refresh; build never calls Zoho); default remains `static`. Durable/shared
-snapshot, request counting, and images await V1, OD-7, OD-9, ADR 0008. No further task is approved; do not start production work,
+snapshot, request counting, and images await V1, OD-7, OD-9, ADR 0008.
+Hosting/snapshot decision record (`docs/project/HOSTING-SNAPSHOT-DECISION.md`):
+hosting NOT DECIDED; in-memory snapshot acceptable only for a long-running
+Node host with fixed instances, shared/durable snapshot required for
+serverless; owner decision OD-9 required first. No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope

@@ -490,6 +490,9 @@ maximum age), `SnapshotProductRepository`, `infrastructure/zoho/zoho-catalog-sna
 `CATALOG_PRODUCT_SOURCE` (default `static`). Live read-only check: one refresh
 (2 requests) served home, category, product, sitemap, and API reads; 13 of 49
 products published. Durable storage and request counting remain open.
+Hosting/snapshot decision record: `docs/project/HOSTING-SNAPSHOT-DECISION.md`
+(hosting NOT DECIDED; Option A in-memory for a long-running Node host with
+fixed instances, Option B shared/durable for serverless; awaits OD-9).
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

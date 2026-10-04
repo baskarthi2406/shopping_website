@@ -99,7 +99,8 @@ Only business decisions; technical questions are listed separately.
    retention/privacy requirement for shopper data?
 9. **OD-9 Hosting (D11).** Hosting choice and budget (long-running Node vs
    serverless); it determines caching, token storage, and whether any store is
-   needed.
+   needed. Hosting evidence, snapshot implications, request budget, and
+   options: `docs/project/HOSTING-SNAPSHOT-DECISION.md` (hosting NOT DECIDED).
 
 ## Technical Verification Required
 

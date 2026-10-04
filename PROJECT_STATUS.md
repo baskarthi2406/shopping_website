@@ -58,7 +58,9 @@ is in progress — the Zoho demo (product → cart → checkout → draft Sales 
 partially implemented (`docs/project/CATEGORY-MAPPING-DESIGN.md`, high-confidence
 rows only; remaining placements await owner decision OD-6); an interim
 in-memory Zoho catalog snapshot (opt-in `CATALOG_PRODUCT_SOURCE=zoho-snapshot`,
-ADR 0009 amendment) removes per-page Zoho reads; S6-T16 is proposed
+ADR 0009 amendment) removes per-page Zoho reads; durable snapshot storage
+awaits the hosting decision (`docs/project/HOSTING-SNAPSHOT-DECISION.md`,
+OD-9); S6-T16 is proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
