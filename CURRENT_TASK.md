@@ -41,8 +41,10 @@ verifications V1–V11, P0 order) in `docs/project/PRODUCTION-DECISIONS.md`,
 awaiting owner answers. Read-only tax verification
 (`docs/project/ZOHO-TAX-VERIFICATION.md`): SO-00001 taxed 5% on top
 (`is_inclusive_tax: false`); inclusive/exclusive is configuration-dependent;
-`label_rate` not verified; tax decision still blocked on owner input. No
-further task is approved; do not start production work,
+`label_rate` not verified; tax decision still blocked on owner input.
+Category mapping design (`docs/project/CATEGORY-MAPPING-DESIGN.md`): Zoho has
+its own category tree; mapping by Zoho category ID with group overrides
+recommended; owner placement decisions required. No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope
