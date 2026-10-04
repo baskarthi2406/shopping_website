@@ -9,9 +9,9 @@ No task is approved. Do not start any task until a human explicitly requests it.
 | Field | Value |
 |-------|-------|
 | Task ID | Owner request (not a sprint task id) |
-| Task | Storefront images, variant price, stock, and GST presentation |
+| Task | Show verified Zoho selling prices on the normal storefront |
 | Status | **COMPLETED** |
-| Scope | Catalog images keep the server-side proxy and fall back to the empty frame when an image fails. Verified variant selling prices stay consistent from the product page through cart and order review. Known stock limits and out-of-stock variants still block purchase. GST stays an explicit unresolved policy with no tax calculation. No Zoho write. `/demo` and SO-00001 are unchanged. |
+| Scope | `zoho-snapshot` shows a fresh verified Zoho `rate` in INR. Listings show that price only when every variant shares it. The selected variant price is the cart and review price. Stale, missing, and invalid rates stay hidden and block Add to Cart. `label_rate`, discounts, and GST are unchanged. `/demo` and SO-00001 are unchanged. |
 
 ---
 
@@ -74,7 +74,9 @@ variants and shows that variant's SKU, price, and availability; listings show
 one price only when every variant shares it. Storefront cart and checkout review are implemented for the normal
 product page (browser storage, catalog read for validation, no Zoho
 order). Images use the existing catalog proxy and fall back safely.
-The selected variant's selling price is the cart and review price.
+The normal `zoho-snapshot` storefront shows a fresh verified Zoho selling
+price (`rate`). A listing shows that price only when every variant shares
+it. `label_rate` is not displayed. The selected variant's selling price is the cart and review price.
 Checkout revalidation names a price or stock change and does not
 rewrite the cart. Customer-facing GST is unresolved
 (`STOREFRONT_TAX_POLICY`); no tax is added to the subtotal. `/demo`

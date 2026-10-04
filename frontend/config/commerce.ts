@@ -1,13 +1,22 @@
 import "server-only";
 import type { PriceDisplayConfig } from "@/application/catalog";
-import { readCatalogProductSource, ZOHO_CATALOG_DEMO_PRICE_DISPLAY } from "./zoho-catalog";
+import {
+  isZohoCatalogSource,
+  readCatalogProductSource,
+  ZOHO_CATALOG_DEMO_PRICE_DISPLAY,
+  type CatalogProductSource,
+} from "./zoho-catalog";
 
 /**
- * Storefront price presentation. No display locale or currency is approved
- * yet (Sprint 5 Q9), so no price renders even if catalog data supplies one.
- * Set this only from a verified business decision; do not infer it from the
- * store's location. The full-catalog demo source (`zoho-demo`) alone shows
- * the verified Zoho selling price, as the frozen `/demo` flow does.
+ * Storefront price presentation for a catalog source. The static fixture
+ * catalog still hides prices. Both Zoho sources (`zoho-snapshot` and
+ * `zoho-demo`) may show a verified INR selling price. Whether that price
+ * includes GST is still unresolved, and `label_rate` is never a compare-at
+ * price. Do not infer a currency from the store's location.
  */
-export const priceDisplay: PriceDisplayConfig | null =
-  readCatalogProductSource() === "zoho-demo" ? ZOHO_CATALOG_DEMO_PRICE_DISPLAY : null;
+export function priceDisplayFor(source: CatalogProductSource): PriceDisplayConfig | null {
+  return isZohoCatalogSource(source) ? ZOHO_CATALOG_DEMO_PRICE_DISPLAY : null;
+}
+
+/** Price presentation for the process catalog source. */
+export const priceDisplay: PriceDisplayConfig | null = priceDisplayFor(readCatalogProductSource());

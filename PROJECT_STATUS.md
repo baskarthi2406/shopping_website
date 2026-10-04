@@ -47,7 +47,8 @@ Variant Selector), and the S5-T08 review are completed. Track B task ids
 separate browser cart and checkout review (`/cart`, `/checkout`) that does
 not place a Zoho order and does not change `/demo`. A later owner
 request also locked image fallback, variant selling prices, known stock
-limits, and an explicit unresolved GST policy (no tax calculation).
+limits, and an explicit unresolved GST policy (no tax calculation). A later
+request shows that verified selling price on the normal snapshot storefront.
 
 **Sprint 6 — Next.js Server-side Foundation** is **IN PROGRESS**: S6-T01
 planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
@@ -68,7 +69,9 @@ subcategory links added); full Zoho catalog demo mode
 (`CATALOG_PRODUCT_SOURCE=zoho-demo`: all 49 products incl. unmapped ones,
 INR prices, server-side image proxy, `/catalog` view; demo only, production
 rule unchanged); category listings stay direct membership and product
-detail selects the real Zoho variant (SKU, price, availability); S6-T16 is proposed
+detail selects the real Zoho variant (SKU, price, availability); the normal
+`zoho-snapshot` storefront shows a fresh verified Zoho `rate` in INR and
+does not show `label_rate` or a discount; S6-T16 is proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
@@ -287,4 +290,5 @@ merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B task ids
 remain deferred. The owner-requested browser cart and checkout review is
 done and does not place orders. Image fallback, variant price and stock
 consistency, and the unresolved GST note are in place; no tax is
-calculated. Requires explicit human approval.
+calculated. The normal snapshot storefront shows a fresh verified Zoho
+selling price and does not show a compare-at price. Requires explicit human approval.

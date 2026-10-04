@@ -49,9 +49,9 @@ export const MAX_ZOHO_CATALOG_REFRESH_MINUTES = 720;
 export const ZOHO_CATALOG_FAILURE_BACKOFF_MS = 5 * 60 * 1000;
 
 /**
- * Demo-only price presentation for `zoho-demo`, matching the frozen `/demo`
- * flow: INR is the verified Zoho organization currency. Prices in any other
- * currency still render nothing. Not a production price-display decision (Q9).
+ * INR presentation for a verified Zoho selling price (`rate`). Used by the
+ * normal `zoho-snapshot` storefront and by `zoho-demo`. Prices in any other
+ * currency still render nothing. This is not a compare-at or GST decision.
  */
 export const ZOHO_CATALOG_DEMO_PRICE_DISPLAY: PriceDisplayConfig = {
   locale: "en-IN",

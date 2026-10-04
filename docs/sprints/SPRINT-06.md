@@ -625,7 +625,7 @@ cache or snapshot.
 | D4 | Persistent store, if any (ADR 0008 P1–P6) | None |
 | D-API | Whether `/api/*` stays public in production and what backs it | Dummy, as today |
 | D5 | Cart and device-local cart (Q1/Q2) | Browser cart and checkout review exist by a later owner request. They do not place a Zoho order. Production cart/checkout remains open |
-| D6 | Locale and currency (Q9) | Price display disabled (`priceDisplay = null`) except the `zoho-demo` selling-price display. Customer-facing GST is unresolved (`STOREFRONT_TAX_POLICY`); no tax is calculated |
+| D6 | Locale and currency (Q9) | Verified Zoho `rate` (INR) is shown for `zoho-snapshot` and `zoho-demo` when the 24-hour price observation is fresh. The static catalog stays unpriced. `label_rate` is not a compare-at price. Customer-facing GST is unresolved (`STOREFRONT_TAX_POLICY`); no tax is calculated |
 | D7 | Listing-card prices (Q10) and search (Q7) | Deferred |
 | D8 | Account and order tracking | Deferred (Sprint 8) |
 | D9 | Homepage claims: secure payment, free shipping, returns, COD, 24/7 support (TD-011) | Unchanged; business confirmation needed |

@@ -23,8 +23,9 @@ export const ZOHO_DEMO_ENV = {
 export const ZOHO_DEMO_ITEM_LIMIT = 12;
 
 /**
- * Demo-only price display: the Zoho organization's currency (INR, verified in
- * S6-T15). The main storefront keeps `priceDisplay = null` (D6 open).
+ * Demo-page price display: the Zoho organization's currency (INR, verified in
+ * S6-T15). The frozen `/demo` flow keeps this display. The normal storefront
+ * uses the same INR selling-price display only for a verified Zoho `rate`.
  */
 export const ZOHO_DEMO_PRICE_DISPLAY: PriceDisplayConfig = {
   locale: "en-IN",
