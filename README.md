@@ -149,8 +149,8 @@ Then implement **only** the current task.
 | Phase | Phase 1 — Customer Storefront + Dummy API Foundation (Phase 2 / Sprint 6 in progress) |
 | Overall status | SPRINT_6_IN_PROGRESS |
 | Current sprint | Sprint 6 — Next.js Server-side Foundation (**IN PROGRESS**) |
-| Last completed | S6-T12 — Catalog Contract Conformance Suite |
-| Current task | None; next proposed S6-T13 — Field Provenance Rules (**NOT_STARTED**, gate G1) |
+| Last completed | S6-T13 — Field Provenance Rules |
+| Current task | None; next proposed S6-T14 — Outbound Request Policy (**NOT_STARTED**, gate G2) |
 
 Sprint 4 is complete. Sprint 5 is complete for Track A (purchasability rules,
 PDP price/availability panel, variant selector); the local cart (Track B) is
@@ -158,5 +158,6 @@ deferred. No price renders until locale/currency is approved. ADR 0006 keeps
 UI and server-side code in one Next.js application (no FastAPI backend); no
 database is selected. S6-T11 guards server configuration with
 `import "server-only"` and verifies it with production builds. S6-T12 adds a
-reusable catalog API conformance suite. Do **not** start S6-T13 automatically. S3-T10 Image Optimization and the original SEO URL
+reusable catalog API conformance suite. S6-T13 adds pure field provenance
+rules (not yet wired in). Do **not** start S6-T14 automatically. S3-T10 Image Optimization and the original SEO URL
 strategy are deferred.

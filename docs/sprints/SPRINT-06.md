@@ -5,9 +5,9 @@
 | Sprint ID | S6 |
 | Phase | Phase 2 — Server-side foundation (single Next.js application) |
 | Objective | Prepare provider-independent server-side foundations in the existing Next.js application (server-only isolation, catalog contract conformance, provenance rules, outbound request policy) without changing storefront behavior, SEO, or the dummy catalog API, and gate Zoho work on verified access |
-| Status | **IN PROGRESS** (S6-T01, S6-T02, S6-T11, S6-T12 completed; no further task is approved) |
+| Status | **IN PROGRESS** (S6-T01, S6-T02, S6-T11, S6-T12, S6-T13 completed; no further task is approved) |
 | Dependencies | Sprint 5 completed (Track A; S5-T08, commit `5525b68`) |
-| Task IDs | S6-T01, S6-T02, S6-T11, S6-T12 (completed) · S6-T03–S6-T10 **WITHDRAWN** · proposed S6-T13 … S6-T16 |
+| Task IDs | S6-T01, S6-T02, S6-T11, S6-T12, S6-T13 (completed) · S6-T03–S6-T10 **WITHDRAWN** · proposed S6-T14 … S6-T16 |
 
 **Only explicitly requested tasks are authorized.** Proposed tasks stay
 `PROPOSED` until a human approves them; approval is recorded here, in
@@ -351,8 +351,8 @@ non-conforming fake dispatch.
 
 ### S6-T13 — Field Provenance Rules
 
-**Status:** PROPOSED — requires S6-T12 and gate G1 (ADR 0007 provenance
-section accepted)
+**Status:** COMPLETED — gate G1 passed (ADR 0007 provenance accepted
+2026-10-04)
 
 **Objective:** Pure application functions that turn provider field
 observations into S4 contract values with the ADR 0007 states.
@@ -380,6 +380,23 @@ observation rejected.
 
 **Git/stop:** branch `s6-t13-provenance-rules`; commit
 `feat(s6): add field provenance rules`; STOP.
+
+**Result:** gate G1 passed — the project owner accepted the ADR 0007
+provenance section on 2026-10-04 (stale price → `null`; future timestamps →
+`unknown`, no skew tolerance; expired `missing` → `unknown`; 24-hour inclusive
+freshness threshold as the S6-T13 default, since none had been set).
+`application/catalog/field-provenance.ts` adds pure
+`evaluateFieldProvenance`, `resolvePricingProvenance`,
+`resolveInventoryProvenance`, `parseObservationTime`, and value guards, with
+an explicit evaluation time, an owning-source parameter (`null` while
+ownership is open → `unknown`), and internal reason codes. Not wired into any
+runtime path; no contract, data, UI, or dependency change.
+`field-provenance.test.ts` (fixed timestamps, synthetic `XTS` values) covers
+every state, the threshold boundary, future and malformed timestamps,
+malformed values, price/stock independence, stale stock → `inventory_unknown`,
+and verified data still subject to `evaluatePurchasability`. Deviations:
+stayed on `s5-t01-sprint-5-planning`; commit message
+`feat(s6): implement field provenance rules` as instructed.
 
 ---
 
@@ -469,13 +486,13 @@ the debt register (TD-008, TD-010).
 | Gate | Before | Requires |
 |------|--------|----------|
 | G0 | S6-T11 | Revised plan approved; decision on merging Sprints 3–5 into `main` (D12) or continuing to stack. **Passed for S6-T11 by explicit user approval**, continuing to stack on the current branch; D12 remains open |
-| G1 | S6-T13 | ADR 0007 provenance section accepted (ownership columns may stay open) |
+| G1 | S6-T13 | ADR 0007 provenance section accepted (ownership columns may stay open). **Passed 2026-10-04** |
 | G2 | S6-T14 | ADR 0009 accepted |
 | GZ | S6-T15 | Zoho access or account documentation supplied, and explicit approval |
 | GP | Any persistence task (none proposed) | ADR 0008 amended with evidence and accepted |
 
 ```text
-S6-T01 (done) → S6-T02 (done) → G0 → S6-T11 (done) → S6-T12 (done) → G1 → S6-T13
+S6-T01 (done) → S6-T02 (done) → G0 → S6-T11 (done) → S6-T12 (done) → G1 → S6-T13 (done)
                                         └──────→ G2 → S6-T14
 GZ → S6-T15 (independent; may be deferred)
 all approved tasks → S6-T16
@@ -519,7 +536,7 @@ cache or snapshot.
 | ID | Decision | Default until decided |
 |----|----------|-----------------------|
 | D1 | Field-level ownership (ADR 0007 table) | Current sources; commercial fields `null` |
-| D2 | Freshness threshold; whether stale price is hidden | No staleness logic; stale price → `null` proposed |
+| D2 | Freshness threshold; whether stale price is hidden | **Decided (S6-T13):** 24 h inclusive default; stale price → `null`. Per-field values may be revisited |
 | D3 | Whether provenance/`asOf` enters the public contract | No |
 | D4 | Persistent store, if any (ADR 0008 P1–P6) | None |
 | D-API | Whether `/api/*` stays public in production and what backs it | Dummy, as today |

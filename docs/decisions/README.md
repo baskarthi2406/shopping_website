@@ -32,7 +32,7 @@ Suggested sections:
 | [0004](0004-repository-swap-static-to-http.md) | Static → HTTP repository swap | Accepted |
 | [0005](0005-stable-storefront-contracts-and-zoho-adapter.md) | Stable storefront contracts and Zoho adapter boundary | Accepted (amended by 0006) |
 | [0006](0006-nextjs-only-application-architecture.md) | Next.js-only application architecture | Accepted |
-| [0007](0007-field-ownership-and-provenance.md) | Field-level ownership and provenance | Proposed |
+| [0007](0007-field-ownership-and-provenance.md) | Field-level ownership and provenance | Proposed (ownership); provenance accepted 2026-10-04 |
 | [0008](0008-persistent-storage.md) | Persistent storage | Proposed |
 | [0009](0009-server-side-provider-access.md) | Server-side provider (Zoho) access policy | Proposed |
 

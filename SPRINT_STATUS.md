@@ -182,9 +182,9 @@ confirmation).
 |-------|--------|
 | Phase | Phase 2 — Server-side foundation (single Next.js application, ADR 0006) |
 | Objective | Server-only isolation, catalog contract conformance, provenance rules, outbound request policy; storefront, SEO, and dummy API unchanged; Zoho gated on verified access |
-| Status | **IN_PROGRESS** (revised in S6-T02; S6-T11 and S6-T12 completed) |
+| Status | **IN_PROGRESS** (revised in S6-T02; S6-T11, S6-T12, S6-T13 completed) |
 | Dependencies | Sprint 5 completed (Track A) |
-| Task IDs | S6-T01, S6-T02, S6-T11, S6-T12 · S6-T03–S6-T10 withdrawn · proposed S6-T13 … S6-T16 |
+| Task IDs | S6-T01, S6-T02, S6-T11, S6-T12, S6-T13 · S6-T03–S6-T10 withdrawn · proposed S6-T14 … S6-T16 |
 
 | Task ID | Name | Status |
 |---------|------|--------|
@@ -193,7 +193,7 @@ confirmation).
 | S6-T03 – S6-T10 | FastAPI/PostgreSQL tasks from S6-T01 | **WITHDRAWN** (ADR 0006, ADR 0008; IDs not reused) |
 | S6-T11 | Server-only Boundary and Secret Isolation | **COMPLETED** (explicit user approval) |
 | S6-T12 | Catalog Contract Conformance Suite | **COMPLETED** (explicit user approval) |
-| S6-T13 | Field Provenance Rules | **PROPOSED** (gate G1: ADR 0007 provenance accepted) |
+| S6-T13 | Field Provenance Rules | **COMPLETED** (gate G1 passed 2026-10-04) |
 | S6-T14 | Outbound Request Policy (server-only) | **PROPOSED** (gate G2: ADR 0009 accepted) |
 | S6-T15 | Zoho Access Verification and Readiness Report | **PROPOSED** (gate GZ: access + approval; else deferred to Sprint 7) |
 | S6-T16 | Sprint 6 Review | **PROPOSED** |
@@ -203,8 +203,9 @@ and `config/server-env.ts`, an import-graph test, and `npm run test:boundary`
 (production-build secret scan plus rejected client-import controls). No
 dependency added. S6-T12 added a reusable catalog API conformance suite
 (`describeCatalogApiContract`) run against the dummy dispatch and a synthetic
-fake, a normalized golden file, and a record of contract ambiguities. No
-further Sprint 6 task is approved. ADR 0006 (Next.js-only) is
+fake, a normalized golden file, and a record of contract ambiguities. S6-T13
+added pure field provenance rules (ADR 0007 provenance accepted; 24 h
+threshold), not yet wired into runtime. No further Sprint 6 task is approved. ADR 0006 (Next.js-only) is
 accepted; ADRs 0007–0009 are proposed. No database is selected. Open decisions
 are in `docs/sprints/SPRINT-06.md` §8. No Zoho calls in Sprint 6 unless GZ is
 approved.
