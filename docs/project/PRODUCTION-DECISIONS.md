@@ -132,7 +132,9 @@ implemented.
 2. **Request budget and catalog snapshot/caching** (P0-9) — after V1, V2,
    OD-9. Replaces live per-page Zoho reads.
 3. **Category/subcategory mapping** (P0-6) — repository mapping file; after
-   V8, OD-6.
+   V8, OD-6. *Partially implemented* (high-confidence rows + one group
+   override in `infrastructure/zoho/zoho-category-mapping.ts`); remaining
+   placements await OD-6 (`CATEGORY-MAPPING-DESIGN.md` §6–7).
 4. **Image proxy/cache** (P0-7) — after V9, OD-7; uses the snapshot refresh.
 5. **Tax handling** (P0-1) — after OD-1, OD-2, V3.
 6. **Inventory/location rules** (P0-2) — after OD-3, OD-4, V4, V5.

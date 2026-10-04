@@ -1,6 +1,7 @@
 import type { DemoSalesOrder } from "@/application/checkout/place-demo-order";
 import { DEMO_ORDER_LABEL, DEMO_PAYMENT_LABEL } from "@/application/checkout/demo-order";
 import type { Inventory, Product, ProductVariant, VariantAttribute } from "@/domain/catalog";
+import type { ZohoCategoryResolver } from "./zoho-category-mapping";
 
 /**
  * Zoho POS → storefront mapping (S6-T15 demo). A Zoho item is one sellable
@@ -80,8 +81,17 @@ function slugFor(name: string, id: string): string {
   return `${base === "" ? "zoho-item" : base}-${id.slice(-6).toLowerCase()}`;
 }
 
-/** Groups Zoho items into products (item group = product), keeping input order. */
-export function mapZohoItemsToProducts(items: readonly unknown[], currency: string): Product[] {
+/**
+ * Groups Zoho items into products (item group = product), keeping input order.
+ * The product's single storefront placement comes from `resolveCategory`
+ * (group override, then Zoho category ID); without a resolver, or when it
+ * returns null, `categoryIds` stays empty and the product is in no listing.
+ */
+export function mapZohoItemsToProducts(
+  items: readonly unknown[],
+  currency: string,
+  resolveCategory: ZohoCategoryResolver = () => null,
+): Product[] {
   const products = new Map<string, { product: Product; variants: ProductVariant[] }>();
   for (const raw of items) {
     if (!isRecord(raw)) continue;
@@ -92,6 +102,10 @@ export function mapZohoItemsToProducts(items: readonly unknown[], currency: stri
     if (entry === undefined) {
       const name = text(raw.group_name) ?? text(raw.name) ?? variant.id;
       const unit = text(raw.unit);
+      const categoryId = resolveCategory({
+        groupId: text(raw.group_id),
+        categoryId: text(raw.category_id),
+      });
       entry = {
         variants: [],
         product: {
@@ -100,7 +114,7 @@ export function mapZohoItemsToProducts(items: readonly unknown[], currency: stri
           name,
           description: "",
           images: [],
-          categoryIds: [],
+          categoryIds: categoryId === null ? [] : [categoryId],
           sku: null,
           uom: unit === null ? null : { code: unit, label: unit },
           pricing: null,

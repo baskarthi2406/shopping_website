@@ -77,6 +77,41 @@ describe("mapZohoItemsToProducts", () => {
     expect(product.name).toBe("-M-solo");
   });
 
+  it("gives a product no category without a resolver", () => {
+    const [product] = mapZohoItemsToProducts([item("Pink", { category_id: "700001" })], "XTS");
+    expect(product.categoryIds).toEqual([]);
+  });
+
+  it("gives a product exactly one category from its group and Zoho category IDs", () => {
+    const seen: unknown[] = [];
+    const products = mapZohoItemsToProducts(
+      [
+        item("Pink", { category_id: "700001" }),
+        item("Green", { category_id: "700001" }),
+        item("solo", { group_id: "900000000000200", group_name: "Other", category_id: "700002" }),
+      ],
+      "XTS",
+      (source) => {
+        seen.push(source);
+        return source.categoryId === "700001" ? "women-co-ord-set" : null;
+      },
+    );
+    expect(products.map((product) => product.categoryIds)).toEqual([["women-co-ord-set"], []]);
+    expect(seen).toEqual([
+      { groupId: "900000000000100", categoryId: "700001" },
+      { groupId: "900000000000200", categoryId: "700002" },
+    ]);
+  });
+
+  it("never uses names to place a product", () => {
+    const [product] = mapZohoItemsToProducts(
+      [item("Pink", { category_name: "Co-Ord Set", group_name: "Women Co-Ord Set" })],
+      "XTS",
+      ({ categoryId }) => (categoryId === null ? null : "women-co-ord-set"),
+    );
+    expect(product.categoryIds).toEqual([]);
+  });
+
   it("marks a product inactive when all variants are inactive", () => {
     const [product] = mapZohoItemsToProducts([item("a", { status: "inactive" })], "XTS");
     expect(product.status).toBe("inactive");

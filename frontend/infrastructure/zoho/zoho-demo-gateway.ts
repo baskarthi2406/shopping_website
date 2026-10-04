@@ -12,6 +12,7 @@ import {
   readZohoSalesOrderNumber,
   toZohoSalesOrderBody,
 } from "./map-zoho-catalog";
+import { createZohoCategoryResolver, type ZohoCategoryResolver } from "./zoho-category-mapping";
 import type { ZohoTokenProvider } from "./zoho-oauth";
 
 export type ZohoDemoGatewayOptions = {
@@ -21,6 +22,8 @@ export type ZohoDemoGatewayOptions = {
   readonly demoCustomerId: string;
   readonly tokens: ZohoTokenProvider;
   readonly fetchImpl?: typeof fetch;
+  /** Storefront placement; defaults to the committed Zoho category mapping. */
+  readonly resolveCategory?: ZohoCategoryResolver;
 };
 
 export type ZohoDemoGateway = DemoOrderGateway & {
@@ -33,7 +36,14 @@ function isRecord(value: unknown): value is Record<string, unknown> {
 }
 
 export function createZohoDemoGateway(options: ZohoDemoGatewayOptions): ZohoDemoGateway {
-  const { config, organizationId, demoCustomerId, tokens, fetchImpl = fetch } = options;
+  const {
+    config,
+    organizationId,
+    demoCustomerId,
+    tokens,
+    fetchImpl = fetch,
+    resolveCategory = createZohoCategoryResolver(),
+  } = options;
   const org = { organization_id: organizationId };
   let currency: Promise<string> | null = null;
 
@@ -72,7 +82,7 @@ export function createZohoDemoGateway(options: ZohoDemoGatewayOptions): ZohoDemo
         query: { ...org, page: "1", per_page: String(limit) },
       });
       const items = isRecord(data) && Array.isArray(data.items) ? data.items : [];
-      return mapZohoItemsToProducts(items, code);
+      return mapZohoItemsToProducts(items, code, resolveCategory);
     },
 
     async findVariantProduct(variantId) {
@@ -84,7 +94,7 @@ export function createZohoDemoGateway(options: ZohoDemoGatewayOptions): ZohoDemo
           query: org,
         });
         const item = isRecord(data) ? data.item : null;
-        return isRecord(item) ? (mapZohoItemsToProducts([item], code)[0] ?? null) : null;
+        return isRecord(item) ? (mapZohoItemsToProducts([item], code, resolveCategory)[0] ?? null) : null;
       } catch (error) {
         if (error instanceof ZohoRequestError && error.kind === "http" && error.status === 404) {
           return null;

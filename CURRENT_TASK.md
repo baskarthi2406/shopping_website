@@ -44,7 +44,12 @@ awaiting owner answers. Read-only tax verification
 `label_rate` not verified; tax decision still blocked on owner input.
 Category mapping design (`docs/project/CATEGORY-MAPPING-DESIGN.md`): Zoho has
 its own category tree; mapping by Zoho category ID with group overrides
-recommended; owner placement decisions required. No further task is approved; do not start production work,
+recommended; owner placement decisions required. Category mapping
+**partially implemented**: 13 high-confidence Zoho category rows + the Girl
+Coord set group override in server-only
+`frontend/infrastructure/zoho/zoho-category-mapping.ts`, wired into
+`mapZohoItemsToProducts` (one placement or `[]`); pending categories stay
+unmapped. Demo flow unchanged. No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope

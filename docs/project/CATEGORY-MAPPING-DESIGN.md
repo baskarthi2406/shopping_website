@@ -1,7 +1,9 @@
 # Category / Subcategory Mapping Design
 
-Status: **DESIGN / VERIFICATION ONLY** (2026-10-04). No mapping file, code,
-URL, or Zoho change. P0-6 in `PRODUCTION-DECISIONS.md`.
+Status: **DESIGN APPROVED; PARTIALLY IMPLEMENTED** (2026-10-04). The
+high-confidence rows and the Girl Coord set group override are implemented
+in `frontend/infrastructure/zoho/zoho-category-mapping.ts` (see section 7).
+No URL or Zoho change. P0-6 in `PRODUCTION-DECISIONS.md`.
 
 Evidence: storefront records in
 `frontend/infrastructure/catalog/data/category-records.ts` and
@@ -317,7 +319,25 @@ table would then be unnecessary.
 9. **Existing 12 static products:** retired when the Zoho catalog goes live
    (their `/p/…` URLs would disappear)?
 
-## 7. Implementation Plan (next task — not implemented)
+## 7. Implementation Plan
+
+**Implemented (2026-10-04):** `frontend/infrastructure/zoho/zoho-category-mapping.ts`
+(server-only) holds 13 Zoho category → storefront category rows (the
+high-confidence rows of section 3; Silk and Cotton Sarees both →
+`women-sarees`) and one group override (Girl Coord set →
+`infants-baby-girl-co-ord-set`). `createZohoCategoryResolver` applies group
+override → category mapping → `null`; `validateZohoCategoryMapping` checks
+numeric ID keys, no duplicates, and targets present in `categoryRecords`.
+`mapZohoItemsToProducts` fills `categoryIds` with one entry or `[]`; the Zoho
+demo gateway uses the committed mapping (the `/demo` UI ignores categories).
+All section 6 pending categories (Baby Girl category, Party frock group,
+Kids tree, Unisex-Jb, Bath/Skin Care, Nursery, Night Wear, Inner Wears ›
+Kids, Panties, Bra, Palazzo, Toys) stay **unmapped** and are not listed.
+**Not yet implemented:** sanitized logging of unmapped Zoho IDs, sitemap
+exclusion of unmapped Zoho products (the storefront still reads static
+repository data, so no Zoho product reaches listings or the sitemap today).
+
+Original plan:
 
 - **Proposed file:** `frontend/infrastructure/zoho/zoho-category-mapping.ts`
   (`import "server-only"`; provider-specific data belongs under

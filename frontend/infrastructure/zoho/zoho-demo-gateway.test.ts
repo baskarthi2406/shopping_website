@@ -63,6 +63,25 @@ describe("createZohoDemoGateway", () => {
     expect(itemsUrl.searchParams.get("per_page")).toBe("5");
   });
 
+  it("places products with the committed category mapping and leaves unknown ones unplaced", async () => {
+    const { instance } = gateway((url) =>
+      url.pathname === "/v1/organizations"
+        ? { status: 200, body: organizations }
+        : {
+            status: 200,
+            body: {
+              code: 0,
+              items: [
+                { ...zohoItem, category_id: "4273340000000034557" },
+                { ...zohoItem, item_id: "900002", group_id: "900200", category_id: "123" },
+              ],
+            },
+          },
+    );
+    const products = await instance.listProducts(5);
+    expect(products.map((product) => product.categoryIds)).toEqual([["women-co-ord-set"], []]);
+  });
+
   it("re-reads one item for order validation and returns null for 404", async () => {
     const { instance } = gateway((url) => {
       if (url.pathname === "/v1/organizations") return { status: 200, body: organizations };

@@ -476,6 +476,12 @@ production checkout; location-specific inventory validation deferred. Demo
 frozen at baseline `589b74a`; production gap assessment and backlog:
 `docs/project/PRODUCTION-READINESS.md`; P0 decision gate (owner decisions,
 Zoho verifications, P0 order): `docs/project/PRODUCTION-DECISIONS.md`.
+Tax verification: `docs/project/ZOHO-TAX-VERIFICATION.md`. Category mapping
+design: `docs/project/CATEGORY-MAPPING-DESIGN.md`; partially implemented in
+server-only `frontend/infrastructure/zoho/zoho-category-mapping.ts` (13
+high-confidence Zoho category rows + one group override; resolver and
+validator tested; unmapped products get `categoryIds: []` and are not
+listed; pending placements await owner decision OD-6).
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

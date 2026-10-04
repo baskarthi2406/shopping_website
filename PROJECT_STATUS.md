@@ -54,7 +54,9 @@ completed (gate G1 passed); S6-T14 Server-side Zoho Request Wrapper is
 completed (gate G2 passed via ADR 0009 amendment); S6-T15 (Zoho feasibility)
 is in progress — the Zoho demo (product → cart → checkout → draft Sales Order
 `SO-00001`) works and is frozen at baseline `589b74a`, with production gaps in
-`docs/project/PRODUCTION-READINESS.md`; S6-T16 is proposed
+`docs/project/PRODUCTION-READINESS.md`; Zoho → storefront category mapping is
+partially implemented (`docs/project/CATEGORY-MAPPING-DESIGN.md`, high-confidence
+rows only; remaining placements await owner decision OD-6); S6-T16 is proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
