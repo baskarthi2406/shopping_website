@@ -481,7 +481,15 @@ design: `docs/project/CATEGORY-MAPPING-DESIGN.md`; partially implemented in
 server-only `frontend/infrastructure/zoho/zoho-category-mapping.ts` (13
 high-confidence Zoho category rows + one group override; resolver and
 validator tested; unmapped products get `categoryIds: []` and are not
-listed; pending placements await owner decision OD-6).
+listed; pending placements await owner decision OD-6). Interim production
+catalog snapshot (P0-9; ADR 0009 amendment): `infrastructure/catalog/catalog-snapshot.ts`
+(in-memory store: background refresh, single flight, failure backoff, 24 h
+maximum age), `SnapshotProductRepository`, `infrastructure/zoho/zoho-catalog-snapshot.ts`
+(paginated GET-only loader, publication filter, sanitized summary log), and
+`config/zoho-catalog.ts`, selected in `config/catalog-source.ts` by
+`CATALOG_PRODUCT_SOURCE` (default `static`). Live read-only check: one refresh
+(2 requests) served home, category, product, sitemap, and API reads; 13 of 49
+products published. Durable storage and request counting remain open.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

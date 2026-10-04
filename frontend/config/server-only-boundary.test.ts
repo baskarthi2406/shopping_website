@@ -18,6 +18,9 @@ const PROTECTED_MODULES = [
   "infrastructure/zoho/zoho-oauth.ts",
   "infrastructure/zoho/zoho-demo-gateway.ts",
   "infrastructure/zoho/zoho-category-mapping.ts",
+  "infrastructure/zoho/zoho-catalog-snapshot.ts",
+  "infrastructure/catalog/catalog-snapshot.ts",
+  "config/zoho-catalog.ts",
   "config/zoho-demo.ts",
   "config/demo-store.ts",
 ];

@@ -333,9 +333,12 @@ demo gateway uses the committed mapping (the `/demo` UI ignores categories).
 All section 6 pending categories (Baby Girl category, Party frock group,
 Kids tree, Unisex-Jb, Bath/Skin Care, Nursery, Night Wear, Inner Wears ›
 Kids, Panties, Bra, Palazzo, Toys) stay **unmapped** and are not listed.
-**Not yet implemented:** sanitized logging of unmapped Zoho IDs, sitemap
-exclusion of unmapped Zoho products (the storefront still reads static
-repository data, so no Zoho product reaches listings or the sitemap today).
+**Catalog snapshot (2026-10-04):** with `CATALOG_PRODUCT_SOURCE=zoho-snapshot`
+the storefront publishes only active products with one approved placement;
+unplaced products get no listing, product page, or sitemap URL. Each
+refresh logs a sanitized summary with unmapped Zoho category IDs and product
+counts. Live read-only check: 157 items → 49 products → 13 published, 36
+unplaced pending OD-6.
 
 Original plan:
 

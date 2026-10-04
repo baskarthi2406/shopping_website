@@ -1,17 +1,40 @@
 import "server-only";
+import { connection } from "next/server";
+import type { Product } from "@/domain/catalog";
+import type { ProductRepository } from "@/application/catalog";
+import { SnapshotProductRepository } from "@/infrastructure/catalog/snapshot-product-repository";
 import { StaticCategoryRepository } from "@/infrastructure/catalog/static-category-repository";
 import { StaticProductRepository } from "@/infrastructure/catalog/static-product-repository";
 import { StaticUomRepository } from "@/infrastructure/catalog/static-uom-repository";
 import { createCatalog } from "./create-catalog";
+import { getZohoCatalogSnapshotStore, readCatalogProductSource } from "./zoho-catalog";
 
-const productRepository = new StaticProductRepository();
+/**
+ * Snapshot reads wait for a real request, so routes that would otherwise be
+ * prerendered (home, sitemap) read the current snapshot at request time and
+ * builds never depend on Zoho.
+ */
+async function readSnapshotProducts(): Promise<readonly Product[]> {
+  await connection();
+  return getZohoCatalogSnapshotStore().getProducts();
+}
+
+function createProductRepository(): ProductRepository {
+  return readCatalogProductSource() === "zoho-snapshot"
+    ? new SnapshotProductRepository(readSnapshotProducts)
+    : new StaticProductRepository();
+}
+
+const productRepository = createProductRepository();
 const categoryRepository = new StaticCategoryRepository();
 const uomRepository = new StaticUomRepository();
 
 /**
  * Dummy API backing store. Route handlers, sitemap generation, and layout
  * navigation bind here so HTTP storefront clients cannot recurse into themselves.
- * S4-T11 will move navigation onto the public category API.
+ * Products come from the static fixtures or, with
+ * `CATALOG_PRODUCT_SOURCE=zoho-snapshot`, from the Zoho catalog snapshot;
+ * page renders never call Zoho directly.
  */
 export const catalogSource = createCatalog(
   productRepository,

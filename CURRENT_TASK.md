@@ -49,7 +49,12 @@ recommended; owner placement decisions required. Category mapping
 Coord set group override in server-only
 `frontend/infrastructure/zoho/zoho-category-mapping.ts`, wired into
 `mapZohoItemsToProducts` (one placement or `[]`); pending categories stay
-unmapped. Demo flow unchanged. No further task is approved; do not start production work,
+unmapped. Demo flow unchanged. Interim production catalog snapshot
+implemented (P0-9, ADR 0009 amendment): `CATALOG_PRODUCT_SOURCE=zoho-snapshot`
+serves storefront products from an in-memory, per-process Zoho snapshot
+(background refresh, default 6 h; never served past 24 h; one shared
+refresh; build never calls Zoho); default remains `static`. Durable/shared
+snapshot, request counting, and images await V1, OD-7, OD-9, ADR 0008. No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope

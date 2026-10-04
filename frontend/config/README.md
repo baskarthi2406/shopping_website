@@ -9,7 +9,12 @@ HTTP). Holds non-secret public settings such as the canonical site origin.
 
 `catalog-source.ts` is the dummy API backing composition (`Static*Repository`).
 Route handlers and `app/sitemap.ts` call it so the dummy API cannot recurse
-through the storefront HTTP client.
+through the storefront HTTP client. With `CATALOG_PRODUCT_SOURCE=zoho-snapshot`
+its products come from the in-memory Zoho catalog snapshot
+(`zoho-catalog.ts`: refresh every `ZOHO_CATALOG_REFRESH_MINUTES`, default 360;
+never served past the 24 h freshness threshold); categories stay static.
+Snapshot reads call `connection()`, so the home page and sitemap render per
+request from memory and builds never call Zoho.
 
 `catalog.ts` is the storefront composition root (`Http*Repository` + catalog
 API client). Pages, layout navigation, and footer category columns call

@@ -85,6 +85,29 @@ capability verification is deferred to S6-T15. No Zoho compatibility is
 claimed. Retries, rate limiting, request budgeting, and token refresh are not
 implemented and remain governed by principles 7–9 once Zoho facts are known.
 
+## Amendment — interim catalog snapshot (2026-10-04)
+
+Principle 6 is implemented for products with an **in-memory, per-process**
+snapshot, opt-in via `CATALOG_PRODUCT_SOURCE=zoho-snapshot` (default `static`):
+
+- Page renders, the sitemap, and public catalog Route Handlers read the
+  snapshot only. A refresh is one `GET /v1/organizations` plus
+  `ceil(items / 200)` `GET /items` pages (2 requests for the observed 157
+  items), plus a token refresh when the cached token has expired.
+- Refresh runs in the background once the snapshot is older than
+  `ZOHO_CATALOG_REFRESH_MINUTES` (15–720, default 360); concurrent readers
+  share one refresh; failures keep the previous snapshot and back off 5
+  minutes; a snapshot older than the 24 h freshness threshold (ADR 0007) is
+  not served, and readers get the existing `temporarily_unavailable` error.
+- Partial (more than 10 pages), empty, or malformed catalogs fail the
+  refresh. Only active products with exactly one approved storefront
+  placement that pass the catalog contract are published.
+- Budget (arithmetic, quota unverified — V1): at the default interval about
+  4 refreshes × 3 requests ≈ 12 requests/day ≈ 360/month **per server
+  process**. Multiple instances, restarts, and serverless cold starts each
+  add a refresh; durable shared snapshots and request counting still need
+  the hosting decision (OD-9) and ADR 0008 P3/P4.
+
 ## Consequences
 
 - Sprint 6 may build provider-independent pieces: server-only isolation,
