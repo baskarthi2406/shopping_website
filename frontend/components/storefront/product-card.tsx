@@ -6,6 +6,9 @@ export type ProductCardProps = {
   name: string;
   description: string;
   image: { src: string; alt: string } | null;
+  price?: string | null;
+  priceMessage?: string | null;
+  availabilityMessage?: string | null;
   headingAs?: "h2" | "h3";
 };
 
@@ -14,6 +17,9 @@ export function ProductCard({
   name,
   description,
   image,
+  price = null,
+  priceMessage = null,
+  availabilityMessage = null,
   headingAs = "h2",
 }: ProductCardProps) {
   const Heading = headingAs;
@@ -42,6 +48,14 @@ export function ProductCard({
           <p className="line-clamp-2 text-caption text-foreground-secondary">
             {description}
           </p>
+          {price !== null ? (
+            <p className="text-small font-semibold text-foreground">{price}</p>
+          ) : priceMessage !== null ? (
+            <p className="text-caption text-foreground-muted">{priceMessage}</p>
+          ) : null}
+          {availabilityMessage !== null ? (
+            <p className="text-caption font-semibold text-foreground">{availabilityMessage}</p>
+          ) : null}
         </div>
       </Link>
     </article>

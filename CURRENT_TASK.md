@@ -67,7 +67,11 @@ publishes all active, contract-valid Zoho products (unmapped ones without a
 storefront category, inspectable at `/catalog`), shows INR variant prices,
 and serves images through the server-side proxy
 `/api/catalog-images/{itemId}/{documentId}`; production publication and the
-frozen `/demo` flow are unchanged (`docs/sprints/SPRINT-06.md`). No further task is approved; do not start production work,
+frozen `/demo` flow are unchanged (`docs/sprints/SPRINT-06.md`). Category →
+subcategory → product navigation verified on the existing taxonomy (direct
+membership, no descendant duplication). Product detail selects real Zoho
+variants and shows that variant's SKU, price, and availability; listings show
+one price only when every variant shares it. No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope

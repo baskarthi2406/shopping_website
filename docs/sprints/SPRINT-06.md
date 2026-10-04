@@ -514,6 +514,18 @@ all priced, 156 in stock, 49 products with images, 13 mapped and 36 unmapped;
 one snapshot refresh per server start; no secrets in responses or logs. Each
 uncached image view costs one Zoho GET (about 4 MB), so images count toward the
 request budget (V1, OD-9).
+Category → subcategory → product navigation uses the existing menu tree and
+direct membership: a parent page links subcategories and does not repeat their
+products; a subcategory lists only its own products, in catalog order.
+Unmapped products stay out of those listings. Product detail keeps one URL per
+item group. Variant choices come from Zoho attributes when they form a safe
+matrix, otherwise one choice per variant. The selected variant shows its own
+SKU, INR price, and availability; an out-of-stock variant stays visible and is
+not purchasable. Listing cards show a price only when every variant has that
+same price. Live check (`zoho-demo`): Girl Coord Set size 0-3M Pink
+`GIR-0-3-PIN` and Green `GIR-0-3-GRE` at ₹464; Women → Co-Ord Set lists one
+product; Yellow XXL `COO-YEL-XXL` is out of stock at ₹398. One snapshot
+refresh (2 GETs). One image GET timed out; no Zoho writes.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

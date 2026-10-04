@@ -7,6 +7,7 @@ export type ProductCommercePanelProps = {
     priceMessage: string | null;
     availability: "out_of_stock" | "not_available" | "unconfirmed" | null;
     availabilityMessage: string | null;
+    sku?: string | null;
   };
   telephone: string;
 };
@@ -40,6 +41,13 @@ export function ProductCommercePanel({ commerce, telephone }: ProductCommercePan
       ) : (
         <p className="text-body font-semibold text-foreground">{commerce.priceMessage}</p>
       )}
+
+      {commerce.sku ? (
+        <p className="mt-2 text-small text-foreground-secondary">
+          <span className="sr-only">SKU: </span>
+          {commerce.sku}
+        </p>
+      ) : null}
 
       {commerce.availabilityMessage !== null ? (
         <p

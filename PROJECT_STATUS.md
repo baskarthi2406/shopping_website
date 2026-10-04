@@ -64,7 +64,8 @@ OD-9); category → subcategory navigation audited (ancestor breadcrumbs and
 subcategory links added); full Zoho catalog demo mode
 (`CATALOG_PRODUCT_SOURCE=zoho-demo`: all 49 products incl. unmapped ones,
 INR prices, server-side image proxy, `/catalog` view; demo only, production
-rule unchanged); S6-T16 is proposed
+rule unchanged); category listings stay direct membership and product
+detail selects the real Zoho variant (SKU, price, availability); S6-T16 is proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image

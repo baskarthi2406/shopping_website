@@ -1,5 +1,6 @@
 import type { Product } from "@/domain/catalog";
 import { toProductCardViewModel, type ProductCardViewModel } from "./category-page-view-model";
+import type { PriceDisplayConfig } from "./product-commerce-view-model";
 
 /** Category reported by the source system for a product; metadata, not a storefront placement. */
 export type CatalogSourceCategory = { readonly name: string | null };
@@ -31,6 +32,7 @@ export const NO_SOURCE_CATEGORY_LABEL = "No source category";
 export function toCatalogDemoViewModel(
   products: readonly Product[],
   sourceCategories: ReadonlyMap<string, CatalogSourceCategory>,
+  priceDisplay: PriceDisplayConfig | null = null,
 ): CatalogDemoViewModel {
   const groups = new Map<string, CatalogDemoProductViewModel[]>();
   let placedCount = 0;
@@ -41,7 +43,7 @@ export function toCatalogDemoViewModel(
     }
     const label = sourceCategories.get(product.id)?.name ?? NO_SOURCE_CATEGORY_LABEL;
     const group = groups.get(label) ?? [];
-    group.push({ ...toProductCardViewModel(product), placed });
+    group.push({ ...toProductCardViewModel(product, priceDisplay), placed });
     groups.set(label, group);
   }
 

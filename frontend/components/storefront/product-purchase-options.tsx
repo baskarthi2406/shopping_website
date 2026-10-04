@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 import {
   resolveVariantSelection,
   type VariantSelection,
@@ -19,6 +19,8 @@ export type ProductPurchaseOptionsProps = {
   commerce: Commerce;
   commerceByVariant: Readonly<Record<string, Commerce>>;
   telephone: string;
+  /** Fires with the resolved variant id, or null while the choice is incomplete. */
+  onResolvedVariantId?: (variantId: string | null) => void;
 };
 
 export function ProductPurchaseOptions({
@@ -26,12 +28,17 @@ export function ProductPurchaseOptions({
   commerce,
   commerceByVariant,
   telephone,
+  onResolvedVariantId,
 }: ProductPurchaseOptionsProps) {
   const baseId = useId();
   const [selection, setSelection] = useState<VariantSelection>({});
   const result = resolveVariantSelection(selector, selection);
-  const current =
-    result.status === "matched" ? (commerceByVariant[result.variantId] ?? commerce) : commerce;
+  const variantId = result.status === "matched" ? result.variantId : null;
+  const current = variantId !== null ? (commerceByVariant[variantId] ?? commerce) : commerce;
+
+  useEffect(() => {
+    onResolvedVariantId?.(variantId);
+  }, [onResolvedVariantId, variantId]);
 
   return (
     <div className="mt-6">
@@ -67,7 +74,9 @@ export function ProductPurchaseOptions({
       </div>
 
       <p aria-live="polite" className="mt-3 min-h-[1.25rem] text-small text-foreground-secondary">
-        {result.message}
+        {result.status === "matched"
+          ? `Selected: ${selector.groups.map((group) => selection[group.key]).join(", ")}`
+          : result.message}
       </p>
 
       <div aria-live="polite">

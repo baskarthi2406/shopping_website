@@ -33,8 +33,11 @@ describe("classic-modern storefront presentation", () => {
     expect(fonts).toContain('display: "swap"');
   });
 
-  it("does not invent commerce data on product cards", () => {
-    expect(cardSource).not.toMatch(/\b(price|sku|inventory|stock|₹|INR)\b/i);
+  it("renders only commerce text it is given and invents none", () => {
+    expect(cardSource).not.toMatch(/₹|INR|\bsku\b|stockOnHand|availableToSell/i);
+    expect(cardSource).toContain("{price}");
+    expect(cardSource).toContain("{priceMessage}");
+    expect(cardSource).toContain("{availabilityMessage}");
     expect(cardSource).toContain("mm-hover-zoom");
   });
 });

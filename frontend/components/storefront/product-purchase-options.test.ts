@@ -83,7 +83,8 @@ describe("ProductPurchaseOptions", () => {
     expect(source).toContain('"use client"');
     expect(source).toContain("@/application/catalog/variant-selection");
     expect(source).not.toMatch(/evaluatePurchasability|Intl\.|localStorage|sessionStorage|fetch\(/);
-    expect(source).toContain("commerceByVariant[result.variantId] ?? commerce");
+    expect(source).toContain("commerceByVariant[variantId] ?? commerce");
+    expect(source).toContain("Selected:");
   });
 
   it("renders only for products with a selector and keeps the plain panel otherwise", () => {

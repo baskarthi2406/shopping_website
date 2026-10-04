@@ -6,6 +6,7 @@ import { CatalogDemoGroups } from "@/components/storefront/catalog-demo-groups";
 import { CatalogUnavailable } from "@/components/storefront/catalog-unavailable";
 import { Container } from "@/components/ui/container";
 import { catalog } from "@/config/catalog";
+import { priceDisplay } from "@/config/commerce";
 import { getCatalogSourceCategories, isCatalogDemoEnabled } from "@/config/catalog-demo";
 
 export const metadata: Metadata = {
@@ -25,7 +26,7 @@ export default async function CatalogDemoPage() {
       catalog.getHomePage(),
       getCatalogSourceCategories(),
     ]);
-    view = toCatalogDemoViewModel(products, sourceCategories);
+    view = toCatalogDemoViewModel(products, sourceCategories, priceDisplay);
   } catch (error) {
     unstable_rethrow(error);
     return <CatalogUnavailable headingAs="h1" />;

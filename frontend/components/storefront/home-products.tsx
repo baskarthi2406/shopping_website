@@ -8,6 +8,9 @@ type HomeProductsProps = {
     name: string;
     description: string;
     image: { src: string; alt: string } | null;
+    price?: string | null;
+    priceMessage?: string | null;
+    availabilityMessage?: string | null;
   }[];
 };
 

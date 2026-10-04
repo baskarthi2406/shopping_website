@@ -59,6 +59,7 @@ describe("toProductCommerceViewModel", () => {
       availability: "unconfirmed",
       availabilityMessage: AVAILABILITY_NOT_CONFIRMED_MESSAGE,
       purchasable: false,
+      sku: null,
     });
   });
 
@@ -82,6 +83,7 @@ describe("toProductCommerceViewModel", () => {
       availability: null,
       availabilityMessage: null,
       purchasable: true,
+      sku: null,
     });
   });
 
@@ -144,6 +146,24 @@ describe("toProductCommerceViewModel", () => {
     expect(
       view(product({ variants: [{ ...variant, pricing: pricing(999) }] }), "v1").price,
     ).toBe(expectedPrice(999));
+  });
+
+  it("reports only the selected variant SKU", () => {
+    const variant: ProductVariant = {
+      id: "v1",
+      sku: "SKU-1",
+      attributes: [{ name: "Size", value: "M" }],
+      pricing: pricing(400),
+      inventory: stock(1),
+      status: "active",
+    };
+    const other: ProductVariant = { ...variant, id: "v2", sku: "SKU-2" };
+    const item = product({ sku: "PARENT", variants: [variant, other] });
+
+    expect(view(item).sku).toBeNull();
+    expect(view(item, "v1").sku).toBe("SKU-1");
+    expect(view(item, "v2").sku).toBe("SKU-2");
+    expect(view(product({ sku: "ONLY" })).sku).toBe("ONLY");
   });
 
   it("delegates eligibility to evaluatePurchasability", () => {

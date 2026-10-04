@@ -1,5 +1,9 @@
+"use client";
+
+import { useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
+import { imageForVariant } from "@/application/catalog/variant-selection";
 import { Breadcrumbs } from "@/components/storefront/breadcrumbs";
 import {
   ProductCommercePanel,
@@ -24,8 +28,10 @@ export type ProductDetailProps = {
 };
 
 export function ProductDetail({ product, commerce, variantOptions }: ProductDetailProps) {
-  const primaryImage = product.images[0] ?? null;
-  const additionalImages = product.images.slice(1);
+  const [variantId, setVariantId] = useState<string | null>(null);
+  const selectedImage = variantId === null ? undefined : imageForVariant(product.images, variantId);
+  const primaryImage = selectedImage ?? product.images[0] ?? null;
+  const additionalImages = product.images.filter((image) => image !== primaryImage);
 
   return (
     <>
@@ -75,7 +81,11 @@ export function ProductDetail({ product, commerce, variantOptions }: ProductDeta
             </p>
           ) : null}
           {commerce && variantOptions ? (
-            <ProductPurchaseOptions {...variantOptions} {...commerce} />
+            <ProductPurchaseOptions
+              {...variantOptions}
+              {...commerce}
+              onResolvedVariantId={setVariantId}
+            />
           ) : commerce ? (
             <ProductCommercePanel {...commerce} />
           ) : null}
