@@ -114,7 +114,7 @@ export type TokenResult = {
 };
 
 function sanitize(value: unknown): string {
-  return String(value).replace(/[^\w.\- ]/g, "").slice(0, 80);
+  return String(value).replace(/[^\w.\-/;= ]/g, "").slice(0, 80);
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -184,6 +184,136 @@ export function summarizeOrganizations(body: unknown): OrganizationsResult {
 
 export function maskId(id: string): string {
   return id.length <= 4 ? "****" : `${"*".repeat(id.length - 4)}${id.slice(-4)}`;
+}
+
+/**
+ * Spike-only normalization of one Zoho POS item (a sellable variant) into
+ * storefront-safe fields. Not wired into the catalog runtime.
+ */
+export type NormalizedZohoItem = {
+  readonly zohoItemId: string;
+  readonly zohoGroupId: string | null;
+  readonly productName: string;
+  readonly variantName: string;
+  readonly sku: string | null;
+  readonly description: string | null;
+  readonly categoryName: string | null;
+  readonly attributes: readonly { readonly name: string; readonly value: string }[];
+  readonly uom: string | null;
+  readonly price: { readonly amount: number; readonly currency: string } | null;
+  readonly labelRate: number | null;
+  readonly gstPercentage: number | null;
+  readonly inventory: {
+    readonly stockOnHand: number | null;
+    readonly availableToSell: number | null;
+    readonly reserved: number | null;
+    readonly status: "unknown" | "in_stock" | "out_of_stock";
+    readonly observedAt: string;
+  };
+  readonly image: { readonly zohoImageName: string } | null;
+  readonly status: "active" | "inactive";
+};
+
+function text(value: unknown): string | null {
+  return typeof value === "string" && value.trim() !== "" ? value.trim() : null;
+}
+
+function quantity(value: unknown): number | null {
+  return typeof value === "number" && Number.isFinite(value) ? value : null;
+}
+
+export function normalizeZohoItem(
+  item: Record<string, unknown>,
+  currency: string | null,
+  observedAt: string,
+): NormalizedZohoItem {
+  const id = text(item.item_id);
+  if (id === null) {
+    throw new ZohoDevAuthError("item has no item_id");
+  }
+  const variantName = text(item.name) ?? text(item.item_name) ?? id;
+  const attributes = [1, 2, 3].flatMap((index) => {
+    const name = text(item[`attribute_name${index}`]);
+    const value = text(item[`attribute_option_name${index}`]);
+    return name !== null && value !== null ? [{ name, value }] : [];
+  });
+  const rate = quantity(item.rate);
+  const tracked = item.track_inventory === true;
+  const availableToSell = tracked ? quantity(item.actual_available_for_sale_stock) : null;
+  const gst = Array.isArray(item.item_tax_preferences)
+    ? item.item_tax_preferences.filter(isRecord).map((pref) => quantity(pref.tax_percentage))
+    : [];
+  const imageName = text(item.image_name);
+  return {
+    zohoItemId: id,
+    zohoGroupId: text(item.group_id),
+    productName: text(item.group_name) ?? variantName,
+    variantName,
+    sku: text(item.sku),
+    description: text(item.description),
+    categoryName: text(item.category_name),
+    attributes,
+    uom: text(item.unit),
+    price: rate !== null && rate >= 0 && currency !== null ? { amount: rate, currency } : null,
+    labelRate: quantity(item.label_rate),
+    gstPercentage: gst.length > 0 && gst.every((value) => value === gst[0]) ? gst[0] : null,
+    inventory: {
+      stockOnHand: tracked ? quantity(item.stock_on_hand) : null,
+      availableToSell,
+      reserved: tracked ? quantity(item.actual_committed_stock) : null,
+      status:
+        availableToSell === null ? "unknown" : availableToSell > 0 ? "in_stock" : "out_of_stock",
+      observedAt,
+    },
+    image: imageName === null ? null : { zohoImageName: imageName },
+    status: item.status === "active" ? "active" : "inactive",
+  };
+}
+
+/** Fields whose values are safe to show; every other field shows its type only. */
+const SHOWN_VALUE_FIELDS = new Set([
+  "code", "message", "name", "item_name", "sku", "description", "unit", "status",
+  "item_type", "product_type", "group_name", "category_name", "brand",
+  "rate", "sales_rate", "pricebook_rate", "label_rate", "is_taxable",
+  "tax_name", "tax_percentage", "tax_type", "is_inclusive_tax", "tax_inclusive",
+  "stock_on_hand", "available_stock", "actual_available_stock", "committed_stock",
+  "actual_committed_stock", "available_for_sale_stock", "actual_available_for_sale_stock",
+  "quantity_in_transit", "track_inventory", "is_combo_product", "is_returnable",
+  "image_name", "image_type", "location_name", "warehouse_name", "is_primary",
+  "is_primary_location", "location_type", "currency_code", "has_more_page", "page",
+  "per_page", "attribute_name1", "attribute_option_name1", "attribute_name2",
+  "attribute_option_name2", "attribute_name3", "attribute_option_name3",
+]);
+const MASKED_ID_FIELDS = /(^|_)(item_id|group_id|location_id|warehouse_id|image_id|image_document_id|category_id)$/;
+
+/** Lists the shape of a provider response, showing values only for allowlisted fields. */
+export function describeShape(value: unknown, indent = "", depth = 0): string[] {
+  if (Array.isArray(value)) {
+    const head = `${indent}[array, ${value.length} entries]`;
+    return value.length === 0 || depth >= 3
+      ? [head]
+      : [head, ...describeShape(value[0], `${indent}  `, depth + 1)];
+  }
+  if (!isRecord(value)) {
+    return [`${indent}${value === null ? "null" : typeof value}`];
+  }
+  const lines: string[] = [];
+  for (const [key, field] of Object.entries(value)) {
+    if (Array.isArray(field) || isRecord(field)) {
+      lines.push(`${indent}${key}: ${Array.isArray(field) ? `array(${field.length})` : "object"}`);
+      if (depth < 3) lines.push(...describeShape(field, `${indent}  `, depth + 1));
+      continue;
+    }
+    const type = field === null ? "null" : typeof field;
+    let shown = "";
+    if (field !== null && field !== "" && MASKED_ID_FIELDS.test(key)) {
+      shown = ` = ${maskId(String(field))}`;
+    } else if (SHOWN_VALUE_FIELDS.has(key)) {
+      shown = ` = ${JSON.stringify(typeof field === "string" ? field.slice(0, 80) : field)}`;
+    }
+    lines.push(`${indent}${key}: ${type}${shown}`);
+  }
+  return lines;
 }
 
 // ---------------------------------------------------------------------------
@@ -304,20 +434,13 @@ async function authorize(): Promise<void> {
 
 async function probe(): Promise<void> {
   const env = loadEnv();
-  const tokens = await postToken({
-    grant_type: "refresh_token",
-    refresh_token: requireEnv(env, "ZOHO_REFRESH_TOKEN"),
-    client_id: requireEnv(env, "ZOHO_CLIENT_ID"),
-    client_secret: requireEnv(env, "ZOHO_CLIENT_SECRET"),
-    redirect_uri: REDIRECT_URI,
-  });
-  saveEnv({ ZOHO_ACCESS_TOKEN: tokens.accessToken });
+  const accessToken = await refreshAccessToken(env);
   console.log("Access token refreshed: yes (stored in .env.local)");
 
   const endpoint = organizationsUrl(requireEnv(env, "ZOHO_API_BASE_URL"));
   const response = await fetch(endpoint, {
     headers: {
-      Authorization: `Zoho-oauthtoken ${tokens.accessToken}`,
+      Authorization: `Zoho-oauthtoken ${accessToken}`,
       Accept: "application/json",
     },
     signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
@@ -343,14 +466,116 @@ async function probe(): Promise<void> {
   }
 }
 
+async function refreshAccessToken(env: Record<string, string>): Promise<string> {
+  const tokens = await postToken({
+    grant_type: "refresh_token",
+    refresh_token: requireEnv(env, "ZOHO_REFRESH_TOKEN"),
+    client_id: requireEnv(env, "ZOHO_CLIENT_ID"),
+    client_secret: requireEnv(env, "ZOHO_CLIENT_SECRET"),
+    redirect_uri: REDIRECT_URI,
+  });
+  saveEnv({ ZOHO_ACCESS_TOKEN: tokens.accessToken });
+  return tokens.accessToken;
+}
+
+type ReadOnlyGet = (
+  pathname: string,
+  query: Record<string, string>,
+  options?: { readonly shape?: boolean; readonly binary?: boolean },
+) => Promise<unknown>;
+
+function createReadOnlyGet(accessToken: string, apiOrigin: string): ReadOnlyGet {
+  return async (pathname, query, options = {}) => {
+    const url = new URL(pathname, apiOrigin);
+    url.search = new URLSearchParams(query).toString();
+    const response = await fetch(url, {
+      method: "GET",
+      headers: { Authorization: `Zoho-oauthtoken ${accessToken}`, Accept: "application/json" },
+      signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
+    });
+    const shownPath = pathname.replace(/\d{6,}/g, (id) => maskId(id));
+    const shownQuery = Object.keys(query).map((key) =>
+      key === "organization_id" ? `${key}=<org>` : `${key}=${query[key]}`,
+    );
+    console.log(`\n=== GET ${shownPath}?${shownQuery.join("&")} -> HTTP ${response.status}`);
+    const contentType = response.headers.get("content-type") ?? "";
+    if (options.binary && !contentType.includes("json")) {
+      const bytes = (await response.arrayBuffer()).byteLength;
+      console.log(`content-type: ${sanitize(contentType)}, bytes: ${bytes} (body discarded)`);
+      return null;
+    }
+    const body: unknown = await response.json().catch(() => null);
+    const lines = options.shape === false && isRecord(body)
+      ? describeShape({ code: body.code, message: body.message })
+      : describeShape(body);
+    for (const line of lines) console.log(line);
+    return body;
+  };
+}
+
+async function catalog(): Promise<void> {
+  const env = loadEnv();
+  const organizationId = requireEnv(env, "ZOHO_ORGANIZATION_ID");
+  const apiBaseUrl = requireEnv(env, "ZOHO_API_BASE_URL");
+  const get = createReadOnlyGet(await refreshAccessToken(env), new URL(apiBaseUrl).origin);
+  const org = { organization_id: organizationId };
+
+  const orgs = summarizeOrganizations(
+    await get(new URL(organizationsUrl(apiBaseUrl)).pathname, {}, { shape: false }),
+  );
+  const currency =
+    orgs.organizations.find((entry) => entry.organizationId === organizationId)?.currencyCode ??
+    null;
+
+  const list = await get("/inventory/v1/items", { ...org, page: "1", per_page: "3" });
+  const listed = isRecord(list) && Array.isArray(list.items) ? list.items.filter(isRecord) : [];
+  const observedAt = new Date().toISOString();
+  const sample: NormalizedZohoItem[] = [];
+  for (const item of listed.slice(0, 3)) {
+    const id = item.item_id;
+    if (typeof id !== "string") continue;
+    const detail = await get(`/inventory/v1/items/${encodeURIComponent(id)}`, org, {
+      shape: sample.length === 0,
+    });
+    if (isRecord(detail) && isRecord(detail.item)) {
+      sample.push(normalizeZohoItem(detail.item, currency, observedAt));
+    }
+  }
+
+  const first = listed[0];
+  if (first !== undefined && typeof first.group_id === "string" && first.group_id !== "") {
+    await get(`/inventory/v1/itemgroups/${encodeURIComponent(first.group_id)}`, org);
+  }
+  if (first !== undefined && typeof first.item_id === "string") {
+    await get(`/inventory/v1/items/${encodeURIComponent(first.item_id)}/image`, org, {
+      binary: true,
+    });
+  }
+  await get("/inventory/v1/locations", org);
+
+  console.log("\n=== Normalized sample (IDs masked)");
+  console.log(
+    JSON.stringify(
+      sample.map((entry) => ({
+        ...entry,
+        zohoItemId: maskId(entry.zohoItemId),
+        zohoGroupId: entry.zohoGroupId === null ? null : maskId(entry.zohoGroupId),
+      })),
+      null,
+      2,
+    ),
+  );
+}
+
 const isCli =
   process.argv[1] !== undefined && import.meta.url === pathToFileURL(process.argv[1]).href;
 
 if (isCli) {
   const command = process.argv[2];
-  const run = command === "authorize" ? authorize : command === "probe" ? probe : null;
+  const commands: Record<string, () => Promise<void>> = { authorize, probe, catalog };
+  const run = command !== undefined && Object.hasOwn(commands, command) ? commands[command] : null;
   if (run === null) {
-    console.error("Usage: node scripts/zoho-oauth-dev.ts <authorize|probe>");
+    console.error("Usage: node scripts/zoho-oauth-dev.ts <authorize|probe|catalog>");
     process.exitCode = 2;
   } else {
     run().catch((error: unknown) => {

@@ -4,8 +4,10 @@ import {
   ZOHO_SCOPES,
   ZohoDevAuthError,
   buildAuthorizeUrl,
+  describeShape,
   interpretTokenResponse,
   maskId,
+  normalizeZohoItem,
   organizationsUrl,
   parseEnvText,
   readCallback,
@@ -149,5 +151,125 @@ describe("organizations", () => {
   it("masks all but the last four characters", () => {
     expect(maskId("60012345")).toBe("****2345");
     expect(maskId("123")).toBe("****");
+  });
+});
+
+describe("describeShape", () => {
+  it("shows values only for allowlisted fields and masks IDs", () => {
+    const lines = describeShape({
+      item: { item_id: "900000000001234", name: "Test", purchase_rate: 10, vendor_name: "V" },
+    });
+    expect(lines).toEqual([
+      "item: object",
+      "  item_id: string = ***********1234",
+      '  name: string = "Test"',
+      "  purchase_rate: number",
+      "  vendor_name: string",
+    ]);
+  });
+
+  it("summarizes arrays by length and first entry", () => {
+    expect(describeShape({ items: [{ sku: "S1" }, { sku: "S2" }] })).toEqual([
+      "items: array(2)",
+      "  [array, 2 entries]",
+      '    sku: string = "S1"',
+    ]);
+  });
+});
+
+describe("normalizeZohoItem", () => {
+  const OBSERVED = "2026-01-01T00:00:00.000Z";
+  const base = {
+    item_id: "900000000000001",
+    group_id: "900000000000009",
+    group_name: "Test Group",
+    name: "Test Group-M-Red",
+    sku: "TG-M-RED",
+    description: "",
+    category_name: "Test Category",
+    unit: "pcs",
+    status: "active",
+    rate: 100,
+    label_rate: 120,
+    track_inventory: true,
+    stock_on_hand: 3,
+    actual_available_for_sale_stock: 2,
+    actual_committed_stock: 1,
+    attribute_name1: "size",
+    attribute_option_name1: "M",
+    attribute_name2: "color",
+    attribute_option_name2: "Red",
+    attribute_name3: "",
+    attribute_option_name3: "",
+    item_tax_preferences: [{ tax_percentage: 5 }, { tax_percentage: 5 }],
+    image_name: "x.jpg",
+    purchase_rate: 50,
+    vendor_name: "Vendor",
+  };
+
+  it("maps a variant item to storefront-safe fields only", () => {
+    const result = normalizeZohoItem(base, "XTS", OBSERVED);
+    expect(result).toEqual({
+      zohoItemId: "900000000000001",
+      zohoGroupId: "900000000000009",
+      productName: "Test Group",
+      variantName: "Test Group-M-Red",
+      sku: "TG-M-RED",
+      description: null,
+      categoryName: "Test Category",
+      attributes: [
+        { name: "size", value: "M" },
+        { name: "color", value: "Red" },
+      ],
+      uom: "pcs",
+      price: { amount: 100, currency: "XTS" },
+      labelRate: 120,
+      gstPercentage: 5,
+      inventory: {
+        stockOnHand: 3,
+        availableToSell: 2,
+        reserved: 1,
+        status: "in_stock",
+        observedAt: OBSERVED,
+      },
+      image: { zohoImageName: "x.jpg" },
+      status: "active",
+    });
+    expect(JSON.stringify(result)).not.toMatch(/purchase|vendor/i);
+  });
+
+  it("marks zero available stock as out of stock", () => {
+    const result = normalizeZohoItem({ ...base, actual_available_for_sale_stock: 0 }, "XTS", OBSERVED);
+    expect(result.inventory.status).toBe("out_of_stock");
+  });
+
+  it("treats untracked or missing stock as unknown, never available", () => {
+    const untracked = normalizeZohoItem({ ...base, track_inventory: false }, "XTS", OBSERVED);
+    expect(untracked.inventory).toMatchObject({ stockOnHand: null, availableToSell: null, status: "unknown" });
+    const missing = normalizeZohoItem(
+      { ...base, actual_available_for_sale_stock: undefined },
+      "XTS",
+      OBSERVED,
+    );
+    expect(missing.inventory.status).toBe("unknown");
+  });
+
+  it("drops the price when currency or rate is unknown", () => {
+    expect(normalizeZohoItem(base, null, OBSERVED).price).toBeNull();
+    expect(normalizeZohoItem({ ...base, rate: "100" }, "XTS", OBSERVED).price).toBeNull();
+  });
+
+  it("falls back to the variant name without a group and rejects missing IDs", () => {
+    expect(normalizeZohoItem({ ...base, group_name: "" }, "XTS", OBSERVED).productName).toBe(
+      "Test Group-M-Red",
+    );
+    expect(() => normalizeZohoItem({ ...base, item_id: "" }, "XTS", OBSERVED)).toThrow(
+      ZohoDevAuthError,
+    );
+  });
+
+  it("leaves GST unknown when tax preferences disagree", () => {
+    const mixed = { ...base, item_tax_preferences: [{ tax_percentage: 5 }, { tax_percentage: 12 }] };
+    expect(normalizeZohoItem(mixed, "XTS", OBSERVED).gstPercentage).toBeNull();
   });
 });

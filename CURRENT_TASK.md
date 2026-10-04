@@ -27,7 +27,15 @@ S3-T10 Image Optimization, the original “SEO-Friendly URL Strategy”, and
 Sprint 5 Track B (S5-T05–S5-T07) remain **DEFERRED**. Do not start them
 automatically.
 
-## Next task after approval (do not start)
+## In progress
+
+**S6-T15 — Zoho feasibility spike.** Authentication PASS; read-only catalog
+feasibility **PARTIAL, sufficient for demo**
+(`docs/project/S6-T15-ZOHO-CATALOG-FEASIBILITY.md`). Next: product → cart →
+checkout → demo sales order, only after an explicit owner decision on demo
+order handling. No Zoho write has been made.
+
+## Original S6-T15 scope
 
 **S6-T15 — Zoho feasibility spike** (highest priority for the demo target
 “Zoho POS → real products → storefront → cart → checkout → demo/COD order →

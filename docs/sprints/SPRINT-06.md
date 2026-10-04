@@ -466,9 +466,11 @@ error messages.
 
 ### S6-T15 — Zoho Access Verification and Readiness Report
 
-**Status:** PROPOSED — requires gate GZ (business provides Zoho account
-access or official documentation for this account, and explicitly approves
-verification); otherwise **DEFERRED** to the start of Sprint 7
+**Status:** IN PROGRESS — gate GZ passed (owner-approved access,
+2026-10-04). Authentication and read-only catalog feasibility verified:
+verdict **PARTIAL, sufficient for demo** — see
+`docs/project/S6-T15-ZOHO-CATALOG-FEASIBILITY.md`. Order capability not yet
+tested (requires an explicit owner decision).
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 
@@ -536,9 +538,9 @@ cache or snapshot.
 | # | Item | Status |
 |---|------|--------|
 | Z1 | Actual quota, reset period (calendar or rolling), per-minute/day limits, what counts as a request (token calls?), overage behavior | NOT VERIFIED |
-| Z2 | Zoho POS API availability for this account and plan, region base URL, required scopes | NOT VERIFIED |
-| Z3 | Authentication flow, token lifetime, refresh, where refreshed tokens live (ADR 0008 P5) | NOT VERIFIED |
-| Z4 | Mapping of items / item groups / variants, SKU, unit, price, currency, stock (per location? TD-004) to the S4 contract and ADR 0007 | NOT VERIFIED |
+| Z2 | Zoho POS API availability for this account and plan, region base URL, required scopes | **VERIFIED (S6-T15):** `https://api.zakya.in/inventory/v1`; locations list not authorized by granted scopes |
+| Z3 | Authentication flow, token lifetime, refresh, where refreshed tokens live (ADR 0008 P5) | **VERIFIED for local dev (S6-T15):** OAuth code flow via `accounts.zoho.in`, 3600 s access token, refresh works; production token storage TBD |
+| Z4 | Mapping of items / item groups / variants, SKU, unit, price, currency, stock (per location? TD-004) to the S4 contract and ADR 0007 | **PARTIAL (S6-T15):** group = product, item = variant; price, SKU, org-level stock map; GST inclusion, per-location stock, images, categories open |
 | Z5 | Pagination model, maximum page size, requests per full catalog refresh | NOT VERIFIED |
 | Z6 | Request budget: full vs incremental refresh (modified-since support?), frequency, freshness threshold | TBD |
 | Z7 | Cache/snapshot mechanism for the chosen host (Next.js cache vs durable store, ADR 0008 P3) | TBD (host undecided) |
