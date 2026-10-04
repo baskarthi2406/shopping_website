@@ -195,7 +195,7 @@ confirmation).
 | S6-T12 | Catalog Contract Conformance Suite | **COMPLETED** (explicit user approval) |
 | S6-T13 | Field Provenance Rules | **COMPLETED** (gate G1 passed 2026-10-04) |
 | S6-T14 | Server-side Zoho Request Wrapper (redefined from Outbound Request Policy) | **COMPLETED** (gate G2 passed via ADR 0009 amendment) |
-| S6-T15 | Zoho Access Verification and Readiness Report | **IN PROGRESS** (GZ passed; catalog PARTIAL; demo checkout → draft Sales Order works and is frozen at `589b74a`; gaps in `docs/project/PRODUCTION-READINESS.md`) |
+| S6-T15 | Zoho Access Verification and Readiness Report | **IN PROGRESS** (GZ passed; catalog PARTIAL; demo checkout → draft Sales Order works and is frozen at `589b74a`; gaps in `docs/project/PRODUCTION-READINESS.md`; decision gate in `docs/project/PRODUCTION-DECISIONS.md`) |
 | S6-T16 | Sprint 6 Review | **PROPOSED** |
 
 S6-T11 added `import "server-only"` to the `config/` server composition roots

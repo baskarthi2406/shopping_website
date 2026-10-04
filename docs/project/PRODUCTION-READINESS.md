@@ -1,7 +1,8 @@
 # Production Readiness — Zoho Storefront Gap Assessment
 
 Status: **ASSESSMENT ONLY** (2026-10-04). Nothing here is approved for
-implementation. Each backlog item needs an explicit task.
+implementation. Each backlog item needs an explicit task. P0 decisions,
+owner questions, and Zoho verifications: `docs/project/PRODUCTION-DECISIONS.md`.
 
 ## Demo baseline (frozen)
 

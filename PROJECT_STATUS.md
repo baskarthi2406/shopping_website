@@ -266,6 +266,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 None approved. The S6-T15 Zoho demo is frozen at `589b74a`; candidate next
 work is the P0 backlog in `docs/project/PRODUCTION-READINESS.md`, each item
-requiring an explicit task. The decision on
+requiring an explicit task. The P0 decision gate
+(`docs/project/PRODUCTION-DECISIONS.md`) awaits owner decisions OD-1–OD-9 and
+Zoho verifications V1–V11. The decision on
 merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains
 deferred pending Q1/Q2. Requires explicit human approval.

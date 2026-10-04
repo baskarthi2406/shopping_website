@@ -474,7 +474,8 @@ verdict **PARTIAL, sufficient for demo** — see
 `docs/project/DEMO-ZOHO-SALES-ORDER.md`. Tax treatment to be confirmed before
 production checkout; location-specific inventory validation deferred. Demo
 frozen at baseline `589b74a`; production gap assessment and backlog:
-`docs/project/PRODUCTION-READINESS.md`.
+`docs/project/PRODUCTION-READINESS.md`; P0 decision gate (owner decisions,
+Zoho verifications, P0 order): `docs/project/PRODUCTION-DECISIONS.md`.
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

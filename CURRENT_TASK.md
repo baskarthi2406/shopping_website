@@ -36,7 +36,9 @@ checkout → Zoho Sales Order **works** (`docs/project/DEMO-ZOHO-SALES-ORDER.md`
 one owner-approved draft demo Sales Order (`SO-00001`) created and verified.
 No invoice or payment. Demo **frozen** at baseline commit `589b74a`;
 production gaps and P0/P1/P2 backlog in `docs/project/PRODUCTION-READINESS.md`
-(assessment only). No further task is approved; do not start production work,
+(assessment only). P0 decision gate (owner decisions OD-1–OD-9, Zoho
+verifications V1–V11, P0 order) in `docs/project/PRODUCTION-DECISIONS.md`,
+awaiting owner answers. No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope
