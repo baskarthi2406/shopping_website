@@ -4,6 +4,7 @@ import {
   createZohoCatalogLoader,
   selectPublishableProducts,
   ZOHO_CATALOG_PAGE_SIZE,
+  type ZohoCatalogLoaderOptions,
 } from "./zoho-catalog-snapshot";
 
 const ORG = "100001";
@@ -65,7 +66,10 @@ function itemsRoute(pages: unknown[][]): Route {
   };
 }
 
-function loader(route: Route, extra: { maxPages?: number } = {}) {
+function loader(
+  route: Route,
+  extra: Partial<Pick<ZohoCatalogLoaderOptions, "maxPages" | "publication" | "imageSrc">> = {},
+) {
   const fetchImpl = fakeFetch(route);
   const log = vi.fn();
   const load = createZohoCatalogLoader({
@@ -88,7 +92,7 @@ describe("createZohoCatalogLoader", () => {
       ]),
     );
 
-    const products = await load();
+    const { products } = await load();
 
     expect(products.map((product) => product.id)).toEqual(["500"]);
     expect(products[0].categoryIds).toEqual(["women-co-ord-set"]);
@@ -178,6 +182,104 @@ describe("createZohoCatalogLoader", () => {
   });
 });
 
+describe("createZohoCatalogLoader in demo publication", () => {
+  const imageSrc = ({ itemId, documentId }: { itemId: string; documentId: string }) =>
+    `/api/catalog-images/${itemId}/${documentId}`;
+  const pages = [
+    [
+      { ...item("11", "500", WOMEN_CO_ORD_SET), image_document_id: "9001" },
+      { ...item("12", "500", WOMEN_CO_ORD_SET), image_document_id: "9001" },
+      { ...item("13", "500", WOMEN_CO_ORD_SET), image_document_id: "9002" },
+      {
+        ...item("21", "600", UNMAPPED_CATEGORY),
+        category_name: "Night Wear",
+        image_document_id: "https://evil.example/x.jpg",
+      },
+      { ...item("31", "", null), group_id: undefined, group_name: undefined, name: "Loose Item" },
+      item("41", "700", UNMAPPED_CATEGORY, "inactive"),
+    ],
+  ];
+
+  it("keeps unmapped active products without a storefront placement", async () => {
+    const { load, log } = loader(itemsRoute(pages), { publication: "demo", imageSrc });
+
+    const { products, sourceCategories } = await load();
+
+    expect(products.map((product) => [product.id, product.categoryIds])).toEqual([
+      ["500", ["women-co-ord-set"]],
+      ["600", []],
+      ["31", []],
+    ]);
+    expect(sourceCategories.get("500")).toEqual({ id: WOMEN_CO_ORD_SET, name: "Co-Ord Set" });
+    expect(sourceCategories.get("600")).toEqual({ id: UNMAPPED_CATEGORY, name: "Night Wear" });
+    expect(sourceCategories.get("31")).toEqual({ id: null, name: "Co-Ord Set" });
+    expect(sourceCategories.has("700")).toBe(false);
+    const line = String(log.mock.calls[0][0]);
+    expect(line).toContain("publication=demo");
+    expect(line).toContain("published=3");
+    expect(line).toContain("inactive=1");
+    expect(line).toContain("variants=5");
+    expect(line).toContain("pricedVariants=5");
+    expect(line).toContain("inStockVariants=5");
+    expect(line).toContain("productsWithImages=1");
+  });
+
+  it("groups variants with SKU, price, and stock under the item group", async () => {
+    const { load } = loader(itemsRoute(pages), { publication: "demo", imageSrc });
+
+    const [group] = (await load()).products;
+
+    expect(group.variants.map((variant) => [variant.id, variant.sku, variant.attributes])).toEqual([
+      ["11", "SKU-11", [{ name: "size", value: "S11" }]],
+      ["12", "SKU-12", [{ name: "size", value: "S12" }]],
+      ["13", "SKU-13", [{ name: "size", value: "S13" }]],
+    ]);
+    expect(group.variants[0].pricing).toEqual({
+      price: { amount: 464, currency: "XTS" },
+      compareAtPrice: null,
+    });
+    expect(group.variants[0].inventory).toEqual({
+      stockOnHand: 2,
+      availableToSell: 2,
+      reserved: null,
+      status: "in_stock",
+    });
+  });
+
+  it("references each distinct numeric image document once and allowlists only those", async () => {
+    const { load } = loader(itemsRoute(pages), { publication: "demo", imageSrc });
+
+    const { products, imageKeys } = await load();
+
+    expect(products[0].images).toEqual([
+      { src: "/api/catalog-images/11/9001", alt: "Group 500" },
+      { src: "/api/catalog-images/13/9002", alt: "Group 500" },
+    ]);
+    expect(products[1].images).toEqual([]);
+    expect([...imageKeys]).toEqual(["11/9001", "13/9002"]);
+    expect(JSON.stringify(products)).not.toContain("evil.example");
+  });
+
+  it("keeps the production rule separate: unmapped products stay unpublished", async () => {
+    const { load } = loader(itemsRoute(pages), { publication: "production", imageSrc });
+
+    const { products, sourceCategories, imageKeys } = await load();
+
+    expect(products.map((product) => product.id)).toEqual(["500"]);
+    expect([...sourceCategories.keys()]).toEqual(["500"]);
+    expect([...imageKeys]).toEqual(["11/9001", "13/9002"]);
+  });
+
+  it("maps no images without an image URL builder", async () => {
+    const { load } = loader(itemsRoute(pages), { publication: "demo" });
+
+    const { products, imageKeys } = await load();
+
+    expect(products.every((product) => product.images.length === 0)).toBe(true);
+    expect(imageKeys.size).toBe(0);
+  });
+});
+
 function product(overrides: Partial<Product>): Product {
   return {
     id: "1",
@@ -212,5 +314,21 @@ describe("selectPublishableProducts", () => {
     expect(selection.unplaced).toBe(2);
     expect(selection.inactive).toBe(1);
     expect(selection.invalid).toBe(3);
+  });
+
+  it("also publishes unplaced products in demo, but never multiply placed ones", () => {
+    const selection = selectPublishableProducts(
+      [
+        product({ id: "1", slug: "a-1" }),
+        product({ id: "2", slug: "b-2", categoryIds: [] }),
+        product({ id: "3", slug: "c-3", categoryIds: ["women-tops", "women-sarees"] }),
+        product({ id: "4", slug: "d-4", categoryIds: [], status: "inactive" }),
+      ],
+      "demo",
+    );
+
+    expect(selection.published.map((entry) => entry.id)).toEqual(["1", "2"]);
+    expect(selection.unplaced).toBe(3);
+    expect(selection.inactive).toBe(1);
   });
 });

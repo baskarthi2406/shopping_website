@@ -61,7 +61,13 @@ Node host with fixed instances, shared/durable snapshot required for
 serverless; owner decision OD-9 required first. Category → subcategory
 navigation audited: menus unchanged; category and product breadcrumbs now
 include the ancestor trail; category pages link visible subcategories;
-listings stay direct membership (`CATEGORY-MAPPING-DESIGN.md` §8). No further task is approved; do not start production work,
+listings stay direct membership (`CATEGORY-MAPPING-DESIGN.md` §8). Full Zoho
+catalog demo mode implemented (demo only): `CATALOG_PRODUCT_SOURCE=zoho-demo`
+publishes all active, contract-valid Zoho products (unmapped ones without a
+storefront category, inspectable at `/catalog`), shows INR variant prices,
+and serves images through the server-side proxy
+`/api/catalog-images/{itemId}/{documentId}`; production publication and the
+frozen `/demo` flow are unchanged (`docs/sprints/SPRINT-06.md`). No further task is approved; do not start production work,
 payment, or Sprint 7 automatically.
 
 ## Original S6-T15 scope

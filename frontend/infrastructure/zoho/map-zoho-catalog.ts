@@ -1,6 +1,12 @@
 import type { DemoSalesOrder } from "@/application/checkout/place-demo-order";
 import { DEMO_ORDER_LABEL, DEMO_PAYMENT_LABEL } from "@/application/checkout/demo-order";
-import type { Inventory, Product, ProductVariant, VariantAttribute } from "@/domain/catalog";
+import type {
+  CatalogImage,
+  Inventory,
+  Product,
+  ProductVariant,
+  VariantAttribute,
+} from "@/domain/catalog";
 import type { ZohoCategoryResolver } from "./zoho-category-mapping";
 
 /**
@@ -81,6 +87,39 @@ function slugFor(name: string, id: string): string {
   return `${base === "" ? "zoho-item" : base}-${id.slice(-6).toLowerCase()}`;
 }
 
+/** Zoho IDs are decimal strings; anything else is never put into an image path. */
+const ZOHO_ID_PATTERN = /^\d{1,30}$/;
+
+/** Item image reference: the item that owns the image and its document ID. */
+export type ZohoItemImageRef = { readonly itemId: string; readonly documentId: string };
+
+export function zohoItemImageRef(item: ZohoRecord): ZohoItemImageRef | null {
+  const itemId = text(item.item_id);
+  const documentId = text(item.image_document_id);
+  return itemId !== null &&
+    documentId !== null &&
+    ZOHO_ID_PATTERN.test(itemId) &&
+    ZOHO_ID_PATTERN.test(documentId)
+    ? { itemId, documentId }
+    : null;
+}
+
+/** Zoho item group ID for grouped items, otherwise the item ID (as used by `mapZohoItemsToProducts`). */
+export function zohoProductIdOf(item: unknown): string | null {
+  return isRecord(item) ? (text(item.group_id) ?? text(item.item_id)) : null;
+}
+
+export type MapZohoItemsOptions = {
+  /**
+   * Builds the storefront image URL for an item image. Without it products
+   * have no images. The URL must not carry provider URLs or credentials.
+   */
+  readonly imageSrc?: (ref: ZohoItemImageRef) => string;
+};
+
+/** At most this many distinct images per product, in variant order. */
+export const MAX_PRODUCT_IMAGES = 8;
+
 /**
  * Groups Zoho items into products (item group = product), keeping input order.
  * The product's single storefront placement comes from `resolveCategory`
@@ -91,8 +130,12 @@ export function mapZohoItemsToProducts(
   items: readonly unknown[],
   currency: string,
   resolveCategory: ZohoCategoryResolver = () => null,
+  options: MapZohoItemsOptions = {},
 ): Product[] {
-  const products = new Map<string, { product: Product; variants: ProductVariant[] }>();
+  const products = new Map<
+    string,
+    { product: Product; variants: ProductVariant[]; images: CatalogImage[]; documents: Set<string> }
+  >();
   for (const raw of items) {
     if (!isRecord(raw)) continue;
     const variant = mapZohoVariant(raw, currency);
@@ -108,6 +151,8 @@ export function mapZohoItemsToProducts(
       });
       entry = {
         variants: [],
+        images: [],
+        documents: new Set(),
         product: {
           id: productId,
           slug: slugFor(name, productId),
@@ -126,9 +171,20 @@ export function mapZohoItemsToProducts(
       products.set(productId, entry);
     }
     entry.variants.push(variant);
+    const image = options.imageSrc === undefined ? null : zohoItemImageRef(raw);
+    if (
+      options.imageSrc !== undefined &&
+      image !== null &&
+      !entry.documents.has(image.documentId) &&
+      entry.images.length < MAX_PRODUCT_IMAGES
+    ) {
+      entry.documents.add(image.documentId);
+      entry.images.push({ src: options.imageSrc(image), alt: entry.product.name });
+    }
   }
-  return [...products.values()].map(({ product, variants }) => ({
+  return [...products.values()].map(({ product, variants, images }) => ({
     ...product,
+    images,
     status: variants.some((variant) => variant.status === "active") ? "active" : "inactive",
     variants,
   }));

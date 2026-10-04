@@ -31,6 +31,14 @@ export {
   type FooterNavViewModel,
 } from "./catalog-nav-view-model";
 export {
+  NO_SOURCE_CATEGORY_LABEL,
+  toCatalogDemoViewModel,
+  type CatalogDemoGroupViewModel,
+  type CatalogDemoProductViewModel,
+  type CatalogDemoViewModel,
+  type CatalogSourceCategory,
+} from "./catalog-demo-view-model";
+export {
   toCategoryPageViewModel,
   toProductCardViewModel,
   type CategoryPageViewModel,

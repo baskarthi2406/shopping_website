@@ -16,6 +16,19 @@ never served past the 24 h freshness threshold); categories stay static.
 Snapshot reads call `connection()`, so the home page and sitemap render per
 request from memory and builds never call Zoho.
 
+`CATALOG_PRODUCT_SOURCE=zoho-demo` is the full-catalog **demo** mode: the same
+snapshot, but every active, contract-valid Zoho product is published;
+products without a mapped storefront category keep `categoryIds: []` (no
+category listing) and appear on the home page, their product page, the
+sitemap, and `/catalog`, which groups products by their Zoho category label
+(`catalog-demo.ts`; metadata only, never a storefront placement). `commerce.ts`
+shows INR prices only in this mode. Product images in either Zoho mode are
+`/api/catalog-images/{itemId}/{documentId}`: `catalog-images.ts` serves only
+pairs referenced by the current snapshot, fetching the bytes server-side
+(`infrastructure/zoho/zoho-item-image.ts`); tokens and Zoho URLs never reach
+the browser. Each uncached image view is one Zoho GET (about 4 MB); browsers
+cache for one day and `next/image` caches optimized copies.
+
 `catalog.ts` is the storefront composition root (`Http*Repository` + catalog
 API client). Pages, layout navigation, and footer category columns call
 `catalog.*` use cases and must not import `infrastructure/catalog/data`.

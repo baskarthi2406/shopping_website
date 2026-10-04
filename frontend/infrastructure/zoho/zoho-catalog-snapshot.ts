@@ -3,7 +3,11 @@ import { validateProduct, type Product } from "@/domain/catalog";
 import type { CatalogSnapshotLoader } from "@/infrastructure/catalog/catalog-snapshot";
 import { createZohoClient, type ZohoClient } from "./zoho-client";
 import type { ZohoConfig } from "./zoho-config";
-import { mapZohoItemsToProducts } from "./map-zoho-catalog";
+import {
+  mapZohoItemsToProducts,
+  zohoProductIdOf,
+  type ZohoItemImageRef,
+} from "./map-zoho-catalog";
 import { createZohoCategoryResolver, type ZohoCategoryResolver } from "./zoho-category-mapping";
 import type { ZohoTokenProvider } from "./zoho-oauth";
 
@@ -12,6 +16,28 @@ export const ZOHO_CATALOG_PAGE_SIZE = 200;
 /** Hard cap on item pages per refresh; a larger catalog fails the refresh instead of publishing part of it. */
 export const ZOHO_CATALOG_MAX_PAGES = 10;
 
+/**
+ * `production` publishes only products with one storefront placement.
+ * `demo` also publishes unmapped products, with no placement, so the whole
+ * catalog can be inspected; their Zoho category is metadata only.
+ */
+export type ZohoCatalogPublication = "production" | "demo";
+
+/** Zoho category of a product as reported by Zoho; never a storefront placement. */
+export type ZohoSourceCategory = { readonly id: string | null; readonly name: string | null };
+
+export type ZohoCatalogSnapshot = {
+  readonly products: readonly Product[];
+  /** Zoho category per published product ID. */
+  readonly sourceCategories: ReadonlyMap<string, ZohoSourceCategory>;
+  /** `itemId/documentId` pairs referenced by published product images. */
+  readonly imageKeys: ReadonlySet<string>;
+};
+
+export function zohoImageKey(ref: ZohoItemImageRef): string {
+  return `${ref.itemId}/${ref.documentId}`;
+}
+
 export type ZohoCatalogLoaderOptions = {
   /** Validated base settings; `accessToken` is replaced per request. */
   readonly config: Omit<ZohoConfig, "accessToken">;
@@ -19,6 +45,9 @@ export type ZohoCatalogLoaderOptions = {
   readonly tokens: ZohoTokenProvider;
   readonly fetchImpl?: typeof fetch;
   readonly resolveCategory?: ZohoCategoryResolver;
+  readonly publication?: ZohoCatalogPublication;
+  /** Storefront image URL for an item image; without it products have no images. */
+  readonly imageSrc?: (ref: ZohoItemImageRef) => string;
   readonly maxPages?: number;
   /** Receives one sanitized summary line per refresh (counts and Zoho category IDs only). */
   readonly log?: (line: string) => void;
@@ -26,6 +55,7 @@ export type ZohoCatalogLoaderOptions = {
 
 export type ZohoCatalogSelection = {
   readonly published: readonly Product[];
+  /** Products without exactly one storefront placement (published only in `demo`). */
   readonly unplaced: number;
   readonly inactive: number;
   readonly invalid: number;
@@ -35,12 +65,20 @@ function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
 }
 
+function text(value: unknown): string | null {
+  return typeof value === "string" && value.trim() !== "" ? value.trim() : null;
+}
+
 /**
- * Storefront publication rule: active products with exactly one storefront
- * placement that pass the catalog contract. Later duplicates of an ID or slug
- * are dropped. Unplaced products get no listing, product page, or sitemap URL.
+ * Storefront publication rule: active products that pass the catalog
+ * contract; in `production` they also need exactly one storefront placement.
+ * Later duplicates of an ID or slug are dropped. Unpublished products get no
+ * listing, product page, or sitemap URL.
  */
-export function selectPublishableProducts(products: readonly Product[]): ZohoCatalogSelection {
+export function selectPublishableProducts(
+  products: readonly Product[],
+  publication: ZohoCatalogPublication = "production",
+): ZohoCatalogSelection {
   const published: Product[] = [];
   const ids = new Set<string>();
   const slugs = new Set<string>();
@@ -48,9 +86,14 @@ export function selectPublishableProducts(products: readonly Product[]): ZohoCat
   let inactive = 0;
   let invalid = 0;
   for (const product of products) {
-    if (product.categoryIds.length !== 1) {
+    const placed = product.categoryIds.length === 1;
+    if (!placed) {
       unplaced += 1;
-    } else if (product.status !== "active") {
+    }
+    if (!placed && (publication === "production" || product.categoryIds.length > 1)) {
+      continue;
+    }
+    if (product.status !== "active") {
       inactive += 1;
     } else if (
       validateProduct(product).length > 0 ||
@@ -73,13 +116,17 @@ export function selectPublishableProducts(products: readonly Product[]): ZohoCat
  * error, an unexpected response shape, an empty catalog, or more than
  * `maxPages` pages.
  */
-export function createZohoCatalogLoader(options: ZohoCatalogLoaderOptions): CatalogSnapshotLoader {
+export function createZohoCatalogLoader(
+  options: ZohoCatalogLoaderOptions,
+): CatalogSnapshotLoader<ZohoCatalogSnapshot> {
   const {
     config,
     organizationId,
     tokens,
     fetchImpl = fetch,
     resolveCategory = createZohoCategoryResolver(),
+    publication = "production",
+    imageSrc,
     maxPages = ZOHO_CATALOG_MAX_PAGES,
     log = () => {},
   } = options;
@@ -136,22 +183,64 @@ export function createZohoCatalogLoader(options: ZohoCatalogLoaderOptions): Cata
     }
 
     const unmapped = new Map<string, number>();
-    const products = mapZohoItemsToProducts(items, currency, (source) => {
-      const placement = resolveCategory(source);
-      if (placement === null) {
-        const key = source.categoryId ?? "none";
-        unmapped.set(key, (unmapped.get(key) ?? 0) + 1);
+    const imageRefs = new Map<string, ZohoItemImageRef>();
+    const products = mapZohoItemsToProducts(
+      items,
+      currency,
+      (source) => {
+        const placement = resolveCategory(source);
+        if (placement === null) {
+          const key = source.categoryId ?? "none";
+          unmapped.set(key, (unmapped.get(key) ?? 0) + 1);
+        }
+        return placement;
+      },
+      imageSrc === undefined
+        ? {}
+        : {
+            imageSrc: (ref) => {
+              const src = imageSrc(ref);
+              imageRefs.set(src, ref);
+              return src;
+            },
+          },
+    );
+    const selection = selectPublishableProducts(products, publication);
+
+    const publishedIds = new Set(selection.published.map((product) => product.id));
+    const sourceCategories = new Map<string, ZohoSourceCategory>();
+    for (const item of items) {
+      const productId = zohoProductIdOf(item);
+      if (productId !== null && publishedIds.has(productId) && !sourceCategories.has(productId)) {
+        const record = item as Record<string, unknown>;
+        sourceCategories.set(productId, {
+          id: text(record.category_id),
+          name: text(record.category_name),
+        });
       }
-      return placement;
-    });
-    const selection = selectPublishableProducts(products);
+    }
+    const imageKeys = new Set<string>();
+    for (const product of selection.published) {
+      for (const image of product.images) {
+        const ref = imageRefs.get(image.src);
+        if (ref !== undefined) {
+          imageKeys.add(zohoImageKey(ref));
+        }
+      }
+    }
+
+    const variants = selection.published.flatMap((product) => product.variants);
     const unmappedList = [...unmapped].map(([id, count]) => `${id}x${count}`).join(",");
     log(
-      `[zoho-catalog] snapshot refreshed requests=${requests} items=${items.length} ` +
-        `products=${products.length} published=${selection.published.length} ` +
-        `unplaced=${selection.unplaced} inactive=${selection.inactive} invalid=${selection.invalid}` +
+      `[zoho-catalog] snapshot refreshed publication=${publication} requests=${requests} ` +
+        `items=${items.length} products=${products.length} published=${selection.published.length} ` +
+        `unplaced=${selection.unplaced} inactive=${selection.inactive} invalid=${selection.invalid} ` +
+        `variants=${variants.length} ` +
+        `pricedVariants=${variants.filter((variant) => variant.pricing !== null).length} ` +
+        `inStockVariants=${variants.filter((variant) => variant.inventory?.status === "in_stock").length} ` +
+        `productsWithImages=${selection.published.filter((product) => product.images.length > 0).length}` +
         (unmappedList === "" ? "" : ` unmappedZohoCategories=${unmappedList}`),
     );
-    return selection.published;
+    return { products: selection.published, sourceCategories, imageKeys };
   };
 }

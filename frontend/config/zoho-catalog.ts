@@ -1,19 +1,36 @@
 import "server-only";
+import { catalogImagePath } from "@/app/api/catalog-images/catalog-image-path";
+import type { PriceDisplayConfig } from "@/application/catalog";
 import { DEFAULT_FRESHNESS_THRESHOLD_MS } from "@/application/catalog/field-provenance";
 import { readServerEnv, type ServerEnv } from "@/config/server-env";
 import {
   createCatalogSnapshotStore,
-  type CatalogSnapshotLoader,
   type CatalogSnapshotStore,
 } from "@/infrastructure/catalog/catalog-snapshot";
-import { createZohoCatalogLoader } from "@/infrastructure/zoho/zoho-catalog-snapshot";
-import { readZohoConfig, ZOHO_ENV, ZohoConfigError } from "@/infrastructure/zoho/zoho-config";
-import { createZohoTokenProvider, readZohoOAuthSettings } from "@/infrastructure/zoho/zoho-oauth";
+import {
+  createZohoCatalogLoader,
+  zohoImageKey,
+  type ZohoCatalogPublication,
+  type ZohoCatalogSnapshot,
+} from "@/infrastructure/zoho/zoho-catalog-snapshot";
+import { readZohoConfig, ZOHO_ENV, ZohoConfigError, type ZohoConfig } from "@/infrastructure/zoho/zoho-config";
+import {
+  createZohoItemImageFetcher,
+  type ZohoItemImage,
+  type ZohoItemImageFetcher,
+} from "@/infrastructure/zoho/zoho-item-image";
+import {
+  createZohoTokenProvider,
+  readZohoOAuthSettings,
+  type ZohoTokenProvider,
+} from "@/infrastructure/zoho/zoho-oauth";
 
 /**
  * Storefront product source. `static` (default) keeps the repository
- * fixtures; `zoho-snapshot` serves products from the in-memory Zoho catalog
- * snapshot. Categories stay storefront-owned either way.
+ * fixtures; `zoho-snapshot` serves the mapped Zoho products (production
+ * publication rule); `zoho-demo` serves every active, contract-valid Zoho
+ * product, leaving unmapped ones without a storefront placement, for catalog
+ * inspection only. Categories stay storefront-owned either way.
  */
 export const CATALOG_ENV = {
   productSource: "CATALOG_PRODUCT_SOURCE",
@@ -21,7 +38,9 @@ export const CATALOG_ENV = {
   organizationId: "ZOHO_ORGANIZATION_ID",
 } as const;
 
-export type CatalogProductSource = "static" | "zoho-snapshot";
+export type CatalogProductSource = "static" | "zoho-snapshot" | "zoho-demo";
+
+const PRODUCT_SOURCES: readonly CatalogProductSource[] = ["static", "zoho-snapshot", "zoho-demo"];
 
 export const DEFAULT_ZOHO_CATALOG_REFRESH_MINUTES = 360;
 export const MIN_ZOHO_CATALOG_REFRESH_MINUTES = 15;
@@ -29,12 +48,33 @@ export const MIN_ZOHO_CATALOG_REFRESH_MINUTES = 15;
 export const MAX_ZOHO_CATALOG_REFRESH_MINUTES = 720;
 export const ZOHO_CATALOG_FAILURE_BACKOFF_MS = 5 * 60 * 1000;
 
+/**
+ * Demo-only price presentation for `zoho-demo`, matching the frozen `/demo`
+ * flow: INR is the verified Zoho organization currency. Prices in any other
+ * currency still render nothing. Not a production price-display decision (Q9).
+ */
+export const ZOHO_CATALOG_DEMO_PRICE_DISPLAY: PriceDisplayConfig = {
+  locale: "en-IN",
+  currencies: ["INR"],
+};
+
 export function readCatalogProductSource(env: ServerEnv = process.env): CatalogProductSource {
   const value = readServerEnv(CATALOG_ENV.productSource, env)?.trim() ?? "static";
-  if (value !== "static" && value !== "zoho-snapshot") {
-    throw new ZohoConfigError(`${CATALOG_ENV.productSource} must be "static" or "zoho-snapshot"`);
+  const source = PRODUCT_SOURCES.find((candidate) => candidate === value);
+  if (source === undefined) {
+    throw new ZohoConfigError(
+      `${CATALOG_ENV.productSource} must be one of ${PRODUCT_SOURCES.map((name) => `"${name}"`).join(", ")}`,
+    );
   }
-  return value;
+  return source;
+}
+
+export function isZohoCatalogSource(source: CatalogProductSource): boolean {
+  return source === "zoho-snapshot" || source === "zoho-demo";
+}
+
+export function publicationFor(source: CatalogProductSource): ZohoCatalogPublication {
+  return source === "zoho-demo" ? "demo" : "production";
 }
 
 export function readZohoCatalogRefreshMinutes(env: ServerEnv = process.env): number {
@@ -56,46 +96,88 @@ export function readZohoCatalogRefreshMinutes(env: ServerEnv = process.env): num
   return minutes;
 }
 
-function createLoader(env: ServerEnv): CatalogSnapshotLoader {
-  // The access token is supplied per refresh by the token provider.
+type ZohoCatalogContext = {
+  readonly config: Omit<ZohoConfig, "accessToken">;
+  readonly organizationId: string;
+  readonly tokens: ZohoTokenProvider;
+};
+
+function readZohoCatalogContext(env: ServerEnv, fetchImpl: typeof fetch): ZohoCatalogContext {
+  // The access token is supplied per request by the token provider.
   const { apiBaseUrl, timeoutMs } = readZohoConfig({ ...env, [ZOHO_ENV.accessToken]: "unused" });
   const organizationId = readServerEnv(CATALOG_ENV.organizationId, env)?.trim() ?? "";
   if (!/^\d{1,30}$/.test(organizationId)) {
     throw new ZohoConfigError(`Missing or invalid server-only setting ${CATALOG_ENV.organizationId}`);
   }
-  return createZohoCatalogLoader({
+  return {
     config: { apiBaseUrl, timeoutMs },
     organizationId,
-    tokens: createZohoTokenProvider(readZohoOAuthSettings(env)),
-    log: (line) => console.info(line),
-  });
+    tokens: createZohoTokenProvider(readZohoOAuthSettings(env), fetchImpl),
+  };
 }
 
-function describe(error: unknown): string {
+export function describeZohoCatalogError(error: unknown): string {
   return error instanceof Error ? `${error.name}: ${error.message}` : "unknown error";
 }
 
-/** Zoho settings are read on the first refresh, so misconfiguration surfaces as a logged refresh failure. */
-export function createZohoCatalogSnapshotStore(env: ServerEnv = process.env): CatalogSnapshotStore {
-  let loader: CatalogSnapshotLoader | null = null;
-  return createCatalogSnapshotStore({
-    load: () => {
-      loader ??= createLoader(env);
-      return loader();
-    },
+export type ZohoCatalogRuntime = {
+  readonly snapshot: CatalogSnapshotStore<ZohoCatalogSnapshot>;
+  /**
+   * Image bytes for an item image referenced by the current snapshot; null
+   * for any pair the snapshot does not reference or Zoho does not have.
+   */
+  loadImage(itemId: string, documentId: string): Promise<ZohoItemImage | null>;
+};
+
+/**
+ * Zoho settings are read on first use, so misconfiguration surfaces as a
+ * logged refresh failure. The snapshot loader and image fetcher share one
+ * token provider.
+ */
+export function createZohoCatalogRuntime(
+  env: ServerEnv = process.env,
+  options: { readonly publication?: ZohoCatalogPublication; readonly fetchImpl?: typeof fetch } = {},
+): ZohoCatalogRuntime {
+  const { fetchImpl = fetch } = options;
+  const publication = options.publication ?? publicationFor(readCatalogProductSource(env));
+  let context: ZohoCatalogContext | null = null;
+  let fetchImage: ZohoItemImageFetcher | null = null;
+  const getContext = () => (context ??= readZohoCatalogContext(env, fetchImpl));
+
+  const snapshot = createCatalogSnapshotStore<ZohoCatalogSnapshot>({
+    load: () =>
+      createZohoCatalogLoader({
+        ...getContext(),
+        fetchImpl,
+        publication,
+        imageSrc: (ref) => catalogImagePath(ref.itemId, ref.documentId),
+        log: (line) => console.info(line),
+      })(),
     refreshIntervalMs: readZohoCatalogRefreshMinutes(env) * 60 * 1000,
     maxAgeMs: DEFAULT_FRESHNESS_THRESHOLD_MS,
     failureBackoffMs: ZOHO_CATALOG_FAILURE_BACKOFF_MS,
-    onRefreshError: (error) => console.error(`[zoho-catalog] snapshot refresh failed: ${describe(error)}`),
+    onRefreshError: (error) => console.error(`[zoho-catalog] snapshot refresh failed: ${describeZohoCatalogError(error)}`),
   });
+
+  return {
+    snapshot,
+    async loadImage(itemId, documentId) {
+      const { imageKeys } = await snapshot.get();
+      if (!imageKeys.has(zohoImageKey({ itemId, documentId }))) {
+        return null;
+      }
+      fetchImage ??= createZohoItemImageFetcher({ ...getContext(), fetchImpl });
+      return fetchImage(itemId);
+    },
+  };
 }
 
-const globalKey = Symbol.for("mini-mystiq.zoho-catalog-snapshot");
-type GlobalWithSnapshot = typeof globalThis & { [globalKey]?: CatalogSnapshotStore };
+const globalKey = Symbol.for("mini-mystiq.zoho-catalog-runtime");
+type GlobalWithRuntime = typeof globalThis & { [globalKey]?: ZohoCatalogRuntime };
 
-/** Process-wide snapshot store, shared across module reloads. */
-export function getZohoCatalogSnapshotStore(): CatalogSnapshotStore {
-  const store = globalThis as GlobalWithSnapshot;
-  store[globalKey] ??= createZohoCatalogSnapshotStore();
+/** Process-wide snapshot and image runtime, shared across module reloads. */
+export function getZohoCatalogRuntime(): ZohoCatalogRuntime {
+  const store = globalThis as GlobalWithRuntime;
+  store[globalKey] ??= createZohoCatalogRuntime();
   return store[globalKey];
 }

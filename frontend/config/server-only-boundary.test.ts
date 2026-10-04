@@ -19,8 +19,12 @@ const PROTECTED_MODULES = [
   "infrastructure/zoho/zoho-demo-gateway.ts",
   "infrastructure/zoho/zoho-category-mapping.ts",
   "infrastructure/zoho/zoho-catalog-snapshot.ts",
+  "infrastructure/zoho/zoho-item-image.ts",
   "infrastructure/catalog/catalog-snapshot.ts",
   "config/zoho-catalog.ts",
+  "config/catalog-images.ts",
+  "config/catalog-demo.ts",
+  "config/commerce.ts",
   "config/zoho-demo.ts",
   "config/demo-store.ts",
 ];

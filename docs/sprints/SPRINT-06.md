@@ -497,6 +497,23 @@ Category → subcategory navigation audit: menus already complete; added
 ancestor breadcrumbs (category and product pages, JSON-LD included) and
 subcategory links on category pages (`components/storefront/subcategory-links.tsx`);
 listings remain direct membership. Details: `CATEGORY-MAPPING-DESIGN.md` §8.
+Full Zoho catalog in the normal storefront (**demo only**, not production):
+`CATALOG_PRODUCT_SOURCE=zoho-demo` reuses the snapshot with a `demo`
+publication rule. Every active, contract-valid product is published; the 36
+of 49 products without a mapped category keep `categoryIds: []` (not in any
+category listing) and are inspectable via home, product pages, sitemap, and
+`/catalog` (grouped by Zoho category label as metadata). The production rule
+(`zoho-snapshot`) is unchanged. Variant prices are shown in INR (verified org
+currency) only in this mode; no compare-at, `label_rate`, or GST claim.
+Images: server-side proxy `/api/catalog-images/{itemId}/{documentId}`, which
+accepts numeric IDs referenced by the current snapshot only; bytes come from
+`GET /items/{id}/image` (server-only `zoho-item-image.ts`; `Accept: image/*`
+is rejected by Zoho with 406, so `*/*` plus a content-type allowlist and a
+10 MB cap are used). Live read-only check: 157 items, 49 groups, 157 variants,
+all priced, 156 in stock, 49 products with images, 13 mapped and 36 unmapped;
+one snapshot refresh per server start; no secrets in responses or logs. Each
+uncached image view costs one Zoho GET (about 4 MB), so images count toward the
+request budget (V1, OD-9).
 
 **Objective:** Replace unverified assumptions in §7 with evidence.
 

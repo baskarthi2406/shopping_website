@@ -7,7 +7,7 @@ import { StaticCategoryRepository } from "@/infrastructure/catalog/static-catego
 import { StaticProductRepository } from "@/infrastructure/catalog/static-product-repository";
 import { StaticUomRepository } from "@/infrastructure/catalog/static-uom-repository";
 import { createCatalog } from "./create-catalog";
-import { getZohoCatalogSnapshotStore, readCatalogProductSource } from "./zoho-catalog";
+import { getZohoCatalogRuntime, isZohoCatalogSource, readCatalogProductSource } from "./zoho-catalog";
 
 /**
  * Snapshot reads wait for a real request, so routes that would otherwise be
@@ -16,11 +16,11 @@ import { getZohoCatalogSnapshotStore, readCatalogProductSource } from "./zoho-ca
  */
 async function readSnapshotProducts(): Promise<readonly Product[]> {
   await connection();
-  return getZohoCatalogSnapshotStore().getProducts();
+  return (await getZohoCatalogRuntime().snapshot.get()).products;
 }
 
 function createProductRepository(): ProductRepository {
-  return readCatalogProductSource() === "zoho-snapshot"
+  return isZohoCatalogSource(readCatalogProductSource())
     ? new SnapshotProductRepository(readSnapshotProducts)
     : new StaticProductRepository();
 }
@@ -33,8 +33,8 @@ const uomRepository = new StaticUomRepository();
  * Dummy API backing store. Route handlers, sitemap generation, and layout
  * navigation bind here so HTTP storefront clients cannot recurse into themselves.
  * Products come from the static fixtures or, with
- * `CATALOG_PRODUCT_SOURCE=zoho-snapshot`, from the Zoho catalog snapshot;
- * page renders never call Zoho directly.
+ * `CATALOG_PRODUCT_SOURCE=zoho-snapshot` or `zoho-demo`, from the Zoho
+ * catalog snapshot; page renders never call Zoho directly.
  */
 export const catalogSource = createCatalog(
   productRepository,

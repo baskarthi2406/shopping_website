@@ -1,5 +1,4 @@
 import "server-only";
-import type { Product } from "@/domain/catalog";
 
 /**
  * In-memory catalog snapshot (ADR 0009 principle 6). Readers never wait on
@@ -10,10 +9,10 @@ import type { Product } from "@/domain/catalog";
  * retried before `failureBackoffMs`. A snapshot older than `maxAgeMs` is never
  * served. State is per server process; durable storage needs ADR 0008.
  */
-export type CatalogSnapshotLoader = () => Promise<readonly Product[]>;
+export type CatalogSnapshotLoader<T> = () => Promise<T>;
 
-export type CatalogSnapshotStoreOptions = {
-  readonly load: CatalogSnapshotLoader;
+export type CatalogSnapshotStoreOptions<T> = {
+  readonly load: CatalogSnapshotLoader<T>;
   readonly refreshIntervalMs: number;
   readonly maxAgeMs: number;
   readonly failureBackoffMs: number;
@@ -22,8 +21,8 @@ export type CatalogSnapshotStoreOptions = {
   readonly onRefreshError?: (error: unknown) => void;
 };
 
-export type CatalogSnapshotStore = {
-  getProducts(): Promise<readonly Product[]>;
+export type CatalogSnapshotStore<T> = {
+  get(): Promise<T>;
 };
 
 export class CatalogSnapshotUnavailableError extends Error {
@@ -33,26 +32,26 @@ export class CatalogSnapshotUnavailableError extends Error {
   }
 }
 
-type Snapshot = { readonly products: readonly Product[]; readonly fetchedAt: number };
+type Snapshot<T> = { readonly value: T; readonly fetchedAt: number };
 
-export function createCatalogSnapshotStore(
-  options: CatalogSnapshotStoreOptions,
-): CatalogSnapshotStore {
+export function createCatalogSnapshotStore<T>(
+  options: CatalogSnapshotStoreOptions<T>,
+): CatalogSnapshotStore<T> {
   const { load, refreshIntervalMs, maxAgeMs, failureBackoffMs, now = Date.now } = options;
   const onRefreshError = options.onRefreshError ?? (() => {});
   if (!(refreshIntervalMs > 0 && refreshIntervalMs < maxAgeMs && failureBackoffMs >= 0)) {
     throw new RangeError("refreshIntervalMs must be positive and below maxAgeMs");
   }
 
-  let current: Snapshot | null = null;
-  let pending: Promise<Snapshot> | null = null;
+  let current: Snapshot<T> | null = null;
+  let pending: Promise<Snapshot<T>> | null = null;
   let lastFailureAt: number | null = null;
 
-  function refresh(): Promise<Snapshot> {
+  function refresh(): Promise<Snapshot<T>> {
     pending ??= (async () => {
       const startedAt = now();
-      const products = await load();
-      current = { products, fetchedAt: startedAt };
+      const value = await load();
+      current = { value, fetchedAt: startedAt };
       lastFailureAt = null;
       return current;
     })()
@@ -72,21 +71,21 @@ export function createCatalogSnapshotStore(
   }
 
   return {
-    async getProducts() {
+    async get() {
       if (current !== null) {
         const age = now() - current.fetchedAt;
         if (age < maxAgeMs) {
           if (age >= refreshIntervalMs && pending === null && mayAttempt()) {
             refresh().catch(() => {});
           }
-          return current.products;
+          return current.value;
         }
       }
       if (pending === null && !mayAttempt()) {
         throw new CatalogSnapshotUnavailableError();
       }
       try {
-        return (await refresh()).products;
+        return (await refresh()).value;
       } catch {
         throw new CatalogSnapshotUnavailableError();
       }

@@ -50,7 +50,7 @@ describe("createCatalogSnapshotStore", () => {
   it("loads once on first read and shares the load between concurrent readers", async () => {
     const { store, loader } = setup(async () => [product("1")]);
 
-    const [a, b] = await Promise.all([store.getProducts(), store.getProducts()]);
+    const [a, b] = await Promise.all([store.get(), store.get()]);
 
     expect(a).toEqual([product("1")]);
     expect(b).toBe(a);
@@ -59,11 +59,11 @@ describe("createCatalogSnapshotStore", () => {
 
   it("serves a fresh snapshot without calling the provider again", async () => {
     const { store, loader, advance } = setup(async () => [product("1")]);
-    await store.getProducts();
+    await store.get();
 
     advance(59 * MINUTE);
-    await store.getProducts();
-    await store.getProducts();
+    await store.get();
+    await store.get();
 
     expect(loader).toHaveBeenCalledTimes(1);
   });
@@ -71,16 +71,16 @@ describe("createCatalogSnapshotStore", () => {
   it("serves the current snapshot and refreshes once in the background after the interval", async () => {
     let version = 1;
     const { store, loader, advance } = setup(async () => [product(String(version))]);
-    await store.getProducts();
+    await store.get();
 
     version = 2;
     advance(61 * MINUTE);
-    const [first, second] = await Promise.all([store.getProducts(), store.getProducts()]);
+    const [first, second] = await Promise.all([store.get(), store.get()]);
 
     expect(first).toEqual([product("1")]);
     expect(second).toEqual([product("1")]);
     expect(loader).toHaveBeenCalledTimes(2);
-    await vi.waitFor(async () => expect(await store.getProducts()).toEqual([product("2")]));
+    await vi.waitFor(async () => expect(await store.get()).toEqual([product("2")]));
     expect(loader).toHaveBeenCalledTimes(2);
   });
 
@@ -90,19 +90,19 @@ describe("createCatalogSnapshotStore", () => {
       if (fail) throw new Error("provider down");
       return [product("1")];
     });
-    await store.getProducts();
+    await store.get();
 
     fail = true;
     advance(61 * MINUTE);
-    expect(await store.getProducts()).toEqual([product("1")]);
+    expect(await store.get()).toEqual([product("1")]);
     await vi.waitFor(() => expect(onRefreshError).toHaveBeenCalledTimes(1));
 
     advance(1 * MINUTE);
-    expect(await store.getProducts()).toEqual([product("1")]);
+    expect(await store.get()).toEqual([product("1")]);
     expect(loader).toHaveBeenCalledTimes(2);
 
     advance(5 * MINUTE);
-    await store.getProducts();
+    await store.get();
     expect(loader).toHaveBeenCalledTimes(3);
   });
 
@@ -112,23 +112,23 @@ describe("createCatalogSnapshotStore", () => {
       if (fail) throw new Error("provider down");
       return [product("1")];
     });
-    await store.getProducts();
+    await store.get();
 
     fail = true;
     advance(24 * 60 * MINUTE);
 
-    await expect(store.getProducts()).rejects.toBeInstanceOf(CatalogSnapshotUnavailableError);
+    await expect(store.get()).rejects.toBeInstanceOf(CatalogSnapshotUnavailableError);
   });
 
   it("waits for a refresh when the snapshot has expired", async () => {
     let version = 1;
     const { store, advance } = setup(async () => [product(String(version))]);
-    await store.getProducts();
+    await store.get();
 
     version = 2;
     advance(25 * 60 * MINUTE);
 
-    expect(await store.getProducts()).toEqual([product("2")]);
+    expect(await store.get()).toEqual([product("2")]);
   });
 
   it("reports unavailability without a snapshot and does not retry before the backoff", async () => {
@@ -136,13 +136,13 @@ describe("createCatalogSnapshotStore", () => {
       throw new Error("provider down");
     });
 
-    await expect(store.getProducts()).rejects.toBeInstanceOf(CatalogSnapshotUnavailableError);
-    await expect(store.getProducts()).rejects.toBeInstanceOf(CatalogSnapshotUnavailableError);
+    await expect(store.get()).rejects.toBeInstanceOf(CatalogSnapshotUnavailableError);
+    await expect(store.get()).rejects.toBeInstanceOf(CatalogSnapshotUnavailableError);
     expect(loader).toHaveBeenCalledTimes(1);
     expect(onRefreshError).toHaveBeenCalledTimes(1);
 
     advance(5 * MINUTE);
-    await expect(store.getProducts()).rejects.toBeInstanceOf(CatalogSnapshotUnavailableError);
+    await expect(store.get()).rejects.toBeInstanceOf(CatalogSnapshotUnavailableError);
     expect(loader).toHaveBeenCalledTimes(2);
   });
 
@@ -151,7 +151,7 @@ describe("createCatalogSnapshotStore", () => {
       throw new Error("secret-bearing provider detail");
     });
 
-    await expect(store.getProducts()).rejects.toThrow("Catalog snapshot is unavailable");
+    await expect(store.get()).rejects.toThrow("Catalog snapshot is unavailable");
   });
 
   it("rejects a refresh interval that is not below the maximum age", () => {
