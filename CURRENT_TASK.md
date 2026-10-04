@@ -8,10 +8,10 @@ No task is approved. Do not start any task until a human explicitly requests it.
 
 | Field | Value |
 |-------|-------|
-| Task ID | S6-T13 |
-| Task | Field Provenance Rules |
+| Task ID | S6-T14 |
+| Task | Server-side Zoho Request Wrapper (redefined by the project owner from “Outbound Request Policy” for the 3-day Zoho feasibility demo) |
 | Status | **COMPLETED** |
-| Scope | Gate G1 passed: ADR 0007 provenance section accepted 2026-10-04 (stale price → `null`; future timestamps → `unknown`, no skew tolerance; expired `missing` → `unknown`; 24-hour inclusive freshness threshold). Pure rules in `frontend/application/catalog/field-provenance.ts` with an explicit evaluation time, plus focused tests. Not wired into runtime; no contract, data, UI, Zoho, or dependency change. Details: `docs/sprints/SPRINT-06.md` → S6-T13. |
+| Scope | Gate G2 passed via the minimum ADR 0009 boundary amendment. Server-only `infrastructure/zoho/zoho-config.ts` and `zoho-client.ts`: server env configuration, explicit timeout, origin-locked paths, sanitized errors, untrusted `unknown` responses. S6-T14 establishes the server-side Zoho integration boundary; actual Zoho capability verification is deferred to S6-T15. No Zoho request, mapping, order creation, UI, contract, or dependency change. Details: `docs/sprints/SPRINT-06.md` → S6-T14. |
 
 ---
 
@@ -29,9 +29,7 @@ automatically.
 
 ## Next task after approval (do not start)
 
-**S6-T14 — Outbound Request Policy (server-only)**, after gate G2 (ADR 0009
-accepted) and explicit human approval. The decision on merging Sprints 3–5
-into `main` (D12) remains open.
-
-Later gate: GZ (Zoho access + approval) before S6-T15. No database, FastAPI,
-or Zoho integration without its gate.
+**S6-T15 — Zoho feasibility spike** (highest priority for the demo target
+“Zoho POS → real products → storefront → cart → checkout → demo/COD order →
+Zoho”). Determines authentication, items, prices, stock, IDs, order creation,
+and API limits. Requires Zoho access (gate GZ) and explicit human approval.

@@ -5,9 +5,9 @@
 | Sprint ID | S6 |
 | Phase | Phase 2 — Server-side foundation (single Next.js application) |
 | Objective | Prepare provider-independent server-side foundations in the existing Next.js application (server-only isolation, catalog contract conformance, provenance rules, outbound request policy) without changing storefront behavior, SEO, or the dummy catalog API, and gate Zoho work on verified access |
-| Status | **IN PROGRESS** (S6-T01, S6-T02, S6-T11, S6-T12, S6-T13 completed; no further task is approved) |
+| Status | **IN PROGRESS** (S6-T01, S6-T02, S6-T11–S6-T14 completed; no further task is approved) |
 | Dependencies | Sprint 5 completed (Track A; S5-T08, commit `5525b68`) |
-| Task IDs | S6-T01, S6-T02, S6-T11, S6-T12, S6-T13 (completed) · S6-T03–S6-T10 **WITHDRAWN** · proposed S6-T14 … S6-T16 |
+| Task IDs | S6-T01, S6-T02, S6-T11–S6-T14 (completed) · S6-T03–S6-T10 **WITHDRAWN** · proposed S6-T15, S6-T16 |
 
 **Only explicitly requested tasks are authorized.** Proposed tasks stay
 `PROPOSED` until a human approves them; approval is recorded here, in
@@ -400,9 +400,36 @@ stayed on `s5-t01-sprint-5-planning`; commit message
 
 ---
 
-### S6-T14 — Outbound Request Policy (server-only)
+### S6-T14 — Server-side Zoho Request Wrapper (originally: Outbound Request Policy)
 
-**Status:** PROPOSED — requires S6-T11 and gate G2 (ADR 0009 accepted)
+**Status:** COMPLETED as redefined by the project owner (2026-10-04): “Server-
+side Zoho Request Wrapper / Demo Critical Path”. Gate G2 passed via the
+minimum ADR 0009 boundary amendment. The original scope below (retries,
+concurrency, budget counting, structured logs) is **not implemented** and
+stays pending until Zoho facts are known.
+
+**Result (redefined scope):**
+
+- `infrastructure/zoho/zoho-config.ts` (server-only): `readZohoConfig` reads
+  `ZOHO_API_BASE_URL` (https, no credentials/query), `ZOHO_ACCESS_TOKEN`, and
+  optional `ZOHO_REQUEST_TIMEOUT_MS` (default 10 000, max 60 000) through
+  `readServerEnv`; errors name variables only.
+- `infrastructure/zoho/zoho-client.ts` (server-only): `createZohoClient(config,
+  fetch)` with method, relative path, query, headers, optional JSON body, and
+  per-request timeout (`AbortController`). Adds `Authorization:
+  Zoho-oauthtoken …` (Zoho's general scheme; unverified for POS), rejects
+  absolute/escaping paths and caller `Authorization` headers, returns
+  `{ status, data: unknown }`, and throws `ZohoRequestError` (`timeout`,
+  `network`, `http`, `invalid_response`, `invalid_request`) with tokens
+  redacted. No retries, caching, or token refresh.
+- Both modules are in the server-only boundary test's protected list; the
+  import-graph test forbids client imports of `infrastructure/`.
+- `.env.example` lists empty placeholders. Not wired into any route or page.
+- S6-T14 establishes the server-side Zoho integration boundary. Actual Zoho
+  capability verification is deferred to S6-T15. No Zoho compatibility is
+  claimed and no Zoho request was made.
+
+**Original proposal (not implemented):**
 
 **Objective:** A small server-only wrapper around `fetch` that any future
 provider adapter must use.
@@ -487,13 +514,13 @@ the debt register (TD-008, TD-010).
 |------|--------|----------|
 | G0 | S6-T11 | Revised plan approved; decision on merging Sprints 3–5 into `main` (D12) or continuing to stack. **Passed for S6-T11 by explicit user approval**, continuing to stack on the current branch; D12 remains open |
 | G1 | S6-T13 | ADR 0007 provenance section accepted (ownership columns may stay open). **Passed 2026-10-04** |
-| G2 | S6-T14 | ADR 0009 accepted |
+| G2 | S6-T14 | ADR 0009 accepted. **Passed 2026-10-04** via the minimum boundary amendment (principles 3–9 still proposed) |
 | GZ | S6-T15 | Zoho access or account documentation supplied, and explicit approval |
 | GP | Any persistence task (none proposed) | ADR 0008 amended with evidence and accepted |
 
 ```text
 S6-T01 (done) → S6-T02 (done) → G0 → S6-T11 (done) → S6-T12 (done) → G1 → S6-T13 (done)
-                                        └──────→ G2 → S6-T14
+                                        └──────→ G2 → S6-T14 (done)
 GZ → S6-T15 (independent; may be deferred)
 all approved tasks → S6-T16
 ```
@@ -515,7 +542,7 @@ cache or snapshot.
 | Z5 | Pagination model, maximum page size, requests per full catalog refresh | NOT VERIFIED |
 | Z6 | Request budget: full vs incremental refresh (modified-since support?), frequency, freshness threshold | TBD |
 | Z7 | Cache/snapshot mechanism for the chosen host (Next.js cache vs durable store, ADR 0008 P3) | TBD (host undecided) |
-| Z8 | Bounded retries, rate limiting, handling of provider 429/5xx | Policy in ADR 0009; implementation S6-T14 |
+| Z8 | Bounded retries, rate limiting, handling of provider 429/5xx | Policy in ADR 0009; not implemented (S6-T14 was redefined to the request wrapper only) |
 | Z9 | Usage monitoring and alert threshold before quota (ADR 0008 P4) | TBD |
 | Z10 | Order and inventory write capabilities and whether they are ever in scope | NOT VERIFIED; out of scope until Sprint 8 decisions |
 | Z11 | Stable identifiers and slug source (TD-005); provider image hosting (TD-003) | TBD |

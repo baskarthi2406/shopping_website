@@ -149,8 +149,8 @@ Then implement **only** the current task.
 | Phase | Phase 1 — Customer Storefront + Dummy API Foundation (Phase 2 / Sprint 6 in progress) |
 | Overall status | SPRINT_6_IN_PROGRESS |
 | Current sprint | Sprint 6 — Next.js Server-side Foundation (**IN PROGRESS**) |
-| Last completed | S6-T13 — Field Provenance Rules |
-| Current task | None; next proposed S6-T14 — Outbound Request Policy (**NOT_STARTED**, gate G2) |
+| Last completed | S6-T14 — Server-side Zoho Request Wrapper |
+| Current task | None; next proposed S6-T15 — Zoho feasibility spike (**NOT_STARTED**, gate GZ) |
 
 Sprint 4 is complete. Sprint 5 is complete for Track A (purchasability rules,
 PDP price/availability panel, variant selector); the local cart (Track B) is
@@ -159,5 +159,6 @@ UI and server-side code in one Next.js application (no FastAPI backend); no
 database is selected. S6-T11 guards server configuration with
 `import "server-only"` and verifies it with production builds. S6-T12 adds a
 reusable catalog API conformance suite. S6-T13 adds pure field provenance
-rules (not yet wired in). Do **not** start S6-T14 automatically. S3-T10 Image Optimization and the original SEO URL
+rules (not yet wired in). S6-T14 adds a server-only Zoho request wrapper; Zoho
+capability is not yet verified. Do **not** start S6-T15 automatically. S3-T10 Image Optimization and the original SEO URL
 strategy are deferred.

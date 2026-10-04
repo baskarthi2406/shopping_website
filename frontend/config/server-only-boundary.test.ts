@@ -13,6 +13,8 @@ const PROTECTED_MODULES = [
   "config/catalog-source.ts",
   "config/catalog-api-dispatch.ts",
   "config/server-env.ts",
+  "infrastructure/zoho/zoho-config.ts",
+  "infrastructure/zoho/zoho-client.ts",
 ];
 
 function listSourceFiles(directory: string): string[] {

@@ -187,8 +187,11 @@ Local development may omit it; `config/site.ts` then uses `http://localhost:3000
   to a browser-safe module, never by removing the guard.
 - Secrets must not reach client props, serialized view models, route
   responses, logs, or error messages.
-- No server-only variable is defined yet; `.env.example` lists public values
-  only.
+- Server-only Zoho settings (S6-T14): `ZOHO_API_BASE_URL`,
+  `ZOHO_ACCESS_TOKEN`, optional `ZOHO_REQUEST_TIMEOUT_MS`, read by
+  `infrastructure/zoho/zoho-config.ts`. `infrastructure/zoho/zoho-client.ts`
+  is the only path for Zoho requests (explicit timeout, sanitized errors,
+  untrusted responses). Zoho capability is not yet verified (S6-T15).
 
 ## Testing
 

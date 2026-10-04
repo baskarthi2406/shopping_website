@@ -50,7 +50,9 @@ approval (`docs/sprints/SPRINT-05.md` → S5-T08).
 planning, the S6-T02 Next.js-only revision, S6-T11 Server-only Boundary, and
 S6-T12 Catalog Contract Conformance Suite are completed; S6-T03–S6-T10
 (FastAPI/PostgreSQL) are withdrawn; S6-T13 Field Provenance Rules is
-completed (gate G1 passed); S6-T14–S6-T16 are proposed with gates G2, GZ
+completed (gate G1 passed); S6-T14 Server-side Zoho Request Wrapper is
+completed (gate G2 passed via ADR 0009 amendment); S6-T15 (Zoho feasibility)
+and S6-T16 are proposed
 (`docs/sprints/SPRINT-06.md`).
 
 Sprint 3 is **MOSTLY_COMPLETE**: S3-T01–S3-T09 completed; S3-T10 Image
@@ -60,9 +62,9 @@ Optimization intentionally deferred.
 
 ## Current Task
 
-None. S6-T13 (Field Provenance Rules) is **COMPLETED**. No further task is
-approved; do not start S6-T14, package installs, persistence, Zoho
-integration, or any other task automatically.
+None. S6-T14 (Server-side Zoho Request Wrapper) is **COMPLETED**. No further
+task is approved; do not start S6-T15, package installs, persistence, Zoho
+calls, or any other task automatically.
 
 Details: `CURRENT_TASK.md` and `docs/sprints/SPRINT-06.md`.
 
@@ -75,7 +77,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Overall Status
 
-**SPRINT_6_IN_PROGRESS** (Sprint 5 completed for Track A; S6-T01, S6-T02, S6-T11, S6-T12, S6-T13 completed; next task S6-T14 awaits gate G2 and approval)
+**SPRINT_6_IN_PROGRESS** (Sprint 5 completed for Track A; S6-T01, S6-T02, S6-T11–S6-T14 completed; next task S6-T15 Zoho feasibility awaits Zoho access and approval)
 
 ---
 
@@ -211,6 +213,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 - S6-T11 — Server-only Boundary and Secret Isolation
 - S6-T12 — Catalog Contract Conformance Suite
 - S6-T13 — Field Provenance Rules
+- S6-T14 — Server-side Zoho Request Wrapper
 
 ## In progress
 
@@ -219,7 +222,7 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 ## Pending
 - Sprint 5 Track B — S5-T05–S5-T07 (local cart) **DEFERRED**, pending renewed
   Q1/Q2 approval; open business questions in `docs/sprints/SPRINT-05.md`
-- Sprint 6 — Next.js Server-side Foundation: proposed S6-T14–S6-T16, each
+- Sprint 6 — Next.js Server-side Foundation: proposed S6-T15, S6-T16, each
   requiring explicit approval (gates in `docs/sprints/SPRINT-06.md` §6)
 - Sprint 7 — Zoho POS Integration
 - Sprint 8 — Orders, Checkout & Operations
@@ -257,7 +260,8 @@ S3-T10 Image Optimization and original S3-T01 “SEO-Friendly URL Strategy” ar
 
 ## Next task (do not start automatically)
 
-**S6-T14 — Outbound Request Policy**, after gate G2 (ADR 0009 accepted).
-S6-T15 needs gate GZ. The decision on
+**S6-T15 — Zoho feasibility spike** (highest priority for the 3-day demo:
+authentication, items, prices, stock, IDs, order creation, limits). Needs gate
+GZ: Zoho access supplied and explicit approval. The decision on
 merging Sprints 3–5 into `main` (D12) remains open. Sprint 5 Track B remains
 deferred pending Q1/Q2. Requires explicit human approval.
